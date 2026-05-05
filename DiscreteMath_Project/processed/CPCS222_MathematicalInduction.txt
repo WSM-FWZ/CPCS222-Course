@@ -1,0 +1,1006 @@
+Mathematical
+Induction
+   College of Computing & Information Technology
+   King Abdulaziz University
+
+
+
+  CPCS-222 – Discrete Structures
+              Outline
+               Summations
+                 Basically reviewing basics of summations
+                 And how they tie into some induction problems
+
+
+
+               Mathematical Induction
+                 This is the focus of today’s lecture.
+
+
+
+
+© Dr. Jonathan (Yahya) Cazalas    Mathematical Induction          page 2
+              Summations
+               Definition:
+                 In very basic terms, a summation is the addition of
+                  a set of numbers.
+               Example:
+                 Let’s say we want to sum the integers from 1 to 5
+                             5
+
+                           ∑ i = 1 + 2 + 3 + 4 + 5 = 15
+                            i =1
+
+
+                       Here, the “i” is just a variable.
+                       Let’s look at this notation in more detail…
+
+
+
+
+© Dr. Jonathan (Yahya) Cazalas            Mathematical Induction        page 3
+              Summations
+               A summation:                              So what is f(j)?
+                                                                                             upper limit
+
+                                  n
+
+                                 ∑ f ( j ) or         ∑    n
+                                                           j =m   f ( j)   lower limit
+                                 j =m
+
+                                 Here, f(j) is simply a function in terms of j
+                                                        indexisofa function in terms of x.
+                                     Just like f(x) = 2x+1
+                                                        summation
+                                     f(j) is simply some   function in terms of j.
+
+               is like a for loop:
+                         int sum = 0;
+                         for ( int j = m; j <= n; j++ )
+                                sum += f(j);
+© Dr. Jonathan (Yahya) Cazalas                   Mathematical Induction                               page 4
+              Summations
+               Example con’d:
+                 Since “i” is just a variable, we can use any variable
+                  name…
+                                 5
+
+                             ∑ Jason = 1 + 2 + 3 + 4 + 5 = 15
+                           Jason =1
+
+
+                       We also recognize that a summation is merely
+                           summing (adding) the values of some given
+                           function
+                                    This far, we’ve only looked at this most simply function:
+                                        f(i) = i
+                                        And then we summed up those i terms.
+
+
+
+© Dr. Jonathan (Yahya) Cazalas                      Mathematical Induction                       page 5
+              Summations
+               Example 2:
+                 Now, let us choose our function to be i2, and let us
+                  again sum this from 1 to 5.
+                                5
+
+                           ∑ i 2
+                                 =
+                              i =1
+                                   12
+                                      + 2 2
+                                            + 3 2
+                                                  + 4 2
+                                                        + 5 2
+                                                              = 1 + 4 + 9 + 16 + 25 = 55
+
+                                    So, the deal here is we are summing whatever the
+                                     function is, and we are summing this from the lower limit
+                                     all the way to the upper limit, adding all the values
+                                     together
+                       What if we let the function be 2i+1
+                          5
+
+                         ∑ 2i + 1 = 3 + 5 + 7 + 9 + 11 = 35
+                         i =1
+
+
+© Dr. Jonathan (Yahya) Cazalas                     Mathematical Induction                        page 6
+              Summations
+               More summations:
+                 Now let us write this purely in “function” form so
+                  we all see what is going on.
+                           5
+
+                         ∑ f (i) = f (1) + f (2) + f (3) + f (4) + f (5)
+                          i =1
+
+                                  Again, on the previous example, we let f(i) = 2i+1
+                                  Thus, we had…
+
+                          5
+
+                         ∑ 2i + 1 = (2(1) + 1) + (2(2) + 1) + (2(3) + 1) + (2(4) + 1) + (2(5) + 1)
+                         i =1
+                                       = 3 + 5 + 7 + 9 + 11 = 35
+
+
+© Dr. Jonathan (Yahya) Cazalas                   Mathematical Induction                              page 7
+                 Evaluating Summations
+                  Example (Question 13, section 2.4):
+             5
+
+           ∑ (k + 1)
+           k =1
+                                      2 + 3 + 4 + 5 + 6 = 20
+             4
+
+           ∑ ( −
+            j =0
+                2 ) j
+                                      (-2)0 + (-2)1 + (-2)2 + (-2)3 + (-2)4 = 11
+            10
+
+           ∑3
+            i =1
+                                      3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 = 30
+
+
+           ∑ (2                   )
+             8
+                     j +1
+                            −2j       (21-20) + (22-21) + (23-22) + … (210-29) = 511
+            j =0                         Note that each term (except the first
+                                          and last) is cancelled by another term
+
+© Dr. Jonathan (Yahya) Cazalas               Mathematical Induction                page 8
+              Summations
+               Summing large amounts of numbers:
+                 What if you were told to simply sum the numbers
+                  from 1 to 1,000.
+                                  There is no function to plug-n-chug into since we are
+                                   simply adding the numbers together…so that part is easy
+                                  BUT, we are adding ONE THOUSAND numbers
+
+                                  This would take SOOOOOOOOOOOOOOOOO long.
+                            1, 000
+
+                             ∑ i = 1 + 2 + 3 + ... + 672 + 673 + ... + 998 + 999 + 1000
+                             i =1
+
+
+                                  Who wants to grab a calculator and give it a shot?
+                                  That would be crazy!
+
+                                      Thankfully, mathematical solutions to some of these common
+                                       summations have been developed and proven
+© Dr. Jonathan (Yahya) Cazalas                     Mathematical Induction                           page 9
+              Summations
+               Summing large amounts of numbers:
+                 What if you were told to simply sum the numbers
+                  from 1 to 1,000.
+                           1, 000
+
+                           ∑ i = 1 + 2 + 3 + ... + 672 + 673 + ... + 998 + 999 + 1000
+                            i =1
+
+                                    We have what is called a “closed form solution” to this
+                                     problem:
+                                      n
+                                            n(n + 1)
+                                     ∑i =
+                                     i =1      2
+                                                             ***Here, n is simply a variable
+                                                             representing the upper limit.
+
+                                    So we simply plug in the 1000 for the n and we get our
+                                     answer:   1, 000
+                                                           1000(1000 + 1)
+                                                 ∑i =
+                                                 i =1            2
+                                                                          = 500,500
+
+© Dr. Jonathan (Yahya) Cazalas                      Mathematical Induction                     page 10
+              Summations
+               Mathematical Induction is a proof method that
+                is used to proof a variety of things…including
+                proving some of these closed form solutions
+                such as the one just shown.
+               But before we move on to that, one more
+                thing on summations
+               This following “thing” is VERY important
+                towards understanding induction.
+                       Later in the slides, I will refer back to this as “the
+                           thing”.
+
+© Dr. Jonathan (Yahya) Cazalas          Mathematical Induction                   page 11
+              Summations
+               Look back at the very first summation example:
+                       5
+
+                     ∑ i = 1 + 2 + 3 + 4 + 5 = 15
+                      i =1
+
+
+
+               Now, look at this summation:
+                       6
+
+                     ∑ i = 1 + 2 + 3 + 4 + 5 + 6 = 21
+                      i =1
+                                                                     What is the same
+                                                                     between these two
+                                                                     summations?
+                                      5
+
+                                     ∑i
+                                     i =1
+                                                  + 6 = 21
+
+                       We realize that this summation is THE SAME as the
+                             previous summation except that we are adding one
+                             additional number in the sequence
+© Dr. Jonathan (Yahya) Cazalas              Mathematical Induction                       page 12
+              Summations
+               Similarly, look at it in “function” form:
+                       5
+
+                     ∑ f (i) = f (1) + f (2) + f (3) + f (4) + f (5)
+                      i =1
+
+
+               Now, look at this summation:
+                       6
+
+                     ∑ f (i) = f (1) + f (2) + f (3) + f (4) + f (5) + f (6)
+                      i =1
+
+                                                   5
+
+                                                 ∑ f (i)
+                                                  i =1
+                                                                    + f (6)
+
+                       Again, we realize that the second summation is THE
+                             SAME as the first summation except that we are
+                             adding one additional term in the sequence
+© Dr. Jonathan (Yahya) Cazalas            Mathematical Induction               page 13
+              Summations
+               So now, remember this summation:
+                       n
+
+                     ∑ i = 1 + 2 + 3 + ... + (n − 2) + (n − 1) + n
+                      i =1
+
+
+
+               Hopefully you can now recognize the following:
+                      n +1
+
+                     ∑ i = 1 + 2 + 3 + ... + (n − 2) + (n − 1) + n + (n + 1)
+                      i =1
+
+                                               n
+
+                                              ∑i
+                                              i =1
+                                                                   + (n + 1)
+
+                       Again, we realize that the second summation is THE
+                             SAME as the first summation except that we are
+                             adding one additional term in the sequence
+© Dr. Jonathan (Yahya) Cazalas            Mathematical Induction               page 14
+              Summations                                                  So, BLAH is the actual
+                                                                          answer to this summation.
+
+
+               So now let us do a make believe problem.
+               Problem:     n                                                    BLAH is the “accepted”
+                 Given that ∑ f (i ) = BLAH                                      value of this function when
+                                              i =1                                we sum it from i to n.
+                                              n +1
+
+                       Solve this:           ∑ f (i)
+                                              i =1
+                                                              using our knowledge from previous slides…
+
+                                                     n +1           n
+                       We know that                 ∑ f (i) = ∑ f (i) + f (n + 1)
+                                                     i =1          i =1
+
+
+                                                                = BLAH + f (n + 1)
+                                    So we were able to solve the summation to the n+1 term
+                                     by using the known answer to the nth term
+© Dr. Jonathan (Yahya) Cazalas                       Mathematical Induction                               page 15
+              An aside…
+              Is spelling really that important?
+                I cdnuolt blveieetaht I cluod aulaclty uesdnatnrd
+                waht I was rdanieg. The phaonmneal pweor of
+                thehmuan mind. Aoccdrnig to a rscheearch at
+                Cmabrigde Uinervtisy, it deosn't mttaer in waht
+                oredr the ltteers in a wrod are, the olny iprmoatnt
+                tihng is taht thefrist and lsat ltteer be in the rghit
+                pclae. The rset can be a taotl mses andyou can sitll
+                raed it wouthit a porbelm. Tihs is bcuseae the
+                huamn mnid deosnot raed ervey lteter by istlef, but
+                the wrod as a wlohe. Amzanig huh? yaeh and I
+                awlyas thought slpeling was ipmorantt.
+© Dr. Jonathan (Yahya) Cazalas    Mathematical Induction             page 16
+              Mathematical Induction
+               Example: Infinite Ladder
+               Suppose we have an infinite
+                ladder as show to the right.
+               We want to know if we can reach
+                every step on this ladder.
+               We know two things (two rules):
+                      1)    We can reach the first step of the ladder.
+                      2)    And if we can reach a particular step of
+                            the ladder, then surely we can reach the
+                            next step after that.
+               From this, can we conclude that
+                    we can reach every step?
+
+© Dr. Jonathan (Yahya) Cazalas                 Mathematical Induction    page 17
+              Mathematical Induction
+               Example: Infinite Ladder
+               Can we can reach every step?
+                       We know we can reach step #1
+                        (from rule 1 on previous slide).
+                       Based on rule 2 (previous slide), we
+                        can then reach step #2.
+                       Once we are at step #2, we can then
+                        reach step #3 (rule 2).
+                       Continuing in this way, we can see
+                        that we can reach the 4th step, the 5th
+                        step, and so on (rule 2).
+                       After 100 uses of rule 2, we know we
+                        can reach the 101st step.
+
+© Dr. Jonathan (Yahya) Cazalas            Mathematical Induction   page 18
+              Mathematical Induction
+               Example: Infinite Ladder
+               But can we conclude (prove) that
+                we can reach each and every
+                step on this infinite ladder?
+                       The answer is YES!
+                       We can prove this using
+                        Mathematical Induction
+                       We let P(n) be the statement that we
+                        can reach the nth step of the ladder.
+                       We can then show that P(n) is true
+                        for every positive integer n.
+                       This is the basic concept of
+                        Induction.
+© Dr. Jonathan (Yahya) Cazalas            Mathematical Induction   page 19
+              What is induction?
+               A method of proof
+               It does not generate
+                answers: it only can prove
+                them
+               Three parts:
+                       Base case(s): show it is true
+                        for one element
+                       Inductive hypothesis:
+                        assume it is true for an
+                        arbitrary positive integer k
+                                    Must be clearly labeled!!!
+                          Inductive Step:
+                           Show it is true for k+1 based on
+                           the truth of k
+
+
+© Dr. Jonathan (Yahya) Cazalas                      Mathematical Induction   page 20
+              Mathematical Induction
+               Principle of Mathematical Induction:
+                 Given some propositional function P(n), we prove
+                   that P(n) is true for all positive integers by
+                   completing three steps:
+                 Base Step:
+                                    We verify that P(1) is true.
+                       Inductive Hypothesis:
+                                    Assume that P(k) is true for an arbitrary integer k
+                       Inductive Step:
+                                    From the assumption in the I.H., we show that P(k+1) must
+                                     also be true.
+
+
+© Dr. Jonathan (Yahya) Cazalas                      Mathematical Induction                  page 21
+              Mathematical Induction
+               Classical Example:
+                                             n(n + 1)                  n
+               We stated earlier that ∑ i =
+                                       i =1     2
+
+               Prove this via Mathematical Induction.
+                1) Base Case: We want to confirm that the left side
+                   (LS) equals the right side (RS) when we plug in the
+                   smallest value (which in this case is 1).
+                                              1
+                                                                                1(1 + 1) 2
+                                        LS: ∑ i = 1                        RS:         = =1
+                                             i =1                                  2     2
+                      2)         Induction Hypothesis: assume true for an arbitrary k
+                                     k
+                                         k (k + 1)
+                                 ∑
+                                 i =1
+                                      i=
+                                             2
+                                                   for k ≥ 1                    Assume P(k) is True
+
+© Dr. Jonathan (Yahya) Cazalas                         Mathematical Induction                         page 22
+              Mathematical Induction
+                                                                                   n
+                                                                                         n(n + 1)
+              Classical Example:                                 Prove ∑ i =                     by Induction
+                                                                                  i =1      2
+
+                     3)     Induction Step: based on the I.H., prove P(k+1).
+                                     k +1
+                            ***At this            + 1basically
+                                        step,( kyou  )(k + 1 + 1plug
+                                                                ) in a k+1 wherever you see a k (or n).
+                             Prove i =  ∑
+                                        i =1                2
+                                                                             PROVE This!
+
+
+                            Here’s where we use “the thing” shown earlier.
+                                 k +1
+
+                                 ∑ i = 1 + 2 + ... + (k − 1) + k + (k + 1)
+                                 i =1
+                                                                                         Guess what:
+                                 k +1              k                                     From our Induction Hypothesis,
+                                 ∑i =
+                                 i =1
+                                                 ∑i
+                                                  i =1
+                                                                + (k + 1)                we know that
+                                                                                                          ∑
+                                                                                                            k
+
+
+                                                                                                          i =1
+                                                                                                               i=
+                                                                                                                  k (k + 1)
+                                                                                                                      2
+
+
+                                 So we substitute this in…
+© Dr. Jonathan (Yahya) Cazalas                           Mathematical Induction                                          page 23
+              Mathematical Induction
+                                                                                   n
+                                                                                         n(n + 1)
+              Classical Example:                                 Prove ∑ i =                     by Induction
+                                                                                  i =1      2
+
+                     3)     Induction Step: based on the I.H., prove P(k+1).
+                                        k +1
+                                               (k + 1)(k + 1 + 1)
+                             Prove ∑ i =
+                                        i =1           2
+
+                            Here’s where we use “the thing” shown earlier.
+                                 k +1
+
+                                 ∑ i = 1 + 2 + ... + (k − 1) + k + (k + 1)
+                                 i =1
+                                                                                         Guess what:
+                                 k +1              k                                     From our Induction Hypothesis,
+                                 ∑i =
+                                 i =1
+                                                 ∑ i + (k + 1)
+                                                  i =1
+                                                                                         we know that
+                                                                                                          ∑
+                                                                                                            k
+
+
+                                                                                                          i =1
+                                                                                                               i=
+                                                                                                                  k (k + 1)
+                                                                                                                      2
+                                 k +1
+                                          k (k + 1)              k (k + 1) 2(k + 1) (k + 1)(k + 2)
+                                 ∑
+                                 i =1
+                                      i =
+                                              2
+                                                    + ( k + 1) =
+                                                                     2
+                                                                          +
+                                                                              2
+                                                                                   =
+                                                                                           2
+© Dr. Jonathan (Yahya) Cazalas                           Mathematical Induction                                          page 24
+              Mathematical Induction
+                                                                          n
+                                                                                n(n + 1)
+              Classical Example:                        Prove ∑ i =                     by Induction
+                                                                         i =1      2
+
+                     3)     Induction Step: based on the I.H., prove P(k+1).
+                                   k +1
+                                           (k + 1)(k + 1 + 1)
+                             Prove ∑ i =
+                                   i =1            2
+                           We just proved the Induction Step above. We proved that
+                            P(k+1) is true under the assumption that P(k) is true.
+                           Since we completed all three steps, by Mathematical
+                            Induction, we know that P(n) is true for all positive integers n.
+                           That is, we have proven, for all positive n, that
+                                               n
+                                                      n(n + 1)
+                                             ∑
+                                             i =1
+                                                  i =
+                                                         2
+© Dr. Jonathan (Yahya) Cazalas                  Mathematical Induction                              page 25
+              What did we show
+               Base case: P(1)
+               If P(k) was true, then P(k+1) is true
+                   i.e., P(k) → P(k+1)
+
+
+                   We know it’s true for P(1)
+                   Because of P(k) → P(k+1), if it’s true for P(1), then it’s true for P(2)
+                   Because of P(k) → P(k+1), if it’s true for P(2), then it’s true for P(3)
+                   Because of P(k) → P(k+1), if it’s true for P(3), then it’s true for P(4)
+                   Because of P(k) → P(k+1), if it’s true for P(4), then it’s true for P(5)
+                   And onwards to infinity
+
+               Thus, it is true for all possible values of n
+
+               In other words, we showed that:
+
+                                 [P(1) ∧ ∀k (P(k ) → P(k + 1) )] → ∀n P(n)
+© Dr. Jonathan (Yahya) Cazalas            Mathematical Induction                          page 26
+              The idea behind Inductive Proofs
+
+               Show the base case
+               Show the inductive hypothesis
+               Manipulate the inductive step so that you can
+                    substitute in part of the inductive hypothesis
+                       Use rules of math to manipulate the equation of the
+                        inductive step
+                       The goal: you want to “see” the left-hand-side of the
+                        inductive hypothesis within the equation of the
+                        inductive step
+                       Then you can substitute the right-hand-side into it
+
+               Show the inductive step
+© Dr. Jonathan (Yahya) Cazalas        Mathematical Induction               page 27
+              Mathematical Induction
+               Example #2:
+                 Conjecture a formula for the sum of the first n
+                  positive odd integers. Then prove your conjecture
+                  using mathematical induction.
+                 So firstly, we need to figure out the formula that
+                  calculates the sum of the first n positive odd integers
+                                    The sums of the first n positive odd integers for n = 1, 2, 3, 4, 5, 6 are:
+                                     1=1                     1+3=4                      1+3+5=9
+                                     1 + 3 + 5 + 7 = 16      1 + 3 + 5 + 7 + 9 = 25     1 + 3 + 5 + 7 + 9 + 11 = 36
+                                    Are you seeing a trend? Is the formula jumping out at you?
+                                    You should notice that the sum of the first n positive odd integers is n2.
+                                    We now need to prove that this conjecture is true.
+                                    We do so via Induction. And by remembering the definition of odd
+                                     integers, we can write this in summation form…
+
+© Dr. Jonathan (Yahya) Cazalas                         Mathematical Induction                                     page 28
+              Mathematical Induction
+               Prove the following via Induction:
+                                                      n
+                    ∀n P (n) where P (n) = ∑ 2i − 1 = n 2
+                                                   i =1
+
+
+
+
+                      1)         Base Case: Show that P(1) is true. We want to
+                                 confirm that the left side (LS) equals the right side
+                                 (RS) when we plug in the smallest value (1) .
+                                                  1
+                                     LS: P (1) = ∑ 2i − 1 = 1         RS: 1 = 1
+                                                                           2
+                                 
+                                                 i =1
+
+
+
+
+© Dr. Jonathan (Yahya) Cazalas                   Mathematical Induction              page 29
+              Mathematical Induction
+                      2)         Inductive hypothesis: assume true for k
+                                    Thus, we assume that P(k) is true, or that
+                                                     k
+
+                                                   ∑ 2i
+                                                    i =1
+                                                        − 1 == k 2
+                                                                             Assume P(k) is True
+
+                                  Note: we do not know if this is true or not!
+                                  BUT, we assume it is true!
+
+
+
+                      3)         Inductive step: show true for k+1
+                                    We want to show that:
+                                                 k +1
+
+                                                 ∑ 2i
+                                                  i =1
+                                                      − 1 == ( k + 1) 2
+
+
+
+
+© Dr. Jonathan (Yahya) Cazalas                      Mathematical Induction                     page 30
+              Mathematical Induction
+                                                                      n
+               Prove the following: ∑ 2i − 1 = n 2 by Induction
+                                                                     i =1
+
+
+                       Remember, we need to prove the Inductive Step:
+                           k +1
+
+                           ∑ 2i
+                            i =1
+                                − 1 == ( k + 1) 2
+                                                                            PROVE This!
+
+                          Again, we use “the thing” from earlier
+                           k +1
+                                          k       
+                           ∑
+                           i =1
+                                2i − 1 =  ∑ 2i − 1 + 2(k + 1) − 1
+                                          i =1    
+                          Why is the above correct? Because summing to the (k+1)st term is
+                           the same as summing to the kth term and then adding on the last
+                           k+1 term.
+                                    And this is what we did here.
+
+
+© Dr. Jonathan (Yahya) Cazalas                           Mathematical Induction               page 31
+              Mathematical Induction
+                                                             n
+               Prove the following: ∑ 2i − 1 = n 2 by Induction
+                                                            i =1
+
+
+                       Remember, we need to prove the Inductive Step:
+                           k +1
+
+                           ∑ 2i
+                            i =1
+                                − 1 == ( k + 1) 2
+                                                                   PROVE This!
+
+                          Again, we use “the thing” from earlier
+                                                                            Guess what:
+                           k +1
+                                         k
+                                                   
+                           ∑    2i − 1 =  ∑ 2i − 1 + 2(k + 1) − 1
+                                                                            From our Induction Hypothesis,
+                                                                                              k
+                                                                            we know that
+                           i =1           i =1                                             ∑ 2i − 1 = k 2
+                                                                                             i =1
+
+
+
+
+                          Substitute this in…
+
+
+
+© Dr. Jonathan (Yahya) Cazalas                   Mathematical Induction                                  page 32
+              Mathematical Induction
+                                                           n
+               Prove the following: ∑ 2i − 1 = n 2 by Induction
+                                                          i =1
+
+
+                       Remember, we need to prove the Inductive Step:
+                           k +1
+
+                           ∑ 2i
+                            i =1
+                                − 1 == ( k + 1) 2
+                                                                 PROVE This!
+
+                          Again, we use “the thing” from earlier
+                                                                          Guess what:
+                           k +1
+                                         k
+                                                   
+                           ∑    2i − 1 =  ∑ 2i − 1 + 2(k + 1) − 1
+                                                                          From our Induction Hypothesis,
+                                                                                            k
+                                                                          we know that
+                           i =1           i =1                                           ∑ 2i − 1 = k 2
+                                                                                           i =1
+
+                           k +1
+
+                           ∑ 2i
+                           i =1
+                                − 1 = k 2
+                                          + 2 ( k + 1) − 1 = k 2
+                                                                 + 2 k + 1 = ( k + 1) 2
+
+
+
+
+                          So we successfully used the I.H. to help us solve the I.S.
+© Dr. Jonathan (Yahya) Cazalas                 Mathematical Induction                                  page 33
+              Mathematical Induction
+                                                              n
+               Prove the following: ∑ 2i − 1 = n 2 by Induction
+                                                             i =1
+
+
+                                Remember, we need to prove the Inductive Step:
+                                 k +1
+
+                                 ∑ 2i
+                                 i =1
+                                      − 1 == ( k + 1) 2
+
+
+
+                                We just proved the Induction Step above. We proved that
+                                 P(k+1) is true under the assumption that P(k) is true.
+                                Since we completed all three steps, by Mathematical
+                                 Induction, we know that P(n) is true for all positive integers
+                                 n.
+                                That is, we have proven, for all positive n, that
+                                  n
+
+                                 ∑ 2i
+                                 i =1
+                                      − 1 = n 2
+
+
+
+© Dr. Jonathan (Yahya) Cazalas                    Mathematical Induction                     page 34
+              Mathematical Induction
+               Example #3: Prove via Mathematical Induction:
+                                                        n
+
+                                                       ∑ i
+                                                       i =1
+                                                           2 i
+                                                               = ( n − 1) 2 n +1
+                                                                                 +2
+
+
+
+                      1)         Base Case: Show that P(1) is true. We want to
+                                 confirm that the left side (LS) equals the right side
+                                 (RS) when we plug in the smallest value (1).
+                                             1
+                                        LS: ∑ i 2 = 1 ∗ 2 = 2
+                                                                                                 1+1
+                                                                                   RS: (1 − 1) ∗ 2     +2 = 0+2 = 2
+                                                   i              1
+                                 
+                                            i =1
+
+
+                      2)         Induction Hypothesis: assume true for an arbitrary k
+                                  k
+
+                             ∑ i 2 i
+
+                                 i =1
+                                     = ( k − 1) 2 k +1
+                                                       +2                              Assume P(k) is True
+
+© Dr. Jonathan (Yahya) Cazalas                                Mathematical Induction                                  page 35
+              Mathematical Induction
+                                                               n
+              Example #3: Prove ∑ i 2i = (n − 1)2 n +1 + 2 via Induction
+                                                              i =1
+
+
+                     3)     Induction Step: based on the I.H., prove P(k+1).
+                                    k +1step, you basically plug in a k+1 wherever you see a k.
+                            ***At this
+                                      ∑
+                            Prove i 2i = (k )+21k +−2 1+)22k +1+1 + 2
+                                          i =1
+                                                                            PROVE This!
+                                                     *All we did was simplify a bit.
+                            Again, to prove this, we use “the thing” from earlier,
+                            which basically allows us to then use the I.H.
+                                   k +1
+                                               k i
+                                   ∑    i 2 =  ∑ i 2  + (k + 1)2 k +1
+                                                 i                                 Guess what:
+                                                                                   From our Induction Hypothesis,
+                                   i =1        i =1                              we know that k i
+                                                                                                 ∑ i 2 = (k − 1)2
+                                                                                                             k +1
+                                                                                                                    +2
+                                                                                                 i =1
+
+
+
+
+                                 So we substitute this in…
+© Dr. Jonathan (Yahya) Cazalas                          Mathematical Induction                                      page 36
+              Mathematical Induction
+                                                           n
+              Example #3: Prove ∑ i 2i = (n − 1)2 n +1 + 2 via Induction
+                                                          i =1
+
+
+                     3)     Induction Step: based on the I.H., prove P(k+1).
+                                         k +1
+                             Prove ∑ i 2i = (k )2 k + 2 + 2                         PROVE This!
+                                         i =1
+
+
+                            Again, to prove this, we use “the thing” from earlier,
+                            which basically allows us to then use the I.H.
+                                 k +1
+                                             k i
+                                 ∑    i 2 =  ∑ i 2  + (k + 1)2 k +1
+                                                i                                  Guess what:
+                                                                                   From our Induction Hypothesis,
+                                 i =1        i =1                                we know that k i
+                                                                                                 ∑ i 2 = (k − 1)2
+                                                                                                             k +1
+                                                                                                                    +2
+                                                                                                 i =1
+
+
+                                 k +1
+
+                                 ∑ i 2
+                                  i =1
+                                       i
+                                         = ( k − 1) 2 k +1
+                                                           + 2 + ( k + 1) 2 k +1
+
+
+
+© Dr. Jonathan (Yahya) Cazalas                      Mathematical Induction                                          page 37
+              Mathematical Induction
+                                                           n
+              Example #3: Prove ∑ i 2i = (n − 1)2 n +1 + 2 via Induction
+                                                          i =1
+
+
+                     3)     Induction Step: based on the I.H., prove P(k+1).
+                                         k +1
+                             Prove ∑ i 2i = (k )2 k + 2 + 2                         PROVE This!
+                                         i =1
+
+
+                            Again, to prove this, we use “the thing” from earlier,
+                            which basically allows us to then use the I.H.
+                                 k +1
+                                             k i
+                                 ∑    i 2 =  ∑ i 2  + (k + 1)2 k +1
+                                                i                                  Guess what:
+                                                                                   From our Induction Hypothesis,
+                                 i =1        i =1                                we know that k i
+                                                                                                 ∑ i 2 = (k − 1)2
+                                                                                                             k +1
+                                                                                                                    +2
+                                                                                                 i =1
+
+
+                                 k +1
+
+                                 ∑ i 2
+                                  i =1
+                                       i
+                                         = ( k − 1) 2 k +1
+                                                           + 2 + ( k + 1) 2 k +1
+
+
+
+© Dr. Jonathan (Yahya) Cazalas                      Mathematical Induction                                          page 38
+              Mathematical Induction
+                                                          n
+              Example #3: Prove ∑ i 2i = (n − 1)2 n +1 + 2 via Induction
+                                                         i =1
+
+
+                     3)     Induction Step: based on the I.H., prove P(k+1).
+                                    k +1
+                             Prove ∑ i 2i = (k )2 k + 2 + 2                           PROVE This!
+                                    i =1
+                                    k +1
+
+                                    ∑                    k +1                  k +1     The rest is just
+                                      i 2 i
+                                            = ( k − 1) 2      + 2 + ( k + 1) 2          basic Algebra
+                                    i =1
+
+                                    k +1
+
+                                    ∑ i
+                                    i =1
+                                        2 i
+                                            = ( k − 1) 2 k +1
+                                                              + ( k + 1) 2 k +1
+                                                                                + 2 = 2 k +1
+                                                                                             ( 2k ) + 2
+                                                  *We re-ordered and then factored out a 2k+1.
+                                    k +1
+
+                                    ∑ i
+                                    i =1
+                                        2 i
+                                            = 2 k +1
+                                                     ( 2 k ) + 2 = ( k ) 21 k +1
+                                                                           2     + 2 = ( k ) 2 k +2
+                                                                                                    +2
+                                Again, we successfully used the I.H. to help us solve the I.S.
+© Dr. Jonathan (Yahya) Cazalas                     Mathematical Induction                                  page 39
+              Mathematical Induction
+                                                             n
+              Example #3: Prove ∑ i 2i = (n − 1)2 n +1 + 2 via Induction
+                                                            i =1
+
+
+                           Remember, we need to prove the Inductive Step:
+                             k +1
+
+                             ∑ i
+                             i =1
+                                 2 i
+                                     = ( k ) 2 k +2
+                                                    +2
+
+                           We just proved the Induction Step above. We proved that
+                            P(k+1) is true under the assumption that P(k) is true.
+                           Since we completed all three steps, by Mathematical
+                            Induction, we know that P(n) is true for all positive integers n.
+                           That is, we have proven, for all positive n, that
+                                 n
+
+                             ∑ i
+                             i =1
+                                 2 i
+                                     = ( n − 1) 2 n +1
+                                                       +2
+
+
+© Dr. Jonathan (Yahya) Cazalas                     Mathematical Induction                page 40
+              Today’s demotivators
+
+              Is your brain fried???
+
+              It’s not all bad.
+
+              How bout some good ole
+              demotivators to get you going!
+
+© Dr. Jonathan (Yahya) Cazalas   Mathematical Induction   page 41
+              Mathematical Induction
+
+                  WASN’T
+                   THAT
+               MOTIVATIONAL!
+© Dr. Jonathan (Yahya) Cazalas   Mathematical Induction   page 42
+Mathematical
+Induction
+   College of Computing & Information Technology
+   King Abdulaziz University
+
+
+
+  CPCS-222 – Discrete Structures
+

@@ -1,0 +1,882 @@
+{
+  "course": "CPCS 222 — Discrete Mathematics",
+  "chapter": 1,
+  "chapter_title": "The Foundations: Logic and Proofs",
+  "preview": true,
+  "source_pdfs": [
+    "CPCS222_01n_LogicProofs.pdf",
+    "CPCS222_02n_LogicProofs.pdf",
+    "CPCS222_03n_LogicProofs.pdf",
+    "CPCS 222 - Lab 01 Propositional Logic.pdf",
+    "CPCS 222 - Lab 02 Applications of propositional logic.pdf",
+    "CPCS 222 - Lab 03 - Propositional Equivalance.pdf",
+    "CPCS 222 - Lab 04 - Predicate and Quantifier.pdf",
+    "CPCS 222 - Lab 05 - Inference Rules.pdf",
+    "CPCS 222 - Lab 06 - Logic and Proofs.pdf"
+  ],
+  "lesson_count": 8,
+  "lessons": [
+    {
+      "section": "1.1",
+      "title": "Propositional Logic — Statements, Connectives, and Truth Tables",
+      "objective": "Decide whether a sentence is a proposition, build compound propositions using the five core connectives (¬, ∧, ∨, →, ↔) and the auxiliary ⊕, and construct a truth table for any compound proposition with up to three propositional variables.",
+      "why": "Propositional logic is the alphabet of formal reasoning. Hardware designers use it to lay out circuits, programmers use it inside every if-statement and SQL WHERE clause, and mathematicians use it to state theorems precisely. Once you can manipulate truth values mechanically, you stop guessing about whether an argument is sound and start proving it.",
+      "story": "Layla (student): \"Professor, my friend says 'x + 1 = 2' is a proposition. I disagree. Who's right?\"\n\nProfessor Hadi: \"You are. A proposition must be a declarative sentence that is definitely either true or false. 'x + 1 = 2' depends on x — it's an open sentence, not yet a proposition. The moment we plug in a value, say x = 1, it becomes the proposition '1 + 1 = 2', which is true.\"\n\nLayla: \"So commands and questions don't count?\"\n\nProfessor Hadi: \"Right. 'Close the door!' is a command, 'What time is it?' is a question. Neither is true or false. Now — what truth value does 'The Moon is made of green cheese' have?\"\n\nLayla: \"False — but it's still a proposition, because it CAN be evaluated.\"\n\nProfessor Hadi: \"Exactly. Truth value, not truthfulness, is what matters.\"",
+      "explain": "A PROPOSITION is a declarative sentence that is either true (T) or false (F), but not both. We name simple propositions with letters p, q, r, s. From these atomic propositions we build COMPOUND PROPOSITIONS using logical connectives. There are five connectives you must master.\n\n1) NEGATION (¬p, read 'not p') flips the truth value: ¬T = F, ¬F = T.\n\n2) CONJUNCTION (p ∧ q, 'p and q') is true only when both p and q are true.\n\n3) DISJUNCTION (p ∨ q, 'p or q') is true when at least one of p, q is true. This is the INCLUSIVE 'or' of mathematics. English's exclusive 'or' (\"soup or salad, not both\") is a separate connective ⊕ (XOR), which is true exactly when p and q differ.\n\n4) IMPLICATION (p → q, 'if p then q') is the trickiest. It is FALSE only in one case: when the hypothesis p is true and the conclusion q is false. If p is false, p → q is vacuously true regardless of q. Think of it as a promise: only a kept promise that fails counts as a lie.\n\n5) BICONDITIONAL (p ↔ q, 'p if and only if q') is true when p and q have the same truth value.\n\nFrom p → q we form three related conditionals:\n  • CONVERSE: q → p\n  • CONTRAPOSITIVE: ¬q → ¬p (logically equivalent to p → q)\n  • INVERSE: ¬p → ¬q (equivalent to the converse, NOT to the original)\n\nA TRUTH TABLE lists every possible combination of truth values for the atomic propositions and computes the truth value of the compound. With n atomic variables you get 2ⁿ rows. Build truth tables column by column, from the innermost subexpressions outward.\n\nOperator precedence (highest to lowest): ¬, then ∧, then ∨, then →, then ↔. When in doubt, parenthesize.",
+      "key_points": [
+        "A proposition is a declarative sentence with a definite truth value (T or F).",
+        "Open sentences with free variables (like 'x > 5') are NOT propositions until variables are bound or assigned.",
+        "Five core connectives: ¬ (not), ∧ (and), ∨ (or, inclusive), → (if-then), ↔ (iff).",
+        "p → q is false ONLY when p is true and q is false; otherwise true.",
+        "p → q ≡ ¬q → ¬p (contrapositive), but p → q ≢ q → p (converse).",
+        "A compound proposition over n atomic variables has 2ⁿ rows in its truth table.",
+        "Precedence: ¬ > ∧ > ∨ > → > ↔; parentheses override."
+      ],
+      "examples": [
+        {
+          "prompt": "Which of these are propositions, and what is the truth value of each? (a) 'Cairo is the capital of Egypt.' (b) '5 + 7 = 10.' (c) 'x + 2 = 11.' (d) 'Answer this question.'",
+          "answer": "(a) Proposition, T. (b) Proposition, F. (c) Open sentence — depends on x — NOT a proposition. (d) Imperative — NOT a proposition."
+        },
+        {
+          "prompt": "Let p = 'It is below freezing' and q = 'It is snowing'. Translate: 'It is below freezing but not snowing.'",
+          "answer": "p ∧ ¬q. The English word 'but' is logically the same as 'and' — it just signals contrast."
+        },
+        {
+          "prompt": "Construct the truth table for (p ∨ ¬q) → q.",
+          "answer": "p | q | ¬q | p∨¬q | (p∨¬q)→q\nT | T |  F |  T   |    T\nT | F |  T |  T   |    F\nF | T |  F |  F   |    T\nF | F |  T |  T   |    F"
+        },
+        {
+          "prompt": "State the converse, contrapositive, and inverse of 'If it snows tonight, then I will stay home.'",
+          "answer": "Let p = 'it snows tonight', q = 'I stay home'. Original: p → q.\nConverse (q → p): 'If I stay home tonight, then it snowed.'\nContrapositive (¬q → ¬p): 'If I do not stay home tonight, then it did not snow.'\nInverse (¬p → ¬q): 'If it does not snow tonight, then I will not stay home.'"
+        },
+        {
+          "prompt": "How many rows does the truth table for (p → r) ∨ (¬s → ¬t) ∨ (¬u → v) have?",
+          "answer": "Six distinct variables (p, r, s, t, u, v), so 2⁶ = 64 rows."
+        }
+      ],
+      "visual": {
+        "type": "table",
+        "idea": "An interactive 'Truth Table Builder' that lets the learner toggle any compound proposition and watch every column populate row by row. Rows for atomic variables are colored by truth value (green/red); the final compound column is highlighted. A side panel shows the current expression in formal notation and as plain English.",
+        "interactive_hint": "Drag-and-drop connective tiles (¬ ∧ ∨ → ↔) onto p, q, r placeholders to build a formula; a 'Reveal' slider fills the truth table one column at a time so the learner sees how complex columns are derived from simpler ones."
+      },
+      "math": [
+        "p → q ≡ ¬p ∨ q",
+        "p ↔ q ≡ (p → q) ∧ (q → p)",
+        "p ⊕ q ≡ (p ∨ q) ∧ ¬(p ∧ q)",
+        "Truth-table size for n variables: 2^n rows."
+      ],
+      "quiz": [
+        {
+          "q": "Which of the following is a proposition? (i) '7 is prime.' (ii) 'Open the window.' (iii) 'x² ≥ 0.' (iv) 'Are you ready?'",
+          "choices": [
+            "i only",
+            "i and iii",
+            "ii and iv",
+            "all four"
+          ],
+          "answer": "i only",
+          "explanation": "(i) is true. (ii) is a command. (iii) has free variable x — open sentence. (iv) is a question."
+        },
+        {
+          "q": "p → q is FALSE in exactly which case?",
+          "choices": [
+            "p T, q T",
+            "p T, q F",
+            "p F, q T",
+            "p F, q F"
+          ],
+          "answer": "p T, q F",
+          "explanation": "An implication only fails when its hypothesis holds but the conclusion does not."
+        },
+        {
+          "q": "Which is the contrapositive of 'If it rains, the match is cancelled'?",
+          "choices": [
+            "If the match is cancelled, it rained.",
+            "If the match is not cancelled, it did not rain.",
+            "If it does not rain, the match is not cancelled.",
+            "If the match is cancelled, it did not rain."
+          ],
+          "answer": "If the match is not cancelled, it did not rain.",
+          "explanation": "Contrapositive of p → q is ¬q → ¬p; swap and negate both sides."
+        },
+        {
+          "q": "How many rows are in a truth table with 4 atomic variables?",
+          "choices": [
+            "8",
+            "12",
+            "16",
+            "24"
+          ],
+          "answer": "16",
+          "explanation": "2⁴ = 16."
+        },
+        {
+          "q": "Translate to logic: 'You can edit the entry only if you are an administrator.' (e = can edit, a = is admin.)",
+          "choices": [
+            "a → e",
+            "e → a",
+            "e ∧ a",
+            "e ↔ a"
+          ],
+          "answer": "e → a",
+          "explanation": "'P only if Q' means P → Q. Editing requires admin status, not the other way around."
+        }
+      ]
+    },
+    {
+      "section": "1.2",
+      "title": "Applications of Propositional Logic — Translation, Specifications, and Puzzles",
+      "objective": "Translate English sentences into propositional logic, judge whether a set of system specifications is consistent, decide satisfiability, and solve logic puzzles by case analysis on truth values.",
+      "why": "Real software bugs hide in misread specifications. A requirements document that LOOKS clear can be inconsistent — provably impossible to satisfy — and propositional logic is the tool that catches it before code is written. The same techniques formalize legal contracts, configure routers, evaluate Boolean searches, and crack classic logic puzzles by sheer truth-table grinding.",
+      "story": "Khalid (student): \"My intern team got a spec that said: 'The reply is sent unless the file system is full,' AND 'The reply is not sent.' We spent two days arguing whether the file system has to be full.\"\n\nProfessor Hadi: \"Translate them. Let r = 'reply is sent', f = 'file system is full'. 'Reply sent unless full' becomes ¬f → r — equivalently r ∨ f. Combined with ¬r, what does logic force?\"\n\nKhalid: \"r ∨ f and ¬r both true... so f must be true. The file system MUST be full.\"\n\nProfessor Hadi: \"You just resolved a two-day argument with one truth table. That's the value of formalization.\"",
+      "explain": "TRANSLATING ENGLISH TO LOGIC requires two steps:\n  (1) Identify the atomic propositions and assign letters.\n  (2) Map English connectives to logical ones — paying close attention to phrases that mean implication.\n\nWatch for these patterns, all of which mean p → q:\n  • 'if p, then q'        • 'p implies q'\n  • 'p only if q'         • 'q if p'\n  • 'q whenever p'        • 'p is sufficient for q'\n  • 'q is necessary for p' • 'q follows from p'\n\nAnd patterns meaning p ↔ q: 'p iff q', 'p is necessary and sufficient for q'.\n\nSYSTEM SPECIFICATIONS are lists of propositions that describe required behavior. A spec list is CONSISTENT if there is at least one assignment of truth values to its atomic variables that makes every proposition true simultaneously. Otherwise it is INCONSISTENT — no software can ever satisfy it. To check consistency, build one combined truth table or hunt by hand for a satisfying row.\n\nSATISFIABILITY of a single compound proposition is the same idea: a proposition is satisfiable if some assignment makes it true. If every row is true it is a TAUTOLOGY; if every row is false it is a CONTRADICTION; otherwise it is a CONTINGENCY.\n\nBOOLEAN SEARCH (search engines, databases) maps AND, OR, NOT directly to ∧, ∨, ¬ over keyword presence.\n\nLOGIC PUZZLES — like Smullyan's knights-and-knaves — are solved by letting propositional letters stand for 'X is a knight', encoding each speaker's statement, and trying both truth values for the speaker. Knights tell truth (their statement equals their type); knaves lie (their statement equals the negation of their type). Any consistent row is a solution; if no row is consistent the scenario is impossible.",
+      "key_points": [
+        "'p only if q' translates to p → q (NOT q → p).",
+        "'p whenever q' translates to q → p — the 'when' clause is the hypothesis.",
+        "'Necessary' marks the conclusion of an implication; 'sufficient' marks the hypothesis.",
+        "A spec list is consistent ⇔ there exists a row in the joint truth table where every spec is T.",
+        "Satisfiable: some row T. Tautology: every row T. Contradiction: every row F.",
+        "In knight/knave puzzles, encode 'X is a knight' as a single atomic proposition; truth-tellers' statements have the same value as their type, liars' are negated."
+      ],
+      "examples": [
+        {
+          "prompt": "Translate: 'You can access the Internet from campus only if you are a CS major or you are not a freshman.' (a = access, c = CS major, f = freshman.)",
+          "answer": "a → (c ∨ ¬f). 'Only if' makes the right-hand side a NECESSARY condition for a."
+        },
+        {
+          "prompt": "Are these specs consistent? S1: 'The diagnostic message is stored in the buffer or it is retransmitted.' S2: 'The message is not stored in the buffer.' S3: 'If the message is stored, then it is retransmitted.'",
+          "answer": "Let p = stored, q = retransmitted. Specs: p ∨ q, ¬p, p → q. Try p = F, q = T: p ∨ q = T, ¬p = T, p → q = T (vacuously). Consistent. Adding ¬q (not retransmitted) makes p ∨ q force p, contradicting ¬p — INCONSISTENT."
+        },
+        {
+          "prompt": "Use De Morgan's law to negate: 'Carlos will bicycle or run tomorrow.'",
+          "answer": "¬(b ∨ r) ≡ ¬b ∧ ¬r: 'Carlos will not bicycle and will not run tomorrow.'"
+        },
+        {
+          "prompt": "Knights-and-Knaves: A says 'B is a knight'. B says 'A and I are of opposite types'. Who is who?",
+          "answer": "Let p = 'A is knight', q = 'B is knight'. A's claim is q; if A is a knight then A's claim is true, so q. B's claim is p ⊕ q. If q holds, B's claim must be true, requiring p ⊕ q true; but p and q are both T, so p ⊕ q = F — contradiction. So A is a knave (¬p), A's claim is false, so ¬q (B is a knave). Both are KNAVES."
+        },
+        {
+          "prompt": "Is (p → q) ∧ (p → ¬q) ∧ (¬p → q) ∧ (¬p → ¬q) satisfiable?",
+          "answer": "Each pair forces a contradiction: p → q and p → ¬q together require ¬p; ¬p → q and ¬p → ¬q together require p. No row satisfies all four — UNSATISFIABLE (a contradiction)."
+        }
+      ],
+      "visual": {
+        "type": "logic-flow",
+        "idea": "An English-to-logic 'translator' panel: the learner types a sentence; the page highlights the trigger phrases ('only if', 'whenever', 'unless', 'necessary', 'sufficient') and shows the matching connective. Below, a live consistency checker for up to five specifications builds the joint truth table and marks the row(s) that satisfy every spec.",
+        "interactive_hint": "Toggle each individual variable; the satisfying-row highlight moves in real time so the learner FEELS what 'consistent' means."
+      },
+      "math": [
+        "Consistent(S₁,…,Sₙ) ⇔ ∃ assignment ν such that ν(Sᵢ) = T for every i.",
+        "Tautology ⇔ all rows T. Contradiction ⇔ all rows F. Contingency ⇔ at least one of each.",
+        "p ⊕ q ≡ (p ∧ ¬q) ∨ (¬p ∧ q)."
+      ],
+      "quiz": [
+        {
+          "q": "'You will pass only if you study.' Which is the correct translation? (s = study, p = pass.)",
+          "choices": [
+            "s → p",
+            "p → s",
+            "s ↔ p",
+            "¬s → p"
+          ],
+          "answer": "p → s",
+          "explanation": "'p only if s' means p → s; studying is necessary for passing."
+        },
+        {
+          "q": "Which is logically equivalent to 'unless'? 'p unless q' is the same as:",
+          "choices": [
+            "p → q",
+            "¬q → p",
+            "q → p",
+            "p ∧ ¬q"
+          ],
+          "answer": "¬q → p",
+          "explanation": "'p unless q' = 'if not q, then p' = ¬q → p (equivalently p ∨ q)."
+        },
+        {
+          "q": "A spec list contains p, ¬p ∨ q, ¬q. Is it consistent?",
+          "choices": [
+            "Yes",
+            "No, p and ¬q force q",
+            "No, ¬p ∨ q with p forces q, contradicting ¬q",
+            "Cannot tell"
+          ],
+          "answer": "No, ¬p ∨ q with p forces q, contradicting ¬q",
+          "explanation": "p is T, so for ¬p ∨ q to hold q must be T. But ¬q forces q F. Inconsistent."
+        },
+        {
+          "q": "A proposition that is true under at least one assignment is called:",
+          "choices": [
+            "Tautology",
+            "Contradiction",
+            "Satisfiable",
+            "Contingent"
+          ],
+          "answer": "Satisfiable",
+          "explanation": "Satisfiable = at least one true row. Tautologies and contingencies are special satisfiable cases."
+        },
+        {
+          "q": "On Smullyan's island, A says 'I am a knave.' What is A?",
+          "choices": [
+            "A knight",
+            "A knave",
+            "Either is possible",
+            "Impossible — A cannot exist"
+          ],
+          "answer": "Impossible — A cannot exist",
+          "explanation": "If A is a knight, the statement is true, so A is a knave — contradiction. If A is a knave, the statement is true, but knaves only lie — contradiction. The Liar's paradox."
+        }
+      ]
+    },
+    {
+      "section": "1.3",
+      "title": "Propositional Equivalences — Laws of Logic and Symbolic Manipulation",
+      "objective": "Recognize the standard logical equivalences (De Morgan's, distributive, absorption, etc.), prove that two propositions are equivalent both by truth table and by step-by-step symbolic derivation, and use these laws to simplify or transform formulas.",
+      "why": "Algebra freed us from arithmetic by letting us manipulate symbols instead of numbers. Logical equivalences do the same for reasoning: they let you rewrite a tangled formula into a simpler one without rebuilding a 64-row truth table every time. Compiler optimizers, SAT solvers, and circuit minimizers all run on these laws. Mastering them is the difference between 'I think this is correct' and 'I have a five-line proof that this is correct.'",
+      "story": "Sara: \"Professor, my code has the condition `!(a && b) || (a && b)`. VS Code says it's always true. Why?\"\n\nProfessor Hadi: \"Let p = a∧b. The expression is ¬p ∨ p — that's the law of the excluded middle. Always true, regardless of p.\"\n\nSara: \"So I could replace the whole condition with `true`?\"\n\nProfessor Hadi: \"Yes — and a modern compiler would. But knowing WHY it can do that is what we're learning. We proved it through identity laws, not by simulation.\"\n\nSara: \"What if the code is `(p ∧ q) ∨ (p ∧ ¬q)`?\"\n\nProfessor Hadi: \"Distribute: p ∧ (q ∨ ¬q) = p ∧ T = p. The q dropped out completely. That's a real optimization.\"",
+      "explain": "Two propositions P and Q are LOGICALLY EQUIVALENT, written P ≡ Q (or P ⇔ Q), if they have the same truth value under every assignment of values to their atomic variables. Equivalently, P ↔ Q is a tautology.\n\nThere are two ways to prove P ≡ Q:\n  (A) TRUTH TABLE: build columns for P and Q; check that they match in every row.\n  (B) SYMBOLIC DERIVATION: rewrite P using a chain of standard equivalences until you arrive at Q. Each step cites a named law.\n\nThe standard laws (memorize these — they are your toolbox):\n\n  Identity:        p ∧ T ≡ p,            p ∨ F ≡ p\n  Domination:      p ∨ T ≡ T,            p ∧ F ≡ F\n  Idempotent:      p ∨ p ≡ p,            p ∧ p ≡ p\n  Double Negation: ¬(¬p) ≡ p\n  Negation:        p ∨ ¬p ≡ T,           p ∧ ¬p ≡ F\n  Commutative:     p ∨ q ≡ q ∨ p,        p ∧ q ≡ q ∧ p\n  Associative:     (p∨q)∨r ≡ p∨(q∨r),    (p∧q)∧r ≡ p∧(q∧r)\n  Distributive:    p ∨ (q∧r) ≡ (p∨q)∧(p∨r),  p ∧ (q∨r) ≡ (p∧q)∨(p∧r)\n  De Morgan's:     ¬(p∧q) ≡ ¬p∨¬q,        ¬(p∨q) ≡ ¬p∧¬q\n  Absorption:      p ∨ (p∧q) ≡ p,        p ∧ (p∨q) ≡ p\n\nTwo derived equivalences worth memorizing:\n  IMPLICATION:   p → q  ≡  ¬p ∨ q\n  BICONDITIONAL: p ↔ q  ≡  (p → q) ∧ (q → p)  ≡  (p ∧ q) ∨ (¬p ∧ ¬q)\n\nPROOF DISCIPLINE: when doing symbolic derivations, write each step on its own line with the law applied to the right. Substitute consistently — if you replace p, replace it everywhere in that step. The strategy is usually:\n  1. Eliminate → and ↔ using the implication identity.\n  2. Push negations inward with De Morgan's and double negation.\n  3. Apply distributive/absorption/idempotent laws to simplify.\n  4. Use identity/domination/negation laws to reach the goal.",
+      "key_points": [
+        "P ≡ Q means P ↔ Q is a tautology — same truth value in every row.",
+        "De Morgan's laws push negations across ∧ and ∨ (flipping the connective).",
+        "p → q ≡ ¬p ∨ q is the single most-used rewrite in proofs.",
+        "Distributive law: ∧ distributes over ∨ AND ∨ distributes over ∧ — both directions.",
+        "Strategy: eliminate → first, push ¬ inward, then simplify.",
+        "Each line of a symbolic proof must cite the law used; otherwise it is just guessing."
+      ],
+      "examples": [
+        {
+          "prompt": "Show ¬(p ∨ ¬(p ∧ q)) is a contradiction using laws.",
+          "answer": "¬(p ∨ ¬(p ∧ q))\n≡ ¬p ∧ ¬¬(p ∧ q)            De Morgan\n≡ ¬p ∧ (p ∧ q)              double negation\n≡ (¬p ∧ p) ∧ q              associative\n≡ F ∧ q                     negation law\n≡ F                         domination.\nAlways false ⇒ contradiction."
+        },
+        {
+          "prompt": "Show [p ∧ (p → q)] → q is a tautology.",
+          "answer": "≡ ¬[p ∧ (¬p ∨ q)] ∨ q       eliminate →\n≡ ¬[(p ∧ ¬p) ∨ (p ∧ q)] ∨ q distribute\n≡ ¬[F ∨ (p ∧ q)] ∨ q        negation\n≡ ¬(p ∧ q) ∨ q              identity\n≡ ¬p ∨ ¬q ∨ q               De Morgan\n≡ ¬p ∨ T                    excluded middle\n≡ T.                        domination"
+        },
+        {
+          "prompt": "Prove ¬p → (q → r) ≡ q → (p ∨ r).",
+          "answer": "LHS: ¬p → (q → r) ≡ ¬¬p ∨ (¬q ∨ r) ≡ p ∨ ¬q ∨ r ≡ ¬q ∨ (p ∨ r) ≡ q → (p ∨ r). Done."
+        },
+        {
+          "prompt": "Use distributive + absorption to simplify (p ∧ q) ∨ (p ∧ ¬q).",
+          "answer": "(p ∧ q) ∨ (p ∧ ¬q) ≡ p ∧ (q ∨ ¬q) ≡ p ∧ T ≡ p."
+        },
+        {
+          "prompt": "Prove ¬p ↔ q ≡ p ↔ ¬q using equivalences.",
+          "answer": "¬p ↔ q ≡ (¬p ∧ q) ∨ (p ∧ ¬q)        biconditional expansion\n       ≡ (p ∧ ¬q) ∨ (¬p ∧ q)        commutative\n       ≡ p ↔ ¬q.                    biconditional expansion (reverse)"
+        }
+      ],
+      "visual": {
+        "type": "logic-flow",
+        "idea": "A 'Law Card Deck' on the left shows all standard equivalences. The main panel displays the current proposition; the learner clicks a law card and a sub-expression to apply that rewrite. The page validates each step against the law's pattern, refusing illegal moves. A counter tracks line-count; an 'auto-prove' button demonstrates a worked solution side by side.",
+        "interactive_hint": "Hovering over any subexpression highlights all places where a given law could apply (e.g., every place where De Morgan would fire). Clicking commits the rewrite."
+      },
+      "math": [
+        "P ≡ Q  ⇔  ⊨ P ↔ Q  (P ↔ Q is a tautology).",
+        "p → q ≡ ¬p ∨ q.",
+        "¬(p ∧ q) ≡ ¬p ∨ ¬q;  ¬(p ∨ q) ≡ ¬p ∧ ¬q.",
+        "p ∨ (q ∧ r) ≡ (p ∨ q) ∧ (p ∨ r); p ∧ (q ∨ r) ≡ (p ∧ q) ∨ (p ∧ r).",
+        "p ∨ (p ∧ q) ≡ p ≡ p ∧ (p ∨ q)  (absorption)."
+      ],
+      "quiz": [
+        {
+          "q": "Which is logically equivalent to ¬(p → q)?",
+          "choices": [
+            "¬p → ¬q",
+            "p ∧ ¬q",
+            "¬p ∨ q",
+            "q → p"
+          ],
+          "answer": "p ∧ ¬q",
+          "explanation": "p → q ≡ ¬p ∨ q; negating gives ¬(¬p ∨ q) ≡ p ∧ ¬q."
+        },
+        {
+          "q": "¬(p ∨ q) is equivalent to:",
+          "choices": [
+            "¬p ∨ ¬q",
+            "¬p ∧ ¬q",
+            "p ∧ q",
+            "p ↔ q"
+          ],
+          "answer": "¬p ∧ ¬q",
+          "explanation": "De Morgan's second law."
+        },
+        {
+          "q": "Simplify (p ∧ T) ∨ (q ∧ F).",
+          "choices": [
+            "p",
+            "q",
+            "p ∨ q",
+            "T"
+          ],
+          "answer": "p",
+          "explanation": "p ∧ T ≡ p; q ∧ F ≡ F; p ∨ F ≡ p."
+        },
+        {
+          "q": "Which law justifies (p ∧ q) ∨ p ≡ p?",
+          "choices": [
+            "Identity",
+            "Domination",
+            "Absorption",
+            "Idempotent"
+          ],
+          "answer": "Absorption",
+          "explanation": "Absorption laws: p ∨ (p ∧ q) ≡ p and p ∧ (p ∨ q) ≡ p."
+        },
+        {
+          "q": "(p → q) ∨ (p → ¬q) is:",
+          "choices": [
+            "A contradiction",
+            "A tautology",
+            "Equivalent to p",
+            "Equivalent to q"
+          ],
+          "answer": "A tautology",
+          "explanation": "≡ (¬p ∨ q) ∨ (¬p ∨ ¬q) ≡ ¬p ∨ (q ∨ ¬q) ≡ ¬p ∨ T ≡ T."
+        }
+      ]
+    },
+    {
+      "section": "1.4",
+      "title": "Predicates and Quantifiers — From Statements to Universes",
+      "objective": "Define propositional functions (predicates) over a domain, apply the universal (∀) and existential (∃) quantifiers, evaluate quantified statements over finite and infinite domains, and negate quantified statements using De Morgan's laws for quantifiers.",
+      "why": "Propositional logic can describe a fixed sentence — but it cannot say 'every integer has a successor' or 'there exists a smallest element'. Predicate logic adds variables and quantifiers, exactly the machinery that database queries (∃ x in Users where x.age > 18), type theory (∀ T. List⟨T⟩ → T), and every mathematical theorem you'll ever read are written in. Without quantifiers, there is no calculus, no algebra, no formal verification.",
+      "story": "Yusuf: \"How do I say 'every man is mortal' in propositional logic?\"\n\nProfessor Hadi: \"You can't — and that's the point. Propositional logic only talks about fixed facts. Once we say 'every', we're ranging over a domain of objects. We need predicates and quantifiers.\"\n\nYusuf: \"OK — so M(x) means 'x is mortal'. How do I say 'every man'?\"\n\nProfessor Hadi: \"Add Man(x). Now: ∀x (Man(x) → M(x)). For every x, if x is a man, then x is mortal. The implication does the filtering — non-men make the implication vacuously true.\"\n\nYusuf: \"And 'some man is brave'?\"\n\nProfessor Hadi: \"With existential, you use ∧, not →. ∃x (Man(x) ∧ B(x)). Otherwise ∃x (Man(x) → B(x)) would be true if even one non-man exists, since the implication holds vacuously.\"",
+      "explain": "A PREDICATE (propositional function) P(x) is a sentence with one or more free variables that becomes a proposition once each variable is replaced by a value from a DOMAIN (also called the universe of discourse) U. Example: if P(x) is 'x > 0' over U = ℤ, then P(3) is true and P(−1) is false. Predicates can have multiple arguments: R(x,y,z) might mean 'x + y = z'.\n\nThere are TWO QUANTIFIERS:\n\n  UNIVERSAL  ∀x P(x)  —  read 'for all x, P(x)' or 'for every x, P(x)'.\n       True ⇔ P(x) is true for EVERY value of x in the domain.\n       False ⇔ there exists an x in the domain making P(x) false (a counterexample).\n\n  EXISTENTIAL  ∃x P(x)  —  read 'there exists x such that P(x)' or 'for some x, P(x)'.\n       True ⇔ AT LEAST ONE x in the domain makes P(x) true.\n       False ⇔ P(x) is false for every x.\n\nOn a finite domain U = {a₁, …, aₙ}:\n  ∀x P(x)  ≡  P(a₁) ∧ P(a₂) ∧ ⋯ ∧ P(aₙ)\n  ∃x P(x)  ≡  P(a₁) ∨ P(a₂) ∨ ⋯ ∨ P(aₙ)\n\nTWO TRANSLATION TEMPLATES that you must internalize:\n  • 'All As are Bs'      →  ∀x (A(x) → B(x))   [implication, NOT conjunction]\n  • 'Some A is a B'      →  ∃x (A(x) ∧ B(x))   [conjunction, NOT implication]\n\nDE MORGAN'S LAWS FOR QUANTIFIERS — negation flips the quantifier and negates the predicate:\n  ¬∀x P(x)  ≡  ∃x ¬P(x)\n  ¬∃x P(x)  ≡  ∀x ¬P(x)\n\nIntuition: 'not every x is P' = 'some x is not P'; 'no x is P' = 'every x is not P'.\n\nBOUND vs FREE variables: a variable bound by a quantifier ranges over the domain; the same letter used outside the quantifier's scope is a different (free) variable. An expression with no free variables is a proposition with a definite truth value.",
+      "key_points": [
+        "Predicate = propositional function with free variables; needs a domain to be evaluated.",
+        "∀x P(x) = AND across the whole domain. ∃x P(x) = OR across the whole domain.",
+        "'All A are B' uses → inside the quantifier; 'some A is B' uses ∧.",
+        "Negate quantifiers by flipping the quantifier and negating the predicate.",
+        "A counterexample (one x with ¬P(x)) suffices to disprove ∀x P(x).",
+        "On the empty domain, ∀x P(x) is vacuously TRUE and ∃x P(x) is FALSE."
+      ],
+      "examples": [
+        {
+          "prompt": "Domain = integers. State the truth value of (a) ∀n (n² ≥ 0), (b) ∃n (n² = 2), (c) ∀n (2n > n), (d) ∃n (n² < 0).",
+          "answer": "(a) TRUE — squares are non-negative. (b) FALSE — no integer squared equals 2. (c) FALSE — counterexample n = 0 gives 2·0 = 0, not greater than 0; the inequality also fails for any non-positive integer. (d) FALSE — no integer has a negative square."
+        },
+        {
+          "prompt": "Translate two ways: 'No student in your class has taken a course in logic programming.' Domain (i) students in class, (ii) all people. L(x) = 'x has taken logic programming'.",
+          "answer": "(i) ¬∃x L(x), or equivalently ∀x ¬L(x). (ii) Add S(x) = 'x is a student in your class': ¬∃x (S(x) ∧ L(x)) ≡ ∀x (S(x) → ¬L(x))."
+        },
+        {
+          "prompt": "Express the negation of 'Some drivers do not obey the speed limit' so that ¬ touches only predicates.",
+          "answer": "Original: ∃x (D(x) ∧ ¬O(x)). Negation: ¬∃x (D(x) ∧ ¬O(x)) ≡ ∀x ¬(D(x) ∧ ¬O(x)) ≡ ∀x (¬D(x) ∨ O(x)) ≡ ∀x (D(x) → O(x)). English: 'Every driver obeys the speed limit.'"
+        },
+        {
+          "prompt": "S(x) = 'x is a student', F(x) = 'x is faculty', A(x,y) = 'x asked y a question', domain = all people. Translate: 'Every student has asked Professor Gross a question.'",
+          "answer": "∀x (S(x) → A(x, Gross))."
+        },
+        {
+          "prompt": "Domain = real numbers. Truth value of ∀x ((-x)² = x²)?",
+          "answer": "TRUE — squaring is unaffected by sign."
+        }
+      ],
+      "visual": {
+        "type": "diagram",
+        "idea": "A 'Universe Explorer': a horizontal strip shows the domain as a row of dots (e.g., integers from -5 to 5). The learner picks a predicate from a dropdown — 'x > 0', 'x is even', 'x² < 5' — and each dot lights green (true) or red (false). Two large indicators on the right read ∀ and ∃, computing live as the learner toggles the predicate or shifts the domain window.",
+        "interactive_hint": "Drag a 'counterexample finder' magnifier; if any red dot exists the ∀ indicator turns red and the magnifier highlights why. Same for ∃ — a single green dot suffices."
+      },
+      "math": [
+        "On finite U = {a₁,…,aₙ}: ∀x P(x) ≡ ⋀ᵢ P(aᵢ); ∃x P(x) ≡ ⋁ᵢ P(aᵢ).",
+        "¬∀x P(x) ≡ ∃x ¬P(x).",
+        "¬∃x P(x) ≡ ∀x ¬P(x).",
+        "Empty domain: ∀x P(x) = T (vacuous), ∃x P(x) = F."
+      ],
+      "quiz": [
+        {
+          "q": "'Every cat purrs' best translates to:",
+          "choices": [
+            "∀x (C(x) ∧ P(x))",
+            "∀x (C(x) → P(x))",
+            "∃x (C(x) → P(x))",
+            "∃x (C(x) ∧ P(x))"
+          ],
+          "answer": "∀x (C(x) → P(x))",
+          "explanation": "'All A are B' uses → inside ∀. The conjunction form would falsely claim everything is a cat."
+        },
+        {
+          "q": "Negate ∀x ∃y P(x,y):",
+          "choices": [
+            "∀x ∀y ¬P(x,y)",
+            "∃x ∀y ¬P(x,y)",
+            "∃x ∃y ¬P(x,y)",
+            "∀x ∃y ¬P(x,y)"
+          ],
+          "answer": "∃x ∀y ¬P(x,y)",
+          "explanation": "Push ¬ inward: ¬∀x ⇒ ∃x ¬; then ¬∃y ⇒ ∀y ¬."
+        },
+        {
+          "q": "Domain = positive integers. ∃n (n² < 0) is:",
+          "choices": [
+            "True",
+            "False",
+            "Not a proposition",
+            "Vacuously true"
+          ],
+          "answer": "False",
+          "explanation": "No positive integer (or any real) has a negative square."
+        },
+        {
+          "q": "What is wrong with ∃x (Man(x) → Mortal(x)) as a translation of 'some man is mortal'?",
+          "choices": [
+            "Nothing — it is correct.",
+            "It uses → where ∧ is needed; the implication is vacuously true if any non-man exists.",
+            "It should be ∀, not ∃.",
+            "It needs two quantifiers."
+          ],
+          "answer": "It uses → where ∧ is needed; the implication is vacuously true if any non-man exists.",
+          "explanation": "The standard pitfall: 'some A is B' must use ∧, not →."
+        },
+        {
+          "q": "If U = ∅, the statement ∀x P(x) is:",
+          "choices": [
+            "False",
+            "True (vacuously)",
+            "Undefined",
+            "Equal to ∃x P(x)"
+          ],
+          "answer": "True (vacuously)",
+          "explanation": "Universal over empty domain is vacuously true; existential over empty domain is false."
+        }
+      ]
+    },
+    {
+      "section": "1.5",
+      "title": "Nested Quantifiers — Order Matters",
+      "objective": "Read and write predicates with multiple nested quantifiers, recognize when ∀∃ and ∃∀ have different meanings, translate complex English mathematical statements into nested-quantifier form, and negate nested-quantifier expressions cleanly.",
+      "why": "Almost every interesting mathematical claim uses two or more quantifiers. Continuity in calculus is ∀ε∃δ. The definition of a limit, a Cauchy sequence, surjectivity of a function, every database join condition — all are nested. Getting the order wrong changes 'every real has an additive inverse' (TRUE) into 'one number is the additive inverse of every real' (FALSE). Order is everything.",
+      "story": "Mariam: \"Are ∀x ∃y P(x,y) and ∃y ∀x P(x,y) the same?\"\n\nProfessor Hadi: \"Almost never. Take P(x,y) = 'x + y = 0' over the reals. The first says: for every real x, some y zeros it out — TRUE, y = -x. The second says: there's ONE y that zeros out every x — FALSE, no single number is the inverse of every real.\"\n\nMariam: \"So the swap matters when ∀ comes first vs second?\"\n\nProfessor Hadi: \"Always pay attention. ∀∃ allows y to depend on x. ∃∀ forces a single y that works uniformly. The second is strictly stronger — it implies the first, but not the other way around.\"\n\nMariam: \"Like in calculus — continuity vs uniform continuity?\"\n\nProfessor Hadi: \"Exactly that. The δ that depends on x vs the δ that doesn't. Quantifier order is the whole difference.\"",
+      "explain": "NESTED QUANTIFIERS apply two or more quantifiers in sequence. The scope of each quantifier is determined by parenthesization or by left-to-right reading.\n\nREADING NESTED QUANTIFIERS AS LOOPS:\n  • ∀x ∀y P(x,y) — 'for every pair (x,y), P holds'. True iff P is     true everywhere.\n  • ∀x ∃y P(x,y) — 'for every x there is SOME y (possibly depending     on x) making P(x,y) true'.\n  • ∃x ∀y P(x,y) — 'there is one x that makes P(x,y) true for all y'.     The same x must work uniformly.\n  • ∃x ∃y P(x,y) — 'there exists at least one pair (x,y)'.\n\nORDER OF QUANTIFIERS — KEY FACT: same-type quantifiers commute, different-type quantifiers do NOT.\n  ∀x ∀y P(x,y) ≡ ∀y ∀x P(x,y)\n  ∃x ∃y P(x,y) ≡ ∃y ∃x P(x,y)\n  ∃y ∀x P(x,y) ⇒ ∀x ∃y P(x,y)   (one direction only — strictly stronger)\n  ∀x ∃y P(x,y) ⇏ ∃y ∀x P(x,y)\n\nTRANSLATION RECIPE for English mathematical statements:\n  1. Make implicit quantifiers explicit: 'the sum of two positive integers is positive' → 'for all positive integers x, y, x + y > 0'.\n  2. Choose variables and domain.\n  3. Pick the right pattern: 'all A satisfying B are C' → ∀x (A(x) ∧ B(x) → C(x)); 'some A is B' → ∃x (A(x) ∧ B(x)).\n  4. Combine with logical connectives.\n\nNEGATING NESTED QUANTIFIERS — push the negation inward by flipping each quantifier and finally negating the inner predicate:\n  ¬∀x ∃y P(x,y)  ≡  ∃x ¬∃y P(x,y)  ≡  ∃x ∀y ¬P(x,y)\n  ¬∃x ∀y P(x,y)  ≡  ∀x ¬∀y P(x,y)  ≡  ∀x ∃y ¬P(x,y)\n\nTRUTH-VALUE TABLE for the four 2-variable quantifier combinations (over a domain where P depends on both arguments):\n\n  Statement       True when                 False when\n  ∀x ∀y P(x,y)    P holds for every pair    Some pair fails P\n  ∀x ∃y P(x,y)    Every x has a witness y   Some x has no witness\n  ∃x ∀y P(x,y)    Some x works for all y    Every x has some y where P fails\n  ∃x ∃y P(x,y)    Some pair satisfies P     P fails for every pair",
+      "key_points": [
+        "Same quantifier swaps freely; mixed ∀/∃ generally do NOT.",
+        "∃y ∀x P(x,y) IMPLIES ∀x ∃y P(x,y), but the reverse fails.",
+        "In ∀x ∃y, the y can depend on x; in ∃y ∀x, the y must be the same for all x.",
+        "Negation: flip each quantifier and negate the innermost predicate.",
+        "Implicit universal quantifiers are common in math — make them explicit before translating.",
+        "Reading nested quantifiers as nested loops ('outer x, inner y') makes order intuitive."
+      ],
+      "examples": [
+        {
+          "prompt": "Domain = real numbers. Determine truth values: (a) ∀x ∀y (x + y = y + x), (b) ∀x ∃y (x + y = 0), (c) ∃y ∀x (x + y = 0).",
+          "answer": "(a) TRUE — commutativity. (b) TRUE — for each x, take y = -x. (c) FALSE — no single y is the additive inverse of every x."
+        },
+        {
+          "prompt": "Translate: 'There is a woman who has taken a flight on every airline in the world.' P(w,f) = 'w has taken f', Q(f,a) = 'f is a flight on airline a'.",
+          "answer": "∃w ∀a ∃f (P(w,f) ∧ Q(f,a))."
+        },
+        {
+          "prompt": "Translate: 'Every real number has a multiplicative inverse, except 0.'",
+          "answer": "∀x ((x ≠ 0) → ∃y (xy = 1)). Or equivalently ∀x ∃y ((x = 0) ∨ (xy = 1))."
+        },
+        {
+          "prompt": "Negate ∀x ∃y (P(x,y) → Q(x,y)) so that ¬ touches only predicates.",
+          "answer": "¬∀x ∃y (P → Q) ≡ ∃x ∀y ¬(P → Q) ≡ ∃x ∀y (P(x,y) ∧ ¬Q(x,y))."
+        },
+        {
+          "prompt": "Domain = integers. What is the truth value of ∀n ∃m (n + m = 0)?",
+          "answer": "TRUE — for every integer n, take m = -n."
+        }
+      ],
+      "visual": {
+        "type": "simulation",
+        "idea": "A 2-D grid where the x-axis is one variable, the y-axis another, and a small square at (i, j) is colored green if P(i, j) holds. Buttons toggle the four quantifier patterns ∀∀, ∀∃, ∃∀, ∃∃; the page highlights the rows/columns the quantifier needs to inspect and reports the resulting truth value live. The learner can edit P to see how flipping a single cell changes ∀∃ vs ∃∀.",
+        "interactive_hint": "Toggle a single cell from green to red and watch how that one change can break ∀∃ but leave ∃∀ untouched (or vice-versa) — the visual makes the asymmetry tangible."
+      },
+      "math": [
+        "∀x ∀y P(x,y) ≡ ∀y ∀x P(x,y); ∃x ∃y ≡ ∃y ∃x.",
+        "∃y ∀x P(x,y) ⇒ ∀x ∃y P(x,y); not generally the reverse.",
+        "¬∀x ∃y P ≡ ∃x ∀y ¬P;  ¬∃x ∀y P ≡ ∀x ∃y ¬P.",
+        "Limit definition: ∀ε>0 ∃δ>0 ∀x (|x − a| < δ → |f(x) − L| < ε) — pure ∀∃∀."
+      ],
+      "quiz": [
+        {
+          "q": "Which of these statements about a binary predicate P over a non-empty domain is ALWAYS true?",
+          "choices": [
+            "∀x ∃y P(x,y) → ∃y ∀x P(x,y)",
+            "∃y ∀x P(x,y) → ∀x ∃y P(x,y)",
+            "∀x ∃y P ↔ ∃y ∀x P",
+            "All of the above"
+          ],
+          "answer": "∃y ∀x P(x,y) → ∀x ∃y P(x,y)",
+          "explanation": "A single uniform witness implies a per-x witness, but not vice versa."
+        },
+        {
+          "q": "Negate ∃x ∀y (x ≤ y) over the integers.",
+          "choices": [
+            "∀x ∃y (x > y)",
+            "∃x ∀y (x > y)",
+            "∀x ∀y (x > y)",
+            "∃x ∃y (x ≤ y)"
+          ],
+          "answer": "∀x ∃y (x > y)",
+          "explanation": "Flip ∃ to ∀, ∀ to ∃, and negate ≤ to >. The negation says 'every x is exceeded by some y'."
+        },
+        {
+          "q": "Over the reals, ∀x ∃y (xy = 1) is:",
+          "choices": [
+            "True",
+            "False (x = 0 has no inverse)",
+            "True only for positive reals",
+            "Undefined"
+          ],
+          "answer": "False (x = 0 has no inverse)",
+          "explanation": "For x = 0, no y satisfies 0·y = 1."
+        },
+        {
+          "q": "Which English sentence matches ∀x ∃y L(x,y), where L(x,y) = 'x loves y'?",
+          "choices": [
+            "Everybody loves somebody.",
+            "Somebody is loved by everybody.",
+            "Everybody loves everybody.",
+            "Somebody loves somebody."
+          ],
+          "answer": "Everybody loves somebody.",
+          "explanation": "For every x, there is at least one y that x loves."
+        },
+        {
+          "q": "Domain = positive integers. ∃n ∀m (nm = m) is:",
+          "choices": [
+            "True (n = 1)",
+            "True (n = 0)",
+            "False",
+            "Depends on m"
+          ],
+          "answer": "True (n = 1)",
+          "explanation": "n = 1 satisfies 1·m = m for all m. (0 is not in the positive-integer domain.)"
+        }
+      ]
+    },
+    {
+      "section": "1.6",
+      "title": "Rules of Inference — Building Valid Arguments",
+      "objective": "Identify the standard inference rules of propositional logic (Modus Ponens, Modus Tollens, Hypothetical Syllogism, Disjunctive Syllogism, Addition, Simplification, Conjunction, Resolution), apply the four quantifier inference rules (UI, UG, EI, EG), and chain rules together into multi-step formal proofs of valid arguments.",
+      "why": "Equivalences let you rewrite a single proposition; inference rules let you DERIVE NEW PROPOSITIONS from old ones. Every formal proof in mathematics, every step in a verified compiler, every line in a Coq or Lean proof, is an instance of one of these rules. They are the atoms of mechanical reasoning. Once you can build arguments this way, you can certify correctness — not just believe it.",
+      "story": "Aisha: \"How do I PROVE 'It rained' from 'If it didn't rain, the race is held' and 'The trophy wasn't awarded' and 'If the race is held, the trophy is awarded'?\"\n\nProfessor Hadi: \"Chain rules. Race held → trophy awarded; trophy wasn't awarded — that's Modus Tollens, so race not held. Then 'not rained → race held' contraposes to 'race not held → it rained'. Apply Modus Ponens.\"\n\nAisha: \"So I built a chain of rules instead of one big truth table.\"\n\nProfessor Hadi: \"Yes — and for n premises with k variables, the truth-table approach is exponential in k. The rule-of-inference approach is linear in the number of steps. That's why proof assistants are practical and brute-force is not.\"",
+      "explain": "A VALID ARGUMENT is a sequence of propositions p₁, p₂, …, pₙ (premises) leading to a conclusion q, such that whenever every premise is true, q is also true. Equivalently, (p₁ ∧ p₂ ∧ ⋯ ∧ pₙ) → q is a tautology.\n\nAn INFERENCE RULE is a small valid argument form. The standard rules of propositional logic:\n\n  Modus Ponens          [p, p → q]      ⊢ q\n  Modus Tollens         [¬q, p → q]     ⊢ ¬p\n  Hypothetical Syll.    [p → q, q → r]  ⊢ p → r\n  Disjunctive Syll.     [p ∨ q, ¬p]     ⊢ q\n  Addition              [p]             ⊢ p ∨ q\n  Simplification        [p ∧ q]         ⊢ p\n  Conjunction           [p, q]          ⊢ p ∧ q\n  Resolution            [p ∨ q, ¬p ∨ r] ⊢ q ∨ r\n\nSTRUCTURE OF A FORMAL PROOF:\n  1. Number each premise.\n  2. Each new line is derived from previous lines by some named rule (or is a logical equivalence).\n  3. End with the conclusion.\n  4. Annotate each line with its justification (rule + line numbers used).\n\nFOUR QUANTIFIER RULES extend inference into predicate logic:\n\n  Universal Instantiation (UI)\n       ∀x P(x)            ⊢  P(c)   for any specific c in the domain.\n\n  Universal Generalization (UG)\n       P(c)  for an arbitrary c   ⊢  ∀x P(x).\n       (the c must have been introduced as 'arbitrary', not as a named instance)\n\n  Existential Instantiation (EI)\n       ∃x P(x)            ⊢  P(c)   for SOME new constant c not used before. The c is a 'witness'; you don't know which.\n\n  Existential Generalization (EG)\n       P(c)               ⊢  ∃x P(x).\n\nSTRATEGY: when you have a universal hypothesis, instantiate (UI). When you have an existential hypothesis, instantiate to a fresh constant (EI). Build to specific predicates, apply propositional rules, and finally generalize back to ∀ or ∃ as the goal demands.\n\nFALLACIES TO AVOID:\n  Affirming the Consequent: from p → q and q, infer p — INVALID.\n  Denying the Antecedent: from p → q and ¬p, infer ¬q — INVALID.\n  Both look like Modus Ponens / Tollens but are not.",
+      "key_points": [
+        "Valid argument ⇔ (conjunction of premises) → conclusion is a tautology.",
+        "Modus Ponens: p, p→q ⊢ q. Modus Tollens: ¬q, p→q ⊢ ¬p.",
+        "Disjunctive Syllogism: from p ∨ q and ¬p infer q.",
+        "Resolution: [p ∨ q, ¬p ∨ r] ⊢ q ∨ r — the workhorse of automated theorem provers.",
+        "UI brings universals down to specific instances; UG promotes a result about an arbitrary element to all elements.",
+        "EI introduces a FRESH constant; never reuse a name from earlier in the proof.",
+        "Affirming the consequent and denying the antecedent are common fallacies — they look like inference rules but are not."
+      ],
+      "examples": [
+        {
+          "prompt": "Premises: (1) ¬r ∨ ¬f → (s ∧ d), (2) s → t, (3) ¬t. Conclude: r.",
+          "answer": "1. ¬r ∨ ¬f → (s ∧ d)         premise\n2. s → t                     premise\n3. ¬t                        premise\n4. ¬s                        Modus Tollens (2,3)\n5. ¬s ∨ ¬d                   Addition (4)\n6. ¬(s ∧ d)                  De Morgan (5)\n7. ¬(¬r ∨ ¬f)                Modus Tollens (1,6)\n8. r ∧ f                     De Morgan + double negation (7)\n9. r                         Simplification (8). ∎"
+        },
+        {
+          "prompt": "Show: if ∀x (P(x) → (Q(x) ∧ S(x))) and ∀x (P(x) ∧ R(x)), then ∀x (R(x) ∧ S(x)).",
+          "answer": "Let c be arbitrary.\n1. P(c) ∧ R(c)              UI on second premise\n2. P(c)                     Simplification\n3. R(c)                     Simplification\n4. P(c) → Q(c) ∧ S(c)       UI on first premise\n5. Q(c) ∧ S(c)              MP (2,4)\n6. S(c)                     Simplification\n7. R(c) ∧ S(c)              Conjunction (3,6)\n8. ∀x (R(x) ∧ S(x))         UG (7). ∎"
+        },
+        {
+          "prompt": "Identify the rule of inference: 'If it snows, the university closes. The university is not closed. Therefore, it did not snow.'",
+          "answer": "Modus Tollens."
+        },
+        {
+          "prompt": "Determine if the argument is correct: 'Every CS major takes discrete math. Natasha is taking discrete math. Therefore, Natasha is a CS major.'",
+          "answer": "INVALID — affirming the consequent. From ∀x (CS(x) → DM(x)) and DM(Natasha), you cannot conclude CS(Natasha)."
+        },
+        {
+          "prompt": "Use Resolution: from p ∨ q and ¬p ∨ r, infer ?",
+          "answer": "q ∨ r."
+        }
+      ],
+      "visual": {
+        "type": "logic-flow",
+        "idea": "A 'Proof Tree Builder' that displays premises as leaf cards and lets the learner connect them via labeled edges representing inference rules (MP, MT, HS, DS, etc.). Each new node shows the inferred proposition and its justification; when the conclusion node is reached, the page validates the entire chain. A side-panel ledger shows each line with rule + sources, exactly the format expected on assignments.",
+        "interactive_hint": "Drag a premise card onto a rule symbol; the page auto-fills the result. Wrong rule selections show a red 'pattern mismatch' indicator and explain which premises a rule actually expects."
+      },
+      "math": [
+        "Modus Ponens:    [p, p → q] ⊢ q.",
+        "Modus Tollens:   [¬q, p → q] ⊢ ¬p.",
+        "Hypothetical Syllogism: [p → q, q → r] ⊢ p → r.",
+        "Disjunctive Syllogism:  [p ∨ q, ¬p] ⊢ q.",
+        "Resolution:      [p ∨ q, ¬p ∨ r] ⊢ q ∨ r.",
+        "UI: ∀x P(x) ⊢ P(c). UG: P(c) arbitrary ⊢ ∀x P(x).",
+        "EI: ∃x P(x) ⊢ P(c) for fresh c. EG: P(c) ⊢ ∃x P(x)."
+      ],
+      "quiz": [
+        {
+          "q": "From premises 'If I study, I pass.' and 'I do not pass', conclude:",
+          "choices": [
+            "I study.",
+            "I do not study.",
+            "Either I study or I pass.",
+            "Cannot conclude."
+          ],
+          "answer": "I do not study.",
+          "explanation": "Modus Tollens: ¬q, p → q ⊢ ¬p."
+        },
+        {
+          "q": "From p ∨ q and ¬p ∨ r, Resolution yields:",
+          "choices": [
+            "p ∨ r",
+            "q ∨ r",
+            "p ∧ r",
+            "¬p ∨ q"
+          ],
+          "answer": "q ∨ r",
+          "explanation": "Resolution cancels p with ¬p and disjoins the remaining literals."
+        },
+        {
+          "q": "Which is INVALID?",
+          "choices": [
+            "Modus Ponens",
+            "Modus Tollens",
+            "Affirming the Consequent",
+            "Hypothetical Syllogism"
+          ],
+          "answer": "Affirming the Consequent",
+          "explanation": "From p → q and q, you cannot conclude p (q might be true via another route)."
+        },
+        {
+          "q": "Existential Instantiation introduces a constant that:",
+          "choices": [
+            "Must equal a named element of the domain.",
+            "May be any previously used name.",
+            "Must be a NEW name not used elsewhere.",
+            "Need not exist if the domain is empty."
+          ],
+          "answer": "Must be a NEW name not used elsewhere.",
+          "explanation": "EI's witness is unknown; reusing a name would assert facts about a specific known element."
+        },
+        {
+          "q": "From ∀x (P(x) → Q(x)) and P(a), conclude:",
+          "choices": [
+            "P(a) ∨ Q(a)",
+            "Q(a)",
+            "∀x Q(x)",
+            "∃x P(x)"
+          ],
+          "answer": "Q(a)",
+          "explanation": "UI gives P(a) → Q(a); MP with P(a) gives Q(a)."
+        }
+      ]
+    },
+    {
+      "section": "1.7",
+      "title": "Introduction to Proofs — Direct, Contrapositive, and Contradiction",
+      "objective": "Distinguish theorems, axioms, lemmas, corollaries, and conjectures; produce direct proofs and proofs by contraposition for implications p → q; produce proofs by contradiction for general claims; recognize and use trivial and vacuous proofs; and prove biconditional statements as two implications.",
+      "why": "Inference rules are the alphabet; PROOFS are the literature. A proof transforms a conjecture — something you suspect — into a theorem — something you and every future reader can rely on. In computer science, proofs of correctness, termination, and optimality are what separate professional engineering from hopeful coding. Even if you never publish a math paper, you'll write proofs every time you argue why a loop terminates or why a security protocol is sound.",
+      "story": "Hassan: \"How do I prove 'if n is odd, then n² is odd'?\"\n\nProfessor Hadi: \"Direct proof. Assume the hypothesis: n is odd, so n = 2k + 1 for some integer k. Square: n² = 4k² + 4k + 1 = 2(2k² + 2k) + 1, which has the form 2r + 1, so n² is odd. ∎\"\n\nHassan: \"What about 'if n² is odd, then n is odd'?\"\n\nProfessor Hadi: \"Direct is awkward — you'd have to factor n² = 2k+1, which is messy. Try CONTRAPOSITION: assume n is even, show n² is even. n = 2k, so n² = 4k² = 2(2k²), even. By contraposition, n² odd → n odd.\"\n\nHassan: \"And √2 is irrational?\"\n\nProfessor Hadi: \"That one needs CONTRADICTION. Suppose √2 = a/b in lowest terms; derive that a and b are both even — contradicting 'lowest terms'.\"",
+      "explain": "TERMINOLOGY — the vocabulary of mathematical writing:\n  • THEOREM — a statement proven true.\n  • AXIOM (postulate) — a foundational truth taken without proof.\n  • LEMMA — a 'helper' theorem used inside a larger proof.\n  • COROLLARY — an immediate consequence of a theorem.\n  • CONJECTURE — a statement believed true but unproven.\n  • PROOF — a finite sequence of statements, each justified by an axiom, definition, previously proven theorem, or rule of inference, ending with the desired claim.\n\nPROVING p → q — five techniques:\n\n1) DIRECT PROOF.  Assume p; using definitions, axioms, and inference rules, derive q.\n    Template: 'Assume p. Then … therefore q. ∎'\n    Example: 'Sum of two even integers is even.' Take m = 2a, n = 2b; m + n = 2(a+b), even.\n\n2) PROOF BY CONTRAPOSITION.  Prove ¬q → ¬p instead. Useful when the contrapositive is more concrete.\n    Example: 'If n² is odd, then n is odd' is best done by contraposition (assume n even, show n² even).\n\n3) PROOF BY CONTRADICTION (reductio ad absurdum).  To prove a claim p, assume ¬p and derive a contradiction (something of the form r ∧ ¬r). For an implication p → q, assume p ∧ ¬q and derive any contradiction.\n    Example: '√2 is irrational.' Assume √2 = a/b in lowest terms; derive 2 | a and 2 | b, contradicting 'lowest terms'.\n\n4) TRIVIAL PROOF.  If you can show q is true outright, then p → q holds regardless of p. Used when the conclusion is independent of the hypothesis.\n    Example: 'If it is raining, then the empty set is a subset of every set.' The conclusion is always true.\n\n5) VACUOUS PROOF.  If you can show p is false, then p → q is vacuously true. Used most often inside proofs by induction.\n    Example: 'If 1 + 1 = 3, then your grandma wears combat boots.' The hypothesis is false, so the implication holds.\n\nBICONDITIONAL p ↔ q.  Prove BOTH directions: p → q AND q → p. Often labeled '(⇒)' and '(⇐)' in writeups.\n    Example: 'n is even iff n² is even' — direct proof for ⇒, contraposition (or another direct argument) for ⇐.\n\nDEFINITIONS YOU SHOULD KNOW (used in nearly every Chapter 1 proof):\n  • n is EVEN iff ∃k ∈ ℤ such that n = 2k.\n  • n is ODD iff ∃k ∈ ℤ such that n = 2k + 1.\n  • r is RATIONAL iff ∃p, q ∈ ℤ with q ≠ 0 such that r = p/q.\n  • A real that is not rational is IRRATIONAL.\n\nPROOF DISCIPLINE: state what you are assuming, name your variables, cite definitions explicitly, and end with ∎ or QED. Avoid hand-waving phrases like 'clearly' or 'obviously' unless the step really is immediate from a stated definition.",
+      "key_points": [
+        "Theorem = proven claim; lemma = helper; corollary = quick consequence; conjecture = unproven guess; axiom = accepted without proof.",
+        "Direct proof: assume p, derive q.",
+        "Contrapositive proof: prove ¬q → ¬p (logically equivalent to p → q).",
+        "Proof by contradiction: assume ¬(claim), derive r ∧ ¬r.",
+        "Trivial proof: q is already true. Vacuous proof: p is already false.",
+        "Biconditional p ↔ q requires two proofs (both directions).",
+        "Definitions: even = 2k, odd = 2k+1, rational = p/q with q ≠ 0."
+      ],
+      "examples": [
+        {
+          "prompt": "Direct proof: 'The sum of two even integers is even.'",
+          "answer": "Let m and n be even. Then m = 2a and n = 2b for some integers a, b. Then m + n = 2a + 2b = 2(a + b). Since a + b is an integer, m + n has the form 2k, so m + n is even. ∎"
+        },
+        {
+          "prompt": "Direct proof: 'Every odd integer is the difference of two squares.'",
+          "answer": "Let n = 2k + 1. Note (k+1)² − k² = (k² + 2k + 1) − k² = 2k + 1 = n. So n is the difference of squares of consecutive integers. ∎"
+        },
+        {
+          "prompt": "Contraposition: 'If x + y ≥ 2 (real x, y), then x ≥ 1 or y ≥ 1.'",
+          "answer": "Contrapositive: if NOT (x ≥ 1 ∨ y ≥ 1), then NOT (x + y ≥ 2). Assume x < 1 and y < 1. Then x + y < 2. Done. ∎"
+        },
+        {
+          "prompt": "Contradiction: 'There are infinitely many primes.'",
+          "answer": "Assume for contradiction there are only finitely many primes p₁, …, pₙ. Form r = p₁p₂⋯pₙ + 1. r is greater than every pᵢ, and dividing r by any pᵢ leaves remainder 1. So either r is prime (a new prime) or r has a prime factor not in our list. Either way, the list was incomplete — contradiction. ∎"
+        },
+        {
+          "prompt": "Biconditional: 'For integers n, n is odd iff n² is odd.'",
+          "answer": "(⇒) Direct: n = 2k + 1 ⇒ n² = 4k² + 4k + 1 = 2(2k² + 2k) + 1, which is odd.\n(⇐) Contrapositive: assume n is even, n = 2k, so n² = 4k² = 2(2k²), even. So n² odd ⇒ n odd. ∎"
+        }
+      ],
+      "visual": {
+        "type": "logic-flow",
+        "idea": "A 'Proof Method Selector' diagram: at the top is the goal p → q. Three branches descend — Direct, Contrapositive, Contradiction. Each branch shows the assumption box, the intermediate steps, and the conclusion. Two side branches (Trivial, Vacuous) appear when q is identified as always-true or p as always-false. The learner picks a goal from a menu (e.g., 'sum of evens is even', 'n² odd ⇒ n odd', '√2 irrational') and the appropriate branch animates with the worked proof.",
+        "interactive_hint": "After each step, the page asks 'why is this step justified?' with multiple-choice citations (definition of even, distributive law, etc.). Building the proof requires defending each line."
+      },
+      "math": [
+        "Direct: assume p, derive q.",
+        "Contrapositive: p → q ≡ ¬q → ¬p; assume ¬q, derive ¬p.",
+        "Contradiction: to prove p, assume ¬p, derive r ∧ ¬r.",
+        "Vacuous: ¬p ⇒ p → q. Trivial: q ⇒ p → q.",
+        "Biconditional: prove (p → q) ∧ (q → p).",
+        "n even ⇔ ∃k ∈ ℤ : n = 2k. n odd ⇔ ∃k ∈ ℤ : n = 2k + 1."
+      ],
+      "quiz": [
+        {
+          "q": "Which proof method is best for 'If n² is odd, then n is odd'?",
+          "choices": [
+            "Direct (assume n² odd, derive n odd)",
+            "Contrapositive (assume n even, derive n² even)",
+            "Vacuous",
+            "Trivial"
+          ],
+          "answer": "Contrapositive (assume n even, derive n² even)",
+          "explanation": "Direct proof would require factoring an odd square — clumsy. Contrapositive is direct."
+        },
+        {
+          "q": "A proof by contradiction of claim p:",
+          "choices": [
+            "Assumes p and derives a contradiction.",
+            "Assumes ¬p and derives a contradiction.",
+            "Assumes nothing and derives p directly.",
+            "Builds a counterexample."
+          ],
+          "answer": "Assumes ¬p and derives a contradiction.",
+          "explanation": "If ¬p leads to a contradiction, ¬p is false, so p is true."
+        },
+        {
+          "q": "A theorem of the form 'p ↔ q' requires:",
+          "choices": [
+            "One direct proof",
+            "Two proofs (one for each direction)",
+            "A truth table",
+            "A counterexample"
+          ],
+          "answer": "Two proofs (one for each direction)",
+          "explanation": "p ↔ q ≡ (p → q) ∧ (q → p); each implication is proven separately."
+        },
+        {
+          "q": "Which is a VACUOUS proof of 'if 0 = 1, then I am the king of England'?",
+          "choices": [
+            "Show I am the king of England.",
+            "Show 0 ≠ 1, so the hypothesis is false; the implication holds.",
+            "Find someone else who is king.",
+            "Use truth tables."
+          ],
+          "answer": "Show 0 ≠ 1, so the hypothesis is false; the implication holds.",
+          "explanation": "When the antecedent is false, the implication is vacuously true."
+        },
+        {
+          "q": "A LEMMA is best described as:",
+          "choices": [
+            "An unproven conjecture.",
+            "An axiom.",
+            "An auxiliary result used in proving a larger theorem.",
+            "An immediate consequence of a theorem."
+          ],
+          "answer": "An auxiliary result used in proving a larger theorem.",
+          "explanation": "Corollary = immediate consequence; conjecture = unproven; axiom = accepted without proof."
+        }
+      ]
+    },
+    {
+      "section": "1.8",
+      "title": "Proof Methods and Strategy — Cases, Existence, Counterexamples, Uniqueness",
+      "objective": "Construct proofs by cases (including 'without loss of generality'), produce constructive and nonconstructive existence proofs, disprove universal claims by counterexample, prove uniqueness, and choose a proof strategy (forward vs backward reasoning) appropriate to a goal.",
+      "why": "By the end of Section 1.7 you have the basic toolkit; Section 1.8 is where craft begins. Real theorems rarely fit one method — they require splitting into cases, finding clever witnesses, exploiting symmetry with 'WLOG', or proving uniqueness on top of existence. These are the moves that distinguish a professional proof from a student exercise. Learning to pick the right approach upfront saves hours of dead-end algebra.",
+      "story": "Lina: \"I need to show 'for every integer n, |n| ≥ 0'. But absolute value is defined piecewise — how do I write one proof?\"\n\nProfessor Hadi: \"PROOF BY CASES. Handle each piece of the definition separately. Case 1: n ≥ 0, then |n| = n ≥ 0. Case 2: n < 0, then |n| = −n > 0. Both cases cover every integer, so done.\"\n\nLina: \"And how do I show 'there exist irrationals x, y with x^y rational'?\"\n\nProfessor Hadi: \"NONCONSTRUCTIVE EXISTENCE. Look at √2^√2. If it's rational, take x = y = √2. If it's irrational, take x = √2^√2 and y = √2; then x^y = (√2^√2)^√2 = √2^2 = 2, rational. Either way, such x and y exist — without ever telling you which case is the real one.\"\n\nLina: \"So I proved existence without producing the actual numbers?\"\n\nProfessor Hadi: \"That's the whole point. Constructive proofs build the witness; nonconstructive proofs show that one must exist.\"",
+      "explain": "PROOF BY CASES.  When a hypothesis splits into a finite number of exhaustive subcases p₁ ∨ p₂ ∨ ⋯ ∨ pₙ, prove the conclusion in each case separately. Crucially, the cases must COVER every possibility.\n    Template:\n       'Case 1: p₁. … so q.'\n       'Case 2: p₂. … so q.'\n       …\n       'Since p₁ ∨ ⋯ ∨ pₙ exhausts all possibilities, q in every         case. ∎'\n\nWITHOUT LOSS OF GENERALITY (WLOG).  When two or more cases are structurally identical except for relabeling, prove one and state the other 'WLOG'. The cases must truly be symmetric — abuse of WLOG is a common error.\n\nEXISTENCE PROOFS — proving ∃x P(x):\n  • CONSTRUCTIVE: explicitly produce a c with P(c). E.g., '1729 =     10³ + 9³ = 12³ + 1³.' c is given.\n  • NONCONSTRUCTIVE: prove existence without producing c. Often via     contradiction or case analysis ('one of these two values works,     though we do not know which').\n\nDISPROOF BY COUNTEREXAMPLE.  To disprove ∀x P(x), exhibit one c with ¬P(c). Counterexamples are surgical — a single c suffices.\n    Example: 'Every positive integer is the sum of squares of three     integers.' False: 7 cannot be written as a² + b² + c² (you can     check 0² + 1² + 2² = 5, 0² + 1² + 1² = 2, etc.).\n\nNONEXISTENCE PROOFS — proving ¬∃x P(x).  Equivalent to proving ∀x ¬P(x), so use a universal proof technique.\n\nUNIQUENESS PROOFS.  To prove ∃!x P(x) ('there is a unique x with P(x)'), do TWO things:\n  (1) EXISTENCE: produce some x with P(x).\n  (2) UNIQUENESS: assume P(x) and P(y), then derive x = y.\n    Example: 'For real a, b with a ≠ 0, there is a unique real r     with ar + b = 0.' Existence: r = −b/a. Uniqueness: if as + b =     0 too, then ar = as so r = s.\n\nSTRATEGY — CHOOSING A METHOD:\n  1. Try a DIRECT proof first.\n  2. If direct gets ugly, try CONTRAPOSITION or CONTRADICTION.\n  3. If the claim involves cases (parity, sign, comparison), use PROOF BY CASES.\n  4. For ∃ claims, try a CONSTRUCTIVE witness; if you can't find one, try NONCONSTRUCTIVE.\n  5. To disprove a ∀, hunt for a COUNTEREXAMPLE.\n\nFORWARD vs BACKWARD REASONING:\n  • FORWARD: start from the hypothesis, apply rules, push toward the     conclusion. Natural for direct proofs.\n  • BACKWARD: start from the conclusion, find a sufficient condition,     then a sufficient condition for that, etc. Useful for     inequalities and for constructing strategies in games (the     Nim-style 15-stone problem is solved backward).\n\nMost real proofs combine both directions, meeting in the middle.",
+      "key_points": [
+        "Proof by cases requires that the cases be EXHAUSTIVE.",
+        "WLOG only when the cases are truly symmetric.",
+        "Constructive existence: produce a witness. Nonconstructive: prove one must exist without producing it.",
+        "A single counterexample disproves ∀x P(x).",
+        "Uniqueness proofs have two halves: existence + 'any two are equal'.",
+        "Strategy ladder: direct → contraposition → contradiction → cases → constructive ∃ → nonconstructive ∃.",
+        "Forward reasoning grows the known; backward reasoning grows the goal — combine them."
+      ],
+      "examples": [
+        {
+          "prompt": "By cases: 'For every integer n, n² ≥ n.'",
+          "answer": "Case 1: n ≥ 1. Then n² = n·n ≥ n·1 = n.\nCase 2: n = 0. Then n² = 0 = n.\nCase 3: n ≤ -1. Then n² ≥ 1 > 0 > n.\nCases exhaust ℤ, so n² ≥ n for all integers. ∎"
+        },
+        {
+          "prompt": "WLOG: 'If both x·y and x+y are even, then both x and y are even.'",
+          "answer": "Contrapositive: assume not both x, y even. WLOG x is odd (otherwise swap names). Case A: y even. Then x+y = odd + even = odd. Case B: y odd. Then x·y = odd·odd = odd. In either case, one of x·y, x+y is odd. ∎"
+        },
+        {
+          "prompt": "Constructive existence: 'There is a positive integer expressible as a sum of two cubes in two different ways.'",
+          "answer": "1729 = 1³ + 12³ = 9³ + 10³. ∎ (Hardy-Ramanujan number.)"
+        },
+        {
+          "prompt": "Counterexample: 'Every prime is odd.'",
+          "answer": "2 is prime and even. ∎ (disproof)"
+        },
+        {
+          "prompt": "Uniqueness: 'For real a ≠ 0, b, the equation ax + b = 0 has a unique real solution.'",
+          "answer": "Existence: x = −b/a satisfies a(−b/a) + b = 0.\nUniqueness: if y also satisfies ay + b = 0, then ay = ax, and since a ≠ 0, y = x. ∎"
+        },
+        {
+          "prompt": "Backward reasoning: 'In a game removing 1, 2, or 3 stones from 15, the first player has a winning strategy.'",
+          "answer": "Work backward: a player faced with 4 stones must leave 1, 2, or 3, all losing positions. Multiples of 4 are LOSING positions. 15 mod 4 = 3, so first player removes 3, leaving 12 (multiple of 4) for the opponent — a losing position. Forward: first move is to remove 3 stones. ∎"
+        }
+      ],
+      "visual": {
+        "type": "logic-flow",
+        "idea": "A 'Proof Strategy Decision Tree': starting from the form of the claim (∀, ∃, ∃!, p → q, p ↔ q, ¬∀), the diagram branches into the recommended technique. Each leaf links to a worked example. A second panel demonstrates 'forward vs backward' on a sample goal: forward grows from hypothesis, backward from conclusion, and the meet-in-the-middle is highlighted when the chains touch.",
+        "interactive_hint": "Plug in your own claim; the page suggests the most likely method (heuristically — by detecting parity, ∀/∃, equality, etc.) and offers a template skeleton you fill in."
+      },
+      "math": [
+        "Cases: (p₁ ∨ ⋯ ∨ pₙ) → q proved as (p₁ → q) ∧ ⋯ ∧ (pₙ → q).",
+        "WLOG ⇔ symmetric cases collapse to one labeled subproof.",
+        "∃!x P(x) ⇔ ∃x (P(x) ∧ ∀y (P(y) → y = x)).",
+        "Counterexample for ∀x P(x): a single c with ¬P(c).",
+        "Forward + backward reasoning: at each step ask 'what do I know now?' (forward) and 'what would suffice?' (backward)."
+      ],
+      "quiz": [
+        {
+          "q": "To disprove 'every prime is odd', the cleanest argument is:",
+          "choices": [
+            "Direct proof of the negation",
+            "A counterexample (e.g., 2)",
+            "Proof by contradiction",
+            "Proof by cases"
+          ],
+          "answer": "A counterexample (e.g., 2)",
+          "explanation": "One counterexample disproves a universal claim."
+        },
+        {
+          "q": "A NONCONSTRUCTIVE existence proof:",
+          "choices": [
+            "Produces an explicit witness.",
+            "Proves a witness must exist without naming it.",
+            "Uses induction.",
+            "Always uses contradiction."
+          ],
+          "answer": "Proves a witness must exist without naming it.",
+          "explanation": "It establishes existence (often via contradiction or case analysis) but does not exhibit a specific c."
+        },
+        {
+          "q": "A uniqueness proof of ∃!x P(x) requires:",
+          "choices": [
+            "Only existence.",
+            "Only uniqueness.",
+            "Existence AND a proof that any two witnesses are equal.",
+            "A truth table."
+          ],
+          "answer": "Existence AND a proof that any two witnesses are equal.",
+          "explanation": "Both halves are needed; existence alone doesn't rule out multiple witnesses."
+        },
+        {
+          "q": "WLOG ('without loss of generality') is appropriate when:",
+          "choices": [
+            "The omitted case is similar by symmetry.",
+            "You forgot to handle the case.",
+            "The case is too long to write.",
+            "The case is unimportant."
+          ],
+          "answer": "The omitted case is similar by symmetry.",
+          "explanation": "WLOG is a shortcut for 'this argument works for the other case verbatim, swapping labels'."
+        },
+        {
+          "q": "Backward reasoning is most useful when:",
+          "choices": [
+            "Hypotheses are abundant and clear.",
+            "The conclusion suggests a sufficient condition you know how to prove.",
+            "There is no hypothesis.",
+            "You are writing a counterexample."
+          ],
+          "answer": "The conclusion suggests a sufficient condition you know how to prove.",
+          "explanation": "Backward reasoning seeks a chain of sufficient conditions that ends at a known fact."
+        }
+      ]
+    }
+  ]
+}

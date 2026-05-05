@@ -1,0 +1,147 @@
+                                  Chapter 2
+
+
+
+With Question/Answer Animations
+Section 2.4
+Section Summary
+ Sequences.
+    Examples: Geometric Progression, Arithmetic
+     Progression
+ Recurrence Relations
+    Example: Fibonacci Sequence
+ Summations
+ Special Integer Sequences (optional)
+Introduction
+ Sequences are ordered lists of elements.
+    1, 2, 3, 5, 8
+    1, 3, 9, 27, 81, …….
+ Sequences arise throughout mathematics, computer
+  science, and in many other disciplines, ranging from
+  botany to music.
+ We will introduce the terminology to represent
+  sequences and sums of the terms in the sequences.
+Sequences
+ Definition: A sequence is a function from a subset of
+  the integers (usually either the set {0, 1, 2, 3, 4, …..} or
+  {1, 2, 3, 4, ….} ) to a set S.
+ The notation an is used to denote the image of the
+  integer n. We can think of an as the equivalent of
+  f(n) where f is a function from {0,1,2,…..} to S. We call
+  an a term of the sequence.
+Sequences
+Example: Consider the sequence   where
+Geometric Progression
+ Definition: A geometric progression is a sequence of the
+ form:
+ where the initial term a and the common ratio r are real
+ numbers.
+ Examples:
+  1.   Let a = 1 and r = −1. Then:
+
+
+  2.   Let a = 2 and r = 5. Then:
+
+
+  3.   Let a = 6 and r = 1/3. Then:
+Arithmetic Progression
+ Definition: A arithmetic progression is a sequence of the
+ form:
+ where the initial term a and the common difference d are
+ real numbers.
+ Examples:
+  1. Let a = −1 and d = 4:
+
+
+  2.   Let a = 7 and d = −3:
+
+
+  3.   Let a = 1 and d = 2:
+Strings
+  Definition: A string is a finite sequence of characters
+  from a finite set (an alphabet).
+ Sequences of characters or bits are important in
+  computer science.
+ The empty string is represented by λ.
+ The string abcde has length 5.
+Fibonacci Sequence
+Definition: Define the Fibonacci sequence, f0 ,f1 ,f2,…, by:
+   Initial Conditions: f0 = 0, f1 = 1
+   Recurrence Relation: fn = fn-1 + fn-2
+
+Example: Find f2 ,f3 ,f4 , f5 and f6 .
+
+ Answer:
+   f 2 = f 1 + f 0 = 1 + 0 = 1,
+   f 3 = f 2 + f 1 = 1 + 1 = 2,
+   f 4 = f 3 + f 2 = 2 + 1 = 3,
+   f5 = f4 + f3 = 3 + 2 = 5,
+   f 6 = f 5 + f 4 = 5 + 3 = 8.
+Special Integer Sequences (opt)
+ Given a few terms of a sequence, try to identify the
+  sequence. Conjecture a formula, recurrence relation,
+  or some other rule.
+ Some questions to ask?
+    Are there repeated terms of the same value?
+    Can you obtain a term from the previous term by adding
+     an amount or multiplying by an amount?
+    Can you obtain a term by combining the previous terms
+     in some way?
+    Are they cycles among the terms?
+    Do the terms match those of a well known sequence?
+Questions on Special Integer
+Sequences (opt)
+ Example 1: Find formulae for the sequences with the
+ following first five terms: 1, ½, ¼, 1/8, 1/16
+ Solution: Note that the denominators are powers of 2. The
+ sequence with an = 1/2n is a possible match. This is a
+ geometric progression with a = 1 and r = ½.
+ Example 2: Consider 1,3,5,7,9
+ Solution: Note that each term is obtained by adding 2 to
+ the previous term. A possible formula is an = 2n + 1. This
+ is an arithmetic progression with a =1 and d = 2.
+ Example 3: 1, -1, 1, -1,1
+ Solution: The terms alternate between 1 and -1. A possible
+ sequence is an = (−1)n . This is a geometric progression
+ with a = 1 and r = −1.
+Useful Sequences
+Guessing Sequences (optional)
+Example: Conjecture a simple formula for an if the first
+ 10 terms of the sequence {an} are 1, 7, 25, 79, 241, 727,
+ 2185, 6559, 19681, 59047.
+
+ Solution: Note the ratio of each term to the previous
+ approximates 3. So now compare with the sequence
+ 3n . We notice that the nth term is 2 less than the
+ corresponding power of 3. So a good conjecture is
+ that an = 3n − 2.
+Integer Sequences (optional)
+ Integer sequences appear in a wide range of contexts. Later
+  we will see the sequence of prime numbers (Chapter 4), the
+  number of ways to order n discrete objects (Chapter 6), the
+  number of moves needed to solve the Tower of Hanoi
+  puzzle with n disks (Chapter 8), and the number of rabbits
+  on an island after n months (Chapter 8).
+ Integer sequences are useful in many fields such as biology,
+  engineering, chemistry and physics.
+ On-Line Encyclopedia of Integer Sequences (OESIS)
+  contains over 200,000 sequences. Began by Neil Stone in
+  the 1960s (printed form). Now found at
+  http://oeis.org/Spuzzle.html
+Integer Sequences (optional)
+ Here are three interesting sequences to try from the OESIS site. To
+  solve each puzzle, find a rule that determines the terms of the
+  sequence.
+ Guess the rules for forming for the following sequences:
+    2, 3, 3, 5, 10, 13, 39, 43, 172, 177, ...
+         Hint: Think of adding and multiplying by numbers to generate this sequence.
+    0, 0, 0, 0, 4, 9, 5, 1, 1, 0, 55, ...
+      Hint: Think of the English names for the numbers representing the position in the
+        sequence and the Roman Numerals for the same number.
+    2, 4, 6, 30, 32, 34, 36, 40, 42, 44, 46, ...
+      Hint: Think of the English names for numbers, and whether or not they have the
+        letter ‘e.’
+
+ The answers and many more can be found at
+http://oeis.org/Spuzzle.html
+

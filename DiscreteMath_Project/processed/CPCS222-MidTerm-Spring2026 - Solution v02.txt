@@ -1,0 +1,252 @@
+       King Abdulaziz University
+Faculty of Computing & Information Technology
+
+            Computer Science Department
+
+                          SOLUTION
+                Mid Term (April 08, 2026)
+
+    Course: CPCS-222 (Discrete Structure I)
+
+            Term: Spring 2026 (Semester 2)
+
+        Points: 60               Time: 80 minutes
+
+  Student ID:
+
+  Student Name:
+
+  ***Section:
+
+
+    Question#           CLO/SO    Max. Marks   Obt. marks
+
+
+        1                1/1         10
+
+
+        2                1/1         10
+
+
+        3                1/1         10
+
+
+        4                1/1         10
+
+
+        5                2/1         10
+
+
+        6                3/1         10
+
+
+                TOTAL                60
+
+                          Instructor:
+                   Dr. Muhammad Umair Ramzan
+Question No. 01 (10 pts)                                                          CLO 1 / SO-1
+
+Read the following passage carefully and identify five (05) sentences which are “not a
+proposition”.
+
+On a pleasant morning, Ahmed arrived at the university campus before his class
+began. The university opens its gates at 8:00 AM every day. He checked his watch
+and noticed that it was 7:50 AM. As he walked toward the building, he saw that the
+library was already open. Please close the library door behind you. Ahmed
+remembered that 10 is greater than 5. He also recalled that the sum of two odd
+numbers is always even. While thinking, he wrote down the expression x+2=7 in his
+notebook. His friend later mentioned that the Earth revolves around the Sun. What
+time does the lecture begin today? Ahmed knew that water boils at 100 degrees
+Celsius under standard conditions. If it rains, then the ground becomes wet. He also
+wrote the inequality y>3 as another example. Wow, the weather is very pleasant
+today. Finally, he concluded that 15 is divisible by 3.
+SOLUTION:
+
+
+
+
+ S. No.                                         Sentence
+
+
+
+   1                         Please close the library door behind you.
+
+
+   2                                             x+2=7
+
+
+   3                         What time does the lecture begin today?
+
+
+   4                                              y>3
+
+
+   5                         Wow, the weather is very pleasant today.
+Question No. 02 (10 pts)                                                           CLO 1 / SO-1
+
+For the given the logical expression: (p ⊕ q) ∧ (¬r ∨ p) construct the truth table.
+
+
+       p q r         p⊕ q        ¬r      ¬r ∨ p              (p ⊕ q) ∧ (¬r ∨ p)
+
+       T T T            F         F          T                         F
+
+       T T F            F         T          T                         F
+
+       T F T            T         F          T                         T
+
+       T F F            T         T          T                         T
+
+       F T T            T         F          F                         F
+
+       F T F            T         T          T                         T
+
+       F F T            F         F          F                         F
+
+       F F F            F         T          T                         F
+
+
+Question No. 03 (10 pts)                                                           CLO 1 / SO-1
+
+For the given the statement, provide the “Inverse”, “Converse” and “Contrapositive” in English
+
+                       Having a valid digital signature is necessary for the approval of
+ Sentence
+                                 the encrypted research grant submission
+
+
+                        If the encrypted research grant submission is not approved, then it does not
+ Inverse                                        have a valid digital signature
+
+
+                      If a submission has a valid digital signature, then the encrypted research grant
+ Converse                                         submission is approved
+
+
+                        If a submission does not have a valid digital signature, then the encrypted
+ Contrapositive                         research grant submission is not approved
+Question No. 04 (10 pts)                                                        CLO 1 / SO-1
+
+Suppose we have the following propositions:
+
+• 𝑝: The system is secure
+•𝑞: The user is authenticated
+•𝑟: The data is encrypted
+•𝑠: Access is granted
+
+Translate the given sentences into propositional logic.
+
+
+
+                                Sentences                               Propositional Logic
+
+
+
+ Access is granted only if the user is authenticated and the                S → (q ∧ r)
+                     data is encrypted
+
+
+     The system is secure if and only if either the data is                P ↔ (q ⊕ r)
+     encrypted or the user is authenticated, but not both
+
+
+ If the system is not secure or the user is not authenticated,           (¬p ∨ ¬q) → ¬s
+                   then access is not granted
+
+
+   Access is granted if the system is secure and either the             (p ∧ (q ∨ ¬r)) → s
+     user is authenticated or the data is not encrypted
+
+
+Question No. 5 (10 pts)                                                         CLO 2 / SO-1
+
+Show that the following propositional formula is a tautology: using Logical Equivalencies
+
+                                [(p → q) ∧ (q → r)] → (p → r)
+                 Expression                    Logical Equivalance Law
+
+          [(p → q) ∧ (q → r)] → (p → r)                 Given
+
+      ¬[(𝒑 → 𝒒) ∧ (𝒒 → 𝒓)] ∨ (𝒑 → 𝒓)               Implication Law
+
+      ¬[(𝒑 → 𝒒) ∧ (𝒒 → 𝒓)] ∨ (¬𝒑 ∨ 𝒓)              Implication Law
+
+      ¬(𝒑 → 𝒒) ∨ ¬(𝒒 → 𝒓) ∨ (¬𝒑 ∨ 𝒓)              De Morgan’s Law
+
+     ¬(¬𝒑 ∨ 𝒒) ∨ ¬(𝒒 → 𝒓) ∨ (¬𝒑 ∨ 𝒓)               Implication Law
+
+     ¬(¬𝒑 ∨ 𝒒) ∨ ¬(¬𝒒 ∨ 𝒓) ∨ (¬𝒑 ∨ 𝒓)              Implication Law
+
+      (𝒑 ∧ ¬𝒒) ∨ ¬(¬𝒒 ∨ 𝒓) ∨ (¬𝒑 ∨ 𝒓)             De Morgan’s Law
+
+      (𝒑 ∧ ¬𝒒) ∨ (𝒒 ∧ ¬𝒓) ∨ (¬𝒑 ∨ 𝒓)              De Morgan’s Law
+
+      (¬𝒑 ∨ 𝒓) ∨ (𝒑 ∧ ¬𝒒) ∨ (𝒒 ∧ ¬𝒓)              Commutative Law
+
+[(¬𝒑 ∨ 𝒓) ∨ 𝒑] ∧ [(¬𝒑 ∨ 𝒓) ∨ ¬𝒒] ∨ (𝒒 ∧ ¬𝒓)        Distributive Law
+
+[¬𝒑 ∨ (𝒓 ∨ 𝒑)] ∧ [(¬𝒑 ∨ 𝒓) ∨ ¬𝒒] ∨ (𝒒 ∧ ¬𝒓)        Associative Law
+
+[¬𝒑 ∨ (𝒑 ∨ 𝒓)] ∧ [(¬𝒑 ∨ 𝒓) ∨ ¬𝒒] ∨ (𝒒 ∧ ¬𝒓)       Commutative Law
+
+[(¬𝒑 ∨ 𝒑) ∨ 𝒓] ∧ [(¬𝒑 ∨ 𝒓) ∨ ¬𝒒] ∨ (𝒒 ∧ ¬𝒓)        Associative Law
+
+    (𝑻 ∨ 𝒓) ∧ [(¬𝒑 ∨ 𝒓) ∨ ¬𝒒] ∨ (𝒒 ∧ ¬𝒓)            Negation Law
+
+       𝑻 ∧ [(¬𝒑 ∨ 𝒓) ∨ ¬𝒒] ∨ (𝒒 ∧ ¬𝒓)              Domination Law
+
+        [(¬𝒑 ∨ 𝒓) ∨ ¬𝒒] ∨ (𝒒 ∧ ¬𝒓)                   Identity Law
+
+         (¬𝒑 ∨ 𝒓 ∨ ¬𝒒) ∨ (𝒒 ∧ ¬𝒓)                  Associative Law
+[(¬𝒑 ∨ 𝒓 ∨ ¬𝒒) ∨ 𝒒] ∧ [(¬𝒑 ∨ 𝒓 ∨ ¬𝒒) ∨ ¬𝒓]         Distributive Law
+
+[¬𝒑 ∨ 𝒓 ∨ (¬𝒒 ∨ 𝒒)] ∧ [(¬𝒑 ∨ ¬𝒒) ∨ (𝒓 ∨ ¬𝒓)]       Associative Law
+
+   [¬𝒑 ∨ 𝒓 ∨ 𝑻] ∧ [(¬𝒑 ∨ ¬𝒒) ∨ (𝒓 ∨ ¬𝒓)]            Negation Law
+
+       [¬𝒑 ∨ 𝒓 ∨ 𝑻] ∧ [(¬𝒑 ∨ ¬𝒒) ∨ 𝑻]               Negation Law
+
+            𝑻 ∧ [(¬𝒑 ∨ ¬𝒒) ∨ 𝑻]                    Domination Law
+
+                     𝑻∧𝑻                           Domination Law
+
+                       T                             Identity Law
+Question No. 6 (10 pts)                                                           CLO 3 / SO 1
+
+Translate the given predicate logic expressions to English sentences. The propositional functions
+are self-explanatory.
+
+
+
+                             Predicate Logic to English Sentences
+
+
+                               ∀x (Student(x) → Studies(x))
+
+
+                                     Every student study
+
+
+                            ∃x (Teacher(x) ∧ ¬Experienced(x))
+
+
+                      There exists a teacher who is not experienced
+
+
+                  ∀x (Course(x) → ∃y (Student(y) ∧ Enrolled (y, x)))
+
+
+                   Every course has at least one student enrolled in it
+
+
+                     ∃x (Book(x) ∧ ∀y (Student(y) → Reads (y, x)))
+
+
+                       There exists a book that every student reads
+
+
+                     ∀x ∃y (Person(x) → (Person(y) ∧ Helps (y, x)))
+
+
+             For every person, there exists another person who helps them
+

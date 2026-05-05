@@ -1,0 +1,90 @@
+{
+  "course": "CPCS 222 — Discrete Mathematics",
+  "chapter": 1,
+  "chapter_title": "The Foundations: Logic and Proofs",
+  "preview": true,
+  "lesson_count": 8,
+  "layer": "visual_layer",
+  "lessons": [
+    {
+      "lesson_id": "ch1.s1.1",
+      "section": "1.1",
+      "title": "Propositional Logic — Statements, Connectives, and Truth Tables",
+      "visual": {
+        "type": "table",
+        "idea": "An interactive 'Truth Table Builder' that lets the learner toggle any compound proposition and watch every column populate row by row. Rows for atomic variables are colored by truth value (green/red); the final compound column is highlighted. A side panel shows the current expression in formal notation and as plain English.",
+        "interactive_hint": "Drag-and-drop connective tiles (¬ ∧ ∨ → ↔) onto p, q, r placeholders to build a formula; a 'Reveal' slider fills the truth table one column at a time so the learner sees how complex columns are derived from simpler ones."
+      }
+    },
+    {
+      "lesson_id": "ch1.s1.2",
+      "section": "1.2",
+      "title": "Applications of Propositional Logic — Translation, Specifications, and Puzzles",
+      "visual": {
+        "type": "logic-flow",
+        "idea": "An English-to-logic 'translator' panel: the learner types a sentence; the page highlights the trigger phrases ('only if', 'whenever', 'unless', 'necessary', 'sufficient') and shows the matching connective. Below, a live consistency checker for up to five specifications builds the joint truth table and marks the row(s) that satisfy every spec.",
+        "interactive_hint": "Toggle each individual variable; the satisfying-row highlight moves in real time so the learner FEELS what 'consistent' means."
+      }
+    },
+    {
+      "lesson_id": "ch1.s1.3",
+      "section": "1.3",
+      "title": "Propositional Equivalences — Laws of Logic and Symbolic Manipulation",
+      "visual": {
+        "type": "logic-flow",
+        "idea": "A 'Law Card Deck' on the left shows all standard equivalences. The main panel displays the current proposition; the learner clicks a law card and a sub-expression to apply that rewrite. The page validates each step against the law's pattern, refusing illegal moves. A counter tracks line-count; an 'auto-prove' button demonstrates a worked solution side by side.",
+        "interactive_hint": "Hovering over any subexpression highlights all places where a given law could apply (e.g., every place where De Morgan would fire). Clicking commits the rewrite."
+      }
+    },
+    {
+      "lesson_id": "ch1.s1.4",
+      "section": "1.4",
+      "title": "Predicates and Quantifiers — From Statements to Universes",
+      "visual": {
+        "type": "diagram",
+        "idea": "A 'Universe Explorer': a horizontal strip shows the domain as a row of dots (e.g., integers from -5 to 5). The learner picks a predicate from a dropdown — 'x > 0', 'x is even', 'x² < 5' — and each dot lights green (true) or red (false). Two large indicators on the right read ∀ and ∃, computing live as the learner toggles the predicate or shifts the domain window.",
+        "interactive_hint": "Drag a 'counterexample finder' magnifier; if any red dot exists the ∀ indicator turns red and the magnifier highlights why. Same for ∃ — a single green dot suffices."
+      }
+    },
+    {
+      "lesson_id": "ch1.s1.5",
+      "section": "1.5",
+      "title": "Nested Quantifiers — Order Matters",
+      "visual": {
+        "type": "simulation",
+        "idea": "A 2-D grid where the x-axis is one variable, the y-axis another, and a small square at (i, j) is colored green if P(i, j) holds. Buttons toggle the four quantifier patterns ∀∀, ∀∃, ∃∀, ∃∃; the page highlights the rows/columns the quantifier needs to inspect and reports the resulting truth value live. The learner can edit P to see how flipping a single cell changes ∀∃ vs ∃∀.",
+        "interactive_hint": "Toggle a single cell from green to red and watch how that one change can break ∀∃ but leave ∃∀ untouched (or vice-versa) — the visual makes the asymmetry tangible."
+      }
+    },
+    {
+      "lesson_id": "ch1.s1.6",
+      "section": "1.6",
+      "title": "Rules of Inference — Building Valid Arguments",
+      "visual": {
+        "type": "logic-flow",
+        "idea": "A 'Proof Tree Builder' that displays premises as leaf cards and lets the learner connect them via labeled edges representing inference rules (MP, MT, HS, DS, etc.). Each new node shows the inferred proposition and its justification; when the conclusion node is reached, the page validates the entire chain. A side-panel ledger shows each line with rule + sources, exactly the format expected on assignments.",
+        "interactive_hint": "Drag a premise card onto a rule symbol; the page auto-fills the result. Wrong rule selections show a red 'pattern mismatch' indicator and explain which premises a rule actually expects."
+      }
+    },
+    {
+      "lesson_id": "ch1.s1.7",
+      "section": "1.7",
+      "title": "Introduction to Proofs — Direct, Contrapositive, and Contradiction",
+      "visual": {
+        "type": "logic-flow",
+        "idea": "A 'Proof Method Selector' diagram: at the top is the goal p → q. Three branches descend — Direct, Contrapositive, Contradiction. Each branch shows the assumption box, the intermediate steps, and the conclusion. Two side branches (Trivial, Vacuous) appear when q is identified as always-true or p as always-false. The learner picks a goal from a menu (e.g., 'sum of evens is even', 'n² odd ⇒ n odd', '√2 irrational') and the appropriate branch animates with the worked proof.",
+        "interactive_hint": "After each step, the page asks 'why is this step justified?' with multiple-choice citations (definition of even, distributive law, etc.). Building the proof requires defending each line."
+      }
+    },
+    {
+      "lesson_id": "ch1.s1.8",
+      "section": "1.8",
+      "title": "Proof Methods and Strategy — Cases, Existence, Counterexamples, Uniqueness",
+      "visual": {
+        "type": "logic-flow",
+        "idea": "A 'Proof Strategy Decision Tree': starting from the form of the claim (∀, ∃, ∃!, p → q, p ↔ q, ¬∀), the diagram branches into the recommended technique. Each leaf links to a worked example. A second panel demonstrates 'forward vs backward' on a sample goal: forward grows from hypothesis, backward from conclusion, and the meet-in-the-middle is highlighted when the chains touch.",
+        "interactive_hint": "Plug in your own claim; the page suggests the most likely method (heuristically — by detecting parity, ∀/∃, equality, etc.) and offers a template skeleton you fill in."
+      }
+    }
+  ]
+}

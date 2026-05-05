@@ -1,0 +1,455 @@
+Chapter 9
+Chapter Summary
+ Relations and Their Properties
+ n-ary Relations and Their Applications (not currently
+  included in overheads)
+ Representing Relations
+ Closures of Relations (not currently included in
+  overheads)
+ Equivalence Relations
+ Partial Orderings
+Section 9.1
+Section Summary
+ Relations and Functions
+ Properties of Relations
+    Reflexive Relations
+    Symmetric and Antisymmetric Relations
+    Transitive Relations
+ Combining Relations
+Binary Relations
+ Definition: A binary relation R from a set A to a set B
+ is a subset R ⊆ A × B.
+ Example:
+   Let A = {0,1,2} and B = {a,b}
+   {(0, a), (0, b), (1,a) , (2, b)} is a relation from A to B.
+   We can represent relations from a set A to a set B
+    graphically or using a table:
+                                   Relations are more general than
+                                   functions. A function is a relation
+                                   where exactly one element of B is
+                                   related to each element of A.
+Binary Relation on a Set
+ Definition: A binary relation R on a set A is a subset
+ of A × A or a relation from A to A.
+ Example:
+   Suppose that      A = {a,b,c}. Then R = {(a,a),(a,b), (a,c)} is
+    a relation on A.
+   Let A = {1, 2, 3, 4}. The ordered pairs in the relation
+    R = {(a,b) | a divides b} are
+     (1,1), (1, 2), (1,3), (1, 4), (2, 2), (2, 4), (3, 3), and (4, 4).
+Binary Relation on a Set (cont.)
+ Question: How many relations are there on a set A?
+
+ Solution: Because a relation on A is the same thing as a
+ subset of A ⨉ A, we count the subsets of A × A. Since
+ A × A has n2 elements when A has n elements, and a set
+                       m                     | A|2
+ with m elements has 2 subsets, there are 2 subsets of
+                              | A|2
+ A × A. Therefore, there are 2 relations on a set A.
+Binary Relations on a Set (cont.)
+ Example: Consider these relations on the set of integers:
+  R1 = {(a,b) | a ≤ b},           R4 = {(a,b) | a = b},
+  R2 = {(a,b) | a > b},           R5 = {(a,b) | a = b + 1},
+  R3 = {(a,b) | a = b or a = −b}, R6 = {(a,b) | a + b ≤ 3}.
+    Note that these relations are on an infinite set and each of these relations is an
+    infinite set.
+
+  Which of these relations contain each of the pairs
+
+        (1,1), (1, 2), (2, 1), (1, −1), and (2, 2)?
+
+ Solution: Checking the conditions that define each relation, we see
+ that the pair (1,1) is in R1, R3, R4 , and R6: (1,2) is in R1 and R6: (2,1) is in
+ R2, R5, and R6: (1, −1) is in R2, R3, and R6 : (2,2) is in R1, R3, and R4.
+Reflexive Relations
+ Definition: R is reflexive iff (a,a) ∊ R for every element
+ a ∊ A. Written symbolically, R is reflexive if and only if
+      ∀x[x∊U ⟶ (x,x) ∊ R]
+ Example: The following relations on the integers are
+ reflexive:                          If A = ∅ then the empty relation is
+  R1 = {(a,b) | a ≤ b},              reflexive vacuously. That is the empty
+                                     relation on an empty set is reflexive!
+  R3 = {(a,b) | a = b or a = −b},
+  R4 = {(a,b) | a = b}.
+  The following relations are not reflexive:
+  R2 = {(a,b) | a > b} (note that 3 ≯ 3),
+  R5 = {(a,b) | a = b + 1} (note that 3 ≠3 + 1),
+  R6 = {(a,b) | a + b ≤ 3} (note that 4 + 4 ≰ 3).
+Symmetric Relations
+ Definition: R is symmetric iff (b,a) ∊ R whenever (a,b) ∊ R
+ for all a,b ∊ A. Written symbolically, R is symmetric if and
+ only if
+     ∀x∀y [(x,y) ∊R ⟶ (y,x) ∊ R]
+ Example: The following relations on the integers are
+ symmetric:
+  R3 = {(a,b) | a = b or a = −b},
+  R4 = {(a,b) | a = b},
+  R6 = {(a,b) | a + b ≤ 3}.
+  The following are not symmetric:
+  R1 = {(a,b) | a ≤ b} (note that 3 ≤ 4, but 4 ≰ 3),
+  R2 = {(a,b) | a > b} (note that 4 > 3, but 3 ≯ 4),
+  R5 = {(a,b) | a = b + 1} (note that 4 = 3 + 1, but 3 ≠4 + 1).
+Antisymmetric Relations
+ Definition:A relation R on a set A such that for all a,b ∊ A if
+ (a,b) ∊ R and (b,a) ∊ R, then a = b is called antisymmetric.
+ Written symbolically, R is antisymmetric if and only if
+   ∀x∀y [(x,y) ∊R ∧ (y,x) ∊ R ⟶ x = y]
+ Example: The following relations on the integers are
+  antisymmetric:
+   R1 = {(a,b) | a ≤ b},              For any integer, if a a ≤ b and
+   R2 = {(a,b) | a > b},              a ≤ b , then a = b.
+   R4 = {(a,b) | a = b},
+   R5 = {(a,b) | a = b + 1}.
+   The following relations are not antisymmetric:
+   R3 = {(a,b) | a = b or a = −b}
+              (note that both (1,−1) and (−1,1) belong to R3),
+   R6 = {(a,b) | a + b ≤ 3} (note that both (1,2) and (2,1) belong to R6).
+Transitive Relations
+ Definition: A relation R on a set A is called transitive if
+ whenever (a,b) ∊ R and (b,c) ∊ R, then (a,c) ∊ R, for all a,b,c ∊ A.
+ Written symbolically, R is transitive if and only if
+      ∀x∀y ∀z[(x,y) ∊R ∧ (y,z) ∊ R ⟶ (x,z) ∊ R ]
+ Example: The following relations on the integers are transitive:
+   R1 = {(a,b) | a ≤ b},            For every integer, a ≤ b
+   R2 = {(a,b) | a > b},            and b ≤ c, then b ≤ c.
+   R3 = {(a,b) | a = b or a = −b},
+   R4 = {(a,b) | a = b}.
+   The following are not transitive:
+   R5 = {(a,b) | a = b + 1} (note that both (3,2) and (4,3) belong to R5,
+     but not (3,3)),
+   R6 = {(a,b) | a + b ≤ 3} (note that both (2,1) and (1,2) belong to R6, but
+     not (2,2)).
+Combining Relations
+ Given two relations R1 and R2, we can combine them
+  using basic set operations to form new relations such
+  as R1 ∪ R2, R1 ∩ R2, R1 − R2, and R2 − R1.
+ Example: Let A = {1,2,3} and B = {1,2,3,4}. The
+  relations R1 = {(1,1),(2,2),(3,3)} and
+  R2 = {(1,1),(1,2),(1,3),(1,4)} can be combined using
+  basic set operations to form new relations:
+   R1 ∪ R2 ={(1,1),(1,2),(1,3),(1,4),(2,2),(3,3)}
+    R1 ∩ R2 ={(1,1)}       R1 − R2 ={(2,2),(3,3)}
+   R2 − R1 ={(1,2),(1,3),(1,4)}
+Composition
+ Definition: Suppose
+   R1 is a relation from a set A to a set B.
+   R2 is a relation from B to a set C.
+ Then the composition (or composite) of R2 with R1, is a
+ relation from A to C where
+   if (x,y) is a member of R1 and (y,z) is a member of R2,
+    then (x,z) is a member of R2∘ R1.
+Representing the Composition of a
+Relation
+              R1    m       R2   w
+    a
+                                 x
+                    n
+    b
+                                 y
+                    o
+    c
+                    p            z
+
+        R1∘ R2 = {(b,D),(b,B)}
+Powers of a Relation
+ Definition: Let R be a binary relation on A. Then the
+ powers Rn of the relation R can be defined inductively by:
+   Basis Step: R1 = R
+   Inductive Step: Rn+1 = Rn ∘ R
+  (see the slides for Section 9.3 for further insights)
+ The powers of a transitive relation are subsets of the
+  relation. This is established by the following theorem:
+  Theorem 1: The relation R on a set A is transitive iff
+  Rn ⊆ R for n = 1,2,3 ….
+ (see the text for a proof via mathematical induction)
+Section 9.3
+Section Summary
+ Representing Relations using Matrices
+ Representing Relations using Digraphs
+Representing Relations Using
+Matrices
+ A relation between finite sets can be represented using a
+  zero-one matrix.
+ Suppose R is a relation from A = {a1, a2, …, am} to
+  B = {b1, b2, …, bn}.
+    The elements of the two sets can be listed in any particular
+     arbitrary order. When A = B, we use the same ordering.
+ The relation R is represented by the matrix
+  MR = [mij], where
+
+
+
+ The matrix representing R has a 1 as its (i,j) entry when ai
+  is related to bj and a 0 if ai is not related to bj.
+Examples of Representing
+Relations Using Matrices
+ Example 1: Suppose that A = {1,2,3} and B = {1,2}. Let
+ R be the relation from A to B containing (a,b) if a ∈ A,
+ b ∈ B, and a > b. What is the matrix representing R
+ (assuming the ordering of elements is the same as the
+ increasing numerical order)?
+ Solution: Because R = {(2,1), (3,1),(3,2)}, the matrix is
+Examples of Representing
+Relations Using Matrices (cont.)
+ Example 2: Let A = {a1,a2, a3} and B = {b1,b2, b3,b4, b5}.
+ Which ordered pairs are in the relation R represented
+ by the matrix
+
+
+
+
+ Solution: Because R consists of those ordered pairs
+ (ai,bj) with mij = 1, it follows that:
+
+   R = {(a1, b2), (a2, b1),(a2, b3), (a2, b4),(a3, b1), {(a3, b3), (a3, b5)}.
+Matrices of Relations on Sets
+ If R is a reflexive relation, all the elements on the main
+  diagonal of MR are equal to 1.
+
+
+
+ R is a symmetric relation, if and only if mij = 1
+  whenever mji = 1. R is an antisymmetric relation, if
+  and only if mij = 0 or mji = 0 when i≠ j.
+Example of a Relation on a Set
+ Example 3: Suppose that the relation R on a set is
+ represented by the matrix
+
+
+
+ Is R reflexive, symmetric, and/or antisymmetric?
+ Solution: Because all the diagonal elements are equal
+ to 1, R is reflexive. Because MR is symmetric, R is
+ symmetric and not antisymmetric because both m1,2
+ and m2,1 are 1.
+Representing Relations Using
+Digraphs
+ Definition: A directed graph, or digraph, consists of a set V of vertices
+ (or nodes) together with a set E of ordered pairs of elements of V called
+ edges (or arcs). The vertex a is called the initial vertex of the edge (a,b),
+ and the vertex b is called the terminal vertex of this edge.
+    An edge of the form (a,a) is called a loop.
+
+ Example 7: A drawing of the directed graph with vertices a, b, c, and d,
+ and edges (a, b), (a, d), (b, b), (b, d), (c, a), (c, b), and (d, b) is shown
+ here.
+Examples of Digraphs Representing
+Relations
+ Example 8: What are the ordered pairs in the relation
+ represented by this directed graph?
+
+
+
+
+  Solution: The ordered pairs in the relation are
+ (1, 3), (1, 4), (2, 1), (2, 2), (2, 3), (3, 1), (3, 3),
+ (4, 1), and (4, 3)
+Determining which Properties a
+Relation has from its Digraph
+
+ Reflexivity: A loop must be present at all vertices in the
+  graph.
+ Symmetry: If (x,y) is an edge, then so is (y,x).
+ Antisymmetry: If (x,y) with x ≠ y is an edge, then (y,x)
+  is not an edge.
+ Transitivity: If (x,y) and (y,z) are edges, then so is (x,z).
+Determining which Properties a Relation
+has from its Digraph – Example 1
+
+                a                      b
+
+
+
+                  c                    d
+
+• Reflexive? No, not every vertex has a loop
+• Symmetric? Yes (trivially), there is no edge from one vertex to another
+• Antisymmetric? Yes (trivially), there is no edge from one vertex
+           to another
+• Transitive? Yes, (trivially) since there is no edge from one vertex to another
+Determining which Properties a Relation
+has from its Digraph – Example 2
+
+           a
+                                   b
+
+
+           c                      d
+    • Reflexive? No, there are no loops
+    • Symmetric? No, there is an edge from a to b, but not from b to a
+    • Antisymmetric? No, there is an edge from d to b and b to d
+    • Transitive? No, there are edges from a to c and from c to b,
+               but there is no edge from a to d
+Determining which Properties a Relation
+has from its Digraph – Example 3
+
+           a
+                                         b
+
+           c                         d
+  Reflexive? No, there are no loops
+  Symmetric? No, for example, there is no edge from c to a
+  Antisymmetric? Yes, whenever there is an edge from one
+       vertex to another, there is not one going back
+  Transitive? No, there is no edge from a to b
+Determining which Properties a Relation
+has from its Digraph – Example 4
+
+                                      b
+           a
+
+
+             c                         d
+ • Reflexive? No, there are no loops
+ • Symmetric? No, for example, there is no edge from d to a
+ • Antisymmetric? Yes, whenever there is an edge from one vertex
+            to another, there is not one going back
+ • Transitive? Yes (trivially), there are no two edges where the first
+            edge ends at the vertex where the second edge begins
+Example of the Powers of a Relation
+      a                       b                 a                     b
+
+
+          d               c                         d             c
+                 R                                       R2
+
+     a                            b                                        b
+                                                a
+
+
+          d                c                        d                 c
+               R4                                         R3
+ The pair (x,y) is in Rn if there is a path of length n from x to y in R
+        (following the direction of the arrows).
+Section 9.5
+Section Summary
+ Equivalence Relations
+ Equivalence Classes
+ Equivalence Classes and Partitions
+Equivalence Relations
+ Definition 1: A relation on a set A is called an
+ equivalence relation if it is reflexive, symmetric, and
+ transitive.
+
+ Definition 2: Two elements a, and b that are related
+ by an equivalence relation are called equivalent. The
+ notation a ∼ b is often used to denote that a and b are
+ equivalent elements with respect to a particular
+ equivalence relation.
+Strings
+ Example: Suppose that R is the relation on the set of strings of English
+ letters such that aRb if and only if l(a) = l(b), where l(x) is the length of the
+ string x. Is R an equivalence relation?
+
+ Solution: Show that all of the properties of an equivalence relation hold.
+   Reflexivity: Because l(a) = l(a), it follows that aRa for all strings a.
+   Symmetry: Suppose that aRb. Since l(a) = l(b), l(b) = l(a) also holds
+    and bRa.
+   Transitivity: Suppose that aRb and bRc. Since l(a) = l(b),and l(b) = l(c),
+    l(a) = l(a) also holds and aRc.
+Congruence Modulo m
+Example: Let m be an integer with m > 1. Show that the relation
+    R = {(a,b) | a ≡ b (mod m)}
+is an equivalence relation on the set of integers.
+
+Solution: Recall that a ≡ b (mod m) if and only if m divides a − b.
+  Reflexivity: a ≡ a (mod m) since a − a = 0 is divisible by m since
+   0 = 0 ∙ m.
+  Symmetry: Suppose that a ≡ b (mod m). Then a − b is divisible by m,
+   and so a − b = km, where k is an integer. It follows that b − a = (− k) m,
+   so b ≡ a (mod m).
+  Transitivity: Suppose that a ≡ b (mod m) and b ≡ c (mod m). Then m
+   divides both a − b and b − c. Hence, there are integers k and l with
+   a − b = km and b − c = lm. We obtain by adding the equations:
+          a − c = (a − b) + (b − c) = km + lm = (k + l) m.
+   Therefore, a ≡ c (mod m).
+Divides
+ Example: Show that the “divides” relation on the set of positive
+ integers is not an equivalence relation.
+ Solution: The properties of reflexivity, and transitivity do hold,
+ but there relation is not transitive. Hence, “divides” is not an
+ equivalence relation.
+   Reflexivity: a ∣ a for all a.
+   Not Symmetric: For example, 2 ∣ 4, but 4 ∤ 2. Hence, the relation is
+    not symmetric.
+   Transitivity: Suppose that a divides b and b divides c. Then there
+    are positive integers k and l such that b = ak and c = bl. Hence, c =
+    a(kl), so a divides c. Therefore, the relation is transitive.
+Equivalence Classes
+  Definition 3: Let R be an equivalence relation on a set A. The set of all
+  elements that are related to an element a of A is called the equivalence class of
+  a. The equivalence class of a with respect to R is denoted by [a]R.
+  When only one relation is under consideration, we can write [a], without the
+  subscript R, for this equivalence class.
+
+   Note that [a]R = {s|(a,s) ∈ R}.
+
+ If b ∈ [a]R, then b is called a representative of this equivalence class. Any
+  element of a class can be used as a representative of the class.
+ The equivalence classes of the relation congruence modulo m are called the
+  congruence classes modulo m. The congruence class of an integer a modulo m
+  is denoted by [a]m, so [a]m = {…, a−2m, a−m, a+2m, a+2m, … }. For example,
+
+     [0]4 = {…, −8, −4 , 0, 4 , 8 , …}       [1]4 = {…, −7, −3 , 1, 5 , 9 , …}
+
+     [2]4 = {…, −6, −2 , 2, 6 , 10 , …}      [3]4 = {…, −5, −1 , 3, 7 , 11 , …}
+Equivalence Classes and Partitions
+ Theorem 1: let R be an equivalence relation on a set A.
+ These statements for elements a and b of A are equivalent:
+    (i) aRb
+    (ii) [a] = [b]
+    (iii) [a] ∩ [b] = ∅
+  Proof: We show that (i) implies (ii). Assume that aRb. Now
+    suppose that c ∈ [a]. Then aRc. Because aRb and R is
+    symmetric, bRa. Because R is transitive and bRa and aRc, it
+    follows that bRc. Hence, c ∈ [b]. Therefore, [a]⊆ [b]. A similar
+    argument (omitted here) shows that [b]⊆ [a]. Since [a]⊆ [b]
+    and [b]⊆ [a], we have shown that [a] = [b].
+       (see text for proof that (ii) implies (iii) and (iii) implies (i))
+Partition of a Set
+ Definition: A partition of a set S is a collection of
+ disjoint nonempty subsets of S that have S as their
+ union. In other words, the collection of subsets Ai,
+ where i ∈ I (where I is an index set), forms a partition
+ of S if and only if
+   Ai ≠ ∅ for i ∈ I,
+   Ai ∩ Aj=∅ when i ≠ j,
+   and
+
+
+
+                                      A Partition of a Set
+An Equivalence Relation Partitions
+a Set
+ Let R be an equivalence relation on a set A. The union
+ of all the equivalence classes of R is all of A, since an
+ element a of A is in its own equivalence class [a]R. In
+ other words,
+
+
+ From Theorem 1, it follows that these equivalence
+  classes are either equal or disjoint, so [a]R ∩[b]R=∅
+  when [a]R ≠ [b]R.
+ Therefore, the equivalence classes form a partition of
+  A, because they split A into disjoint subsets.
+An Equivalence Relation Partitions
+a Set (continued)
+ Theorem 2: Let R be an equivalence relation on a set S. Then the equivalence
+ classes of R form a partition of S. Conversely, given a partition {Ai | i ∈ I} of the
+ set S, there is an equivalence relation R that has the sets Ai, i ∈ I, as its
+ equivalence classes.
+
+ Proof: We have already shown the first part of the theorem.
+ For the second part, assume that {Ai | i ∈ I} is a partition of S. Let R be the
+ relation on S consisting of the pairs (x, y) where x and y belong to the same
+ subset Ai in the partition. We must show that R satisfies the properties of an
+ equivalence relation.
+   Reflexivity: For every a ∈ S, (a,a) ∈ R, because a is in the same subset as itself.
+   Symmetry: If (a,b) ∈ R, then b and a are in the same subset of the partition, so
+    (b,a) ∈ R.
+   Transitivity: If (a,b) ∈ R and (b,c) ∈ R, then a and b are in the same subset of
+    the partition, as are b and c. Since the subsets are disjoint and b belongs to
+    both, the two subsets of the partition must be identical. Therefore, (a,c) ∈ R
+    since a and c belong to the same subset of the partition.
+

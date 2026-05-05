@@ -1,0 +1,622 @@
+          Chapter 1, Part II: Predicate Logic
+
+
+With Question/Answer Animations
+Summary
+ Predicate Logic (First-Order Logic (FOL), Predicate
+  Calculus)
+    The Language of Quantifiers
+    Logical Equivalences
+    Nested Quantifiers
+    Translation from Predicate Logic to English
+    Translation from English to Predicate Logic
+Section 1.4
+Section Summary
+ Predicates
+ Variables
+ Quantifiers
+    Universal Quantifier
+    Existential Quantifier
+ Negating Quantifiers
+    De Morgan’s Laws for Quantifiers
+ Translating English to Logic
+Propositional Logic Not Enough
+ If we have:
+   “All men are mortal.”
+   “Socrates is a man.”
+ Does it follow that “Socrates is mortal?”
+ Can’t be represented in propositional logic. Need a
+  language that talks about objects, their properties, and
+  their relations.
+ Later we’ll see how to draw inferences.
+Introducing Predicate Logic
+ Predicate logic uses the following new features:
+    Variables: x, y, z
+    Predicates: P(x), M(x)
+    Quantifiers (to be covered in a few slides):
+ Propositional functions are a generalization of
+  propositions.
+    They contain variables and a predicate, e.g., P(x)
+    Variables can be replaced by elements from their
+     domain.
+Propositional Functions
+ Propositional functions become propositions (and have
+  truth values) when their variables are each replaced by a
+  value from the domain (or bound by a quantifier, as we will
+  see later).
+ The statement P(x) is said to be the value of the
+  propositional function P at x.
+ For example, let P(x) denote “x > 0” and the domain be the
+  integers. Then:
+  P(-3) is false.
+  P(0) is false.
+  P(3) is true.
+ Often the domain is denoted by U. So in this example U is
+  the integers.
+Examples of Propositional
+Functions
+ Let “x + y = z” be denoted by R(x, y, z) and U (for all three variables) be
+  the integers. Find these truth values:
+   R(2,-1,5)
+      Solution: F
+   R(3,4,7)
+      Solution: T
+   R(x, 3, z)
+      Solution: Not a Proposition
+ Now let “x - y = z” be denoted by Q(x, y, z), with U as the integers.
+  Find these truth values:
+   Q(2,-1,3)
+      Solution: T
+   Q(3,4,7)
+      Solution: F
+    Q(x, 3, z)
+      Solution: Not a Proposition
+Compound Expressions
+ Connectives from propositional logic carry over to predicate
+  logic.
+ If P(x) denotes “x > 0,” find these truth values:
+   P(3) ∨ P(-1) Solution: T
+   P(3) ∧ P(-1) Solution: F
+   P(3) → P(-1) Solution: F
+   P(3) → P(1) Solution: T
+ Expressions with variables are not propositions and therefore do
+  not have truth values. For example,
+   P(3) ∧ P(y)
+   P(x) → P(y)
+ When used with quantifiers (to be introduced next), these
+  expressions (propositional functions) become propositions.
+Quantifiers                           Charles Peirce (1839-1914)
+
+ We need quantifiers to express the meaning of English
+  words including all and some:
+    “All men are Mortal.”
+    “Some cats do not have fur.”
+ The two most important quantifiers are:
+    Universal Quantifier, “For all,” symbol: 
+    Existential Quantifier, “There exists,” symbol: 
+ We write as in x P(x) and x P(x).
+ x P(x) asserts P(x) is true for every x in the domain.
+ x P(x) asserts P(x) is true for some x in the domain.
+ The quantifiers are said to bind the variable x in these
+  expressions.
+Universal Quantifier
+ x P(x) is read as “For all x, P(x)” or “For every x, P(x)”
+   Examples:
+     1)    If P(x) denotes “x > 0” and U is the integers, then x P(x) is
+          false.
+     2)   If P(x) denotes “x > 0” and U is the positive integers, then
+          x P(x) is true.
+     3)   If P(x) denotes “x is even” and U is the integers, then  x
+          P(x) is false.
+Existential Quantifier
+ x P(x) is read as “For some x, P(x)”, or as “There is an
+  x such that P(x),” or “For at least one x, P(x).”
+   Examples:
+    1.    If P(x) denotes “x > 0” and U is the integers, then x P(x) is
+         true. It is also true if U is the positive integers.
+    2.   If P(x) denotes “x < 0” and U is the positive integers, then
+         x P(x) is false.
+    3.   If P(x) denotes “x is even” and U is the integers, then x
+         P(x) is true.
+Uniqueness Quantifier (optional)
+ !x P(x) means that P(x) is true for one and only one x in the
+  universe of discourse.
+ This is commonly expressed in English in the following
+  equivalent ways:
+    “There is a unique x such that P(x).”
+    “There is one and only one x such that P(x)”
+ Examples:
+   1. If P(x) denotes “x + 1 = 0” and U is the integers, then !x P(x) is
+      true.
+   2. But if P(x) denotes “x > 0,” then !x P(x) is false.
+ The uniqueness quantifier is not really needed as the restriction
+  that there is a unique x such that P(x) can be expressed as:
+                   x (P(x) ∧y (P(y) → y =x))
+Thinking about Quantifiers
+ When the domain of discourse is finite, we can think of
+  quantification as looping through the elements of the domain.
+ To evaluate x P(x) loop through all x in the domain.
+    If at every step P(x) is true, then x P(x) is true.
+    If at a step P(x) is false, then x P(x) is false and the loop
+     terminates.
+ To evaluate x P(x) loop through all x in the domain.
+    If at some step, P(x) is true, then x P(x) is true and the loop
+     terminates.
+    If the loop ends without finding an x for which P(x) is true, then x
+     P(x) is false.
+ Even if the domains are infinite, we can still think of the
+  quantifiers this fashion, but the loops will not terminate in some
+  cases.
+Properties of Quantifiers
+ The truth value of x P(x) and  x P(x) depend on both
+  the propositional function P(x) and on the domain U.
+ Examples:
+  1.   If U is the positive integers and P(x) is the statement
+       “x < 2”, then x P(x) is true, but  x P(x) is false.
+  2.   If U is the negative integers and P(x) is the statement
+       “x < 2”, then both x P(x) and  x P(x) are true.
+  3.   If U consists of 3, 4, and 5, and P(x) is the statement
+       “x > 2”, then both x P(x) and  x P(x) are true. But if
+       P(x) is the statement “x < 2”, then both x P(x) and
+        x P(x) are false.
+Precedence of Quantifiers
+ The quantifiers  and  have higher precedence than
+  all the logical operators.
+ For example, x P(x) ∨ Q(x) means (x P(x))∨ Q(x)
+ x (P(x) ∨ Q(x)) means something different.
+ Unfortunately, often people write x P(x) ∨ Q(x) when
+  they mean  x (P(x) ∨ Q(x)).
+Predicate and Quantifiers
+   When all the elements in the domain can
+   be listed x1, x2 ,x3, x4, ……., xn
+   ∀x Q(x) is the same as the conjunction
+               Q(x1)  Q(x2) ….  Q(xn)
+   ∃x Q(x) is the same as the disjunction
+               Q(x1)  Q(x2) ….  Q(xn)
+Predicate and Quantifiers
+ Let Q(x) “x2>10”
+ What is the truth value of ∃x Q(x) when the
+ domain consists of the positive integers not
+ exceeding 4?
+
+ ∃x Q(x) is the same as the disjunction
+              Q(1)  Q(2)  Q(3)  Q(4).
+ Q(4) is true
+ Thus ∃x Q(x) is true.
+Predicate and Quantifiers
+  Let Q(x) “x2<10”
+  What is the truth value of ∀x Q(x) when the
+  domain consists of the positive integers not
+  exceeding 4?
+
+  ∀x Q(x) is the same as the conjunction
+               Q(1)  Q(2)  Q(3)  Q(4).
+  Q(4) is false
+  Thus ∀x Q(x) is false.
+Translating from English to Logic
+Example 1: Translate the following sentence into predicate
+  logic: “Every student in this class has taken a course in
+  Java.”
+Solution:
+ First decide on the domain U.
+  Solution 1: If U is all students in this class, define a
+    propositional function J(x) denoting “x has taken a course in
+    Java” and translate as x J(x).
+  Solution 2: But if U is all people, also define a propositional
+    function S(x) denoting “x is a student in this class” and
+    translate as x (S(x)→ J(x)).
+          x (S(x) ∧ J(x)) is not correct. What does it mean?
+Translating from English to Logic
+Example 2: Translate the following sentence into
+  predicate logic: “Some student in this class has taken a
+  course in Java.”
+Solution:
+First decide on the domain U.
+  Solution 1: If U is all students in this class, translate as
+                 x J(x)
+  Solution 1: But if U is all people, then translate as
+    x (S(x) ∧ J(x))
+        x (S(x)→ J(x)) is not correct. What does it mean?
+Returning to the Socrates Example
+ Introduce the propositional functions Man(x)
+  denoting “x is a man” and Mortal(x) denoting “x is
+  mortal.” Specify the domain as all people.
+ The two premises are:
+
+
+ The conclusion is:
+
+
+ Later we will show how to prove that the conclusion
+  follows from the premises.
+Equivalences in Predicate Logic
+ Statements involving predicates and quantifiers are
+  logically equivalent if and only if they have the same
+  truth value
+    for every predicate substituted into these statements
+     and
+    for every domain of discourse used for the variables in
+     the expressions.
+ The notation S ≡T indicates that S and T are logically
+  equivalent.
+ Example: x ¬¬S(x) ≡ x S(x)
+Thinking about Quantifiers as
+Conjunctions and Disjunctions
+ If the domain is finite, a universally quantified proposition is
+  equivalent to a conjunction of propositions without quantifiers
+  and an existentially quantified proposition is equivalent to a
+  disjunction of propositions without quantifiers.
+ If U consists of the integers 1,2, and 3:
+
+
+
+
+ Even if the domains are infinite, you can still think of the
+  quantifiers in this fashion, but the equivalent expressions
+  without quantifiers will be infinitely long.
+Negating Quantified Expressions
+ Consider x J(x)
+   “Every student in your class has taken a course in Java.”
+    Here J(x) is “x has taken a course in calculus” and
+    the domain is students in your class.
+ Negating the original statement gives “It is not the case
+  that every student in your class has taken Java.” This
+  implies that “There is a student in your class who has
+  not taken calculus.”
+  Symbolically ¬x J(x) and x ¬J(x) are equivalent
+Negating Quantified Expressions
+(continued)
+ Now Consider  x J(x)
+   “There is a student in this class who has taken a course in
+     Java.”
+   Where J(x) is “x has taken a course in Java.”
+ Negating the original statement gives “It is not the case
+  that there is a student in this class who has taken Java.”
+  This implies that “Every student in this class has not
+  taken Java”
+  Symbolically ¬ x J(x) and  x ¬J(x) are equivalent
+Negating Quantified Expressions
+(continued)
+ Examples: what are the negation of
+ ∀x (x2>x)
+ ∃x (x2=x)
+
+ ∀x (x2>x)
+ ∀x (x2>x)  ∃x (x2>x)  ∃x (x2x)
+
+ ∃x (x2=x)
+ ∃x (x2=x)  ∀x (x2=x)  ∀x (x2x)
+De Morgan’s Laws for Quantifiers
+ The rules for negating quantifiers are:
+
+
+
+
+ The reasoning in the table shows that:
+
+
+
+
+ These are important. You will use these.
+Translation from English to Logic
+Examples:
+1. “Some student in this class has visited Mexico.”
+    Solution: Let M(x) denote “x has visited Mexico” and
+     S(x) denote “x is a student in this class,” and U be all
+     people.
+              x (S(x) ∧ M(x))
+2. “Every student in this class has visited Canada or
+   Mexico.”
+   Solution: Add C(x) denoting “x has visited Canada.”
+            x (S(x)→ (M(x)∨C(x)))
+Some Fun with Translating from
+English into Logical Expressions
+ U = {fleegles, snurds, thingamabobs}
+   F(x): x is a fleegle
+   S(x): x is a snurd
+   T(x): x is a thingamabob
+  Translate “Everything is a fleegle”
+
+  Solution: x F(x)
+Translation (cont)
+ U = {fleegles, snurds, thingamabobs}
+   F(x): x is a fleegle
+   S(x): x is a snurd
+   T(x): x is a thingamabob
+  “Nothing is a snurd.”
+
+  Solution: ¬x S(x) What is this equivalent to?
+  Solution: x ¬ S(x)
+Translation (cont)
+ U = {fleegles, snurds, thingamabobs}
+   F(x): x is a fleegle
+   S(x): x is a snurd
+   T(x): x is a thingamabob
+ “All fleegles are snurds.”
+
+ Solution: x (F(x)→ S(x))
+Translation (cont)
+ U = {fleegles, snurds, thingamabobs}
+   F(x): x is a fleegle
+   S(x): x is a snurd
+   T(x): x is a thingamabob
+ “Some fleegles are thingamabobs.”
+
+ Solution: x (F(x) ∧ T(x))
+Translation (cont)
+ U = {fleegles, snurds, thingamabobs}
+   F(x): x is a fleegle
+   S(x): x is a snurd
+   T(x): x is a thingamabob
+  “No snurd is a thingamabob.”
+
+  Solution: ¬x (S(x) ∧ T(x)) What is this equivalent
+ to?
+  Solution: x (¬S(x) ∨ ¬T(x))
+Translation (cont)
+ U = {fleegles, snurds, thingamabobs}
+   F(x): x is a fleegle
+   S(x): x is a snurd
+   T(x): x is a thingamabob
+ “If any fleegle is a snurd then it is also a thingamabob.”
+
+  Solution: x ((F(x) ∧ S(x))→ T(x))
+System Specification Example
+ Predicate logic is used for specifying properties that systems must
+  satisfy.
+ For example, translate into predicate logic:
+    “Every mail message larger than one megabyte will be compressed.”
+    “If a user is active, at least one network link will be available.”
+ Decide on predicates and domains (left implicit here) for the variables:
+    Let L(m, y) be “Mail message m is larger than y megabytes.”
+    Let C(m) denote “Mail message m will be compressed.”
+    Let A(u) represent “User u is active.”
+    Let S(n, x) represent “Network link n is state x.
+ Now we have:
+                                                        Charles Lutwidge Dodgson
+Lewis Carroll Example                                    (AKA Lewis Caroll)
+                                                            (1832-1898)
+ The first two are called premises and the third is called the
+    conclusion.
+    1.   “All lions are fierce.”
+    2.   “Some lions do not drink coffee.”
+    3.   “Some fierce creatures do not drink coffee.”
+  Here is one way to translate these statements to predicate logic.
+   Let P(x), Q(x), and R(x) be the propositional functions “x is a
+   lion,” “x is fierce,” and “x drinks coffee,” respectively.
+  1. x (P(x)→ Q(x))
+  2. x (P(x) ∧ ¬R(x))
+  3. x (Q(x) ∧ ¬R(x))
+ Later we will see how to prove that the conclusion follows from
+   the premises.
+Section 1.5
+Section Summary
+ Nested Quantifiers
+ Order of Quantifiers
+ Translating from Nested Quantifiers into English
+ Translating Mathematical Statements into Statements
+  involving Nested Quantifiers.
+ Translated English Sentences into Logical Expressions.
+ Negating Nested Quantifiers.
+Nested Quantifiers
+ Nested quantifiers are often necessary to express the
+  meaning of sentences in English as well as important
+  concepts in computer science and mathematics.
+  Example: “Every real number has an inverse” is
+    x y(x + y = 0)
+   where the domains of x and y are the real numbers.
+ We can also think of nested propositional functions:
+  x y(x + y = 0) can be viewed as x Q(x) where Q(x) is
+    y P(x, y) where P(x, y) is (x + y = 0)
+Negating Nested Quantifiers
+ Example:
+ Express the negation of xy(xy=1)
+
+ xy(xy=1) by DeMorgan’s laws
+ xy(xy=1)
+ xy(xy=1)
+ xy(xy1)
+                   Quantification
+Introducing the universal quantifier  and the
+existential quantifier  facilitates the translation of
+world knowledge into predicate calculus.
+Examples:
+•Paul beats up all professors who fail him.
+     x([Professor(x)  Fails(x, Paul)]  BeatsUp(Paul, x))
+
+•All computer scientists are either rich or crazy, but not both.
+ x (CS(x)  [Rich(x)  Crazy(x)]  [Rich(x)  Crazy(x)] )
+
+•Or, using XOR:
+  x (CS(x)  [Rich(x)  Crazy(x)])
+Thinking of Nested Quantification
+ Nested Loops
+    To see if xyP (x,y) is true, loop through the values of x :
+         At each step, loop through the values for y.
+         If for some pair of x andy, P(x,y) is false, then x yP(x,y) is false and both the
+          outer and inner loop terminate.
+     x y P(x,y) is true if the outer loop ends after stepping through each x.
+    To see if x yP(x,y) is true, loop through the values of x:
+         At each step, loop through the values for y.
+         The inner loop ends when a pair x and y is found such that P(x, y) is true.
+         If no y is found such that P(x, y) is true the outer loop terminates as x yP(x,y)
+          has been shown to be false.
+      x y P(x,y) is true if the outer loop ends after stepping through each x.
+ If the domains of the variables are infinite, then this process can not
+  actually be carried out.
+Order of Quantifiers
+Examples:
+1. Let P(x,y) be the statement “x + y = y + x.” Assume
+   that U is the real numbers. Then x yP(x,y) and
+   y xP(x,y) have the same truth value.
+2. Let Q(x,y) be the statement “x + y = 0.” Assume that
+   U is the real numbers. Then x yP(x,y) is true, but
+   y xP(x,y) is false.
+Questions on Order of Quantifiers
+ Example 1: Let U be the real numbers,
+ Define P(x,y) : x ∙ y = 0
+ What is the truth value of the following:
+ 1. xyP(x,y)
+       Answer: False
+  2.   xyP(x,y)
+       Answer: True
+  3.   xy P(x,y)
+       Answer: True
+  4.   x  y P(x,y)
+       Answer: True
+The order of quantifiers
+ Suppose that the universe for x and y is {1, 2, 3}.
+  Also, assume that P(x, y) is a predicate that is true in the
+  following cases, and false otherwise: P(1, 3), P(2, 1),
+  P(2, 2), P(3, 1), P(3, 2), P(3, 3).
+ Determine whether each of the following is true or false:
+
+       (a) ∀y∃x (xy ∧ P(x, y)).      True
+
+       (b) ∀x∃y (xy ∧ ¬P(x, y)).      False
+
+       (c) ∀y∃x (xy ∧¬P(x, y)).       False
+Quantifications of Two Variables
+Statement   When True?                     When False
+            P(x,y) is true for every       There is a pair x, y for
+            pair x,y.                      which P(x,y) is false.
+
+            For every x there is a y for   There is an x such that
+            which P(x,y) is true.          P(x,y) is false for every y.
+            There is an x for which        For every x there is a y for
+            P(x,y) is true for every y.    which P(x,y) is false.
+            There is a pair x, y for       P(x,y) is false for every
+            which P(x,y) is true.          pair x,y
+Translating Nested Quantifiers into
+English
+Example 1: Translate the statement
+        x (C(x )∨ y (C(y ) ∧ F(x, y)))
+   where C(x) is “x has a computer,” and F(x,y) is “x and y are
+  friends,” and the domain for both x and y consists of all
+  students in your school.
+  Solution: Every student in your school has a computer or
+  has a friend who has a computer.
+Example 1: Translate the statement
+    xy z ((F(x, y)∧ F(x,z) ∧ (y ≠z))→¬F(y,z))
+ Solution: Every student none of whose friends are also
+ friends with each other.
+Translating Mathematical
+Statements into Predicate Logic
+ Example : Translate “The sum of two positive integers is
+  always positive” into a logical expression.
+ Solution:
+  1.    Rewrite the statement to make the implied quantifiers and
+        domains explicit:
+       “For every two integers, if these integers are both positive, then the
+            sum of these integers is positive.”
+  2.    Introduce the variables x and y, and specify the domain, to
+        obtain:
+       “For all positive integers x and y, x + y is positive.”
+  3.    The result is:
+           x  y ((x > 0)∧ (y > 0)→ (x + y > 0))
+       where the domain of both variables consists of all integers
+Translating English into Logical
+Expressions Example
+Example: Use quantifiers to express the statement
+  “There is a woman who has taken a flight on every
+  airline in the world.”
+Solution:
+   1. Let P(w,f) be “w has taken f ” and Q(f,a) be “f is a
+       flight on a .”
+   2. The domain of w is all women, the domain of f is all
+      flights, and the domain of a is all airlines.
+   3. Then the statement can be expressed as:
+           w a f (P(w,f ) ∧ Q(f,a))
+Translating English into Logical
+Expressions Example
+Translating English into Logical
+Expressions Example (cont)
+  The previous example can be expressed as:
+   “For every person x, if person x is female and
+  person x is a parent, then there exists a person
+  such that x is the mother of person y”
+    F(x) : x is Female      P(x) : x is a parent
+   M(x,y) : x is the mother of y
+
+  Which is logically equivalent to
+
+  We can move y to the left because y
+  does not appear in F(x) P(x)
+Questions on Translation from
+English
+ Choose the obvious predicates and express in predicate logic.
+Example 1: “Brothers are siblings.”
+     Solution: x y (B(x,y) → S(x,y))
+Example 2: “Siblinghood is symmetric.”
+     Solution: x y (S(x,y) → S(y,x))
+Example 3: “Everybody loves somebody.”
+     Solution: x y L(x,y)
+Example 4: “There is someone who is loved by everyone.”
+     Solution: y x L(x,y)
+Example 5: “There is someone who loves someone.”
+     Solution: x y L(x,y)
+Example 6: “Everyone loves himself”
+     Solution: x L(x,x)
+Negating Nested Quantifiers
+Example 1: Recall the logical expression developed three slides back:
+           w a f (P(w,f ) ∧ Q(f,a))
+   Part 1: Use quantifiers to express the statement that “There does not exist a woman who
+    has taken a flight on every airline in the world.”
+   Solution: ¬w a f (P(w,f ) ∧ Q(f,a))
+ Part 2: Now use De Morgan’s Laws to move the negation as far inwards as possible.
+    Solution:
+1.      ¬w a f (P(w,f ) ∧ Q(f,a))
+2.      w ¬ a f (P(w,f ) ∧ Q(f,a)) by De Morgan’s for 
+3.      w  a ¬ f (P(w,f ) ∧ Q(f,a)) by De Morgan’s for 
+4.     w  a f ¬ (P(w,f ) ∧ Q(f,a)) by De Morgan’s for 
+5.     w  a f (¬ P(w,f ) ∨ ¬ Q(f,a)) by De Morgan’s for ∧.
+Part 3: Can you translate the result back into English?
+     Solution:
+     “For every woman there is an airline such that for all flights, this woman has not taken
+       that flight or that flight is not on this airline”
+    Negating quantified expression
+Show that ∀x [P(x)  Q(x)]  ∃x [P(x)  Q(x)]
+
+Solution:
+∀x [P(x)  Q(x)]  ∃x [P(x)  Q(x)]
+                  ∃x [P(x)  Q(x)]
+                  ∃x [ P(x)  Q(x)]
+                  ∃x [P(x)  Q(x)]
+OR
+
+      x( P( x)  Q( x))  x( P( x)  Q( x))
+                           x( P( x)  Q( x))
+Recall that:    ( p  q)  p  q
+Negating Nested Quantifiers
+  Example:
+  Express the statement (There does not exist a
+  woman who has taken a flight on every airline
+  in the world)
+  Let P(w,f) be “w has taken f” and Q(f,a) be “f is
+  a flight on a”, then
+  w a f(P(w,f)Q(f,a))
+  w a f(P(w,f)Q(f,a))
+  w a f(P(w,f)Q(f,a))
+  w a f (P(w,f)Q(f,a))
+  w a f ( P(w,f)Q(f,a))
+Some Questions about Quantifiers
+(optional)
+ Can you switch the order of quantifiers?
+    Is this a valid equivalence?
+        Solution: Yes! The left and the right side will always have the same truth
+     value. The order in which x and y are picked does not matter.
+    Is this a valid equivalence?
+        Solution: No! The left and the right side may have different truth values for
+     some propositional functions for P. Try “x + y = 0” for P(x,y) with U being the
+     integers. The order in which the values of x and y are picked does matter.
+ Can you distribute quantifiers over logical connectives?
+    Is this a valid equivalence?
+        Solution: Yes! The left and the right side will always have the same truth
+     value no matter what propositional functions are denoted by P(x) and Q(x).
+    Is this a valid equivalence?
+        Solution: No! The left and the right side may have different truth values.
+     Pick “x is a fish” for P(x) and “x has scales” for Q(x) with the domain of
+     discourse being all animals. Then the left side is false, because there are some
+     fish that do not have scales. But the right side is true since not all animals are
+     fish.
+

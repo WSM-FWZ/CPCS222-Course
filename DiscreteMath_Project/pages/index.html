@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CPCS 222 — Lesson Viewer</title>
+  <link rel="stylesheet" href="../assets/css/main.css" />
+</head>
+<body class="page-viewer">
+
+  <!-- ======================================================
+       HEADER
+  ====================================================== -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="nav-home" href="home.html" title="Back to course home">
+        ◂ Home
+      </a>
+      <div class="course-badge">CPCS 222</div>
+      <span class="header-title" id="header-chapter-title">
+        Ch. 1 — Logic &amp; Proofs
+      </span>
+      <div class="header-right">
+        <span class="progress-text" id="progress-text">Section 1.1</span>
+        <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle theme">🌙</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ======================================================
+       APP BODY  (sidebar + main)
+  ====================================================== -->
+  <div class="app-body">
+
+    <!-- -------------------------------------------------
+         SIDEBAR
+    ------------------------------------------------- -->
+    <nav class="sidebar" id="sidebar" aria-label="Lessons">
+      <div class="sidebar-header">
+        <div class="sidebar-chapter">Chapter 1</div>
+        <div class="sidebar-title">The Foundations</div>
+        <div class="sidebar-sub">Logic &amp; Proofs</div>
+      </div>
+      <ul class="lesson-list" id="lesson-list" role="list">
+        <!-- Populated by navigation.js -->
+      </ul>
+    </nav>
+
+    <!-- -------------------------------------------------
+         LESSON VIEW
+    ------------------------------------------------- -->
+    <main class="lesson-view" id="lesson-view" tabindex="-1">
+      <!-- Initial loading state (replaced by navigation.js on boot) -->
+      <div class="loading-state">
+        <div class="spinner"></div>
+        <p>Initializing lessons…</p>
+      </div>
+    </main>
+
+  </div><!-- .app-body -->
+
+  <!-- ======================================================
+       ENGINE SCRIPTS  (order matters)
+  ====================================================== -->
+  <script src="../engine/json_loader.js"></script>
+  <script src="../engine/quiz_engine.js"></script>
+  <script src="../engine/renderer.js"></script>
+  <script src="../engine/navigation.js"></script>
+  <script src="../assets/js/app.js"></script>
+
+</body>
+</html>

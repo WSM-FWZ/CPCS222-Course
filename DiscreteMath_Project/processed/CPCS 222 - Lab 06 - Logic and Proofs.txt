@@ -1,0 +1,45 @@
+    Lab 06 - Logic and Proof
+    Objective
+    Solving exercises from the textbook in chapter 1.6-1.8
+    Current Lab Learning Outcomes (LLO)
+    By completion of the lab, the students should be able to:
+    1. Students will understand Methods of proof.
+    2. They will be able to solve shorter/easier or longer / harder problems given in the textbook.
+
+    Lab Requirements
+    Students allowed using their lecture notes in the lab in order to solve the exercises.
+    Lab Assessment
+    1- Divide students to groups and let them to solve the given example.
+    2- Discuss the answers with the groups and write on board the optimal solution.
+    Lab Description
+    In this lab, the following exercises are going to be solved and explained to them:
+
+1   Use a proof by contradiction to prove that the sum of an irrational number and a rational number
+    is irrational.
+
+2   Show that these statements about the integer x are equivalent:
+    (i) 3x + 2 is even, (ii) x + 5 is odd, (iii) x2 is even.
+3  Show that if n is an integer and n3 + 5 is odd, then n is even using
+   a) a proof by contraposition.
+   b) a proof by contradiction.
+4 Prove the following statement by contradiction if n2 is odd, then n is odd.
+5 Show that at least ten of any 64 days chosen must fall on the same day of the week.
+6 Prove that If you are studying CPCS222 then you are human (domain is all people), what kind of
+   proof did you use.
+7 Show that if x2≥0 then x2+2x+1≥0 (Domain is of all real numbers). what kind of proof did you
+   use.
+8 Show that if x2+1<0 then 2x2+5x+1= 0 (Domain is of all real numbers). what kind of proof did
+   you use.
+9 Prove that if x and y are real numbers, then max(x, y) +min(x, y) = x + y. [Hint: Use a proof by
+   cases, with the two cases corresponding to x ≥y and x < y, respectively.]
+10 Prove that there is no positive integer n such that n2+ n3= 100.
+11 Show that the implication If x > 0, then x 2 + 5 > 0. Where x is any real number.
+12 Prove that there are no solutions in integers x and y to the equation 2x2 + 5y2 = 14.
+13 prove that the following implication is true, where x is a real number and n is a constant.
+
+                                        𝑛𝑥 𝑛(𝑛 − 1)𝑥
+                    𝑰𝒇(1 + 𝑥) > 1 +        +                 ,     𝒕𝒉𝒆𝒏 𝑥 + 1 > 0.
+                                        1!         2!
+   what ever the value of x then x2 + 1 > 0 is always true . So without considering p, q is always
+   true.
+

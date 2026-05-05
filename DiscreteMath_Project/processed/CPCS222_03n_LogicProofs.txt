@@ -1,0 +1,830 @@
+                     Chapter 1, Part III: Proofs
+
+
+
+With Question/Answer Animations
+Summary
+ Valid Arguments and Rules of Inference
+ Proof Methods
+ Proof Strategies
+Section 1.6
+Section Summary
+ Valid Arguments
+ Inference Rules for Propositional Logic
+ Using Rules of Inference to Build Arguments
+ Rules of Inference for Quantified Statements
+ Building Arguments for Quantified Statements
+Revisiting the Socrates Example
+ We have the two premises:
+    “All men are mortal.”
+    “Socrates is a man.”
+ And the conclusion:
+    “Socrates is mortal.”
+ How do we get the conclusion from the premises?
+The Argument
+ We can express the premises (above the line) and the
+  conclusion (below the line) in predicate logic as an
+  argument:
+
+
+
+
+ We will see shortly that this is a valid argument.
+Valid Arguments
+        We will show how to construct valid arguments in
+         two stages; first for propositional logic and then for
+         predicate logic. The rules of inference are the
+         essential building block in the construction of valid
+         arguments.
+    1.     Propositional Logic
+          Inference Rules
+    2.     Predicate Logic
+          Inference rules for propositional logic plus additional inference
+               rules to handle variables and quantifiers.
+Arguments in Propositional Logic
+ A argument in propositional logic is a sequence of propositions.
+  All but the final proposition are called premises. The last
+  statement is the conclusion.
+ The argument is valid if the premises imply the conclusion. An
+  argument form is an argument that is valid no matter what
+  propositions are substituted into its propositional variables.
+ If the premises are p1 ,p2, …,pn and the conclusion is q then
+     (p1 ∧ p2 ∧ … ∧ pn ) → q is a tautology.
+ Inference rules are all argument simple argument forms that will
+  be used to construct more complex argument forms.
+Rules of Inference for Propositional
+Logic: Modus Ponens
+                      Corresponding Tautology:
+                         (p ∧ (p →q)) → q
+
+
+
+
+          Example:
+          Let p be “It is snowing.”
+          Let q be “I will study discrete math.”
+
+          “If it is snowing, then I will study discrete math.”
+          “It is snowing.”
+
+          “Therefore , I will study discrete math.”
+Rules of Inference for Propositional Logic:
+Modus Tollens
+                            Corresponding Tautology:
+                               (¬p∧(p →q))→¬q
+
+
+
+
+        Example:
+        Let p be “it is snowing.”
+        Let q be “I will study discrete math.”
+
+        “If it is snowing, then I will study discrete math.”
+        “I will not study discrete math.”
+
+        “Therefore , it is not snowing.”
+Hypothetical Syllogism
+                          Corresponding Tautology:
+                          ((p →q) ∧ (q→r))→(p→ r)
+
+
+
+
+        Example:
+        Let p be “it snows.”
+        Let q be “I will study discrete math.”
+        Let r be “I will get an A.”
+
+        “If it snows, then I will study discrete math.”
+        “If I study discrete math, I will get an A.”
+
+        “Therefore , If it snows, I will get an A.”
+Disjunctive Syllogism
+                         Corresponding Tautology:
+                         (¬p∧(p ∨q))→q
+
+
+
+       Example:
+       Let p be “I will study discrete math.”
+       Let q be “I will study English literature.”
+
+       “I will study discrete math or I will study English literature.”
+       “I will not study discrete math.”
+
+       “Therefore , I will study English literature.”
+Addition
+                             Corresponding Tautology:
+                                  p →(p ∨q)
+
+
+
+           Example:
+           Let p be “I will study discrete math.”
+           Let q be “I will visit Las Vegas.”
+
+           “I will study discrete math.”
+
+           “Therefore, I will study discrete math or I will visit
+           Las Vegas.”
+Simplification
+
+                              Corresponding Tautology:
+                                  (p∧q) →p
+
+
+
+       Example:
+       Let p be “I will study discrete math.”
+       Let q be “I will study English literature.”
+
+       “I will study discrete math and English literature”
+
+       “Therefore, I will study discrete math.”
+Conjunction
+                                  Corresponding Tautology:
+                                  ((p) ∧ (q)) →(p ∧ q)
+
+
+
+       Example:
+       Let p be “I will study discrete math.”
+       Let q be “I will study English literature.”
+
+
+       “I will study discrete math.”
+       “I will study English literature.”
+
+       “Therefore, I will study discrete math and I will study
+       English literature.”
+Resolution                      Resolution plays an important role
+                                in AI and is used in Prolog.
+
+
+                            Corresponding Tautology:
+                            ((¬p ∨ r ) ∧ (p ∨ q)) →(q ∨ r)
+
+
+
+     Example:
+     Let p be “I will study discrete math.”
+     Let r be “I will study English literature.”
+     Let q be “I will study databases.”
+
+     “I will not study discrete math or I will study English literature.”
+     “I will study discrete math or I will study databases.”
+
+     “Therefore, I will study databases or I will English literature.”
+Using the Rules of Inference to
+Build Valid Arguments
+ A valid argument is a sequence of statements. Each statement is
+  either a premise or follows from previous statements by rules of
+  inference. The last statement is called conclusion.
+ A valid argument takes the following form:
+                     S1
+                     S2
+                    .
+                    .
+                    .
+                   Sn
+
+                   C
+Valid Arguments
+Example 1: From the single proposition
+
+ Show that q is a conclusion.
+Solution:
+Valid Arguments
+Example 2:
+ With these hypotheses:
+    “It is not sunny this afternoon and it is colder than yesterday.”
+    “We will go swimming only if it is sunny.”
+    “If we do not go swimming, then we will take a canoe trip.”
+    “If we take a canoe trip, then we will be home by sunset.”
+ Using the inference rules, construct a valid argument for the conclusion:
+    “We will be home by sunset.”
+Solution:
+1.   Choose propositional variables:
+    p : “It is sunny this afternoon.” r : “We will go swimming.” t : “We will be home by sunset.”
+    q : “It is colder than yesterday.” s : “We will take a canoe trip.”
+2. Translation into propositional logic:
+
+
+
+
+                                                      Continued on next slide 
+Valid Arguments
+ 3. Construct the Valid Argument
+Handling Quantified Statements
+ Valid arguments for quantified statements are a
+  sequence of statements. Each statement is either a
+  premise or follows from previous statements by rules
+  of inference which include:
+    Rules of Inference for Propositional Logic
+    Rules of Inference for Quantified Statements
+ The rules of inference for quantified statements are
+  introduced in the next several slides.
+Universal Instantiation (UI)
+
+
+
+     Example:
+
+     Our domain consists of all dogs and Fido is a dog.
+
+     “All dogs are cuddly.”
+
+     “Therefore, Fido is cuddly.”
+Universal Generalization (UG)
+
+
+
+
+        Used often implicitly in Mathematical Proofs.
+Existential Instantiation (EI)
+
+
+
+     Example:
+
+     “There is someone who got an A in the course.”
+     “Let’s call her a and say that a got an A”
+Existential Generalization (EG)
+
+
+
+     Example:
+
+     “Michelle got an A in the class.”
+     “Therefore, someone got an A in the class.”
+Using Rules of Inference
+Example 1: Using the rules of inference, construct a valid
+  argument to show that
+   “John Smith has two legs”
+  is a consequence of the premises:
+   “Every man has two legs.” “John Smith is a man.”
+Solution: Let M(x) denote “x is a man” and L(x) “ x has two legs”
+  and let John Smith be a member of the domain.
+   Valid Argument:
+Using Rules of Inference
+ Example 2: Use the rules of inference to construct a valid argument
+  showing that the conclusion
+   “Someone who passed the first exam has not read the book.”
+ follows from the premises
+   “A student in this class has not read the book.”
+   “Everyone in this class passed the first exam.”
+ Solution: Let C(x) denote “x is in this class,” B(x) denote “ x has read
+  the book,” and P(x) denote “x passed the first exam.”
+    First we translate the
+    premises and conclusion
+    into symbolic form.
+
+
+
+
+            Continued on next slide 
+Using Rules of Inference
+ Valid Argument:
+Returning to the Socrates Example
+Solution for Socrates Example
+ Valid Argument
+Universal Modus Ponens
+    Universal Modus Ponens combines universal
+    instantiation and modus ponens into one rule.
+
+
+
+
+    This rule could be used in the Socrates example.
+Section 1.7
+Section Summary
+ Mathematical Proofs
+ Forms of Theorems
+ Direct Proofs
+ Indirect Proofs
+    Proof of the Contrapositive
+    Proof by Contradiction
+Section Summary
+ Proofs of Mathematical Statements
+ Mathematical proofs are, in a sense, the
+  only true knowledge we have.
+ They provide us with a guarantee as well as
+  an explanation.
+ Mathematical proofs are necessary in Computing:
+  • You must always (try to) prove that your
+    algorithm:
+   o terminates ,
+   o is sound, complete, optimal, and
+   o finds optimal solution.
+ Definitions
+ A theorem is a valid logical assertion which can be
+  proved.
+ An axiom is a statement which is given to be true.
+ A lemma is a ‘pre-theorem’ or a result useful within the
+  proof of a theorem.
+ A conjecture is a statement whose truth value is
+  unknown (guess) .
+ A corollary is a ‘post-theorem’ or a result which
+  follows directly from a theorem.
+ A proof is a sequence of statements that
+  form an argument.
+Again …
+Theorem: the main result that we want to prove.
+
+Lemma: intermediate result used in theorem
+proof.
+Corollary: immediate consequence of
+theorem.
+Axiom: basic
+truth.
+Conjecture: something to be
+proven.
+Proof: is a valid argument that
+establishes        the truth of a theorem.
+                                             4
+                       1/30/2026
+Forms of Theorems
+ Many theorems assert that a property holds for all elements
+  in a domain, such as the integers, the real numbers, or
+  some of the discrete structures that we will study in this
+  class.
+ Often the universal quantifier (needed for a precise
+  statement of a theorem) is omitted by standard
+  mathematical convention.
+  For example, the statement:
+    “If x > y, where x and y are positive real numbers, then x2 > y2 ”
+ really means
+    “For all positive real numbers x and y, if x > y, then x2 > y2 .”
+Proving Theorems
+ Many theorems have the form:
+
+
+ To prove them, we show that where c is an arbitrary
+  element of the domain,
+ By universal generalization the truth of the original
+  formula follows.
+ So, we must prove something of the form:
+Proving Conditional Statements: p → q
+ Trivial Proof: If we know q is true, then
+      p → q is true as well.
+
+“If it is raining then 1=1.”
+
+ Vacuous Proof: If we know p is false then
+       p → q is true as well.
+“If I am both rich and poor then 2 + 2 = 5.”
+
+[ Even though these examples seem silly, both trivial and vacuous
+  proofs are often used in mathematical induction, as we will see
+  in Chapter 5) ]
+Even and Odd Integers
+ Definition: The integer n is even if there exists an
+ integer k such that n = 2k, and n is odd if there exists
+ an integer k, such that n = 2k + 1. Note that every
+ integer is either even or odd and no integer is both
+ even and odd.
+
+
+
+ We will need this basic fact about the integers in some
+ of the example proofs to follow. We will learn more
+ about the integers in Chapter 4.
+Proving Conditional Statements: p → q
+ Direct Proof: Assume that p is true. Use rules of inference,
+ axioms, and logical equivalences to show that q must also
+ be true.
+ Example: Give a direct proof of the theorem “If n is an odd
+ integer, then n2 is odd.”
+ Solution: Assume that n is odd. Then n = 2k + 1 for an
+ integer k. Squaring both sides of the equation, we get:
+ n2 = (2k + 1)2 = 4k2 + 4k +1 = 2(2k2 + 2k) + 1= 2r + 1,
+  where r = 2k2 + 2k , an integer.
+ We have proved that if n is an odd integer, then n2 is an
+ odd integer.
+             ( marks the end of the proof. Sometimes QED is
+             used instead. )
+Example
+
+
+
+
+  QED= Latin word for “quod erat demonstrandum” meaning
+  “that which was to be demonstrated.”
+Proving Conditional Statements: p → q
+ Definition: The real number r is rational if there exist
+ integers p and q where q≠0 such that r = p/q
+ Example: Prove that the sum of two rational numbers
+ is rational.
+ Solution: Assume r and s are two rational numbers.
+ Then there must be integers p, q and also t, u such
+ that
+
+                                      where v = pu + qt
+                                            w = qu ≠ 0
+ Thus the sum is rational.
+Proving Conditional Statements: p → q
+Proving Conditional Statements: p → q
+ Example: Prove that for an integer n, if n2 is odd, then n is
+ odd.
+ Solution: Use proof by contraposition. Assume n is even
+ (i.e., not odd). Therefore, there exists an integer k such
+ that n = 2k. Hence,
+         n2 = 4k2 = 2 (2k2)
+ and n2 is even(i.e., not odd).
+ We have shown that if n is an even integer, then n2 is even.
+ Therefore by contraposition, for an integer n, if n2 is odd,
+ then n is odd.
+Proving Conditional Statements: p → q
+ Proof by Contradiction: (AKA reductio ad absurdum).
+ To prove p, assume ¬p and derive a contradiction such as
+ p ∧ ¬p. (an indirect form of proof). Since we have shown
+ that ¬p →F is true , it follows that the contrapositive T→p
+ also holds.
+ Example: Prove that if you pick 22 days from the calendar,
+ at least 4 must fall on the same day of the week.
+ Solution: Assume that no more than 3 of the 22 days fall
+ on the same day of the week. Because there are 7 days of
+ the week, we could only have picked 21 days. This
+ contradicts the assumption that we have picked 22 days.
+Example 3 (cont …)
+ Since a2=2 (b2), then a2 is even, therefore, a is even,
+  then:
+  2b2 = (2c)2, for some integer c
+  2b2=4c2, so b2=2c2
+ Thus, b is even too.
+ If a and b are even, then they have at least one common
+  factor (2), so the assumption r is contradicted:
+                  p  (r  r)
+
+ Therefore, ¬p is false, p is true,
+      “√2 is irrational is true”
+ QED
+
+
+                                                      32
+                         1/30/2026
+Theorem:      2 is irrational P            Agai
+                                           n
+Proof: (proof by contradiction P  (r  r )   )
+
+P : Assume 2 is rational
+                     m
+                  2
+                     n
+ r:     m and n have no common
+         divisor greater than 1
+
+ Therefore:      P  r
+                       1/30/2026                    50
+      2
+  m
+2 2               m 2  2n 2                   m  2k1 (m is even)
+  n
+                         n  2k1
+                           2                2
+2n  m  4k1                                        n  2k2 (n is even)
+  2       2    2
+
+
+
+
+              m 2k1
+      r :                common divisor is 2
+              n 2k 2
+
+
+      Therefore:      P  r
+
+                                1/30/2026                             51
+Therefore:
+
+
+ P  r
+ P  r
+  (P  r )  (P  r ) Conjunction
+   P  ( r  r )
+             contradiction
+
+
+                  1/30/2026        52
+Therefore:
+
+
+             P  ( r  r )
+             ( r  r )
+              (P) Modus Tollens
+             P
+
+                               End of proof
+                   1/30/2026                  53
+Proof by Contradiction
+ A preview of Chapter 4.
+  Example: Prove that there is no largest prime number.
+  Solution: Assume that there is a largest prime
+  number. Call it pn. Hence, we can list all the primes
+  2,3,.., pn. Form
+
+ None of the prime numbers on the list divides r.
+ Therefore, by a theorem in Chapter 4, either r is prime
+ or there is a smaller prime that divides r. This
+ contradicts the assumption that there is a largest
+ prime. Therefore, there is no largest prime.
+Vacuous Proofs
+ Consider an implication: p  q
+ If it can be shown that: p is false, then the
+  implication is always true.
+  • By definition of an implication ( if p=F,
+   then    p q is true, whatever q=T or q=F).
+
+ Note that: you are showing that the
+  hypothesis is false.
+Vacuous Proofs
+ Proving p  q
+ Vacuous Proof: Prove p is true.
+ If we know one of the hypotheses in p is false, then
+  p  q is vacuously true.
+       F  T and F  F are both true.
+ Examples
+    If I am both rich and poor, then hurricane Katrina was a mild
+     breeze.
+    Theorem: (For all n) If n is odd and even, then n2 = n + n.
+     Proof:
+     The statement “n is both odd and even” is necessarily false,
+      since no number can be both odd and even.
+      So, the theorem is vacuously true.
+ Sometimes used to proof theorems using
+  UNIVERSAL QUANTIFICATION.
+Theorems that are Biconditional
+Statements
+ To prove a theorem that is a biconditional statement,
+  that is, a statement of the form p ↔ q, we show that
+  p → q and q →p are both true.
+ Example: Prove the theorem: “If n is an integer, then n is
+ odd if and only if n2 is odd.”
+ Solution: We have already shown (previous slides) that
+ both p →q and q →p. Therefore we can conclude p ↔ q.
+
+ Sometimes iff is used as an abbreviation for “if an only if,” as in
+       “If n is an integer, then n is odd iif n2 is odd.”
+Example 5
+Prove that: “if n=a*b, where a and b are positive integers, then
+             a  √n or b  √n ”.
+Proof:
+    We assume that (a  √n or b  √n ) is false (q).
+
+    (a  √n  b  √n )
+
+    (a > √n  b > √n ) we multiply these to obtain
+
+      ab > √n * √n.
+
+    ab > n which a.b ≠ n, i.e, (p).
+
+    QED
+
+                            1/30/2026                         19
+Trivial Proofs
+ • Consider an implication: p  q
+ • If it can be shown that q is true, then the
+   implication is always true.
+     – By definition of an implication (q=T then p  q
+       is true whatever p=T or p=F).
+
+
+ • Note that you are showing that the
+   conclusion is true.
+
+
+59                         1/30/2026
+Trivial Proof Example
+• Consider the statement:
+  “If you are tall and are in CS 202, then you are
+   a student”
+
+• Since all people in CS 202 are students, the
+  implication is true regardless if you are tall
+  or not.
+
+
+
+                     1/30/2026
+   60
+Trivial Proof
+ Proving pq.
+ Trivial proof: Prove q is true (Prove q by itself).
+ If we know q is true, then pq is true.
+ The assertion is trivially true independent of the truth value
+  of p.
+      F  T and T  T are both true.
+   
+ Examples
+      “If it’s raining today, then the empty set is a subset of every set”.
+     Theorem: (For integer n) If n is the sum of two prime numbers, then
+       either n is odd or n is even.
+       Proof:
+          Any integer n is either odd or even.
+         So, the conclusion of the implication is true,
+         regardless of the truth of the hypothesis.
+        Thus, the implication is true trivially.
+
+
+
+
+         1/30/2026                                                        24
+What is wrong with this?
+ “Proof” that 1 = 2
+
+
+
+
+   Solution: Step 5. a - b = 0 by the premise and
+   division by 0 is undefined.
+Section 1.8
+Section Summary
+ Proof by Cases
+ Existence Proofs
+    Constructive
+    Nonconstructive
+ Disproof by Counterexample
+ Nonexistence Proofs
+ Uniqueness Proofs
+ Proof Strategies
+ Proving Universally Quantified Assertions
+ Open Problems
+Without Loss of Generality
+ Example: Show that if x and y are integers and both x∙y and x+y are even,
+ then both x and y are even.
+ Proof: Use a proof by contraposition. Suppose x and y are not both even.
+ Then, one or both are odd. Without loss of generality, assume that x is odd.
+ Then x = 2m + 1 for some integer k.
+    Case 1: y is even. Then y = 2n for some integer n, so
+    x + y = (2m + 1) + 2n = 2(m + n) + 1 is odd.
+    Case 2: y is odd. Then y = 2n + 1 for some integer n, so
+    x ∙ y = (2m + 1) (2n + 1) = 2(2m ∙ n +m + n) + 1 is odd.
+
+
+ We only cover the case where x is odd because the case where y is odd is
+ similar. The use phrase without loss of generality (WLOG) indicates this.
+Existence Proofs                            Srinivasa Ramanujan
+                                             (1887-1920)
+
+ Proof of theorems of the form                  .
+ Constructive existence proof:
+    Find an explicit value of c, for which P(c) is true.
+    Then             is true by Existential Generalization (EG).
+  Example: Show that there is a positive integer that can be
+  written as the sum of cubes of positive integers in two
+  different ways:
+  Proof:      1729 is such a number since
+              1729 = 103 + 93 = 123 + 13
+
+            Godfrey Harold Hardy
+             (1877-1947)
+Nonconstructive Existence Proofs
+ In a nonconstructive existence proof, we assume no c
+  exists which makes P(c) true and derive a
+  contradiction.
+  Example: Show that there exist irrational numbers x
+  and y such that xy is rational.
+  Proof: We know that √2 is irrational. Consider the
+  number √2 √2 . If it is rational, we have two irrational
+  numbers x and y with xy rational, namely x = √2
+  and y = √2. But if √2 √2 is irrational,
+  then we can let x = √2 √2 and y = √2 so that
+  aaaaa xy = (√2 √2 )√2 = √2 (√2 √2) = √2 2 = 2.
+Counterexamples
+ Recall                         .
+ To establish that             is true (or          is false)
+  find a c such that P(c) is true or P(c) is false.
+ In this case c is called a counterexample to the
+  assertion           .
+  Example: “Every positive integer is the sum of the
+  squares of 3 integers.” The integer 7 is a
+  counterexample. So the claim is false.
+Uniqueness Proofs
+ Some theorems asset the existence of a unique element with a
+  particular property, !x P(x). The two parts of a uniqueness proof
+  are
+    Existence: We show that an element x with the property exists.
+    Uniqueness: We show that if y≠x, then y does not have the property.
+ Example: Show that if a and b are real numbers and a ≠0, then
+ there is a unique real number r such that ar + b = 0.
+ Solution:
+   Existence: The real number r = −b/a is a solution of ar + b = 0
+    because a(−b/a) + b = −b + b =0.
+   Uniqueness: Suppose that s is a real number such that as + b = 0.
+    Then ar + b = as + b, where r = −b/a. Subtracting b from both
+    sides and dividing by a shows that r = s.
+Proof Strategies for proving p → q
+ Choose a method.
+   1. First try a direct method of proof.
+   2. If this does not work, try an indirect method (e.g., try to
+      prove the contrapositive).
+ For whichever method you are trying, choose a strategy.
+   1. First try forward reasoning. Start with the axioms and
+      known theorems and construct a sequence of steps that end
+      in the conclusion. Start with p and prove q, or start with ¬q
+      and prove ¬p.
+   2. If this doesn’t work, try backward reasoning. When trying to
+      prove q, find a statement p that we can prove with the
+      property p → q.
+Backward Reasoning
+ Example: Suppose that two people play a game taking turns removing, 1, 2, or 3 stones at
+  a time from a pile that begins with 15 stones. The person who removes the last stone wins
+  the game. Show that the first player can win the game no matter what the second player
+  does.
+
+ Proof: Let n be the last step of the game.
+   Step n: Player1 can win if the pile contains 1,2, or 3 stones.
+   Step n-1: Player2 will have to leave such a pile if the pile that he/she is faced with has 4
+      stones.
+   Step n-2: Player1 can leave 4 stones when there are 5,6, or 7 stones left at the beginning of
+      his/her turn.
+   Step n-3: Player2 must leave such a pile, if there are 8 stones .
+   Step n-4: Player1 has to have a pile with 9,10, or 11 stones to ensure that there are 8 left.
+   Step n-5: Player2 needs to be faced with 12 stones to be forced to leave 9,10, or 11.
+   Step n-6: Player1 can leave 12 stones by removing 3 stones.
+ Now reasoning forward, the first player can ensure a win by removing 3 stones and leaving
+ 12.
+Universally Quantified Assertions
+ To prove theorems of the form          ,assume x is an
+  arbitrary member of the domain and show that P(x)
+  must be true. Using UG it follows that          .
+  Example: An integer x is even if and only if x2 is even.
+  Solution: The quantified assertion is
+     x [x is even  x2 is even]
+  We assume x is arbitrary.
+  Recall that           is equivalent to
+  So, we have two cases to consider. These are
+  considered in turn.
+               Continued on next slide 
+Universally Quantified Assertions
+Case 1. We show that if x is even then x2 is even using
+ a direct proof (the only if part or necessity).
+If x is even then x = 2k for some integer k.
+Hence x2 = 4k2 = 2(2k2 ) which is even since it is an
+ integer divisible by 2.
+This completes the proof of case 1.
+
+
+
+
+         Case 2 on next slide 
+Universally Quantified Assertions
+ Case 2. We show that if x2 is even then x must be even (the
+ if part or sufficiency). We use a proof by contraposition.
+ Assume x is not even and then show that x2 is not even.
+ If x is not even then it must be odd. So, x = 2k + 1 for some
+ k. Then x2 = (2k + 1)2 = 4k2 + 4k + 1 = 2(2k2 + 2k) + 1
+  which is odd and hence not even. This completes the proof
+ of case 2.
+ Since x was arbitrary, the result follows by UG.
+ Therefore we have shown that x is even if and only if x2 is
+ even.
+Proof and Disproof: Tilings
+Example 1: Can we tile the standard checkerboard
+  using dominos?
+Solution: Yes! One example provides a constructive
+  existence proof.
+
+
+
+                         Two Dominoes
+
+
+
+ The Standard Checkerboard              One Possible Solution
+Tilings
+  Example 2: Can we tile a checkerboard obtained by
+  removing one of the four corner squares of a standard
+  checkerboard?
+  Solution:
+ Our checkerboard has 64 − 1 = 63 squares.
+ Since each domino has two squares, a board with a
+  tiling must have an even number of squares.
+ The number 63 is not even.
+ We have a contradiction.
+Tilings
+ Example 3: Can we tile a board obtained by removing
+ both the upper left and the lower right squares of a
+ standard checkerboard?
+
+
+
+
+      Nonstandard Checkerboard              Dominoes
+
+                                 Continued on next slide 
+Tilings
+ Solution:
+ There are 62 squares in this board.
+ To tile it we need 31 dominos.
+ Key fact: Each domino covers one black and one white
+  square.
+ Therefore the tiling covers 31 black squares and 31
+  white squares.
+ Our board has either 30 black squares and 32 white
+  squares or 32 black squares and 30 white squares.
+ Contradiction!
+

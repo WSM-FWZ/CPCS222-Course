@@ -1,0 +1,67 @@
+                                         Lab 12 Counting
+Objective
+Solving exercises from the textbook.
+
+Current Lab Learning Outcomes (LLO)
+By completion of the lab, the students should be able to
+ 1. Understand basics of counting and pigeon hole principle
+ 2. Solve shorter/easier or longer / harder problems given in the textbook.
+
+Lab Requirements
+Students allowed using their lecture notes in the lab and use blackboard slides in order to solve the exercises.
+Lab Assessment
+1- Divide students to groups and let them to solve the given example.
+2- Discuss the answers with the groups and write on board the optimal solution.
+Lab Description
+In this lab, students learn how to apply the basic counting principles, the pigeonhole principle, and permutations and
+combinations to solve counting problems
+
+    1. A wired equivalent privacy (WEP) key for a wireless fidelity (WiFi) network is a string of either 10,
+       26, or 58 hexadecimal digits. How many different WEP keys are there?
+    2. Use the principle of inclusion–exclusion to find the number of positive integers less than 1,000,000
+       that are not divisible either by4 or by 6.
+    3. How many ways are there to arrange the letters a, b, c,and d such that a is not followed immediately
+       by b.
+    4. Show that among any group of five (not necessarily consecutive) integers, there are two with the
+       same remainder when divided by 4.
+
+    5. What is the minimum number of students, each of whom comes from one of the 50 states, who must
+       be enrolled ina university to guarantee that there are at least 100 who come from the same state?
+
+    6. Find the value of each of these quantities.
+           a. P(6, 3) b. P(8, 8)             c. C(5, 3)            d. C(8, 8)
+    7. How many bit strings of length 10 contain
+       a) Exactly four 1's?
+       b) At most four 1's?
+       c) At least four 1's?
+       d) An equal number of 0's and 1's?
+    8. In how many ways can a set of five letters be selected from the English alphabet?
+
+
+
+
+    9. A coin is flipped 10 times where each flip comes up either heads or tails. How many possible
+       outcomes
+       a) Are there in total?
+   b) Contain exactly two heads?
+   c) Contain at most three tails.
+   d) Contain the same number of heads and tails?
+
+10. How many permutations of the letters ABCDEFG contain
+    a) The string BCD?
+    b) The string CFGA?
+    c) The strings BA and GF?
+    d) The strings ABC and DE?
+    e) The strings ABC and CDE?
+    f )The strings CBA and BED?
+
+11. How many ways are there for eight men and five women to stand in a line so that no two women
+    stand next to each other? [Hint: First, position the men and then consider possible positions for the
+    women.]
+
+12. How many bit strings of length 10 contain at least three 1's and at least three 0's?
+
+
+13. How many bit strings contain exactly eight 0's and ten 1's if every 0 must be immediately followed by
+    a 1?
+

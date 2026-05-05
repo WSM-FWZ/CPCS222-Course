@@ -1,0 +1,81 @@
+Assignment #1 - CPCS 222 (Spring 2026) (10 points)
+                            (Boy’s campus)
+
+Due: (30/04/2026)
+Student Name : _____________________________________________ Student ID: _______________
+Section : __________________
+
+
+
+1. Construct a truth table for (𝑎⨁¬𝑏) ↔ (¬𝑎 → 𝑐)                           [1.5 points]
+
+
+
+  a    b      c    ¬a     ¬b
+  T
+  T
+  T
+  T
+  F
+  F
+  F
+  F
+
+ 2.        Translate the English statement into propositional logic - “If the bus and
+
+Uber are parked at the bus station, then passengers can travel to Riyadh”
+                                                                                [0.5 points]
+
+
+
+
+3.     Write the converse and inverse of the propositional logic obtained from
+question 2. Also, write these in English.
+                                                                                   [1 point]
+
+
+
+
+ Converse
+
+
+
+
+ Inverse
+4. Show that [p∧(p→q)]→q is a tautology
+                                                                                 [2 points]
+ Expression                                             Rule
+
+
+
+
+5.      Translate the English statements into predicate logic
+where the domain of x is all animals in the world.
+Hint: Use f(x) – x is an animal in Riyadh Zoo , j(x) – x is a fish and m(x) – x is a lion
+
+
+
+A) “Some animals in Riyadh Zoo are fishes or lions”
+                                                                                [0.5 points]
+
+
+
+
+B) Negate the English statement given in question 5
+                                                                                [0.5 points]
+6.    If m is an even integer number and n is an even integer number, prove
+that mn is also a positive integer using direct proof. Hint: m ≠ n [2 points]
+
+
+
+
+7. Use the rule of inference to construct a valid argument to show that: [2 points]
+“There is an employee in the factory who must attend training.”
+
+is a consequence of the premises:
+
+   1. “There is an employee in the factory who violated a policy,”
+   2. “Every employee who violated a policy must attend training.”
+
+ Step                                      Reason
+

@@ -1,0 +1,81 @@
+                                         Lab 11 Counting
+Objective
+Solving exercises from the textbook.
+
+
+Current Lab Learning Outcomes (LLO)
+By completion of the lab, the students should be able to
+ 1. Understand basics of counting.
+ 2. Solve shorter/easier or longer / harder problems given in the textbook.
+
+Lab Requirements
+Students allowed using their lecture notes in the lab and use blackboard slides in order to solve the exercises.
+
+
+Lab Assessment
+1- Divide students to groups and let them to solve the given example.
+2- Discuss the answers with the groups and write on board the optimal solution.
+
+Lab Description
+In this lab, students learn how to apply the basic counting principles, the pigeonhole principle, and permutations and
+combinations to solve counting problems
+
+
+ 1.     There are 18 mathematics majors and 325 computer science majors at a college.
+           a) In how many ways can two representatives be picked so that one is mathematics
+               major and the other is a computer science major?
+           b) In how many ways can one representative be picked who is either mathematics
+               major or a computer science major?
+ 2.     Six different airlines fly from New York to Denver and seven fly from Denver to San
+        Francisco. How many different pairs of airlines can you choose on which to book a trip
+        from New York to San Francisco via Denver, when you pick an airline for the flight to
+        Denver and an airline for the continuation flight to San Francisco?
+ 3.     In how many ways can a photographer at a wedding arrange six people in a row,
+        including the bride and groom, if
+           a) The bride must be next to the groom.
+           b) The bride is not next to the groom.
+           c) The bride is positioned somewhere to the left of the groom.
+ 4.     How many permutations of {a, b, c, d, e, f, g} end with a?
+5.   How many possibilities are there for the win, place, and show (first, second, and third)
+     positions in a horse race with 12 horses if all orders of finish are possible?
+6. A club has 25 members.
+         a) How many ways are there to choose four members of the club to serve on an
+            executive committee?
+         b) How many ways are there to choose a president, vice president, secretary, and
+            treasurer of the club, where no person can hold more than one office?
+7. Suppose that a department contains 10 men and 15 women. How many ways are there
+     to form a committee with six members if it must have the same number of men and
+     women?
+8. A multiple-choice test contains 10 questions. There are four possible answers for each
+     question.
+     a) In how many ways can a student answer the questions on the test if the student
+         answers every question?
+     b) In how many ways can a student answer the questions on the test if the student can
+         leave answers blank?
+  10.How many different three-letter initials are there that begin with an A?
+  11.How many bit strings of length ten both begin and end with a 1?
+  12.How many strings of three decimal digits
+     a) Do not contain the same digit three times?
+     b) Begin with an odd digit?
+     c) Have exactly two digits that are 4's?
+  13.How many strings of eight English letters are there
+     a) That contain no vowels, if letters can be repeated.
+     b) That contain no vowels, if letters cannot be repeated.
+     c) That start with a vowel, if letters can be repeated.
+  14.How many bit strings of length ten both begin and end with a 1?
+  15.How many bit strings of length 10 either begin with three 0's or end with two 0's?
+  16.Adrawer contains a dozen brown socks and a dozen black socks, all unmatched. A man
+     takes socks out at randomin the dark.
+     a) How many socks must he take out to be sure that he has at least two socks of the
+         same color?
+     b) How many socks must he take out to be sure that he has at least two black socks?
+  17.There are 38 different time periods during which classes at a university can be
+     scheduled. If there are 677 different classes, how many different rooms will be
+     needed?
+  18.Suppose that every student in a discrete mathematics class of 25 students is a
+     freshman, a sophomore, or a junior.
+     a) Show that there are at least nine freshmen, at least nine sophomores, or at least nine
+         juniors in the class.
+     b) Show that there are at least three freshmen, at least 19 sophomores, or at least five
+         juniors in the class.
+
