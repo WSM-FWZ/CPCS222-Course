@@ -5,7 +5,7 @@
 (function (global) {
   'use strict';
 
-  var _PREVIEW_SECTION = '1.1';
+  var _PREVIEW_SECTION = '1.8';
 
   var _sidebarListEl  = null;
   var _lessonViewEl   = null;
