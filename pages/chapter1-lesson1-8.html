@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CPCS 222 — 1.8 Proof Methods and Strategy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/css/main.css" />
+
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\\(','\\)']],
+        displayMath: [['\\[','\\]']]
+      },
+      options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+
+  <script>
+    (function(){
+      var t = localStorage.getItem('cpcs222-theme') || 'light';
+      document.documentElement.setAttribute('data-theme', t);
+    })();
+  </script>
+</head>
+<body class="page-viewer">
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="nav-home" href="../index.html" title="Back to home">◂ Home</a>
+      <div class="course-badge">CPCS 222</div>
+      <span class="header-title">Ch. 1 — Logic &amp; Proofs</span>
+      <div class="header-right">
+        <span class="progress-text" id="progress-text">Section 1.8</span>
+        <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle theme">🌙</button>
+      </div>
+    </div>
+  </header>
+
+  <nav class="breadcrumb" id="breadcrumb-nav" aria-label="Breadcrumb">
+    <a href="../index.html">Home</a>
+    <span class="breadcrumb-sep" aria-hidden="true">›</span>
+    <span>Chapter 1</span>
+    <span class="breadcrumb-sep" aria-hidden="true">›</span>
+    <span class="breadcrumb-current">Proof Methods and Strategy</span>
+  </nav>
+
+  <div class="app-body">
+
+    <nav class="sidebar" id="sidebar" aria-label="Lessons">
+      <div class="sidebar-header">
+        <div class="sidebar-chapter">Chapter 1</div>
+        <div class="sidebar-title">The Foundations</div>
+        <div class="sidebar-sub">Logic &amp; Proofs</div>
+      </div>
+      <ul class="lesson-list" id="lesson-list" role="list"></ul>
+    </nav>
+
+    <main class="lesson-view" id="lesson-view" tabindex="-1">
+      <div class="loading-state">
+        <div class="spinner"></div>
+        <p>Loading lesson…</p>
+      </div>
+    </main>
+
+  </div>
+
+  <script src="../engine/json_loader.js"></script>
+  <script src="../engine/quiz_engine.js"></script>
+  <script src="../engine/renderer.js"></script>
+  <script src="../engine/navigation.js"></script>
+  <script src="../assets/js/app.js"></script>
+  <script>
+    if (!window.location.hash) { window.location.replace(window.location.pathname + '#1.8'); }
+  </script>
+
+</body>
+</html>
