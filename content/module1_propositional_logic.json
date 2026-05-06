@@ -1,0 +1,991 @@
+{
+  "course": "CPCS 222 — Discrete Mathematics",
+  "module": {
+    "module_id": 1,
+    "title": "Propositional Logic",
+    "description": "Module 1 introduces the foundations of propositional logic: what counts as a proposition, the four connectives (¬, ∧, ∨, ⊕), the conditional and biconditional (→, ↔), the construction of truth tables, and the standard English-to-logic translations including the converse, contrapositive, and inverse of an implication. This is the first building block of every formal proof in the course.",
+    "source_files": [
+      "CPCS222_01n_LogicProofs.pdf"
+    ],
+    "lessons": [
+      {
+        "lesson_id": "module1-lesson1",
+        "type": "tutorial",
+        "title": "What Is a Proposition?",
+        "slug": "what-is-a-proposition",
+        "welcome": "Welcome to Module 1. Before you can prove anything in computer science — that an algorithm terminates, that a program is correct, that a circuit produces the right output — you need a precise language for talking about truth. That language begins with a single idea: the proposition. In this lesson you will learn what counts as a proposition, what does not, and why this distinction matters for every line of logic that follows.",
+        "objectives": [
+          "Define a proposition in your own words and identify its truth value.",
+          "Distinguish propositions from questions, commands, and open sentences with free variables.",
+          "Recognize atomic propositions and assign them propositional variables (p, q, r, …).",
+          "Explain why expressions like 'x + 1 = 2' are not propositions until x is given a value.",
+          "Connect the idea of a proposition to its role inside compound logical statements."
+        ],
+        "storytelling": [
+          {
+            "speaker": "Student",
+            "text": "I keep hearing the word 'proposition' in this course. Is it just a fancy word for 'sentence'?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "Not quite. A proposition is a very specific kind of sentence. It has to be a declarative sentence, and it must be either definitely true or definitely false. Questions and commands are not propositions."
+          },
+          {
+            "speaker": "Student",
+            "text": "So 'The sky is blue' is a proposition, but 'Is the sky blue?' is not?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "Exactly. The first one is true. The second one is a question — it has no truth value. Logic does not handle questions or commands directly. It works only with statements that can be evaluated."
+          },
+          {
+            "speaker": "Student",
+            "text": "What about 'x + 2 = 5'? That looks like a sentence, but its truth depends on x."
+          },
+          {
+            "speaker": "Professor",
+            "text": "Good catch. That is called an open sentence. It has a free variable, so it is not a proposition by itself. Once you say 'let x = 3', it becomes the proposition '3 + 2 = 5', which is true. We will see later how quantifiers turn open sentences into propositions in another way."
+          }
+        ],
+        "sections": [
+          {
+            "number": 1,
+            "heading": "The Definition of a Proposition",
+            "explanation": "A proposition is a declarative sentence that is either true (T) or false (F), but not both. The key word is declarative — the sentence has to be making a claim about the world, not asking or commanding. Whether the claim happens to be correct is a separate matter; what matters is that the claim has a definite truth value.",
+            "examples": [
+              "'2 + 3 = 5' — proposition, true.",
+              "'2 + 3 = 6' — proposition, false (still a proposition, just a wrong one).",
+              "'Riyadh is the capital of Saudi Arabia.' — proposition, true.",
+              "'The Moon is made of green cheese.' — proposition, false."
+            ],
+            "common_mistakes": [
+              "Confusing 'true' with 'proposition'. A false sentence is still a proposition, as long as its truth value is determined."
+            ],
+            "visual_idea": {
+              "type": "diagram",
+              "description": "A simple decision diagram: 'Is the sentence declarative?' → Yes/No. If Yes: 'Does it have a definite truth value?' → Yes/No. Only the path Yes → Yes lands on the green box labelled 'Proposition'. Other paths lead to red boxes labelled 'Not a proposition'.",
+              "interactive_hint": "Let the learner type any sentence into a text box; the diagram lights up the corresponding path and shows the verdict in a side panel."
+            }
+          },
+          {
+            "number": 2,
+            "heading": "Examples and Non-Examples",
+            "explanation": "The fastest way to internalize the definition is to look at many positive and negative examples side by side. Anything that is a question, a command, or a sentence whose truth value cannot be pinned down is not a proposition.",
+            "examples": [
+              "Proposition: '0 + 0 = 2.' (False, but still a proposition.)",
+              "Proposition: 'Toronto is the capital of Canada.' (False — Ottawa is — but still a proposition.)",
+              "NOT a proposition: 'Sit down!' — a command.",
+              "NOT a proposition: 'What time is it?' — a question.",
+              "NOT a proposition: 'x + 1 = 2.' — open sentence, depends on x.",
+              "NOT a proposition: 'x + y = z.' — three free variables."
+            ],
+            "common_mistakes": [
+              "Treating 'x + 1 = 2' as a proposition because it looks like an equation. It is not — until x is given a value.",
+              "Calling a paradox like 'This sentence is false' a proposition. It cannot consistently be either true or false, so it fails the definition."
+            ],
+            "visual_idea": {
+              "type": "diagram",
+              "description": "A two-column gallery: the left column lists clear propositions in green; the right column lists non-propositions in red, each labelled with WHY (question, command, open sentence, paradox).",
+              "interactive_hint": "Drag-and-drop a sentence between columns; the page only accepts the drop if the column matches the correct category."
+            }
+          },
+          {
+            "number": 3,
+            "heading": "Truth Values: True or False, Never Both",
+            "explanation": "Every proposition has exactly one truth value: T (true) or F (false). The proposition that is always true is denoted by T; the proposition that is always false is denoted by F. We never say a proposition is 'partly true' or 'sometimes true' — vagueness is incompatible with formal logic. If a sentence feels vague, it is usually because it hides a free variable or an unstated context, both of which break propositionhood.",
+            "examples": [
+              "'Elephants are bigger than mice' is a proposition with truth value T.",
+              "'520 < 111' is a proposition with truth value F.",
+              "'y > 5' is NOT a proposition because the truth value depends on y."
+            ],
+            "common_mistakes": [
+              "Saying 'it depends' for a proposition. If it depends on something, it is not yet a proposition."
+            ],
+            "visual_idea": {
+              "type": "truth-table",
+              "description": "A minimal one-row table: a proposition p occupies the only header cell, and a single row shows the truth value (T or F).",
+              "interactive_hint": "A toggle button flips p between T and F to reinforce that every proposition lives in exactly one of these two states."
+            }
+          },
+          {
+            "number": 4,
+            "heading": "From English to Symbols: Atomic Propositions",
+            "explanation": "When working with logic we replace everyday English with letters. Each simple, non-decomposable proposition is called an atomic proposition. We give it a name — usually p, q, r, s — so we can manipulate it symbolically. For example, if p stands for 'It is raining' and q stands for 'I am at home', then we can talk about combinations of p and q without rewriting the English each time. Atomic propositions are the building blocks; in the next lesson we will combine them with logical connectives to form compound propositions.",
+            "examples": [
+              "Let p = 'It is below freezing.' and q = 'It is snowing.' Then 'p' refers to the first sentence, and we can speak about 'p and q' without re-writing them.",
+              "Let r = 'I will go shopping.' Then '¬r' (read 'not r') will denote 'I will not go shopping' once we introduce negation in the next lesson."
+            ],
+            "common_mistakes": [
+              "Re-using the same letter for two different sentences. Pick a fresh letter for each new atomic proposition.",
+              "Trying to assign a letter to a non-proposition. Only declarative, definite-truth-value sentences deserve a letter."
+            ],
+            "visual_idea": {
+              "type": "svg",
+              "description": "A small stack of cards labelled p, q, r, s. Each card has a blank line on which the learner writes the English sentence the letter stands for. The cards stay visible throughout the lesson so the learner can refer back to the binding.",
+              "interactive_hint": "Click a card to flip it; one side shows the letter, the other shows the bound English sentence."
+            }
+          }
+        ],
+        "worked_examples": [
+          {
+            "problem": "Decide which of the following are propositions and give the truth value of each one that is. (a) 'Cairo is the capital of Egypt.' (b) '5 + 7 = 10.' (c) 'x + 2 = 11.' (d) 'Answer this question.'",
+            "step_by_step_solution": [
+              "Check each sentence against the definition: declarative + definite truth value.",
+              "(a) Declarative, definite truth value (true). It IS a proposition with value T.",
+              "(b) Declarative, definite truth value (false: 5 + 7 = 12). Proposition with value F.",
+              "(c) Declarative-looking, but contains free variable x. Truth value depends on x. NOT a proposition.",
+              "(d) Imperative — a command. NOT a proposition."
+            ],
+            "final_answer": "(a) Proposition, T. (b) Proposition, F. (c) Not a proposition (open sentence). (d) Not a proposition (command).",
+            "why_it_works": "Each item is filtered through the two checks of the definition. Anything that fails either check is rejected, no matter how 'sentence-like' it appears.",
+            "common_mistake": "Marking (c) as a proposition because it has an equals sign. An equation with a free variable is an open sentence, not a proposition."
+          },
+          {
+            "problem": "Two students argue. Student A says: '\"3 < 5\" is a proposition.' Student B says: 'No it isn't, because it's just a fact, not a sentence.' Who is right?",
+            "step_by_step_solution": [
+              "Recall: a proposition is a declarative sentence with a definite truth value.",
+              "'3 < 5' is a declarative statement comparing two numbers.",
+              "Its truth value is well-defined: it is true.",
+              "So it is a proposition with truth value T."
+            ],
+            "final_answer": "Student A is right.",
+            "why_it_works": "'Just a fact' is exactly the kind of declarative content logic studies. Mathematical inequalities with concrete numbers (no free variables) are propositions.",
+            "common_mistake": "Believing that propositions must be in plain English. Any declarative content with a definite truth value qualifies, including symbolic ones."
+          }
+        ],
+        "quick_checks": [
+          {
+            "type": "mcq",
+            "question": "Which of the following is a proposition?",
+            "choices": [
+              "'Open the door.'",
+              "'Is it raining?'",
+              "'7 is greater than 4.'",
+              "'x = 10.'"
+            ],
+            "answer": "'7 is greater than 4.'",
+            "explanation": "It is declarative and has a definite truth value (true). The others are a command, a question, and an open sentence."
+          },
+          {
+            "type": "true_false",
+            "question": "A false sentence cannot be a proposition.",
+            "choices": [
+              "True",
+              "False"
+            ],
+            "answer": "False",
+            "explanation": "A proposition only needs a definite truth value — being false is allowed."
+          },
+          {
+            "type": "short_answer",
+            "question": "Why is 'y > 5' not a proposition?",
+            "choices": [],
+            "answer": "Because y is a free variable; the truth value depends on y. Without a value for y, the sentence has no definite truth value.",
+            "explanation": "Open sentences become propositions only after their variables are given specific values."
+          }
+        ],
+        "summary": {
+          "key_takeaways": [
+            "A proposition is a declarative sentence that is either true or false, but not both.",
+            "Questions, commands, and open sentences with free variables are NOT propositions.",
+            "Every proposition has exactly one truth value — T or F.",
+            "We use letters p, q, r, s to name atomic propositions so we can manipulate them symbolically.",
+            "Atomic propositions are the building blocks that the next lesson will combine using connectives."
+          ],
+          "next": "In the next lesson we add connectives — negation, conjunction, disjunction, and exclusive or — that combine atomic propositions into compound ones."
+        }
+      },
+      {
+        "lesson_id": "module1-lesson2",
+        "type": "tutorial",
+        "title": "Logical Connectives and Truth Values",
+        "slug": "logical-connectives-and-truth-values",
+        "welcome": "In Lesson 1 you learned what a proposition is. In this lesson you will learn how to combine propositions using LOGICAL CONNECTIVES — the small symbols that act like the 'verbs' of formal logic. With just four connectives (¬, ∧, ∨, ⊕) you can express ideas like 'and', 'or', 'not', and 'either-but-not-both' in a precise, computable way. These connectives are what every Boolean condition in code, every logic gate in a circuit, and every search filter on the web is made of.",
+        "objectives": [
+          "Define negation (¬), conjunction (∧), disjunction (∨), and exclusive or (⊕).",
+          "Compute the truth value of a compound proposition given the truth values of its parts.",
+          "Translate simple English sentences using 'not', 'and', 'or', 'but', and exclusive 'or' into symbolic form.",
+          "Distinguish inclusive 'or' (∨) from exclusive 'or' (⊕) and recognize which English sentences mean which.",
+          "Build small compound propositions from two or three atomic propositions."
+        ],
+        "storytelling": [
+          {
+            "speaker": "Student",
+            "text": "If a proposition is just a sentence with a truth value, why do we need symbols like ∧ and ∨?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "Because we want to combine propositions and reason about the result mechanically. English is ambiguous — does 'or' mean 'one of them' or 'one or both'? Logic answers that with two distinct symbols, ∨ and ⊕, that have unambiguous definitions."
+          },
+          {
+            "speaker": "Student",
+            "text": "And ¬ just flips a true to false?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "Exactly. ¬ is the simplest connective: it takes one proposition and gives back its opposite. The others combine two propositions. Once you know the truth tables for these four, you can compute the truth value of any compound expression by hand."
+          }
+        ],
+        "sections": [
+          {
+            "number": 1,
+            "heading": "Why We Need Connectives",
+            "explanation": "A single atomic proposition can only say one thing. Real reasoning involves combining many simple statements. Connectives are the operators that build COMPOUND propositions from atomic ones. They are like arithmetic operators (+, ×) for truth values: each connective takes one or two truth values as input and returns a truth value as output.",
+            "examples": [
+              "'I am at home AND it is raining.' — joins two propositions with ∧.",
+              "'It is NOT raining.' — flips one proposition with ¬.",
+              "'Either soup OR salad (not both).' — exclusive or, ⊕."
+            ],
+            "common_mistakes": [],
+            "visual_idea": {
+              "type": "diagram",
+              "description": "Two boxes labelled p and q feed into a third box labelled with a connective; the output box shows the resulting truth value. The diagram closely mirrors a circuit/logic-gate picture.",
+              "interactive_hint": "Toggle p and q; the output cell updates instantly using the chosen connective's truth table."
+            }
+          },
+          {
+            "number": 2,
+            "heading": "Negation (¬)",
+            "explanation": "Negation is a UNARY connective — it takes one proposition. If p is true, then ¬p is false; if p is false, then ¬p is true. In English, we write 'not p' or 'it is not the case that p'. The truth table has only two rows because there is one input variable.",
+            "examples": [
+              "If p = 'The earth is round', then ¬p = 'The earth is not round'.",
+              "If p is true, ¬p is false. If p is false, ¬p is true.",
+              "Negation is its own inverse: ¬(¬p) is the same as p."
+            ],
+            "common_mistakes": [
+              "Negating only part of a compound sentence. 'It is not the case that I am at home and it is raining' negates the WHOLE conjunction, not just one piece."
+            ],
+            "visual_idea": {
+              "type": "truth-table",
+              "description": "Two-row table:\n  p | ¬p\n  T |  F\n  F |  T",
+              "interactive_hint": "Highlight the input cell; the output cell flashes the flipped value to make the 'flip' intuition concrete."
+            }
+          },
+          {
+            "number": 3,
+            "heading": "Conjunction (∧)",
+            "explanation": "Conjunction is the logical 'and'. The compound proposition p ∧ q is true exactly when BOTH p and q are true; it is false in every other case. In English, the words 'and' and 'but' both translate to ∧ — the difference between them is stylistic, not logical.",
+            "examples": [
+              "If p = 'I am at home' and q = 'It is raining', then p ∧ q = 'I am at home and it is raining'.",
+              "Truth table for ∧: T∧T=T, T∧F=F, F∧T=F, F∧F=F.",
+              "'It is below freezing BUT not snowing' = p ∧ ¬q."
+            ],
+            "common_mistakes": [
+              "Translating 'but' as a different connective. Logically, 'but' is just '∧' with a hint of contrast."
+            ],
+            "visual_idea": {
+              "type": "truth-table",
+              "description": "Standard four-row truth table for p ∧ q. Highlight the single T row at the top to emphasize that ∧ is 'true only when both are true'.",
+              "interactive_hint": "Sliders for p and q; the output cell turns green only on the (T, T) configuration."
+            }
+          },
+          {
+            "number": 4,
+            "heading": "Disjunction (∨) — Inclusive Or",
+            "explanation": "Disjunction is the logical 'or'. The compound proposition p ∨ q is true when AT LEAST ONE of p, q is true — including the case where both are true. This is the INCLUSIVE 'or' of mathematics. English 'or' is sometimes inclusive ('students who have taken CS1 or CS2') and sometimes exclusive ('soup or salad'); ∨ always means inclusive.",
+            "examples": [
+              "If p = 'I am at home' and q = 'It is raining', then p ∨ q = 'I am at home or it is raining (or both)'.",
+              "Truth table for ∨: T∨T=T, T∨F=T, F∨T=T, F∨F=F. Only the bottom row is false.",
+              "'Students who have taken CS101 or Math120 may take this course' uses inclusive or — taking both is fine."
+            ],
+            "common_mistakes": [
+              "Reading 'or' as exclusive by default. In logic, ∨ is inclusive unless the symbol ⊕ is used."
+            ],
+            "visual_idea": {
+              "type": "truth-table",
+              "description": "Four-row table for p ∨ q with three green rows on top and one red F row at the bottom — the visual mirror of the conjunction table.",
+              "interactive_hint": "A 'compare with ∧' toggle that overlays the conjunction table so the learner can see precisely which rows differ."
+            }
+          },
+          {
+            "number": 5,
+            "heading": "Exclusive Or (⊕)",
+            "explanation": "Exclusive or, written p ⊕ q, is true exactly when p and q differ — exactly one of them is true, but not both. This matches the everyday 'either…or…but not both' phrasing. In computer science, XOR is heavily used in cryptography, parity bits, and bit manipulation.",
+            "examples": [
+              "If p = 'I will earn an A in this course' and q = 'I will drop this course', then p ⊕ q = 'I will either earn an A or drop the course, but not both'.",
+              "Truth table for ⊕: T⊕T=F, T⊕F=T, F⊕T=T, F⊕F=F. Exactly the two 'mismatch' rows are true.",
+              "'Soup or salad comes with the entrée' is naturally exclusive — you do not get both."
+            ],
+            "common_mistakes": [
+              "Using ⊕ when English ∨ is intended. If both options being true is acceptable, use ∨."
+            ],
+            "visual_idea": {
+              "type": "truth-table",
+              "description": "Side-by-side comparison of ∨ and ⊕. The only row they disagree on is (T, T). Highlight that row to anchor the distinction.",
+              "interactive_hint": "Click any cell to see which English sentence patterns fit the inclusive vs exclusive interpretation."
+            }
+          },
+          {
+            "number": 6,
+            "heading": "Building Compound Propositions",
+            "explanation": "Once you know the four connectives, you can stack them. The compound proposition (¬p) ∨ (p ∧ q) is built by first computing ¬p, then p ∧ q, then their disjunction. To evaluate compound propositions you walk from the innermost subexpression outward, using the truth tables you have just learned.",
+            "examples": [
+              "Let p = T, q = F. Then ¬p = F. p ∧ q = F. So (¬p) ∨ (p ∧ q) = F ∨ F = F.",
+              "Let p = F, q = T. Then ¬p = T. p ∧ q = F. So (¬p) ∨ (p ∧ q) = T ∨ F = T."
+            ],
+            "common_mistakes": [
+              "Forgetting parentheses. Without them, the precedence rules in Lesson 3 decide which connective binds first — and the answer can change."
+            ],
+            "visual_idea": {
+              "type": "flowchart",
+              "description": "A bottom-up flowchart that takes p and q on the left, branches into ¬p and p ∧ q boxes, and merges them into the final disjunction box on the right. Arrows show the data flow of truth values.",
+              "interactive_hint": "Each intermediate box displays its current value; the learner toggles p, q at the source and watches values ripple through."
+            }
+          }
+        ],
+        "worked_examples": [
+          {
+            "problem": "Let p = 'It is below freezing' and q = 'It is snowing'. Translate the following sentences into propositional logic. (a) 'It is below freezing and snowing.' (b) 'It is below freezing but not snowing.' (c) 'It is not below freezing and it is not snowing.' (d) 'Either it is snowing or below freezing (or both).'",
+            "step_by_step_solution": [
+              "(a) 'and' → ∧. So: p ∧ q.",
+              "(b) 'but not' → ∧ with negation on q. So: p ∧ ¬q.",
+              "(c) 'not … and … not …' → ¬p ∧ ¬q.",
+              "(d) 'or … or … or both' → inclusive or → q ∨ p (equivalently p ∨ q)."
+            ],
+            "final_answer": "(a) p ∧ q; (b) p ∧ ¬q; (c) ¬p ∧ ¬q; (d) p ∨ q.",
+            "why_it_works": "Each English connector maps to a single logical symbol, and negation modifies whatever piece is being negated.",
+            "common_mistake": "Translating (b) as 'p ∧ ¬p ∧ q' or similar. Only q is being negated; p stays positive."
+          },
+          {
+            "problem": "Compute the truth value of (p ∨ q) ∧ ¬(p ∧ q) when p = T, q = T.",
+            "step_by_step_solution": [
+              "Compute the inner pieces first.",
+              "p ∨ q = T ∨ T = T.",
+              "p ∧ q = T ∧ T = T, so ¬(p ∧ q) = F.",
+              "Now combine: T ∧ F = F."
+            ],
+            "final_answer": "F.",
+            "why_it_works": "(p ∨ q) ∧ ¬(p ∧ q) is exactly the truth-table definition of exclusive or. When both p and q are true, exclusive or is false.",
+            "common_mistake": "Computing the outer conjunction first. Always evaluate the innermost subexpressions before combining them."
+          }
+        ],
+        "quick_checks": [
+          {
+            "type": "mcq",
+            "question": "If p is false and q is true, what is the value of p ∧ q?",
+            "choices": [
+              "True",
+              "False",
+              "Unknown",
+              "Both"
+            ],
+            "answer": "False",
+            "explanation": "Conjunction is true only when BOTH operands are true."
+          },
+          {
+            "type": "mcq",
+            "question": "Which connective best matches 'either you turn left or you turn right (but not both)'?",
+            "choices": [
+              "∧",
+              "∨",
+              "⊕",
+              "¬"
+            ],
+            "answer": "⊕",
+            "explanation": "'Either … or … but not both' is the textbook phrasing of exclusive or."
+          },
+          {
+            "type": "true_false",
+            "question": "p ∨ q is true when both p and q are true.",
+            "choices": [
+              "True",
+              "False"
+            ],
+            "answer": "True",
+            "explanation": "∨ is inclusive — true when at least one operand is true, including the both-true case."
+          }
+        ],
+        "summary": {
+          "key_takeaways": [
+            "Negation (¬) flips the truth value of a single proposition.",
+            "Conjunction (∧) is true only when both operands are true.",
+            "Disjunction (∨) is INCLUSIVE — true when at least one operand is true.",
+            "Exclusive or (⊕) is true when EXACTLY one operand is true.",
+            "English 'and' / 'but' both translate to ∧; English 'or' is usually ∨ but sometimes ⊕ — context decides.",
+            "Evaluate compound propositions from the inside out, using the truth tables of each connective."
+          ],
+          "next": "Next we tackle truth tables in detail and the trickiest connective of all: the conditional (→) and its cousin the biconditional (↔)."
+        }
+      },
+      {
+        "lesson_id": "module1-lesson3",
+        "type": "tutorial",
+        "title": "Truth Tables and Conditional Statements",
+        "slug": "truth-tables-and-conditional-statements",
+        "welcome": "Now that you can compose propositions with ¬, ∧, ∨, and ⊕, it is time to learn the most important connective of all: the conditional (p → q), read 'if p then q'. Conditionals are the language of rules, promises, and theorems. Almost every theorem you will ever read is a conditional. In this lesson you will also master the truth-table method, the biconditional, and the three implications related to a given conditional: its converse, contrapositive, and inverse.",
+        "objectives": [
+          "Construct a complete truth table for any compound proposition with up to three propositional variables.",
+          "Define the implication p → q and explain why it is true when the hypothesis is false.",
+          "Translate the many English phrasings of 'if p then q' into → form.",
+          "Form the converse, contrapositive, and inverse of an implication and recognize which is logically equivalent to the original.",
+          "Define the biconditional p ↔ q and apply the standard precedence rules for connectives."
+        ],
+        "storytelling": [
+          {
+            "speaker": "Student",
+            "text": "Why is 'If 1 + 1 = 3, then I am a billionaire' considered TRUE in logic? It feels like nonsense."
+          },
+          {
+            "speaker": "Professor",
+            "text": "Logic only cares whether a promise is broken. The implication p → q says 'if p happens, q must happen'. The only way to break that promise is when p is true but q is false. If p never happens, the promise is never tested, so it is not broken — and we count it as true."
+          },
+          {
+            "speaker": "Student",
+            "text": "So whenever the hypothesis is false, the whole implication is automatically true?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "Yes. We call those vacuously true implications. They feel strange in English but they keep the rules of logic clean and consistent."
+          },
+          {
+            "speaker": "Student",
+            "text": "And the contrapositive — why does that matter?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "Because p → q and ¬q → ¬p are logically equivalent. Sometimes one direction is easier to prove than the other. Knowing the contrapositive gives you a second route to the same destination."
+          }
+        ],
+        "sections": [
+          {
+            "number": 1,
+            "heading": "Building a Truth Table",
+            "explanation": "A truth table lists every possible combination of truth values for the atomic propositions and computes the value of each subexpression and the final compound. With n atomic variables there are 2ⁿ rows. To build one:\n\n  1. Write a column for each atomic variable.\n  2. Fill in every combination of T and F (2ⁿ rows).\n  3. Add a column for each subexpression as it grows.\n  4. Compute each new column from the columns to its left.",
+            "examples": [
+              "For 1 variable: 2 rows. For 2 variables: 4 rows. For 3 variables: 8 rows.",
+              "For p ∨ q with two variables, fill T-T, T-F, F-T, F-F as the input rows."
+            ],
+            "common_mistakes": [
+              "Skipping intermediate columns. The truth table is easier to verify when each subexpression has its own column.",
+              "Forgetting that 2ⁿ rows are needed — even one missed row can hide a counterexample."
+            ],
+            "visual_idea": {
+              "type": "truth-table",
+              "description": "A growing truth table that adds columns left-to-right as the expression is built. Each new column is highlighted as it is filled in.",
+              "interactive_hint": "An 'add column' button lets the learner extend the table by one subexpression at a time, helping them see the build-up."
+            }
+          },
+          {
+            "number": 2,
+            "heading": "The Conditional (→)",
+            "explanation": "The conditional p → q is read 'if p then q'. It is FALSE in exactly one row of the truth table: when p is true and q is false. In every other case it is true. Think of p → q as a promise: 'if p happens, I guarantee q'. The promise can only be broken when the trigger (p) fires but the guarantee (q) fails. If p never fires, the promise was never tested — by convention, the implication is then vacuously true.",
+            "examples": [
+              "If p = 'I am elected' and q = 'I will lower taxes', then p → q is the campaign promise. The politician breaks the promise only by being elected and not lowering taxes.",
+              "Truth table for p → q: T→T = T, T→F = F, F→T = T, F→F = T."
+            ],
+            "common_mistakes": [
+              "Reading p → q as 'p causes q'. Logic does not care about causation — only about truth values.",
+              "Calling F → T or F → F false. Both are TRUE: a vacuous promise is not a broken one."
+            ],
+            "visual_idea": {
+              "type": "truth-table",
+              "description": "Truth table for → with the single false row (T → F) highlighted in red and labelled 'broken promise'. The two F-hypothesis rows are labelled 'vacuously true'.",
+              "interactive_hint": "Hovering over each row reveals the English-sentence interpretation of that row's promise."
+            }
+          },
+          {
+            "number": 3,
+            "heading": "Different Ways to Express p → q in English",
+            "explanation": "Many English phrasings all translate to the SAME conditional p → q. Memorize this list — it is one of the most common sources of translation mistakes:\n\n  • 'if p, then q'\n  • 'p implies q'\n  • 'p only if q'\n  • 'q if p'\n  • 'q whenever p'\n  • 'q follows from p'\n  • 'p is sufficient for q'\n  • 'q is necessary for p'\n  • 'a sufficient condition for q is p'\n  • 'a necessary condition for p is q'\n\nNote especially that 'p only if q' is p → q, NOT q → p — q is the necessary condition.",
+            "examples": [
+              "'You can access the Internet only if you are an administrator' = a → ad (where a = access, ad = admin).",
+              "'Studying is sufficient for passing' = s → p (sufficient marks the hypothesis).",
+              "'A passing grade is necessary for graduation' = g → p (necessary marks the conclusion)."
+            ],
+            "common_mistakes": [
+              "Reversing 'only if' into q → p. 'p only if q' means 'p requires q', so the implication points from p to q.",
+              "Mixing up necessary and sufficient. A sufficient condition is the hypothesis side; a necessary condition is the conclusion side."
+            ],
+            "visual_idea": {
+              "type": "diagram",
+              "description": "A reference table with two columns: an English phrase on the left and the corresponding implication direction on the right. Each row is colour-coded by the keyword (necessary = blue, sufficient = green, only if = orange).",
+              "interactive_hint": "Click any phrase to see a worked translation example with concrete propositions."
+            }
+          },
+          {
+            "number": 4,
+            "heading": "Converse, Contrapositive, and Inverse",
+            "explanation": "Starting from p → q, three related conditionals appear naturally. They sound similar but are NOT all equivalent:\n\n  • CONVERSE       q → p\n  • CONTRAPOSITIVE ¬q → ¬p     (logically equivalent to p → q)\n  • INVERSE        ¬p → ¬q\n\nThe contrapositive has the same truth value as the original in every row of the truth table — they are logically equivalent. The converse and inverse are equivalent to each other, but NOT to the original. Confusing the converse with the original is one of the most common reasoning errors in everyday life.",
+            "examples": [
+              "Original: 'If it rains, the home team wins' (p → q).",
+              "Converse: 'If the home team wins, it rained' (q → p).",
+              "Contrapositive: 'If the home team does not win, it did not rain' (¬q → ¬p).",
+              "Inverse: 'If it does not rain, the home team does not win' (¬p → ¬q)."
+            ],
+            "common_mistakes": [
+              "Treating the converse as if it followed from the original. It does not — additional information is required.",
+              "Forgetting that the contrapositive IS equivalent to the original; this often gives a cleaner proof path."
+            ],
+            "visual_idea": {
+              "type": "diagram",
+              "description": "A four-cell square: top-left p → q, top-right q → p, bottom-left ¬p → ¬q, bottom-right ¬q → ¬p. Equivalent pairs are connected by green arrows; non-equivalent pairs by red dashed arrows.",
+              "interactive_hint": "Type your own implication; the diagram fills in all four forms automatically."
+            }
+          },
+          {
+            "number": 5,
+            "heading": "The Biconditional (↔)",
+            "explanation": "The biconditional p ↔ q is read 'p if and only if q' (often shortened to 'iff'). It is TRUE exactly when p and q have the SAME truth value, and FALSE when they differ. Equivalently, p ↔ q ≡ (p → q) ∧ (q → p): both implications must hold.",
+            "examples": [
+              "'You can vote if and only if you are 18 or older' = v ↔ a (where v = can vote, a = age ≥ 18).",
+              "'A number is even iff it is divisible by 2' = e ↔ d.",
+              "Truth table for ↔: T↔T = T, T↔F = F, F↔T = F, F↔F = T."
+            ],
+            "common_mistakes": [
+              "Writing one direction (only p → q) when 'if and only if' requires BOTH directions.",
+              "Translating 'iff' as a single arrow. Always use ↔ or two →s."
+            ],
+            "visual_idea": {
+              "type": "truth-table",
+              "description": "Truth table for ↔ with the two equal-value rows highlighted (T↔T and F↔F) to emphasize that the biconditional rewards 'sameness'.",
+              "interactive_hint": "Toggle p and q; the page shows ↔ alongside the two implications p → q and q → p so the learner sees the decomposition live."
+            }
+          },
+          {
+            "number": 6,
+            "heading": "Operator Precedence",
+            "explanation": "When parentheses are missing, connectives bind in this order, from tightest to loosest:\n\n  1. ¬\n  2. ∧\n  3. ∨\n  4. →\n  5. ↔\n\nSo p ∨ q ∧ r reads as p ∨ (q ∧ r), because ∧ binds tighter than ∨. When in any doubt, add parentheses — they cannot hurt and they prevent the reader from guessing wrong.",
+            "examples": [
+              "p ∧ q ∨ r is read as (p ∧ q) ∨ r.",
+              "¬p ∨ q is read as (¬p) ∨ q, NOT ¬(p ∨ q).",
+              "p → q ∧ r is read as p → (q ∧ r)."
+            ],
+            "common_mistakes": [
+              "Treating → as left-associative the way + is in arithmetic. Always use parentheses with chains of conditionals."
+            ],
+            "visual_idea": {
+              "type": "diagram",
+              "description": "A precedence ladder: ¬ at the top, then ∧, ∨, →, ↔ descending. Above each level are example expressions where omitting the parentheses changes the meaning.",
+              "interactive_hint": "Type a parenthesis-free expression and watch the page auto-insert parentheses according to the precedence rules."
+            }
+          }
+        ],
+        "worked_examples": [
+          {
+            "problem": "Construct a truth table for (p ∨ ¬q) → q.",
+            "step_by_step_solution": [
+              "Two atomic variables ⇒ 2² = 4 rows.",
+              "Add columns for ¬q, p ∨ ¬q, and the final implication.",
+              "Row 1 (p=T, q=T): ¬q = F. p ∨ ¬q = T. T → T = T.",
+              "Row 2 (p=T, q=F): ¬q = T. p ∨ ¬q = T. T → F = F.",
+              "Row 3 (p=F, q=T): ¬q = F. p ∨ ¬q = F. F → T = T.",
+              "Row 4 (p=F, q=F): ¬q = T. p ∨ ¬q = T. T → F = F."
+            ],
+            "final_answer": "p | q | ¬q | p∨¬q | (p∨¬q)→q\nT | T |  F |  T   |    T\nT | F |  T |  T   |    F\nF | T |  F |  F   |    T\nF | F |  T |  T   |    F",
+            "why_it_works": "Building one column at a time keeps each cell trivial. The implication's only false rows are exactly those where the antecedent is true and the consequent is false.",
+            "common_mistake": "Trying to compute the implication directly without first computing p ∨ ¬q. With four rows it is easy to lose track without intermediate columns."
+          },
+          {
+            "problem": "State the converse, contrapositive, and inverse of 'If it snows tonight, then I will stay home.'",
+            "step_by_step_solution": [
+              "Let p = 'it snows tonight', q = 'I stay home'. Original: p → q.",
+              "Converse (q → p): 'If I stay home tonight, then it snowed.'",
+              "Contrapositive (¬q → ¬p): 'If I do not stay home tonight, then it did not snow.'",
+              "Inverse (¬p → ¬q): 'If it does not snow tonight, then I will not stay home.'"
+            ],
+            "final_answer": "Converse: q → p. Contrapositive: ¬q → ¬p (equivalent to the original). Inverse: ¬p → ¬q (equivalent to the converse, not the original).",
+            "why_it_works": "The contrapositive flips and negates both parts; the double change leaves the truth-table column unchanged.",
+            "common_mistake": "Believing the converse follows from the original. Staying home does not prove it snowed — there are other reasons to stay in."
+          },
+          {
+            "problem": "Translate to logic: 'You can access the Internet only if you are an administrator or you are not a student.' Use a = access, d = administrator, s = student.",
+            "step_by_step_solution": [
+              "'p only if q' translates to p → q. Here p is 'access' = a.",
+              "The right-hand side is 'administrator OR not a student' = d ∨ ¬s.",
+              "Combine: a → (d ∨ ¬s)."
+            ],
+            "final_answer": "a → (d ∨ ¬s).",
+            "why_it_works": "'Only if' marks the right-hand side as the necessary condition: access is allowed only when admin OR not a student is true.",
+            "common_mistake": "Reversing the implication into (d ∨ ¬s) → a. The English 'only if' is one of the easiest phrases to flip by accident."
+          }
+        ],
+        "quick_checks": [
+          {
+            "type": "mcq",
+            "question": "How many rows are in a truth table for a compound proposition with 4 atomic variables?",
+            "choices": [
+              "8",
+              "12",
+              "16",
+              "32"
+            ],
+            "answer": "16",
+            "explanation": "2⁴ = 16 — every combination of T/F for the four variables."
+          },
+          {
+            "type": "mcq",
+            "question": "Which of the following is FALSE?",
+            "choices": [
+              "T → T",
+              "T → F",
+              "F → T",
+              "F → F"
+            ],
+            "answer": "T → F",
+            "explanation": "An implication is false only when the hypothesis is true and the conclusion is false."
+          },
+          {
+            "type": "mcq",
+            "question": "The contrapositive of p → q is:",
+            "choices": [
+              "q → p",
+              "¬p → ¬q",
+              "¬q → ¬p",
+              "p ↔ q"
+            ],
+            "answer": "¬q → ¬p",
+            "explanation": "Contrapositive flips both parts and negates them; it is logically equivalent to the original."
+          }
+        ],
+        "summary": {
+          "key_takeaways": [
+            "A truth table with n atomic variables has 2ⁿ rows.",
+            "p → q is false ONLY when p is true and q is false; otherwise true.",
+            "Many English phrases ('only if', 'whenever', 'sufficient', 'necessary') all translate to a single conditional.",
+            "p → q is logically equivalent to its contrapositive ¬q → ¬p, but NOT to its converse q → p.",
+            "p ↔ q is true exactly when p and q have the same truth value.",
+            "Precedence (high → low): ¬, ∧, ∨, →, ↔. When in doubt, parenthesize."
+          ],
+          "next": "You now have the full Module 1 toolkit. Next, jump into the exercises page to test your understanding with a mix of multiple-choice, true/false, short-answer, and step-by-step truth-table problems."
+        }
+      }
+    ],
+    "exercises": {
+      "lesson_id": "module1-exercises",
+      "type": "exercises",
+      "title": "Module 1 Exercises — Propositional Logic",
+      "description": "Practice problems covering Module 1: identifying propositions, applying connectives, computing truth tables, and translating between English and logical notation. Mix of multiple choice, true/false, short answer, step-by-step truth tables, exam-style questions, and randomized templates for unlimited practice.",
+      "question_sets": [
+        {
+          "type": "mcq",
+          "questions": [
+            {
+              "question": "Which of the following is a proposition?",
+              "choices": [
+                "'Close the window.'",
+                "'What is your name?'",
+                "'2 + 2 = 4.'",
+                "'x + 3 = 9.'"
+              ],
+              "answer": "'2 + 2 = 4.'",
+              "explanation": "It is declarative and has a definite truth value."
+            },
+            {
+              "question": "If p is false and q is true, what is the value of p ∨ q?",
+              "choices": [
+                "True",
+                "False",
+                "Undefined",
+                "Both"
+              ],
+              "answer": "True",
+              "explanation": "Inclusive or is true when at least one operand is true."
+            },
+            {
+              "question": "If p is true and q is false, what is the value of p → q?",
+              "choices": [
+                "True",
+                "False",
+                "Undefined",
+                "Vacuously true"
+              ],
+              "answer": "False",
+              "explanation": "An implication is false ONLY in this configuration."
+            },
+            {
+              "question": "The contrapositive of 'If you study, then you pass' is:",
+              "choices": [
+                "If you pass, then you study.",
+                "If you do not pass, then you did not study.",
+                "If you do not study, then you do not pass.",
+                "You study and you pass."
+              ],
+              "answer": "If you do not pass, then you did not study.",
+              "explanation": "Contrapositive of p → q is ¬q → ¬p."
+            },
+            {
+              "question": "How many rows does a truth table for a compound proposition with 5 variables have?",
+              "choices": [
+                "10",
+                "16",
+                "25",
+                "32"
+              ],
+              "answer": "32",
+              "explanation": "2⁵ = 32."
+            },
+            {
+              "question": "Which connective is INCLUSIVE 'or'?",
+              "choices": [
+                "⊕",
+                "∨",
+                "∧",
+                "→"
+              ],
+              "answer": "∨",
+              "explanation": "∨ is inclusive — true when at least one is true. ⊕ is exclusive."
+            },
+            {
+              "question": "p ↔ q is FALSE when:",
+              "choices": [
+                "Both p and q are true.",
+                "Both p and q are false.",
+                "p and q have different truth values.",
+                "Either p or q is true."
+              ],
+              "answer": "p and q have different truth values.",
+              "explanation": "Biconditional is true exactly when truth values agree."
+            },
+            {
+              "question": "Which English phrase does NOT translate to p → q?",
+              "choices": [
+                "p only if q",
+                "q whenever p",
+                "q is sufficient for p",
+                "p is sufficient for q"
+              ],
+              "answer": "q is sufficient for p",
+              "explanation": "'q is sufficient for p' means q → p, not p → q."
+            }
+          ]
+        },
+        {
+          "type": "true_false",
+          "questions": [
+            {
+              "question": "Every false sentence is a proposition.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "False",
+              "explanation": "Only declarative sentences with definite truth values are propositions. Some false-feeling utterances (commands, questions) are not propositions at all."
+            },
+            {
+              "question": "p → q is logically equivalent to ¬q → ¬p.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "True",
+              "explanation": "This is the contrapositive equivalence."
+            },
+            {
+              "question": "p → q is logically equivalent to q → p.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "False",
+              "explanation": "The converse is NOT equivalent to the original implication."
+            },
+            {
+              "question": "If p is false, then p → q is true regardless of q.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "True",
+              "explanation": "A vacuous implication is true by definition."
+            },
+            {
+              "question": "p ⊕ q is true when both p and q are true.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "False",
+              "explanation": "Exclusive or is true when EXACTLY one is true. Both true makes ⊕ false."
+            },
+            {
+              "question": "The English word 'but' translates to ∧ in logic.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "True",
+              "explanation": "'But' is logically the same as 'and'; the difference is only stylistic."
+            }
+          ]
+        },
+        {
+          "type": "short_answer",
+          "questions": [
+            {
+              "question": "Why is 'x > 5' not a proposition?",
+              "answer": "Because x is a free variable. Without a specific value for x, the sentence has no definite truth value, so it fails the definition of a proposition.",
+              "explanation": "Open sentences become propositions once their variables are bound or assigned."
+            },
+            {
+              "question": "Translate: 'I will pass only if I study hard.' (p = pass, s = study hard.)",
+              "answer": "p → s.",
+              "explanation": "'p only if s' means 'p requires s' = p → s. Studying is necessary for passing."
+            },
+            {
+              "question": "State the converse, contrapositive, and inverse of 'If it is sunny, then we go to the park.'",
+              "answer": "Converse: 'If we go to the park, then it is sunny.' Contrapositive: 'If we do not go to the park, then it is not sunny.' Inverse: 'If it is not sunny, then we do not go to the park.'",
+              "explanation": "Original p → q. Converse q → p; contrapositive ¬q → ¬p; inverse ¬p → ¬q."
+            },
+            {
+              "question": "Use De Morgan-style reasoning: what is the negation of 'It is below freezing AND it is snowing'?",
+              "answer": "'It is not below freezing OR it is not snowing.'",
+              "explanation": "¬(p ∧ q) ≡ ¬p ∨ ¬q."
+            },
+            {
+              "question": "Why do we have separate symbols ∨ and ⊕ when English uses just one word, 'or'?",
+              "answer": "Because English 'or' is ambiguous. Sometimes it means inclusive ('or both'), sometimes exclusive ('but not both'). Logic uses ∨ for inclusive and ⊕ for exclusive so that every formula has exactly one meaning.",
+              "explanation": "Ambiguity in natural language is resolved by using two distinct symbols."
+            }
+          ]
+        },
+        {
+          "type": "step_by_step",
+          "questions": [
+            {
+              "question": "Construct a complete truth table for (p ∨ q) ∧ ¬p, using columns for each subexpression.",
+              "answer": "p | q | p∨q | ¬p | (p∨q)∧¬p\nT | T |  T  | F  |   F\nT | F |  T  | F  |   F\nF | T |  T  | T  |   T\nF | F |  F  | T  |   F",
+              "explanation": "Build the table column by column. The compound is true only in the row where p is false and q is true."
+            },
+            {
+              "question": "Construct a truth table for p → (q ∧ ¬r), with three variables.",
+              "answer": "p | q | r | ¬r | q∧¬r | p→(q∧¬r)\nT | T | T |  F |  F   |   F\nT | T | F |  T |  T   |   T\nT | F | T |  F |  F   |   F\nT | F | F |  T |  F   |   F\nF | T | T |  F |  F   |   T\nF | T | F |  T |  T   |   T\nF | F | T |  F |  F   |   T\nF | F | F |  T |  F   |   T",
+              "explanation": "Three variables ⇒ 8 rows. The implication is false only on the rows where p is true and q ∧ ¬r is false."
+            },
+            {
+              "question": "Show whether (p → q) ∧ (q → p) is logically equivalent to p ↔ q by truth table.",
+              "answer": "p | q | p→q | q→p | (p→q)∧(q→p) | p↔q\nT | T |  T  |  T  |     T       |  T\nT | F |  F  |  T  |     F       |  F\nF | T |  T  |  F  |     F       |  F\nF | F |  T  |  T  |     T       |  T\nThe two final columns match in every row, so the propositions are logically equivalent.",
+              "explanation": "This is precisely the standard decomposition of the biconditional."
+            },
+            {
+              "question": "Build a truth table for ¬(p ∧ q) and ¬p ∨ ¬q. Are they equivalent?",
+              "answer": "p | q | p∧q | ¬(p∧q) | ¬p | ¬q | ¬p∨¬q\nT | T |  T  |   F    |  F |  F |   F\nT | F |  F  |   T    |  F |  T |   T\nF | T |  F  |   T    |  T |  F |   T\nF | F |  F  |   T    |  T |  T |   T\nThe columns ¬(p∧q) and ¬p∨¬q match exactly. So ¬(p∧q) ≡ ¬p∨¬q. This is one of De Morgan's laws.",
+              "explanation": "Confirming De Morgan's first law by direct truth-table comparison."
+            }
+          ]
+        },
+        {
+          "type": "exam_style",
+          "questions": [
+            {
+              "question": "Let a = 'You can access the system', s = 'You are a student', i = 'You are an instructor'. Translate to propositional logic: 'You can access the system if and only if you are a student or an instructor, but not both.'",
+              "answer": "a ↔ (s ⊕ i).",
+              "explanation": "'If and only if' = ↔. 'A or B but not both' = exclusive or = s ⊕ i."
+            },
+            {
+              "question": "Two specifications: S1 = 'The diagnostic message is stored or it is retransmitted.' S2 = 'The diagnostic message is not stored.' Are S1 and S2 consistent? If so, give an assignment that satisfies both.",
+              "answer": "Yes, consistent. Let p = 'stored', q = 'retransmitted'. Take p = F, q = T: S1 = F ∨ T = T. S2 = ¬F = T. Both true.",
+              "explanation": "Consistency requires at least one assignment making every spec true."
+            },
+            {
+              "question": "Show using a truth table that (p → q) ∨ (p → ¬q) is a tautology.",
+              "answer": "p | q | p→q | ¬q | p→¬q | (p→q)∨(p→¬q)\nT | T |  T  | F  |  F   |     T\nT | F |  F  | T  |  T   |     T\nF | T |  T  | F  |  T   |     T\nF | F |  T  | T  |  T   |     T\nEvery row is T, so the proposition is a tautology.",
+              "explanation": "When p is false, both implications are vacuously true; when p is true, exactly one of q, ¬q is true, so at least one implication holds."
+            },
+            {
+              "question": "On Smullyan's island of knights (always tell truth) and knaves (always lie), A says 'B is a knight'. B says 'A and I are of opposite types'. Determine the type of each.",
+              "answer": "Both are knaves. Reason: let p = 'A is a knight', q = 'B is a knight'. A's statement is q. If A were a knight, q would be true, so B would also be a knight. Then B's statement 'A and B are opposite' must be true, but A and B would both be knights — contradiction. So A is a knave, A's statement is false, hence ¬q: B is also a knave.",
+              "explanation": "Logic puzzles are solved by trying each truth assignment and rejecting those that produce contradictions."
+            },
+            {
+              "question": "Determine whether (p → r) ∧ (q → r) is logically equivalent to (p ∨ q) → r.",
+              "answer": "Yes, equivalent. Build truth tables for both with 3 variables and confirm the columns match in all 8 rows. Intuitively: 'either path leads to r' is the same as 'the disjunctive path leads to r'.",
+              "explanation": "This equivalence justifies splitting an OR-hypothesis into two cases when proving an implication."
+            }
+          ]
+        },
+        {
+          "type": "randomized",
+          "questions": [
+            {
+              "template": "Compute the truth value of {EXPR} given p = {P} and q = {Q}.",
+              "variables": {
+                "EXPR": [
+                  "p ∧ q",
+                  "p ∨ q",
+                  "p → q",
+                  "p ↔ q",
+                  "p ⊕ q",
+                  "¬p ∨ q",
+                  "p ∧ ¬q"
+                ],
+                "P": [
+                  "T",
+                  "F"
+                ],
+                "Q": [
+                  "T",
+                  "F"
+                ]
+              },
+              "instructions": "Pick one EXPR, one P, one Q at random and compute. Cycle through to drill all eight binary truth-table rows.",
+              "example_realization": "Compute the truth value of p → q given p = T and q = F. Answer: F.",
+              "explanation": "Repeated random drill of small truth-table evaluations builds fluency."
+            },
+            {
+              "template": "State the {RELATION} of the implication: 'If {P_TEXT}, then {Q_TEXT}.'",
+              "variables": {
+                "RELATION": [
+                  "converse",
+                  "contrapositive",
+                  "inverse"
+                ],
+                "P_TEXT": [
+                  "it rains",
+                  "you study hard",
+                  "the network is up",
+                  "the file is open"
+                ],
+                "Q_TEXT": [
+                  "the road is wet",
+                  "you pass the exam",
+                  "the page loads",
+                  "the data can be edited"
+                ]
+              },
+              "instructions": "Generate the requested transformation. Converse swaps parts; contrapositive swaps and negates both; inverse negates both without swapping.",
+              "example_realization": "Realization: RELATION = contrapositive, P_TEXT = 'it rains', Q_TEXT = 'the road is wet'. Answer: 'If the road is not wet, then it is not raining.'",
+              "explanation": "Pattern-drill on the three transformations cements which one preserves equivalence (contrapositive) and which two do not."
+            },
+            {
+              "template": "Translate the English sentence into propositional logic using p, q, r as appropriate: '{SENTENCE}'.",
+              "variables": {
+                "SENTENCE": [
+                  "p only if q",
+                  "p whenever q",
+                  "p unless q",
+                  "neither p nor q",
+                  "p but not q",
+                  "p is necessary for q",
+                  "p is sufficient for q",
+                  "p if and only if q"
+                ]
+              },
+              "instructions": "Apply the standard translation rules. 'Only if' marks the conclusion. 'Whenever' marks the hypothesis. 'Unless' translates to ¬q → p (or equivalently p ∨ q). 'Neither/nor' is ¬p ∧ ¬q. 'But' is ∧. 'Necessary' marks the conclusion; 'sufficient' marks the hypothesis.",
+              "example_realization": "Realization: SENTENCE = 'p only if q'. Answer: p → q.",
+              "explanation": "Repeated random drill of these phrases removes the most common translation mistakes."
+            },
+            {
+              "template": "Construct a truth table for the compound proposition {EXPR} with {N} atomic variables.",
+              "variables": {
+                "EXPR": [
+                  "p → (q ∧ r)",
+                  "(p ∨ q) → r",
+                  "(p ∧ q) ↔ (¬p ∨ q)",
+                  "p ⊕ (q ∧ r)",
+                  "¬(p → q)"
+                ],
+                "N": [
+                  "2",
+                  "3"
+                ]
+              },
+              "instructions": "Build 2^N rows. Add a column for each subexpression as it grows. Verify the final column.",
+              "example_realization": "Realization: EXPR = '¬(p → q)', N = 2. Answer: 4 rows; the only T row is p = T, q = F.",
+              "explanation": "Practising truth-table construction on a fresh expression each time ensures the procedure becomes routine."
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
