@@ -224,7 +224,7 @@
         '</div>' +
         '<div class="m1-we-body">' +
           '<div class="m1-we-steps"><span class="m1-we-label">Step-by-Step</span>' + stepsHtml + '</div>' +
-          '<div class="m1-we-answer"><span class="m1-we-label">✅ Final Answer</span><pre class="m1-pre">' + esc(ex.final_answer) + '</pre></div>' +
+          '<div class="m1-we-answer"><span class="m1-we-label">✅ Final Answer</span>' + _formatAnswer(ex.final_answer) + '</div>' +
           '<div class="m1-we-why"><span class="m1-we-label">💡 Why It Works</span><p>' + esc(ex.why_it_works) + '</p></div>' +
           mistakeHtml +
         '</div>' +
@@ -385,6 +385,35 @@
     container.appendChild(art);
   }
 
+  /* ── ANSWER FORMATTER ────────────────────────────────────────
+     Decides how to render an answer string:
+       • truth table  (contains | + \n) → monospace <pre> with scroll
+       • structured   (Converse:, etc.) → split at label boundaries
+       • plain text                     → wrapping <span>              */
+  var _LABEL_TEST  = /\b(?:Converse|Contrapositive|Inverse|Original|Final answer|Step\s+\d+|Reason|Result):/;
+  var _LABEL_SPLIT = /(?=\b(?:Converse|Contrapositive|Inverse|Original|Final answer|Step\s+\d+|Reason|Result):)/;
+
+  function _formatAnswer(text) {
+    if (!text) return '';
+    /* Truth table: preserve monospace alignment, allow horizontal scroll */
+    if (text.indexOf('|') !== -1 && text.indexOf('\n') !== -1) {
+      return '<pre class="m1-pre">' + esc(text) + '</pre>';
+    }
+    /* Structured labeled answer: split at known label prefixes */
+    if (_LABEL_TEST.test(text)) {
+      var parts = text.split(_LABEL_SPLIT).filter(function (p) { return p.trim(); });
+      if (parts.length > 1) {
+        return '<div class="m1-ans-text">' +
+          parts.map(function (p) {
+            return '<p class="m1-ans-part">' + esc(p.trim()) + '</p>';
+          }).join('') +
+        '</div>';
+      }
+    }
+    /* Plain paragraph or short answer: wrap naturally */
+    return '<span class="m1-ans-text">' + esc(text) + '</span>';
+  }
+
   function _buildExQuestion(q, type, uid) {
     var div = document.createElement('div');
     div.className = 'm1-ex-card';
@@ -408,8 +437,8 @@
         '<p class="m1-ex-q">' + esc(q.question) + '</p>' +
         '<button class="m1-sa-reveal" onclick="(function(b){b.style.display=\'none\';document.getElementById(\'' + uid + '-fb\').style.display=\'block\'})(this)">Show Answer</button>' +
         '<div class="m1-qc-feedback m1-sa-answer" id="' + uid + '-fb">' +
-          '<strong>Answer:</strong><br><pre class="m1-pre">' + esc(q.answer) + '</pre>' +
-          (q.explanation ? '<em>' + esc(q.explanation) + '</em>' : '') +
+          '<strong>Answer:</strong><br>' + _formatAnswer(q.answer) +
+          (q.explanation ? '<em class="m1-ans-expl">' + esc(q.explanation) + '</em>' : '') +
         '</div>';
 
     } else if (type === 'step_by_step') {
