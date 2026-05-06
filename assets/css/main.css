@@ -1797,6 +1797,38 @@ body {
   overflow-x: auto;
   margin: 0;
 }
+/* Non-table answers: wrap naturally, no horizontal scroll */
+.m1-ans-text {
+  display: block;
+  font-size: .85rem;
+  color: var(--text-2);
+  line-height: 1.7;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: normal;
+  max-width: 100%;
+  overflow-x: visible;
+  margin: .2rem 0 0;
+}
+/* One labeled part inside a structured answer (Converse: …, Contrapositive: …) */
+.m1-ans-part {
+  margin: 0 0 .45rem;
+  font-size: .85rem;
+  color: var(--text-2);
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+.m1-ans-part:last-child { margin-bottom: 0; }
+/* Inline explanation note below an answer */
+.m1-ans-expl {
+  display: block;
+  margin-top: .55rem;
+  font-size: .82rem;
+  color: var(--text-3);
+  line-height: 1.55;
+  font-style: italic;
+}
 .m1-we-why { margin-bottom: .5rem; font-size: .86rem; color: var(--text-2); line-height: 1.6; }
 .m1-we-mistake {
   background: rgba(245,158,11,.07);
@@ -1896,6 +1928,9 @@ body {
   font-size: .84rem;
   color: var(--text-2);
   line-height: 1.6;
+  overflow-wrap: anywhere;
+  word-break: normal;
+  max-width: 100%;
 }
 .m1-qc-feedback.show { display: block; }
 [data-theme="dark"] .m1-qc-feedback { background: rgba(16,185,129,.08); border-color: rgba(52,211,153,.2); }
