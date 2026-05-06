@@ -337,7 +337,7 @@
 
     /* Hero */
     var hero = document.createElement('div');
-    hero.className = 'm1-ex-hero reveal';
+    hero.className = 'm1-hero m1-ex-hero reveal';
     hero.innerHTML =
       '<div class="m1-hero-top">' +
         '<span class="m1-hero-module">📐 Module 1 — Propositional Logic</span>' +
@@ -429,55 +429,59 @@
     div.className = 'm1-rand-area';
 
     var templates = qset.questions || [];
-    var current = [0]; /* mutable ref */
+    var currentIdx = 0;
 
+    /* Pick random values for every {VARIABLE} in the template at tIdx */
     function pickQuestion(tIdx) {
       var tmpl = templates[tIdx];
-      var vars = tmpl.variables;
-      /* Build one realization by picking random values for each variable key */
+      var vars = tmpl.variables || {};
       var filled = tmpl.template;
       Object.keys(vars).forEach(function (k) {
         var arr = vars[k];
         var pick = arr[Math.floor(Math.random() * arr.length)];
         filled = filled.replace(new RegExp('\\{' + k + '\\}', 'g'), pick);
       });
-      return { q: filled, hint: tmpl.instructions, ex: tmpl.example_realization };
+      return { q: filled, hint: tmpl.instructions || '', ex: tmpl.example_realization || '' };
     }
 
+    /* Re-render the question panel with freshly randomized values */
     function show() {
-      var tIdx = current[0];
+      var tIdx = currentIdx;
       var r = pickQuestion(tIdx);
-      var d = div.querySelector('.m1-rand-q');
-      d.innerHTML =
+      var qDiv = div.querySelector('.m1-rand-q');
+      qDiv.innerHTML =
         '<p class="m1-rand-template"><strong>Template ' + (tIdx + 1) + ' of ' + templates.length + ':</strong> ' + esc(templates[tIdx].template) + '</p>' +
         '<div class="m1-rand-realized"><strong>Your question:</strong> ' + esc(r.q) + '</div>' +
         '<div class="m1-rand-instructions"><em>📋 ' + esc(r.hint) + '</em></div>' +
-        '<button class="m1-sa-reveal" id="rand-reveal-' + tIdx + '" onclick="document.getElementById(\'rand-ans-' + tIdx + '\').style.display=\'block\';this.style.display=\'none\'">Show Example Answer</button>' +
-        '<div class="m1-qc-feedback m1-sa-answer" id="rand-ans-' + tIdx + '" style="display:none"><strong>Example realization:</strong> ' + esc(r.ex) + '</div>';
+        '<button class="m1-sa-reveal" onclick="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'">Show Example Answer</button>' +
+        '<div class="m1-qc-feedback m1-sa-answer" style="display:none"><strong>Example answer:</strong> ' + esc(r.ex) + '</div>';
     }
 
+    /* Build skeleton — buttons wired with closures, no global calls */
     div.innerHTML =
       '<div class="m1-rand-q"></div>' +
       '<div class="m1-rand-btns">' +
-        '<button class="m1-rand-next" onclick="Module1Engine._randNext(' + JSON.stringify(templates.map(function(t,i){return i;})) + ',this)">🎲 New Question</button>' +
-        '<button class="m1-rand-prev" onclick="Module1Engine._randPrev(' + templates.length + ',this)">← Prev Template</button>' +
-        '<button class="m1-rand-next-tmpl" onclick="Module1Engine._randNextTmpl(' + templates.length + ',this)">Next Template →</button>' +
+        '<button class="m1-rand-next">🎲 New Question</button>' +
+        '<button class="m1-rand-prev">← Prev Template</button>' +
+        '<button class="m1-rand-next-tmpl">Next Template →</button>' +
       '</div>';
 
-    /* store state on the element */
-    div._randIdx = current;
-    div._templates = templates;
-    div._show = show;
+    var btns = div.querySelectorAll('.m1-rand-btns button');
+    /* New Question: re-randomize same template */
+    btns[0].addEventListener('click', function () { show(); });
+    /* Prev Template */
+    btns[1].addEventListener('click', function () {
+      currentIdx = (currentIdx - 1 + templates.length) % templates.length;
+      show();
+    });
+    /* Next Template */
+    btns[2].addEventListener('click', function () {
+      currentIdx = (currentIdx + 1) % templates.length;
+      show();
+    });
 
-    /* defer to let the container attach */
+    /* Initial render after element is in DOM */
     setTimeout(function () { show(); }, 0);
-
-    /* wire buttons properly using Module1Engine api */
-    global.Module1Engine._randState = global.Module1Engine._randState || {};
-    var stateKey = 'rand-' + Math.random().toString(36).slice(2);
-    div.setAttribute('data-rand-key', stateKey);
-    global.Module1Engine._randState[stateKey] = { idx: 0, templates: templates, show: show, div: div };
-
     return div;
   }
 
