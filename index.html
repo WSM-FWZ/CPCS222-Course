@@ -41,20 +41,22 @@
         <a href="./pages/module1-propositional-logic-lesson1.html" class="btn btn-primary">
           Start Module 1 &nbsp;→
         </a>
-        <span class="badge badge-ready" style="align-self:center; font-size:.8rem; padding:.4em 1em;">Module 1 Ready</span>
+        <a href="./pages/module2-lesson1.html" class="btn btn-primary" style="background:linear-gradient(135deg,#10b981,#06b6d4);border-color:#10b981;">
+          Start Module 2 &nbsp;→
+        </a>
       </div>
       <div class="hero-stats">
         <div class="hero-stat">
-          <span class="stat-num">3</span>
+          <span class="stat-num">6</span>
           <span class="stat-label">Tutorials</span>
         </div>
         <div class="hero-stat">
-          <span class="stat-num">30+</span>
+          <span class="stat-num">60+</span>
           <span class="stat-label">Practice Questions</span>
         </div>
         <div class="hero-stat">
-          <span class="stat-num">1</span>
-          <span class="stat-label">Module Complete</span>
+          <span class="stat-num">2</span>
+          <span class="stat-label">Modules Complete</span>
         </div>
         <div class="hero-stat">
           <span class="stat-num">∞</span>
@@ -151,18 +153,87 @@
         </div>
       </div>
 
-      <!-- Chapter 2 — Coming Soon -->
-      <div class="module-card coming-soon">
+      <!-- Module 2 — Active -->
+      <div class="module-card">
         <div class="module-header">
-          <div class="module-color-dot ch2">🔢</div>
+          <div class="module-color-dot ch2">🔮</div>
           <div class="module-info">
-            <div class="module-num">Chapter 2</div>
-            <div class="module-title">Basic Structures</div>
-            <div class="module-sub">Sets, functions, sequences, and summations</div>
+            <div class="module-num">Module 2</div>
+            <div class="module-title">Predicate Logic</div>
+            <div class="module-sub">Predicates, quantifiers, translation, De Morgan's laws &amp; nested quantifiers</div>
           </div>
           <div class="module-meta">
-            <span class="badge badge-soon">Coming Soon</span>
+            <span class="module-count">3 tutorials + exercises</span>
+            <span class="badge badge-ready">Ready</span>
           </div>
+        </div>
+
+        <div class="learning-path">
+
+          <div class="path-lesson" onclick="location.href='./pages/module2-lesson1.html'">
+            <div class="path-num">1</div>
+            <div class="path-info">
+              <div class="path-title">Predicates and Quantifiers</div>
+              <div class="path-topics">
+                <span class="path-topic">Predicates</span>
+                <span class="path-topic">Domain</span>
+                <span class="path-topic">∀ Universal</span>
+                <span class="path-topic">∃ Existential</span>
+              </div>
+            </div>
+            <div class="path-actions">
+              <a href="./pages/module2-lesson1.html" class="path-btn path-btn-tutorial">📖 Tutorial</a>
+            </div>
+          </div>
+
+          <div class="path-lesson" onclick="location.href='./pages/module2-lesson2.html'">
+            <div class="path-num">2</div>
+            <div class="path-info">
+              <div class="path-title">Translating and Negating Quantified Statements</div>
+              <div class="path-topics">
+                <span class="path-topic">Translation Patterns</span>
+                <span class="path-topic">Domain Choice</span>
+                <span class="path-topic">De Morgan's Laws</span>
+                <span class="path-topic">Negation</span>
+              </div>
+            </div>
+            <div class="path-actions">
+              <a href="./pages/module2-lesson2.html" class="path-btn path-btn-tutorial">📖 Tutorial</a>
+            </div>
+          </div>
+
+          <div class="path-lesson" onclick="location.href='./pages/module2-lesson3.html'">
+            <div class="path-num">3</div>
+            <div class="path-info">
+              <div class="path-title">Nested Quantifiers and Order</div>
+              <div class="path-topics">
+                <span class="path-topic">∀∀ ∀∃ ∃∀ ∃∃</span>
+                <span class="path-topic">Order Matters</span>
+                <span class="path-topic">Loop View</span>
+                <span class="path-topic">Negation</span>
+              </div>
+            </div>
+            <div class="path-actions">
+              <a href="./pages/module2-lesson3.html" class="path-btn path-btn-tutorial">📖 Tutorial</a>
+            </div>
+          </div>
+
+          <div class="path-lesson path-lesson-ex" onclick="location.href='./pages/module2-exercises.html'">
+            <div class="path-num path-num-ex">Ex</div>
+            <div class="path-info">
+              <div class="path-title">Module 2 Practice</div>
+              <div class="path-topics">
+                <span class="path-topic">MCQ</span>
+                <span class="path-topic">True / False</span>
+                <span class="path-topic">Short Answer</span>
+                <span class="path-topic">Randomized Drill</span>
+              </div>
+            </div>
+            <div class="path-actions">
+              <a href="./pages/module2-exercises.html" class="path-btn path-btn-exercise">🧪 Exercises</a>
+            </div>
+          </div>
+
         </div>
       </div>
 
@@ -254,7 +325,7 @@
   </main>
 
   <footer class="site-footer">
-    <p>CPCS 222 — Discrete Mathematics &nbsp;·&nbsp; Based on Rosen 8th Ed. &nbsp;·&nbsp; Module 1 Complete</p>
+    <p>CPCS 222 — Discrete Mathematics &nbsp;·&nbsp; Based on Rosen 8th Ed. &nbsp;·&nbsp; Modules 1 &amp; 2 Complete</p>
   </footer>
 
   <script src="./assets/js/app.js"></script>
