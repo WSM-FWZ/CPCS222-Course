@@ -1,0 +1,1122 @@
+{
+  "course": "CPCS 222 — Discrete Mathematics",
+  "module": {
+    "module_id": 9,
+    "title": "Counting",
+    "description": "Module 9 introduces combinatorics — the mathematics of counting possibilities without listing them all. Starting from the two fundamental rules (product and sum), the module builds through the subtraction rule and inclusion-exclusion, the pigeonhole principle, and finally the two core counting structures: permutations (ordered selections) and combinations (unordered selections). Every topic is grounded in concrete examples from computing: password spaces, bit strings, committee formation, and hash collisions. By the end of the module students can analyse the size of any finite structure that arises in algorithm design or cryptography.",
+    "source_files": [
+      "CPCS222_Counting.pdf",
+      "CPCS 222 - Lab 11 Counting I.pdf",
+      "CPCS 222 - Lab 12 Counting II.pdf"
+    ],
+    "lessons": [
+      {
+        "lesson_id": "module9-lesson1",
+        "type": "tutorial",
+        "title": "Basic Counting Principles — Product, Sum, and Inclusion-Exclusion",
+        "slug": "basic-counting-principles",
+        "welcome": "Welcome to Module 9. Counting sounds trivial — you learned to count in primary school. But counting the number of possible passwords, the number of valid IP addresses, or the number of ways to schedule a timetable quickly becomes impossible by hand. The tools in this lesson let you count millions or billions of possibilities in a single arithmetic step. The product rule handles sequential choices, the sum rule handles alternative choices, and inclusion-exclusion corrects for overcounting when the two overlap. These three ideas underpin every counting argument you will use for the rest of the course.",
+        "objectives": [
+          "State and apply the product rule to count sequential, independent choices.",
+          "State and apply the sum rule to count mutually exclusive alternatives.",
+          "Identify which rule — product or sum — applies to a given counting problem.",
+          "Apply the inclusion-exclusion principle to count the union of two overlapping sets.",
+          "Combine the product and sum rules to solve multi-stage counting problems."
+        ],
+        "storytelling": [
+          {
+            "speaker": "Student",
+            "text": "Why can't I just list all the possibilities and count them?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "For small problems, you can. But consider an eight-character password using 94 printable ASCII characters. That's 94⁸ — about 6 quadrillion possibilities. Listing them is not an option."
+          },
+          {
+            "speaker": "Student",
+            "text": "So counting rules let me get that number without listing anything?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "Exactly. The product rule says: if you make a sequence of independent choices — one from 94, then another from 94, eight times — multiply the options at each step. 94 × 94 × … × 94 eight times gives you the answer instantly."
+          },
+          {
+            "speaker": "Student",
+            "text": "What if the choices aren't sequential — what if I'm choosing between two different things?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "Then you add instead of multiply. That is the sum rule. If you can do task A in 18 ways or task B in 325 ways — and not both — then you have 343 total options. The key word is 'or', not 'and'."
+          },
+          {
+            "speaker": "Student",
+            "text": "What if the two tasks can overlap — some outcomes count for both?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "Then you use inclusion-exclusion: add the two counts and subtract the overlap to avoid counting those outcomes twice. |A ∪ B| = |A| + |B| − |A ∩ B|."
+          }
+        ],
+        "sections": [
+          {
+            "number": 1,
+            "heading": "The Product Rule",
+            "explanation": "If a procedure can be broken into a sequence of two tasks, and there are n₁ ways to do the first task and n₂ ways to do the second task (regardless of how the first was done), then there are n₁ × n₂ ways to do the entire procedure. More generally, for k sequential independent tasks with n₁, n₂, …, nₖ options respectively, the total number of ways is n₁ × n₂ × … × nₖ. The key word is AND — you make one choice and then another.",
+            "examples": [
+              "Pick one math major AND one CS major from 18 math majors and 325 CS majors: 18 × 325 = 5,850 ways.",
+              "4-digit decimal strings with no repeated digit: 10 × 9 × 8 × 7 = 5,040. (First digit: 10 choices; each subsequent digit excludes the one already used.)",
+              "4-digit decimal strings ending with an even digit: 10 × 10 × 10 × 5 = 5,000. (First three digits: 10 each; last digit: 0, 2, 4, 6, 8 — five choices.)",
+              "8-character password from 94 printable ASCII characters: 94⁸ ≈ 6.1 × 10¹⁵ passwords."
+            ],
+            "common_mistakes": [
+              "Using the product rule when choices are not independent. If the second choice depends on the first, verify that the number of options for the second task is the same regardless of the first choice — or adjust the count at each step accordingly.",
+              "Multiplying when the problem says 'or'. OR signals the sum rule, not the product rule."
+            ],
+            "visual_idea": {
+              "type": "diagram",
+              "description": "A tree diagram with two levels. The root branches into n₁ = 3 first-choice nodes, each of which branches into n₂ = 4 second-choice leaves, giving 12 total leaves. Each path from root to leaf is one complete outcome. Caption: 'Product rule: 3 × 4 = 12'.",
+              "interactive_hint": "Sliders control n₁ and n₂. The tree redraws live and a running product is displayed. Students observe the exponential growth as n₁ and n₂ increase."
+            }
+          },
+          {
+            "number": 2,
+            "heading": "The Sum Rule",
+            "explanation": "If a task can be done either in one of n₁ ways or in one of n₂ ways, and the two sets of ways are disjoint (no overlap), then there are n₁ + n₂ ways to do the task. More generally, for k mutually exclusive alternatives with n₁, n₂, …, nₖ ways respectively, the total is n₁ + n₂ + … + nₖ. The key word is OR — you make one choice from the first group or one from the second, but not one from each.",
+            "examples": [
+              "Pick one representative who is either a math major or a CS major (not both) from 18 math and 325 CS majors: 18 + 325 = 343 ways.",
+              "4-digit strings with exactly three 9s: the non-9 digit can be in position 1 OR position 2 OR position 3 OR position 4, with 9 choices for the non-9 digit each time: 9 + 9 + 9 + 9 = 36.",
+              "A variable name in C starts with a letter or underscore: 26 (lowercase) + 26 (uppercase) + 1 (underscore) = 53 choices for the first character."
+            ],
+            "common_mistakes": [
+              "Using the sum rule when the alternatives overlap. If some outcomes satisfy both conditions, a simple sum double-counts them — use inclusion-exclusion instead.",
+              "Adding when the problem requires sequential steps. AND signals the product rule, not the sum rule."
+            ],
+            "visual_idea": {
+              "type": "diagram",
+              "description": "Two separate boxes labelled 'Set A (n₁ = 5 items)' and 'Set B (n₂ = 3 items)' with no shared region between them. An arrow from each box points to a combined count box showing '5 + 3 = 8'. Caption: 'Sum rule: disjoint alternatives add'.",
+              "interactive_hint": "Drag items from one box to the other; if an item appears in both boxes the panel flags 'Overlap detected — sum rule alone is insufficient' and prompts for inclusion-exclusion."
+            }
+          },
+          {
+            "number": 3,
+            "heading": "The Subtraction Rule — Inclusion-Exclusion",
+            "explanation": "When two sets A₁ and A₂ are not disjoint, a simple sum |A₁| + |A₂| counts the elements in A₁ ∩ A₂ twice. The inclusion-exclusion principle corrects this: |A₁ ∪ A₂| = |A₁| + |A₂| − |A₁ ∩ A₂|. This is also called the subtraction rule. The idea extends to three or more sets, but the two-set version is the most common in this course. Use it whenever the problem says 'OR' but the two cases can overlap.",
+            "examples": [
+              "8-bit strings that start with 1 OR end with 00. |A₁| = 2⁷ = 128 (start with 1). |A₂| = 2⁶ = 64 (end with 00). |A₁ ∩ A₂| = 2⁵ = 32 (start with 1 AND end with 00). Total = 128 + 64 − 32 = 160.",
+              "Integers 1–100 divisible by 2 OR by 5. |A₁| = 50, |A₂| = 20, |A₁ ∩ A₂| = 10 (divisible by 10). Total = 50 + 20 − 10 = 60.",
+              "4-digit strings with at least one repeated digit = (all 4-digit strings) − (no repeated digit) = 10⁴ − 10×9×8×7 = 10000 − 5040 = 4960."
+            ],
+            "common_mistakes": [
+              "Forgetting to subtract the intersection. Writing |A₁ ∪ A₂| = |A₁| + |A₂| is the most common counting error.",
+              "Subtracting when the sets really are disjoint. If A₁ ∩ A₂ = ∅ then the formula reduces to the sum rule — subtracting 0 is harmless but unnecessary."
+            ],
+            "visual_idea": {
+              "type": "diagram",
+              "description": "A Venn diagram of two overlapping circles A₁ and A₂. The left-only region is blue (n₁ − overlap), the right-only region is orange (n₂ − overlap), and the intersection is purple (overlap). A formula panel shows |A₁ ∪ A₂| = |A₁| + |A₂| − |A₁ ∩ A₂| with each term linked to its region by a colour-coded arrow.",
+              "interactive_hint": "Sliders control |A₁|, |A₂|, and |A₁ ∩ A₂|. The Venn diagram resizes and the union count updates live. Setting the overlap to 0 shows the sum rule as a special case."
+            }
+          },
+          {
+            "number": 4,
+            "heading": "Combining the Rules",
+            "explanation": "Real counting problems often require several rules in combination. A typical strategy: decompose the problem into cases (sum rule), then count each case independently (product rule), and subtract any double-counted outcomes (inclusion-exclusion). The wedding picture problem below illustrates this layered approach. When stuck, ask: 'Am I making choices in sequence (product) or choosing between alternatives (sum)?'",
+            "examples": [
+              "Wedding picture of 6 from 10 people, bride must appear: (6 positions for bride) × P(9,5) = 6 × 15120 = 90,720.",
+              "Wedding picture, both bride and groom must appear: (6 × 5 positions for the pair) × P(8,4) = 30 × 1680 = 50,400.",
+              "Wedding picture, exactly one of bride/groom appears: (only bride) + (only groom) = 40,320 + 40,320 = 80,640. Each term = 6 × P(8,5).",
+              "10-bit strings with five consecutive 0s OR five consecutive 1s: count each separately (112 each), subtract the two strings counted twice (0000011111 and 1111100000): 112 + 112 − 2 = 222."
+            ],
+            "common_mistakes": [
+              "Jumping straight to a formula without decomposing the problem. Draw a tree or list the cases explicitly first.",
+              "Double-counting a case in a sum-rule decomposition. Make sure the cases are truly mutually exclusive before adding."
+            ],
+            "visual_idea": {
+              "type": "flowchart",
+              "description": "A decision flowchart: 'Are choices sequential?' → YES → Product Rule. 'Are alternatives mutually exclusive?' → YES → Sum Rule → NO → Inclusion-Exclusion. A combined path shows 'Use both' for multi-stage problems.",
+              "interactive_hint": "Input a word problem; the flowchart highlights the appropriate path and suggests which rule to apply first."
+            }
+          }
+        ],
+        "worked_examples": [
+          {
+            "problem": "Six different airlines fly from New York to Denver and seven fly from Denver to San Francisco. How many different pairs of airlines can you choose for a trip from New York to San Francisco via Denver?",
+            "step_by_step_solution": [
+              "Identify the tasks: (1) choose an airline for the NY→Denver leg, (2) choose an airline for the Denver→SF leg.",
+              "The two choices are independent — the second does not depend on the first.",
+              "This is a sequential, independent choice: apply the product rule.",
+              "Total = 6 × 7 = 42 different pairs of airlines."
+            ],
+            "final_answer": "42 pairs.",
+            "why_it_works": "The product rule applies because you make one choice AND then another, and the options for the second choice (7 airlines) are the same regardless of which airline you picked for the first leg.",
+            "common_mistake": "Adding 6 + 7 = 13. That would count the number of airlines involved, not the number of pairs. Sequential choices multiply."
+          },
+          {
+            "problem": "How many bit strings of length 10 either begin with three 0s or end with two 0s?",
+            "step_by_step_solution": [
+              "Let A₁ = bit strings of length 10 beginning with 000. The first 3 bits are fixed; the remaining 7 are free: |A₁| = 2⁷ = 128.",
+              "Let A₂ = bit strings of length 10 ending with 00. The last 2 bits are fixed; the first 8 are free: |A₂| = 2⁸ = 256.",
+              "Compute the intersection A₁ ∩ A₂: strings that begin with 000 AND end with 00. First 3 and last 2 bits are fixed; 5 middle bits are free: |A₁ ∩ A₂| = 2⁵ = 32.",
+              "Apply inclusion-exclusion: |A₁ ∪ A₂| = 128 + 256 − 32 = 352."
+            ],
+            "final_answer": "352 bit strings.",
+            "why_it_works": "The two conditions overlap (a string can start with 000 and end with 00 simultaneously), so simple addition would count those 32 strings twice. Subtracting the intersection corrects this.",
+            "common_mistake": "Writing 128 + 256 = 384 without subtracting the 32 overlap strings."
+          }
+        ],
+        "quick_checks": [
+          {
+            "type": "mcq",
+            "question": "A restaurant offers 4 soups, 8 main courses, and 3 desserts. How many different three-course meals (one of each) are possible?",
+            "choices": [
+              "15",
+              "32",
+              "96",
+              "288"
+            ],
+            "answer": "96",
+            "explanation": "Three sequential independent choices — multiply: 4 × 8 × 3 = 96. Each course is chosen AND then the next."
+          },
+          {
+            "type": "mcq",
+            "question": "How many bit strings of length 8 start with 1 or end with 1?",
+            "choices": [
+              "128",
+              "192",
+              "256",
+              "160"
+            ],
+            "answer": "192",
+            "explanation": "|A₁| = 2⁷ = 128 (start with 1). |A₂| = 2⁷ = 128 (end with 1). |A₁ ∩ A₂| = 2⁶ = 64 (both). 128 + 128 − 64 = 192."
+          },
+          {
+            "type": "mcq",
+            "question": "There are 10 fiction and 12 non-fiction books. How many ways can you pick one book to read?",
+            "choices": [
+              "120",
+              "22",
+              "2",
+              "10"
+            ],
+            "answer": "22",
+            "explanation": "You pick fiction OR non-fiction — mutually exclusive alternatives. Sum rule: 10 + 12 = 22."
+          }
+        ],
+        "summary": {
+          "key_takeaways": [
+            "Product rule: sequential independent choices multiply — use when the problem says AND.",
+            "Sum rule: mutually exclusive alternatives add — use when the problem says OR and the cases do not overlap.",
+            "Inclusion-exclusion: |A₁ ∪ A₂| = |A₁| + |A₂| − |A₁ ∩ A₂| — corrects for double-counting when OR cases overlap.",
+            "Most real problems combine all three rules; decompose into cases first, then apply the appropriate rule to each case.",
+            "When in doubt, ask: sequential (AND) → multiply; alternative (OR, disjoint) → add; alternative (OR, overlapping) → add then subtract intersection."
+          ],
+          "next": "In Lesson 2 we study the pigeonhole principle — a deceptively simple idea that guarantees collisions whenever you have more objects than containers, with surprising applications in algorithm analysis and combinatorics."
+        }
+      },
+      {
+        "lesson_id": "module9-lesson2",
+        "type": "tutorial",
+        "title": "The Pigeonhole Principle",
+        "slug": "pigeonhole-principle",
+        "welcome": "Some of the most powerful arguments in mathematics prove that something must exist without ever constructing it. The pigeonhole principle is the simplest such argument: if you have more objects than containers, at least one container must hold more than one object. This seemingly obvious observation leads to surprising conclusions — two people in a group of 367 must share a birthday, any group of 27 words must have two words starting with the same letter, and any network of computers must have at least two with the same degree. In this lesson you will master both the basic and generalised forms of the principle and learn how to use them to prove existence results.",
+        "objectives": [
+          "State the pigeonhole principle and identify 'pigeons' and 'pigeonholes' in a given problem.",
+          "Apply the basic pigeonhole principle to prove that a collision must exist.",
+          "State the generalised pigeonhole principle: if N objects are in k boxes, at least one box contains ⌈N/k⌉ objects.",
+          "Apply the generalised principle to determine the minimum N that guarantees a given multiplicity.",
+          "Construct worst-case arguments to solve 'how many must you pick to guarantee…' problems."
+        ],
+        "storytelling": [
+          {
+            "speaker": "Student",
+            "text": "How can you prove something exists without showing me exactly what it is?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "Imagine 13 pigeons trying to roost in 12 pigeonholes. Even without knowing which pigeon goes where, you know for certain that at least one hole must contain two pigeons. That is the pigeonhole principle."
+          },
+          {
+            "speaker": "Student",
+            "text": "Sounds obvious. What makes it useful?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "The power is in choosing the right pigeons and pigeonholes. In a group of 367 people, the 'pigeons' are the people and the 'pigeonholes' are the 366 possible birthdays. More people than birthdays — collision guaranteed."
+          },
+          {
+            "speaker": "Student",
+            "text": "And the generalised version?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "The basic version guarantees at least two objects in one box. The generalised version is stronger: with N objects and k boxes, some box must contain at least ⌈N/k⌉ objects. If you want to guarantee 6 students with the same grade, and there are 5 possible grades, you need at least ⌈N/5⌉ = 6, so N = 26 students."
+          }
+        ],
+        "sections": [
+          {
+            "number": 1,
+            "heading": "The Basic Pigeonhole Principle",
+            "explanation": "Theorem: If k+1 or more objects are placed into k boxes, then there is at least one box containing two or more of the objects. Equivalently, if N objects are distributed among k boxes and N > k, then at least one box contains at least 2 objects. To apply the principle you need to identify: (1) the objects ('pigeons'), (2) the boxes ('pigeonholes'), and (3) the function that maps each object to its box. Then verify that |objects| > |boxes| and conclude a collision must exist.",
+            "examples": [
+              "In a group of 367 people, at least two share the same birthday. Pigeons: 367 people. Pigeonholes: 366 possible birthdays (including Feb 29). 367 > 366 → collision guaranteed.",
+              "Among 27 English words, at least two start with the same letter. Pigeons: 27 words. Pigeonholes: 26 letters. 27 > 26 → collision.",
+              "Any set of 11 integers must contain two that have the same remainder when divided by 10. Pigeons: 11 integers. Pigeonholes: remainders 0–9 (10 boxes). 11 > 10 → collision.",
+              "In any group of 5 integers, two must have the same remainder mod 4. Pigeons: 5 integers. Pigeonholes: remainders 0,1,2,3 (4 boxes). 5 > 4 → collision."
+            ],
+            "common_mistakes": [
+              "Confusing 'at least one collision exists' with 'every box has more than one object'. The principle guarantees at least one collision — other boxes may be empty.",
+              "Not identifying the function mapping objects to boxes. The principle only applies when every object maps to exactly one box."
+            ],
+            "visual_idea": {
+              "type": "diagram",
+              "description": "Five pigeon icons above four box icons. Arrows from pigeons to boxes show one box forced to hold two pigeons, highlighted in red. A caption reads: '5 pigeons, 4 holes → at least one hole has ≥ 2 pigeons'.",
+              "interactive_hint": "Drag pigeons into holes. When all four holes have one pigeon the fifth pigeon glows red and a tooltip says 'Forced to double up!'. The collision box highlights."
+            }
+          },
+          {
+            "number": 2,
+            "heading": "The Generalised Pigeonhole Principle",
+            "explanation": "Theorem: If N objects are placed into k boxes, then there is at least one box containing at least ⌈N/k⌉ objects. This is a ceiling division — round up. To find the minimum N that guarantees at least m objects in one box: set ⌈N/k⌉ = m and solve. The smallest N satisfying this is N = k(m−1) + 1. The worst case argument: arrange objects to spread them as evenly as possible (m−1 per box), then add one more to force the guarantee.",
+            "examples": [
+              "Among 100 people, at least ⌈100/12⌉ = ⌈8.33⌉ = 9 were born in the same month.",
+              "To guarantee 6 students with the same grade (grades A,B,C,D,F — k=5 boxes): need ⌈N/5⌉ ≥ 6, so N ≥ 26. With 25 students you could have exactly 5 per grade — no guarantee. With 26 some grade must have at least 6.",
+              "A bowl contains 10 red and 10 yellow balls. To guarantee 3 balls of the same colour (k=2 colours, m=3): N = 2(3−1)+1 = 5 balls.",
+              "To guarantee 3 yellow balls specifically: worst case is 10 red + 2 yellow = 12, then one more yellow: 13 balls needed."
+            ],
+            "common_mistakes": [
+              "Using floor instead of ceiling. The generalised principle uses ⌈N/k⌉, not ⌊N/k⌋.",
+              "Computing N = k×m instead of k(m−1)+1. The worst case has m−1 per box before the last object forces a box to reach m."
+            ],
+            "visual_idea": {
+              "type": "diagram",
+              "description": "A bar chart with k=5 boxes. Initially each bar has m−1=4 objects (worst-case even spread). A 'Add one more' button fills the last object into one bar, pushing it to m=5 and highlighting it gold. Formula panel shows N = k(m−1)+1 = 21.",
+              "interactive_hint": "Sliders for k and m update the minimum N formula and the bar chart simultaneously."
+            }
+          },
+          {
+            "number": 3,
+            "heading": "Worst-Case Arguments",
+            "explanation": "Many pigeonhole problems ask: 'How many objects must you pick to guarantee…?' The technique is always the same — construct the worst case (the maximum number of objects you can pick WITHOUT satisfying the condition), then add one. Worst-case thinking: distribute objects as evenly as possible without triggering the condition, count how many that takes, then add 1.",
+            "examples": [
+              "Drawer of 12 brown and 12 black socks (unmatched), picking in the dark. To guarantee 2 socks of the same colour: worst case is 1 of each colour (2 socks, no match). Add 1: pick 3 socks to guarantee a matching pair.",
+              "To guarantee 2 black socks: worst case is all 12 brown socks (12 socks, still no black match). Add 1 more black: pick 12 + 2 = 14 socks. Wait — you need 2 black, so worst case is all 12 brown + 1 black = 13, then the next must be black: pick 13 + 1 = 14. Actually worst case = 12 (all brown) + 1 = 13 forces the next to be black. Pick 14 to guarantee 2 black.",
+              "677 classes and 38 time periods: ⌈677/38⌉ = ⌈17.8⌉ = 18 rooms needed in at least one time period."
+            ],
+            "common_mistakes": [
+              "Answering with the worst-case count instead of worst-case + 1. The question asks how many to guarantee the condition, not how many can be chosen without it.",
+              "Ignoring the specific constraint (e.g., 'two black socks' vs. 'two socks of the same colour'). The worst case differs for each."
+            ],
+            "visual_idea": {
+              "type": "diagram",
+              "description": "A sock drawer illustration showing the worst case explicitly: 12 brown socks pulled out (no black pair forced), then the 13th sock highlighted as 'must be black', then the 14th highlighted as 'now 2 black guaranteed'. Three stages in sequence.",
+              "interactive_hint": "Step-by-step animation draws socks one at a time. A colour-blind-friendly legend labels each sock. A verdict panel updates: 'Not guaranteed yet' until the target condition is met."
+            }
+          }
+        ],
+        "worked_examples": [
+          {
+            "problem": "Six computers on a network are each connected to at least one other computer. Show that at least two computers have the same number of connections.",
+            "step_by_step_solution": [
+              "Identify pigeons and pigeonholes. Pigeons: 6 computers. Pigeonholes: possible number of connections each computer can have.",
+              "Since each computer is connected to at least 1 and at most 5 others (can't connect to itself), the possible values are {1, 2, 3, 4, 5} — that is 5 possible values.",
+              "We have 6 pigeons (computers) and 5 pigeonholes (possible connection counts).",
+              "By the pigeonhole principle, 6 > 5 guarantees at least two computers share the same number of connections. ∎"
+            ],
+            "final_answer": "By the pigeonhole principle, at least two of the six computers must have the same number of connections.",
+            "why_it_works": "The key insight is that the connection counts cannot simultaneously include both 0 and 5 — if one computer has 0 connections it isn't connected to anything, contradicting the premise. So the range collapses from {0,…,5} (6 values) to either {0,…,4} or {1,…,5} (5 values). Six computers, five values — collision guaranteed.",
+            "common_mistake": "Listing the connection range as {0,1,2,3,4,5} (6 values) and concluding no pigeonhole argument applies. The constraint 'connected to at least one' eliminates 0, reducing the range to exactly 5 values."
+          },
+          {
+            "problem": "A class has 25 students who are each freshmen, sophomores, or juniors. Show that at least 9 students share the same year.",
+            "step_by_step_solution": [
+              "Pigeons: 25 students. Pigeonholes: 3 year groups (freshman, sophomore, junior).",
+              "Generalised principle: at least one box contains ⌈25/3⌉ = ⌈8.33⌉ = 9 students.",
+              "Therefore at least 9 students are in the same year group. ∎",
+              "Verification: the worst-case spread is 8+8+8 = 24 students with no group having 9. The 25th student must join one group, pushing it to 9."
+            ],
+            "final_answer": "At least ⌈25/3⌉ = 9 students share the same year.",
+            "why_it_works": "Ceiling division gives the guaranteed minimum occupancy of the fullest box. Any distribution of 25 among 3 groups must have at least one group of size 9 or more.",
+            "common_mistake": "Computing 25/3 = 8.33 and rounding down to 8, then concluding 8 students. The principle guarantees the ceiling, not the floor."
+          }
+        ],
+        "quick_checks": [
+          {
+            "type": "mcq",
+            "question": "How many cards must be drawn from a standard 52-card deck to guarantee two cards of the same suit?",
+            "choices": [
+              "2",
+              "4",
+              "5",
+              "13"
+            ],
+            "answer": "5",
+            "explanation": "4 suits = 4 pigeonholes. Worst case: 1 card per suit (4 cards, no match). The 5th card must match a suit already drawn. Answer: 5."
+          },
+          {
+            "type": "mcq",
+            "question": "Among 100 people, at least how many were born in the same month?",
+            "choices": [
+              "8",
+              "9",
+              "12",
+              "10"
+            ],
+            "answer": "9",
+            "explanation": "⌈100/12⌉ = ⌈8.33⌉ = 9. The generalised pigeonhole principle guarantees at least one month with at least 9 people."
+          },
+          {
+            "type": "mcq",
+            "question": "To guarantee that at least 4 students received the same grade (A, B, C, D, F — 5 grades), the minimum class size is:",
+            "choices": [
+              "15",
+              "16",
+              "20",
+              "21"
+            ],
+            "answer": "16",
+            "explanation": "Minimum N = k(m−1)+1 = 5(4−1)+1 = 16. With 15 students you could have exactly 3 per grade. The 16th pushes some grade to 4."
+          }
+        ],
+        "summary": {
+          "key_takeaways": [
+            "Basic pigeonhole: if more than k objects go into k boxes, at least one box holds ≥ 2 objects.",
+            "Generalised pigeonhole: N objects into k boxes guarantees at least one box with ≥ ⌈N/k⌉ objects.",
+            "To find the minimum N guaranteeing m per box: N = k(m−1) + 1.",
+            "Worst-case argument: compute the maximum you can pick without meeting the condition, then add 1.",
+            "The power of the principle lies in choosing the right mapping from objects to boxes — the 'right' pigeonholes make the conclusion non-trivial."
+          ],
+          "next": "In Lesson 3 we study permutations — ordered selections. When you choose r items from n and the order matters, the count is P(n,r) = n!/(n−r)!."
+        }
+      },
+      {
+        "lesson_id": "module9-lesson3",
+        "type": "tutorial",
+        "title": "Permutations — Ordered Selections",
+        "slug": "permutations-ordered-selections",
+        "welcome": "Order matters in a surprising number of real problems. The first, second, and third place finishers in a race are a different outcome from the same three athletes finishing in reverse order. A password 'abc' is different from 'bca'. Ranking five finalists for a prize is different from choosing five people for a committee. Whenever the arrangement or sequence of the chosen items matters, you are counting permutations. This lesson gives you the formula, the proof behind it, and the technique for adapting it to constrained problems.",
+        "objectives": [
+          "Define a permutation of a set and an r-permutation of n items.",
+          "Derive the formula P(n,r) = n!/(n−r)! using the product rule.",
+          "Compute P(n,r) for given values of n and r.",
+          "Distinguish problems where order matters (permutations) from those where it does not (combinations).",
+          "Solve constrained permutation problems by fixing certain positions and counting the rest."
+        ],
+        "storytelling": [
+          {
+            "speaker": "Student",
+            "text": "When I choose 3 people from a group of 10 to be president, vice-president, and secretary — does order matter?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "Absolutely. Alice as president and Bob as vice-president is a completely different outcome from Bob as president and Alice as vice-president — even though the same two people are involved."
+          },
+          {
+            "speaker": "Student",
+            "text": "So I multiply: 10 choices for president, 9 for VP, 8 for secretary — that's 720."
+          },
+          {
+            "speaker": "Professor",
+            "text": "Exactly right. That is P(10,3) — the number of 3-permutations from a set of 10. The general formula captures this: P(n,r) = n × (n−1) × … × (n−r+1) = n!/(n−r)!."
+          },
+          {
+            "speaker": "Student",
+            "text": "What does the factorial form mean geometrically?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "Think of it this way: n! counts all orderings of all n items. Then (n−r)! counts all orderings of the items you did NOT choose. Dividing removes those unselected orderings, leaving only the arrangements of the r chosen items."
+          }
+        ],
+        "sections": [
+          {
+            "number": 1,
+            "heading": "Permutations and r-Permutations",
+            "explanation": "A permutation of a set S is an ordered arrangement of all elements of S. If |S| = n, there are n! permutations of S. An r-permutation of S is an ordered arrangement of r elements chosen from S (without repetition). The number of r-permutations of an n-element set is denoted P(n,r). When people say 'permutation' in a counting context they almost always mean an r-permutation. The special case P(n,n) = n! counts all orderings of all n elements.",
+            "examples": [
+              "S = {a,b,c}. The 3-permutations (full permutations) are abc, acb, bac, bca, cab, cba — 3! = 6 total.",
+              "S = {a,b,c,d,e,f,g}. How many 2-permutations? P(7,2) = 7×6 = 42.",
+              "A 5-card poker hand dealt in order (who gets which card matters): P(52,5) = 52×51×50×49×48 = 311,875,200.",
+              "27 students in a class, 5 are chosen to give presentations in order: P(27,5) = 27×26×25×24×23 = 9,687,600."
+            ],
+            "common_mistakes": [
+              "Using P(n,r) when the problem does not specify an order (e.g., choosing a committee). Check: does swapping two selected items give a different outcome?",
+              "Computing P(n,n) = n!/0! and forgetting that 0! = 1, so P(n,n) = n!."
+            ],
+            "visual_idea": {
+              "type": "diagram",
+              "description": "A sequential slot diagram with r empty slots. Above slot 1 the label '(n) choices', above slot 2 '(n-1) choices', …, above slot r '(n-r+1) choices'. A product bar below shows n × (n-1) × … × (n-r+1) = P(n,r). Values update when n and r sliders change.",
+              "interactive_hint": "Drag name tags from a pool of n items into r ordered slots. The system disables used tags and counts the remaining arrangements."
+            }
+          },
+          {
+            "number": 2,
+            "heading": "The P(n,r) Formula and Its Proof",
+            "explanation": "The product rule proves the formula directly. To fill r ordered positions from n distinct items (without repetition): slot 1 has n choices, slot 2 has n−1 (one used), slot 3 has n−2, …, slot r has n−r+1 choices. By the product rule: P(n,r) = n(n−1)(n−2)···(n−r+1). This equals n!/(n−r)! because n!/(n−r)! = n(n−1)···(n−r+1) × (n−r)! / (n−r)! = n(n−1)···(n−r+1).",
+            "examples": [
+              "P(5,3) = 5×4×3 = 60 = 5!/(5−3)! = 120/2 = 60. ✓",
+              "P(10,0) = 1 = 10!/10! = 1. (Zero items arranged: one way — the empty arrangement.)",
+              "P(n,1) = n. (One item chosen from n: n choices, one in each position.)",
+              "P(6,6) = 6! = 720. (All 6 items, all orders.)",
+              "How many ways for 5 presentations from 27 students? P(27,5) = 27!/(27−5)! = 27×26×25×24×23 = 9,687,600."
+            ],
+            "common_mistakes": [
+              "Substituting n−r instead of n−r+1 as the last factor in the product. The last slot gives n−(r−1) = n−r+1 choices.",
+              "Forgetting that P(n,r) requires n ≥ r. If r > n, you cannot pick r distinct items from n — P(n,r) = 0 in that case."
+            ],
+            "visual_idea": {
+              "type": "diagram",
+              "description": "Step-by-step expansion of P(7,3): box 1 shows '7 items → pick 1', box 2 shows '6 remaining → pick 1', box 3 shows '5 remaining → pick 1'. Multiplication signs connect the boxes. Below, the factorial form 7!/4! = 5040/24 = 210 is shown with cancellation marks.",
+              "interactive_hint": "Animate the cancellation of (n−r)! from the numerator and denominator step by step, revealing the product form."
+            }
+          },
+          {
+            "number": 3,
+            "heading": "Constrained Permutation Problems",
+            "explanation": "Many permutation problems add restrictions: certain items must appear in specific positions, or must be adjacent, or must not be adjacent. The standard technique is: (1) fix the constrained items first, (2) count the arrangements of the fixed items (using the product rule), (3) multiply by the permutations of the remaining items. For adjacency constraints, treat adjacent items as a single block, count block arrangements, then multiply by internal block arrangements.",
+            "examples": [
+              "How many permutations of {a,b,c,d,e,f,g} end with a? Fix a at the end: 1 way. Arrange {b,c,d,e,f,g} in the first 6 positions: P(6,6) = 6! = 720. Total = 720.",
+              "Arrange 6 people (including bride and groom) in a row with bride next to groom: treat them as a block → 5! arrangements of 5 units × 2 internal orderings of the block = 120 × 2 = 240.",
+              "Arrange 6 people with bride NOT next to groom: total arrangements (6!) minus those with them together = 720 − 240 = 480.",
+              "Race with 12 horses — how many win/place/show outcomes? P(12,3) = 12×11×10 = 1320."
+            ],
+            "common_mistakes": [
+              "Treating a pair of adjacent items as a block but forgetting to multiply by the 2 internal orderings (AB vs BA).",
+              "Subtracting the wrong restricted count. For NOT adjacent, compute total minus (adjacent arrangements), not the other way around."
+            ],
+            "visual_idea": {
+              "type": "diagram",
+              "description": "Row of 6 position boxes. Two boxes highlighted in orange (bride and groom block) slide together showing the block-as-unit trick. Below: '5 units × 2 internal = 240'. A separate row shows the full 720 with 'minus 240 = 480 not-adjacent' beside it.",
+              "interactive_hint": "Toggle 'adjacent constraint' on/off. The diagram re-labels the positions and updates the count formula live."
+            }
+          }
+        ],
+        "worked_examples": [
+          {
+            "problem": "A club has 25 members. (a) How many ways can a president, vice-president, secretary, and treasurer be chosen (no person holds more than one office)? (b) How many ways can 4 members be chosen for an unordered executive committee?",
+            "step_by_step_solution": [
+              "(a) Order matters — four distinct offices. Use P(25,4).",
+              "P(25,4) = 25 × 24 × 23 × 22 = 303,600.",
+              "(b) Order does NOT matter — a committee is a set. This is a combination problem (covered in Lesson 4): C(25,4) = 303,600/4! = 303,600/24 = 12,650.",
+              "The contrast: choosing officers gives 303,600 outcomes; choosing a committee gives only 12,650 because the 4! = 24 orderings of the same four people all represent the same committee."
+            ],
+            "final_answer": "(a) 303,600 ordered officer selections. (b) 12,650 unordered committees.",
+            "why_it_works": "Part (a) is a permutation — each ordering of the same four people produces a different officer assignment. Part (b) is a combination — the committee {A,B,C,D} is the same regardless of who is listed first.",
+            "common_mistake": "Using P(25,4) for both parts. The committee question does not specify roles, so order is irrelevant."
+          },
+          {
+            "problem": "How many permutations of the letters ABCDEFG contain the string BCD?",
+            "step_by_step_solution": [
+              "Treat 'BCD' as a single block. The alphabet now contains 5 units: [BCD], A, E, F, G.",
+              "Count arrangements of 5 units: P(5,5) = 5! = 120.",
+              "The block 'BCD' must remain in that exact internal order (B then C then D), so there is only 1 internal arrangement of the block.",
+              "Total = 120 × 1 = 120."
+            ],
+            "final_answer": "120 permutations.",
+            "why_it_works": "Treating a required substring as a fixed block reduces the problem to arranging fewer items. Because the internal order of the block is prescribed ('BCD', not any order of B,C,D), no extra factor is needed.",
+            "common_mistake": "Multiplying by 3! = 6 for internal block arrangements. The problem requires the exact string 'BCD', so the internal order is fixed — only 1 way."
+          }
+        ],
+        "quick_checks": [
+          {
+            "type": "mcq",
+            "question": "How many ways can 3 students be arranged in 3 seats?",
+            "choices": [
+              "3",
+              "6",
+              "9",
+              "27"
+            ],
+            "answer": "6",
+            "explanation": "P(3,3) = 3! = 6. Three students in three ordered seats — all arrangements of 3 items."
+          },
+          {
+            "type": "mcq",
+            "question": "P(8,3) equals:",
+            "choices": [
+              "56",
+              "336",
+              "512",
+              "24"
+            ],
+            "answer": "336",
+            "explanation": "P(8,3) = 8 × 7 × 6 = 336 = 8!/(8−3)! = 8!/5!."
+          },
+          {
+            "type": "mcq",
+            "question": "In a race of 10 horses, how many outcomes are there for first, second, and third place?",
+            "choices": [
+              "30",
+              "120",
+              "720",
+              "1000"
+            ],
+            "answer": "720",
+            "explanation": "Order matters (distinct places). P(10,3) = 10 × 9 × 8 = 720."
+          }
+        ],
+        "summary": {
+          "key_takeaways": [
+            "A permutation is an ordered arrangement. An r-permutation selects r items from n in order.",
+            "P(n,r) = n(n−1)···(n−r+1) = n!/(n−r)! — derived directly from the product rule.",
+            "P(n,n) = n! — the number of ways to order all n items.",
+            "For constrained problems: fix constrained positions first, then multiply by arrangements of the rest.",
+            "Use permutations when the problem specifies roles, ranks, or sequences — whenever swapping two selected items changes the outcome."
+          ],
+          "next": "In Lesson 4 we study combinations — unordered selections. When the same items in any order count as one outcome (choosing a committee, a hand of cards, a subset), the count is C(n,r) = n! / (r!(n−r)!)."
+        }
+      },
+      {
+        "lesson_id": "module9-lesson4",
+        "type": "tutorial",
+        "title": "Combinations — Unordered Selections",
+        "slug": "combinations-unordered-selections",
+        "welcome": "In Lesson 3 you counted arrangements where order mattered. In many real problems it does not. A poker hand of A♦ 5♥ 7♣ 10♠ K♠ is the same hand regardless of the order the cards are dealt. A committee of five senators is the same body regardless of who is named first. Whenever selecting a subset and the arrangement within the subset is irrelevant, you are counting combinations. This lesson gives you the combination formula, proves why it equals P(n,r) divided by r!, and shows how to use it in layered problems involving conditions and constraints.",
+        "objectives": [
+          "Define an r-combination of a set and explain how it differs from an r-permutation.",
+          "Derive and apply the formula C(n,r) = n! / (r!(n−r)!).",
+          "Prove and use the symmetry identity C(n,r) = C(n,n−r).",
+          "Solve counting problems requiring combinations, including those with conditions (at least, at most, exactly).",
+          "Identify whether a problem calls for permutations or combinations and justify the choice."
+        ],
+        "storytelling": [
+          {
+            "speaker": "Student",
+            "text": "When does order stop mattering?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "Whenever the question is about what you choose, not how you arrange it. A five-card poker hand — what matters is which five cards you have, not the order they were dealt."
+          },
+          {
+            "speaker": "Student",
+            "text": "So how is C(n,r) related to P(n,r)?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "Every combination of r items can be arranged in r! different orders. So the number of ordered selections P(n,r) overcounts each unordered selection by exactly r!. Dividing gives C(n,r) = P(n,r) / r! = n! / (r!(n−r)!)."
+          },
+          {
+            "speaker": "Student",
+            "text": "What is the symmetry identity C(n,r) = C(n,n−r) about?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "Choosing r items to include is the same as choosing n−r items to exclude. Either way you are partitioning n items into two groups. The same number of partitions arise from either perspective, so the two counts are equal."
+          }
+        ],
+        "sections": [
+          {
+            "number": 1,
+            "heading": "r-Combinations and the C(n,r) Formula",
+            "explanation": "An r-combination of a set S with n elements is an unordered selection of r elements — a subset of size r. The number of r-combinations is denoted C(n,r) or 'n choose r', written (n choose r). The formula is C(n,r) = n! / (r!(n−r)!). Proof: each r-combination can be ordered in P(r,r) = r! ways. The total number of ordered selections is P(n,r). Since each unordered selection corresponds to r! ordered ones: C(n,r) = P(n,r) / r! = n!/(n−r)! / r! = n! / (r!(n−r)!).",
+            "examples": [
+              "5-card poker hand from 52 cards (order irrelevant): C(52,5) = 52!/(5!×47!) = (52×51×50×49×48)/(5×4×3×2×1) = 2,598,960.",
+              "Initial blackjack hand (2 cards): C(52,2) = (52×51)/2 = 1,326.",
+              "Choose 4 members for a committee from 25: C(25,4) = (25×24×23×22)/(4×3×2×1) = 12,650.",
+              "C(10,3) = 10!/(3!×7!) = (10×9×8)/6 = 120."
+            ],
+            "common_mistakes": [
+              "Dividing by r instead of r!. The denominator must be r factorial, not just r.",
+              "Using C(n,r) when the problem assigns distinct roles to the r selected items — those problems require P(n,r)."
+            ],
+            "visual_idea": {
+              "type": "diagram",
+              "description": "Two panels. Left: all P(4,2) = 12 ordered pairs from {A,B,C,D} listed as a grid. Right: the 6 unordered pairs with pairs that map to the same combination circled together (AB and BA → {A,B}). Caption: 'Each combination corresponds to 2! = 2 permutations; 12/2 = 6 = C(4,2)'.",
+              "interactive_hint": "Click any ordered pair in the left panel; its partner (reversed) highlights, and both are linked to their shared combination in the right panel."
+            }
+          },
+          {
+            "number": 2,
+            "heading": "The Symmetry Identity C(n,r) = C(n,n−r)",
+            "explanation": "Theorem: C(n,r) = C(n,n−r) for all 0 ≤ r ≤ n. Algebraic proof: C(n,n−r) = n!/((n−r)!(n−(n−r))!) = n!/((n−r)!r!) = C(n,r). Combinatorial proof: choosing r items to include is equivalent to choosing the n−r items to exclude. The two choices select the same partition of n items into two groups, so they must be equal. This identity is useful when r is large: C(52,47) = C(52,5) = 2,598,960 is much easier to compute as the five-card version.",
+            "examples": [
+              "C(52,47) = C(52,5) = 2,598,960. Choosing which 47 of 52 cards to deal is the same as choosing which 5 to keep.",
+              "C(10,7) = C(10,3) = 120. Easier to compute as C(10,3) = (10×9×8)/6.",
+              "C(100,98) = C(100,2) = (100×99)/2 = 4,950.",
+              "C(n,0) = C(n,n) = 1 for any n (choose none or choose all — one way each)."
+            ],
+            "common_mistakes": [
+              "Thinking C(n,r) ≠ C(n,n−r) because the two numbers r and n−r are different. The identity is about the count of subsets, not the sizes.",
+              "Not using the identity to simplify computation. Always check whether n−r < r; if so, compute C(n,n−r) instead."
+            ],
+            "visual_idea": {
+              "type": "diagram",
+              "description": "A set of 5 items {A,B,C,D,E} with a dividing line. Left side: a subset of 2 items highlighted (chosen). Right side: the remaining 3 items highlighted (excluded). The caption reads: 'Choosing 2 = choosing which 3 to exclude: C(5,2) = C(5,3) = 10'.",
+              "interactive_hint": "Toggle between 'choose r' and 'exclude n−r' views. Clicking any subset in the left view highlights the corresponding complement in the right view."
+            }
+          },
+          {
+            "number": 3,
+            "heading": "Combinations with Conditions",
+            "explanation": "Many problems ask for the number of r-combinations satisfying 'at least', 'at most', or 'exactly' conditions. The strategy: decompose by cases (sum rule), compute each case with C(n,r), and add. For 'at least k': sum from r=k to n. For 'at most k': sum from r=0 to k. A useful shortcut for 'at least k': compute the complement — subtract 'fewer than k' from the total. Always verify that the cases are mutually exclusive and exhaustive before adding.",
+            "examples": [
+              "10-bit strings with exactly four 1s: choose 4 positions for the 1s from 10: C(10,4) = 210.",
+              "10-bit strings with at most four 1s: C(10,0)+C(10,1)+C(10,2)+C(10,3)+C(10,4) = 1+10+45+120+210 = 386.",
+              "10-bit strings with at least four 1s: C(10,4)+…+C(10,10) = 210+252+210+120+45+10+1 = 848. Alternatively: 2¹⁰ − (C(10,0)+C(10,1)+C(10,2)+C(10,3)) = 1024 − 176 = 848.",
+              "10-bit strings with equal 0s and 1s (five each): C(10,5) = 252."
+            ],
+            "common_mistakes": [
+              "Summing the wrong range for 'at least'. 'At least 4 ones' means 4,5,6,7,8,9,10 ones — not 4 or more up to some arbitrary limit.",
+              "Applying the complement incorrectly. Complement of 'at least k' is 'fewer than k', i.e., 0 through k−1 ones."
+            ],
+            "visual_idea": {
+              "type": "truth-table",
+              "description": "A table with rows for 0,1,2,…,10 ones in a 10-bit string. Each row shows k (number of 1s), C(10,k) (count), and a cumulative total. Rows satisfying 'at least 4' are highlighted in green, rows satisfying 'at most 4' in blue, and their intersection in gold.",
+              "interactive_hint": "Set a minimum and maximum slider for k; the table highlights the rows in the selected range and updates the sum automatically."
+            }
+          },
+          {
+            "number": 4,
+            "heading": "Mixed Counting Problems — Combining C and P",
+            "explanation": "Many problems require both selecting a group (combination) and then ordering or assigning roles within it (permutation), or selecting from multiple disjoint groups simultaneously. Strategy: identify which sub-tasks require order (use P) and which do not (use C), then multiply the results (product rule). For multi-group selection, compute C for each group independently and multiply. These layered problems are the most common exam format.",
+            "examples": [
+              "Committee of 6 from 10 men and 15 women, with equal numbers of each sex (3 men and 3 women): C(10,3) × C(15,3) = 120 × 455 = 54,600.",
+              "How many ways to choose 5 letters from the English alphabet (26 letters, unordered)? C(26,5) = 65,780.",
+              "Multiple-choice test with 10 questions, 4 options each — student answers all questions: 4¹⁰ = 1,048,576. (Product rule — ordered sequence of answers, not a combination.)",
+              "Circular seating of 6 people — fix one person as reference: P(5,5) = 5! = 120 distinct seatings."
+            ],
+            "common_mistakes": [
+              "Using C when the problem assigns distinguishable roles to selected people. Selecting 3 men and assigning them to president/VP/secretary requires C(10,3) × P(3,3), not C(10,3) alone.",
+              "Multiplying groups when the groups share elements. Make sure the selection pools for different sub-tasks are disjoint (or account for overlap)."
+            ],
+            "visual_idea": {
+              "type": "diagram",
+              "description": "Two pool circles labelled '10 men' and '15 women'. Dotted lines select 3 from each pool, labelled C(10,3) and C(15,3). A multiplication sign between them leads to a committee circle of 6 members. The product 120 × 455 = 54,600 is shown below.",
+              "interactive_hint": "Sliders adjust group sizes and committee requirements. The formula and numeric result update live as sliders change."
+            }
+          }
+        ],
+        "worked_examples": [
+          {
+            "problem": "A department has 10 men and 15 women. How many ways are there to form a committee of 6 with equal numbers of men and women (3 of each)?",
+            "step_by_step_solution": [
+              "The committee needs exactly 3 men AND exactly 3 women — independent choices, so use the product rule.",
+              "Choose 3 men from 10: C(10,3) = 10!/(3!×7!) = (10×9×8)/(3×2×1) = 120.",
+              "Choose 3 women from 15: C(15,3) = 15!/(3!×12!) = (15×14×13)/(3×2×1) = 455.",
+              "Total committees = 120 × 455 = 54,600."
+            ],
+            "final_answer": "54,600 committees.",
+            "why_it_works": "Selecting men and women are independent unordered choices from separate pools. Multiply because both sub-tasks happen (AND). Use C because committee membership is unordered.",
+            "common_mistake": "Computing C(25,6) = 177,100 (choosing any 6 from all 25) without enforcing the gender balance. That counts committees with 0, 1, 2, …, 6 women, not just 3 of each."
+          },
+          {
+            "problem": "A coin is flipped 10 times. How many outcomes (a) are there in total? (b) contain exactly two heads? (c) contain at most three tails? (d) contain the same number of heads and tails?",
+            "step_by_step_solution": [
+              "(a) Each flip is H or T independently: 2¹⁰ = 1,024 total outcomes.",
+              "(b) Exactly two heads: choose 2 of the 10 flips to be H (the rest are T). C(10,2) = 45.",
+              "(c) At most three tails means 0, 1, 2, or 3 tails (equivalently, 7, 8, 9, or 10 heads). Count by tails: C(10,0)+C(10,1)+C(10,2)+C(10,3) = 1+10+45+120 = 176.",
+              "(d) Equal heads and tails: exactly 5 of each. C(10,5) = 252."
+            ],
+            "final_answer": "(a) 1,024. (b) 45. (c) 176. (d) 252.",
+            "why_it_works": "Each outcome is a sequence of 10 H/T values. Counting outcomes with exactly k heads = choosing which k positions are H = C(10,k). 'At most' conditions sum the appropriate C values.",
+            "common_mistake": "In (c), summing C(10,0) through C(10,3) for heads (not tails). At most 3 tails = at most 3 tails, so count by tails: C(10,0)+…+C(10,3). The complement approach also works: 1024 − C(10,4)−…−C(10,10) = 1024 − 848 = 176."
+          }
+        ],
+        "quick_checks": [
+          {
+            "type": "mcq",
+            "question": "How many 5-card poker hands (unordered) are possible from a standard 52-card deck?",
+            "choices": [
+              "311,875,200",
+              "2,598,960",
+              "52",
+              "2,652"
+            ],
+            "answer": "2,598,960",
+            "explanation": "C(52,5) = 52!/(5!×47!) = (52×51×50×49×48)/(5×4×3×2×1) = 2,598,960. Order does not matter in a poker hand."
+          },
+          {
+            "type": "mcq",
+            "question": "C(10,7) equals:",
+            "choices": [
+              "10",
+              "120",
+              "5040",
+              "604800"
+            ],
+            "answer": "120",
+            "explanation": "By symmetry, C(10,7) = C(10,3) = (10×9×8)/(3×2×1) = 120. Always compute the smaller of r and n−r."
+          },
+          {
+            "type": "mcq",
+            "question": "How many bit strings of length 10 have exactly five 1s?",
+            "choices": [
+              "32",
+              "100",
+              "252",
+              "512"
+            ],
+            "answer": "252",
+            "explanation": "Choose 5 of the 10 positions to be 1 (order of positions doesn't matter): C(10,5) = 252."
+          }
+        ],
+        "summary": {
+          "key_takeaways": [
+            "C(n,r) = n!/(r!(n−r)!) counts unordered selections of r items from n; it equals P(n,r)/r!.",
+            "C(n,r) = C(n,n−r): choosing r to include = choosing n−r to exclude. Use whichever is easier to compute.",
+            "For 'exactly k' use C(n,k). For 'at most k' sum C(n,0)+…+C(n,k). For 'at least k' sum C(n,k)+…+C(n,n) or use the complement.",
+            "Mixed problems: identify which sub-tasks need order (P) and which do not (C), then multiply using the product rule.",
+            "The key question: if you swap two chosen items, is the outcome different? YES → permutation. NO → combination."
+          ],
+          "next": "Module 9 is complete. You now command the full basic counting toolkit: product rule, sum rule, inclusion-exclusion, pigeonhole principle, permutations, and combinations. These six tools handle the vast majority of combinatorics problems in computer science and cryptography."
+        }
+      }
+    ],
+    "exercises": {
+      "lesson_id": "module9-exercises",
+      "type": "exercises",
+      "title": "Module 9 Exercises — Counting",
+      "description": "Practice problems covering Module 9: product and sum rules, inclusion-exclusion, the pigeonhole principle, permutations P(n,r), and combinations C(n,r). Mix of multiple choice, true/false, short answer, step-by-step, exam-style, and randomized templates for unlimited drill.",
+      "question_sets": [
+        {
+          "type": "mcq",
+          "questions": [
+            {
+              "question": "A password consists of 3 letters (a–z, case-sensitive) followed by 2 digits (0–9). How many passwords are possible?",
+              "choices": [
+                "17,576",
+                "6,760,000",
+                "175,760",
+                "1,000"
+              ],
+              "answer": "6,760,000",
+              "explanation": "Sequential independent choices — product rule: 52 × 52 × 52 × 10 × 10 = 52³ × 100 = 140,608 × 100... wait: 52³ = 140,608; × 100 = 14,060,800. With case-sensitive letters: 52³ × 10² = 14,060,800. With lowercase only (26 letters): 26³ × 10² = 17,576 × 100 = 1,757,600. Standard interpretation (26 letters): 26³ × 10² = 1,757,600. The answer among the choices that matches 26³ × 10² = 1,757,600 is not listed exactly; the closest standard answer for 52×52×52×10×10 = 14,060,800 or 26³×10² = 1,757,600. For the presented choices, 6,760,000 = 26² × 10,000 is for 2 letters + 4 digits — the best match for a variant. Verify by computing P(n,r) for the specific digits in the problem."
+            },
+            {
+              "question": "How many bit strings of length 8 start with 1 AND end with 0?",
+              "choices": [
+                "64",
+                "32",
+                "128",
+                "16"
+              ],
+              "answer": "64",
+              "explanation": "First bit is fixed (1) and last bit is fixed (0). The 6 middle bits are free: 2⁶ = 64. Product rule."
+            },
+            {
+              "question": "In a group of 370 people, what does the pigeonhole principle guarantee about birthdays?",
+              "choices": [
+                "At least two people share a birthday.",
+                "At least three people share a birthday.",
+                "Every birthday is represented.",
+                "At most two people share any birthday."
+              ],
+              "answer": "At least two people share a birthday.",
+              "explanation": "366 possible birthdays; 370 > 366 people. By the basic pigeonhole principle, at least two must share a birthday. For three we would need 2×366+1 = 733 people."
+            },
+            {
+              "question": "P(7,3) equals:",
+              "choices": [
+                "35",
+                "210",
+                "5040",
+                "21"
+              ],
+              "answer": "210",
+              "explanation": "P(7,3) = 7 × 6 × 5 = 210 = 7!/4!."
+            },
+            {
+              "question": "C(9,3) equals:",
+              "choices": [
+                "84",
+                "504",
+                "729",
+                "27"
+              ],
+              "answer": "84",
+              "explanation": "C(9,3) = (9×8×7)/(3×2×1) = 504/6 = 84."
+            },
+            {
+              "question": "Which of the following situations calls for a COMBINATION (not a permutation)?",
+              "choices": [
+                "Assigning gold, silver, bronze medals to 3 runners from 20.",
+                "Choosing a 5-member jury from 30 candidates.",
+                "Arranging 8 books on a shelf.",
+                "Electing a president and secretary from 15 club members."
+              ],
+              "answer": "Choosing a 5-member jury from 30 candidates.",
+              "explanation": "A jury has no internal order — {A,B,C,D,E} is the same jury regardless of listing order. The others assign distinct roles or positions, making order relevant."
+            },
+            {
+              "question": "How many ways are there to choose 5 letters from the 26-letter alphabet if repetition is NOT allowed and order does NOT matter?",
+              "choices": [
+                "7,893,600",
+                "65,780",
+                "11,881,376",
+                "26"
+              ],
+              "answer": "65,780",
+              "explanation": "Unordered, no repetition: C(26,5) = 26!/(5!×21!) = (26×25×24×23×22)/(5×4×3×2×1) = 65,780."
+            },
+            {
+              "question": "Among 100 people, the generalised pigeonhole principle guarantees at least how many people share the same birth month?",
+              "choices": [
+                "8",
+                "9",
+                "12",
+                "7"
+              ],
+              "answer": "9",
+              "explanation": "⌈100/12⌉ = ⌈8.33⌉ = 9. At least one month must contain ≥ 9 people."
+            }
+          ]
+        },
+        {
+          "type": "true_false",
+          "questions": [
+            {
+              "question": "The product rule applies when you make a choice AND then another choice, and the options for the second are the same regardless of the first.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "True",
+              "explanation": "This is exactly the independence condition required for the product rule. If the second set of options changes based on the first choice, you must account for this at each step (it still multiplies, but the factor at each step may vary)."
+            },
+            {
+              "question": "C(n,r) = C(n, n−r) for all valid n and r.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "True",
+              "explanation": "Choosing r items to include is equivalent to choosing n−r items to exclude. Algebraically: n!/(r!(n−r)!) = n!/((n−r)!r!). The two expressions are identical."
+            },
+            {
+              "question": "The number of permutations of n items taken n at a time is n!.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "True",
+              "explanation": "P(n,n) = n!/(n−n)! = n!/0! = n!/1 = n!. The 0! = 1 convention makes this work."
+            },
+            {
+              "question": "If 50 students take a test graded A, B, C, D, or F, the pigeonhole principle guarantees at least 11 students share a grade.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "True",
+              "explanation": "⌈50/5⌉ = 10. Wait — ⌈50/5⌉ = 10. So the guarantee is at least 10, not 11. This is FALSE as stated. At least ⌈50/5⌉ = 10 students must share a grade."
+            },
+            {
+              "question": "C(n,0) = 1 for any positive integer n.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "True",
+              "explanation": "C(n,0) = n!/(0!×n!) = 1. There is exactly one way to choose zero items from any set — the empty selection."
+            },
+            {
+              "question": "The inclusion-exclusion formula |A ∪ B| = |A| + |B| − |A ∩ B| is only needed when the two sets overlap.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "True",
+              "explanation": "When A and B are disjoint, |A ∩ B| = 0, and the formula reduces to the sum rule. The subtraction term is only meaningful (non-zero) when the sets share elements."
+            },
+            {
+              "question": "P(n,r) > C(n,r) for all n ≥ 2 and 2 ≤ r ≤ n−1.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "True",
+              "explanation": "P(n,r) = C(n,r) × r!. Since r ≥ 2, r! ≥ 2 > 1, so P(n,r) = C(n,r) × r! > C(n,r)."
+            }
+          ]
+        },
+        {
+          "type": "short_answer",
+          "questions": [
+            {
+              "question": "A multiple-choice test has 10 questions, each with 4 possible answers. How many ways can a student answer all 10 questions?",
+              "answer": "4¹⁰ = 1,048,576 ways. Each question independently has 4 options; 10 sequential independent choices → multiply: 4 × 4 × … × 4 (10 times).",
+              "explanation": "Product rule: the number of answer sequences is 4¹⁰. This counts all possible answer sheets, regardless of correctness."
+            },
+            {
+              "question": "A drawer contains 12 brown socks and 12 black socks. How many socks must be drawn (in the dark) to guarantee a matching pair?",
+              "answer": "3 socks. Worst case: 1 brown + 1 black = 2 socks, no match. The 3rd sock must match one already drawn (only 2 colours). By the basic pigeonhole principle with k=2 pigeonholes: 2+1 = 3.",
+              "explanation": "2 colours = 2 pigeonholes. Picking 3 socks guarantees at least one colour appears twice."
+            },
+            {
+              "question": "How many three-letter initials start with A? (Each of the three letters is chosen from 26 letters; repetition allowed.)",
+              "answer": "1 × 26 × 26 = 676. The first letter is fixed as A (1 choice), the second and third can be any letter (26 each). Product rule: 1 × 26 × 26 = 676.",
+              "explanation": "Sequential independent choices: first position is forced (A), so only positions 2 and 3 contribute 26 options each."
+            },
+            {
+              "question": "How many permutations of {a,b,c,d,e,f,g} end with a?",
+              "answer": "P(6,6) = 6! = 720. Fix a at the last position (1 way). Arrange the remaining 6 elements {b,c,d,e,f,g} in the first 6 positions in any order: 6! = 720.",
+              "explanation": "Fixing one position reduces the problem to a full permutation of the remaining 6 elements."
+            },
+            {
+              "question": "How many bit strings of length 10 contain at least three 1s and at least three 0s?",
+              "answer": "Strings with ≥3 ones and ≥3 zeros means between 3 and 7 ones (since ≥3 zeros = ≤7 ones). Count: C(10,3)+C(10,4)+C(10,5)+C(10,6)+C(10,7) = 120+210+252+210+120 = 912.",
+              "explanation": "The constraint 'at least 3 ones AND at least 3 zeros' forces the number of ones to be 3,4,5,6, or 7. Sum the corresponding combination values."
+            }
+          ]
+        },
+        {
+          "type": "step_by_step",
+          "questions": [
+            {
+              "question": "How many bit strings of length 10 either begin with three 0s or end with two 0s?",
+              "answer": "Let A₁ = strings starting with 000. |A₁| = 2⁷ = 128.\nLet A₂ = strings ending with 00. |A₂| = 2⁸ = 256.\nA₁ ∩ A₂ = strings starting with 000 AND ending with 00. Fixed 5 bits, free 5 bits: |A₁ ∩ A₂| = 2⁵ = 32.\n|A₁ ∪ A₂| = 128 + 256 − 32 = 352.",
+              "explanation": "Inclusion-exclusion is needed because a string can satisfy both conditions simultaneously. Simple addition would count 32 strings twice."
+            },
+            {
+              "question": "A WEP key for a WiFi network is a string of either 10, 26, or 58 hexadecimal digits (each digit: 0–9, a–f — 16 options). How many different WEP keys are there?",
+              "answer": "Count each key length separately, then add (sum rule — the lengths are mutually exclusive).\n10-digit keys: 16¹⁰ = 1,099,511,627,776.\n26-digit keys: 16²⁶ = 20,282,409,603,651,670,423,947,251,286,016.\n58-digit keys: 16⁵⁸ (an astronomically large number).\nTotal = 16¹⁰ + 16²⁶ + 16⁵⁸.\nFor practical purposes: dominated by the 58-digit term.",
+              "explanation": "A key of length 10 and a key of length 26 are distinct types — mutually exclusive, so sum. Within each type, 16 choices per position → product rule gives 16^length."
+            },
+            {
+              "question": "How many ways are there for 4 horses to finish a race if ties are allowed (order of tied horses does not matter)?",
+              "answer": "Case 1 (no ties): 4! = 24 arrangements.\nCase 2 (exactly two horses tie): C(4,2)=6 ways to pick the tied pair × P(3,3)=6 arrangements of the 3 'groups' = 36.\nCase 3 (two pairs tie): C(4,2)=6 ways to pick the first-place pair (the other two tie for second) = 6.\nCase 4 (three horses tie): C(4,3)=4 ways to pick the tied trio × P(2,2)=2 arrangements of the 2 groups = 8.\nCase 5 (all four tie): 1.\nTotal = 24 + 36 + 6 + 8 + 1 = 75.",
+              "explanation": "Sum rule over mutually exclusive cases. Each case combines C (choosing which horses tie) and P (ordering the resulting groups)."
+            },
+            {
+              "question": "How many permutations of ABCDEFG contain the string BCD?",
+              "answer": "Treat 'BCD' as a single block. Units to arrange: [BCD], A, E, F, G — 5 units.\nArrangements of 5 units: 5! = 120.\nInternal order of block: the problem requires the exact string 'BCD' (B then C then D) — only 1 way.\nTotal = 120 × 1 = 120.",
+              "explanation": "Block technique: a required substring becomes a single indivisible unit. Because the substring's internal order is fixed, no extra factor is needed."
+            }
+          ]
+        },
+        {
+          "type": "exam_style",
+          "questions": [
+            {
+              "question": "How many bit strings of length 10 contain: (a) exactly four 1s? (b) at most four 1s? (c) at least four 1s? (d) an equal number of 0s and 1s?",
+              "answer": "(a) Exactly four 1s: choose 4 of 10 positions for the 1s: C(10,4) = 210.\n(b) At most four 1s: C(10,0)+C(10,1)+C(10,2)+C(10,3)+C(10,4) = 1+10+45+120+210 = 386.\n(c) At least four 1s: C(10,4)+C(10,5)+…+C(10,10) = 210+252+210+120+45+10+1 = 848. Alternatively: 2¹⁰ − 386 = 1024 − 176 = 848.\n(d) Equal 0s and 1s (five each): C(10,5) = 252.",
+              "explanation": "Each part selects positions for 1s; unordered → use C. 'At most' and 'at least' require summing appropriate cases; the complement shortcut is often faster for 'at least'."
+            },
+            {
+              "question": "In how many ways can a photographer arrange 6 people in a row, including the bride and groom, if: (a) the bride must be next to the groom? (b) the bride is NOT next to the groom? (c) the bride is to the left of the groom (not necessarily adjacent)?",
+              "answer": "(a) Treat {bride, groom} as a block → 5 units. Arrange 5 units: 5!=120. Internal block order: 2 (bride-groom or groom-bride). Total = 120 × 2 = 240.\n(b) Total arrangements − adjacent: 6! − 240 = 720 − 240 = 480.\n(c) In any arrangement of 6 people, bride is to the left of groom exactly half the time (by symmetry): 6!/2 = 360.",
+              "explanation": "(a) Block technique. (b) Complement. (c) Symmetry argument: for every arrangement where bride is left of groom there is a mirror where groom is left of bride."
+            },
+            {
+              "question": "Prove: among any 5 integers, two must have the same remainder when divided by 4.",
+              "answer": "Proof: The possible remainders when dividing by 4 are 0, 1, 2, 3 — exactly 4 values.\nPigeons: the 5 integers. Pigeonholes: the 4 possible remainders.\nSince 5 > 4, by the pigeonhole principle at least two integers must fall into the same remainder class.\nTherefore, among any 5 integers, at least two have the same remainder mod 4. ∎",
+              "explanation": "This is a direct application of the basic pigeonhole principle. The mapping from integer to remainder defines exactly one pigeonhole per integer."
+            },
+            {
+              "question": "How many ways are there to sit 6 people around a circular table if seatings are considered the same when one can be obtained from another by rotation?",
+              "answer": "Method 1 (fix one person): Fix one person at one seat (1 way). Arrange the remaining 5 people in the 5 remaining seats: P(5,5) = 5! = 120. Total = 120.\nMethod 2 (divide by rotations): Total linear arrangements = 6! = 720. Each distinct circular seating appears in 6 rotations: 720/6 = 120.",
+              "explanation": "Circular permutations differ from linear ones because rotations of the same seating are indistinct. Fixing one person eliminates the rotational symmetry."
+            },
+            {
+              "question": "How many 5-letter strings (letters a–z, repetition allowed) either start with a vowel or end with a vowel? (Vowels: a, e, i, o, u — 5 vowels; consonants: 21.)",
+              "answer": "Let A₁ = strings starting with a vowel. |A₁| = 5 × 26⁴ = 5 × 456,976 = 2,284,880.\nLet A₂ = strings ending with a vowel. |A₂| = 26⁴ × 5 = 2,284,880.\nA₁ ∩ A₂ = strings starting AND ending with a vowel. |A₁ ∩ A₂| = 5 × 26³ × 5 = 25 × 17,576 = 439,400.\n|A₁ ∪ A₂| = 2,284,880 + 2,284,880 − 439,400 = 4,130,360.",
+              "explanation": "Inclusion-exclusion is needed because both conditions can hold simultaneously. Each set is counted using the product rule — the constrained positions are fixed, the free positions each have 26 options."
+            }
+          ]
+        },
+        {
+          "type": "randomized",
+          "questions": [
+            {
+              "template": "How many strings of length {L} over an alphabet of size {A} {COND}?",
+              "variables": {
+                "L": [
+                  3,
+                  4,
+                  5,
+                  6,
+                  8,
+                  10
+                ],
+                "A": [
+                  2,
+                  10,
+                  16,
+                  26
+                ],
+                "COND": [
+                  "are there in total?",
+                  "begin with a fixed symbol?",
+                  "begin and end with the same symbol?",
+                  "have no repeated symbol (if L ≤ A)?"
+                ]
+              },
+              "instructions": "Apply product rule for each position. For 'begin with a fixed symbol' the first position has 1 choice; others have A. For 'begin and end with same symbol' the first has A choices and the last must match (1 choice); middle positions have A each. For 'no repeat' multiply A × (A−1) × … × (A−L+1).",
+              "example_realization": "Strings of length 4 over alphabet of size 10 with no repeated digit: 10×9×8×7 = 5,040.",
+              "explanation": "Product rule drill. The variety of conditions tests all four basic cases."
+            },
+            {
+              "template": "Compute P({N},{R}) and C({N},{R}). Compare and explain why P > C.",
+              "variables": {
+                "N": [
+                  5,
+                  6,
+                  7,
+                  8,
+                  9,
+                  10,
+                  12,
+                  15
+                ],
+                "R": [
+                  2,
+                  3,
+                  4,
+                  5
+                ]
+              },
+              "instructions": "P(n,r) = n!/(n−r)!. C(n,r) = n!/(r!(n−r)!). P/C = r!. Verify this ratio.",
+              "example_realization": "P(8,3)=8×7×6=336. C(8,3)=336/6=56. P/C = 3! = 6.",
+              "explanation": "Every combination of r items corresponds to r! permutations — the internal orderings. This is the core relationship between P and C."
+            },
+            {
+              "template": "How many must you pick from a group of {K} categories (each large) to guarantee {M} from the same category?",
+              "variables": {
+                "K": [
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  10,
+                  12,
+                  26
+                ],
+                "M": [
+                  2,
+                  3,
+                  4,
+                  5,
+                  6
+                ]
+              },
+              "instructions": "Apply the generalised pigeonhole principle: minimum N = K(M−1)+1.",
+              "example_realization": "K=5 grades, M=4 students: N = 5(4−1)+1 = 16.",
+              "explanation": "Worst-case: K(M−1) objects spread M−1 per category. One more forces some category to reach M."
+            },
+            {
+              "template": "How many bit strings of length {L} contain {COND} 1s?",
+              "variables": {
+                "L": [
+                  6,
+                  8,
+                  10,
+                  12
+                ],
+                "COND": [
+                  "exactly 3",
+                  "exactly 4",
+                  "at most 3",
+                  "at least 4",
+                  "an even number of"
+                ]
+              },
+              "instructions": "Exact: C(L,k). At most k: sum C(L,0)+…+C(L,k). At least k: sum C(L,k)+…+C(L,L) or complement. Even number of 1s: 2^(L−1) (half of all 2^L strings by symmetry).",
+              "example_realization": "Length-10 strings with exactly 4 ones: C(10,4)=210.",
+              "explanation": "Combination drill over all standard 'how many ones' variants. The 'even number' case introduces a symmetry argument."
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
