@@ -69,16 +69,11 @@
 
   /* ----------------------------------------------------------
      MOBILE SIDEBAR TOGGLE
+     course_nav.js handles the full logic; this is a no-op
+     guard so the overlay/open class stays consistent.
   ---------------------------------------------------------- */
   function initSidebarToggle() {
-    var sidebar = document.getElementById('sidebar');
-    var toggle  = document.getElementById('sidebar-toggle');
-    if (!sidebar || !toggle) return;
-    toggle.addEventListener('click', function () {
-      sidebar.classList.toggle('sidebar--open');
-      toggle.setAttribute('aria-expanded',
-        String(sidebar.classList.contains('sidebar--open')));
-    });
+    /* Handled by CourseNav._initMobileToggle — skip to avoid conflicts. */
   }
 
   /* ----------------------------------------------------------
