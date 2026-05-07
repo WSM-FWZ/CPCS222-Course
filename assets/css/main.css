@@ -2095,3 +2095,228 @@ body {
 /* ============================================================
    END MODULE 1 ENGINE STYLES
    ============================================================ */
+
+/* ============================================================
+   COURSE NAVIGATOR — Accordion Sidebar  (course_nav.js)
+   ============================================================ */
+
+/* ── Brand header ─────────────────────────────────────────── */
+.cnav-brand {
+  display: flex;
+  align-items: center;
+  gap: .85rem;
+  padding: 1.1rem 1.15rem 1rem;
+  border-bottom: 1px solid var(--sidebar-border);
+  flex-shrink: 0;
+}
+.cnav-brand-icon {
+  font-size: 1.35rem;
+  flex-shrink: 0;
+}
+.cnav-brand-label {
+  font-size: .6rem;
+  font-weight: 800;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: #475569;
+  margin-bottom: .15rem;
+}
+.cnav-brand-name {
+  font-size: .82rem;
+  font-weight: 700;
+  color: var(--sidebar-head);
+  line-height: 1.15;
+}
+
+/* ── Module list container ───────────────────────────────── */
+.cnav-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: .4rem 0 2rem;
+  scrollbar-width: thin;
+  scrollbar-color: #334155 transparent;
+}
+.cnav-list::-webkit-scrollbar { width: 4px; }
+.cnav-list::-webkit-scrollbar-thumb { background: #334155; border-radius: 2px; }
+
+/* ── Module accordion button ─────────────────────────────── */
+.cnav-module-btn {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  width: 100%;
+  padding: .6rem .9rem .6rem 1rem;
+  background: none;
+  border: none;
+  border-left: 2px solid transparent;
+  cursor: pointer;
+  font-family: var(--font);
+  text-align: left;
+  color: #94a3b8;
+  transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+  position: relative;
+}
+.cnav-module-btn:hover {
+  background: var(--sidebar-hover);
+  color: #cbd5e1;
+}
+.cnav-module-btn[aria-expanded="true"] {
+  color: var(--sidebar-head);
+  background: rgba(255,255,255,.04);
+  border-left-color: var(--sidebar-active-bar);
+}
+
+.cnav-mod-badge {
+  font-size: .58rem;
+  font-weight: 900;
+  letter-spacing: .04em;
+  color: #475569;
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.09);
+  border-radius: 4px;
+  padding: .1em .45em;
+  flex-shrink: 0;
+  min-width: 2.1em;
+  text-align: center;
+}
+.cnav-module-btn[aria-expanded="true"] .cnav-mod-badge {
+  color: #93c5fd;
+  background: rgba(37,99,235,.18);
+  border-color: rgba(59,130,246,.25);
+}
+
+.cnav-mod-icon {
+  font-size: .95rem;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.cnav-mod-title {
+  flex: 1;
+  font-size: .78rem;
+  font-weight: 600;
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cnav-chevron {
+  font-size: .6rem;
+  color: #475569;
+  flex-shrink: 0;
+  transition: transform .2s var(--ease);
+}
+.cnav-module-btn[aria-expanded="true"] .cnav-chevron {
+  color: #64748b;
+}
+
+/* ── Collapsible body ────────────────────────────────────── */
+.cnav-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .28s cubic-bezier(.4,0,.2,1);
+  background: rgba(0,0,0,.18);
+}
+.cnav-body.cnav-open {
+  max-height: 600px; /* large enough for 4 lessons + exercises */
+}
+
+/* ── Lesson / exercises link items ──────────────────────── */
+.cnav-item {
+  display: flex;
+  align-items: flex-start;
+  gap: .55rem;
+  padding: .52rem .85rem .52rem 2.15rem;
+  color: #64748b;
+  font-size: .77rem;
+  line-height: 1.4;
+  text-decoration: none;
+  border-left: 2px solid transparent;
+  transition: background var(--dur) var(--ease), color var(--dur) var(--ease),
+              border-color var(--dur) var(--ease);
+}
+.cnav-item:hover {
+  background: var(--sidebar-hover);
+  color: #94a3b8;
+}
+.cnav-item.cnav-active {
+  background: var(--sidebar-active-bg);
+  border-left-color: var(--sidebar-active-bar);
+  color: var(--sidebar-active-text);
+}
+.cnav-item.cnav-active .cnav-item-num { color: #93c5fd; }
+
+.cnav-item-num {
+  font-size: .62rem;
+  font-weight: 800;
+  color: #475569;
+  flex-shrink: 0;
+  min-width: 1.3em;
+  padding-top: .05em;
+}
+.cnav-item-title {
+  flex: 1;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  line-height: 1.4;
+}
+.cnav-item-badge {
+  font-size: .7rem;
+  flex-shrink: 0;
+  opacity: .55;
+  padding-top: .05em;
+}
+
+/* ── Exercises row variant ───────────────────────────────── */
+.cnav-item-ex { color: #475569; }
+.cnav-item-ex:hover { color: #64748b; }
+.cnav-ex-num {
+  color: #10b981 !important;
+  font-size: .58rem;
+}
+.cnav-item-ex.cnav-active {
+  background: rgba(16,185,129,.12) !important;
+  border-left-color: #10b981 !important;
+  color: #34d399 !important;
+}
+.cnav-ex-badge { opacity: .7; }
+
+/* ── Sidebar with cnav (hides old .sidebar-header / ul) ── */
+.cnav-sidebar {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* body overflow handled by cnav-list */
+}
+
+/* ── Mobile overlay ──────────────────────────────────────── */
+#cnav-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.55);
+  z-index: 99;
+}
+#cnav-overlay.cnav-overlay-show { display: block; }
+
+/* ── Site footer (overrides base rule above) ─────────────── */
+.site-footer {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  padding: 1rem 1.75rem;
+  margin-top: 0;           /* remove old 4rem gap on lesson pages */
+  text-align: center;
+  font-size: .78rem;
+  color: var(--text-3);
+  line-height: 1.65;
+  flex-shrink: 0;
+}
+.page-home .site-footer { margin-top: 2rem; } /* restore spacing on homepage only */
+.site-footer strong { color: var(--text-2); font-weight: 600; }
+[data-theme="dark"] .site-footer { background: var(--surface-2); }
+
+/* ============================================================
+   END COURSE NAVIGATOR STYLES
+   ============================================================ */
