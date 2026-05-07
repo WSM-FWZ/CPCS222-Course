@@ -179,27 +179,28 @@
 }
 
 .fb-input {
-  width:         100%;
-  padding:       .55rem .75rem;
-  border:        1.5px solid var(--border, #e2e8f0);
-  border-radius: .5rem;
-  background:    var(--bg, #f8fafc);
-  color:         var(--text, #1e293b);
-  font-size:     .9rem;
-  font-family:   inherit;
-  transition:    border-color .15s, box-shadow .15s, background .15s;
-  box-sizing:    border-box;
-  appearance:    none;
+  width:              100%;
+  padding:            .55rem .75rem;
+  border:             1.5px solid var(--border, #e2e8f0);
+  border-radius:      .5rem;
+  background-color:   var(--bg, #f8fafc);
+  color:              var(--text, #1e293b);
+  font-size:          .9rem;
+  font-family:        inherit;
+  transition:         border-color .15s, box-shadow .15s, background-color .15s;
+  box-sizing:         border-box;
+  appearance:         none;
   -webkit-appearance: none;
+  -moz-appearance:    none;
 }
 
 .fb-input::placeholder { color: var(--text-muted, #94a3b8); }
 
 .fb-input:focus {
-  outline:      none;
-  border-color: #6366f1;
-  box-shadow:   0 0 0 3px rgba(99,102,241,.18);
-  background:   var(--surface, #fff);
+  outline:          none;
+  border-color:     #6366f1;
+  box-shadow:       0 0 0 3px rgba(99,102,241,.18);
+  background-color: var(--surface, #fff);
 }
 
 .fb-input.fb-input-err {
@@ -363,15 +364,15 @@
 }
 
 [data-theme="dark"] .fb-input {
-  background:   var(--bg, #0f172a);
-  border-color: var(--border, #334155);
-  color:        var(--text, #e2e8f0);
+  background-color: var(--bg, #0f172a);
+  border-color:     var(--border, #334155);
+  color:            var(--text, #e2e8f0);
 }
 
 [data-theme="dark"] .fb-input:focus {
-  background:   var(--surface, #1e293b);
-  border-color: #818cf8;
-  box-shadow:   0 0 0 3px rgba(129,140,248,.2);
+  background-color: var(--surface, #1e293b);
+  border-color:     #818cf8;
+  box-shadow:       0 0 0 3px rgba(129,140,248,.2);
 }
 
 [data-theme="dark"] .fb-input.fb-input-err {
@@ -379,8 +380,19 @@
   box-shadow:   0 0 0 3px rgba(248,113,113,.18);
 }
 
+/* Select arrow — fully self-contained so no background shorthand above can reset
+   background-repeat/position/size.  Both light and dark use explicit sub-properties. */
 [data-theme="dark"] .fb-select {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-image:    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat:   no-repeat;
+  background-position: right .65rem center;
+  background-size:     1.1rem;
+}
+
+/* Option text in dark mode (Firefox + Chromium; Safari uses native OS rendering) */
+[data-theme="dark"] .fb-select option {
+  background-color: #1e293b;
+  color:            #e2e8f0;
 }
 
 [data-theme="dark"] .fb-cancel-btn {
