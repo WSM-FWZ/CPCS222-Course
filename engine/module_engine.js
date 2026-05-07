@@ -102,52 +102,12 @@
     var bl = document.getElementById('mod-bc-lesson');
     if (bl) bl.textContent = lesson ? lesson.title : 'Exercises';
 
-    /* Sidebar header */
-    var sn = document.getElementById('sidebar-module-num');
-    if (sn) sn.textContent = 'Module ' + cfg.moduleNum;
-
-    var st = document.getElementById('sidebar-module-title');
-    if (st) st.textContent = cfg.moduleTitle;
+    /* Sidebar header — managed by course_nav.js; no-op here */
   }
 
   /* ── SIDEBAR ───────────────────────────────────────────────── */
-  function _buildSidebar(lessons, activeId) {
-    var cfg = _cfg;
-    var sub = document.getElementById('sidebar-sub');
-    if (sub) sub.textContent = lessons.length + ' Tutorial' + (lessons.length !== 1 ? 's' : '') + ' + Exercises';
-
-    var list = document.getElementById('sidebar-list');
-    if (!list) return;
-    list.innerHTML = '';
-
-    lessons.forEach(function (les, i) {
-      var li = document.createElement('li');
-      var isActive = les.lesson_id === activeId;
-      li.className = 'lesson-list-item me-sidebar-link' + (isActive ? ' active' : '');
-      li.setAttribute('data-id', les.lesson_id);
-      li.innerHTML =
-        '<div class="lli-dot"></div>' +
-        '<div>' +
-          '<div class="lli-section">Lesson ' + (i + 1) + ' · Tutorial</div>' +
-          '<div class="lli-title">' + esc(les.title) + '</div>' +
-        '</div>';
-      li.addEventListener('click', function () { location.href = './lesson' + (i + 1) + '.html'; });
-      list.appendChild(li);
-    });
-
-    /* Exercises entry */
-    var exLi = document.createElement('li');
-    var exActive = (cfg.type === 'exercises');
-    exLi.className = 'lesson-list-item me-sidebar-link me-sidebar-exercises' + (exActive ? ' active' : '');
-    exLi.innerHTML =
-      '<div class="lli-dot"></div>' +
-      '<div>' +
-        '<div class="lli-section">Exercises 🧪</div>' +
-        '<div class="lli-title">Module ' + cfg.moduleNum + ' Practice</div>' +
-      '</div>';
-    exLi.addEventListener('click', function () { location.href = './exercises.html'; });
-    list.appendChild(exLi);
-  }
+  /* Sidebar is now fully managed by course_nav.js — this is a no-op. */
+  function _buildSidebar(lessons, activeId) { /* handled by CourseNav */ }
 
   /* ── PUBLIC — LESSON ────────────────────────────────────────── */
   function renderLesson(lessonId, container, jsonPath) {
