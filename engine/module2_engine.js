@@ -1,6 +1,6 @@
 /* ============================================================
-   CPCS 222 — Module 1 Engine
-   Fetches /content/module1_propositional_logic.json and renders
+   CPCS 222 — Module 2 Engine
+   Fetches content/module2.json and renders
    lesson pages and the exercises page.
    ============================================================ */
 (function (global) {
@@ -17,15 +17,12 @@
       .replace(/"/g, '&quot;');
   }
 
-  /* Compute the correct JSON path based on the current page's location.
-     Pages inside /pages/ need ../content/…
-     The root index.html needs ./content/… */
   function _resolveJsonPath() {
     var pathname = window.location.pathname;
     if (pathname.indexOf('/pages/') !== -1) {
-      return '../content/module1_propositional_logic.json';
+      return '../content/module2.json';
     }
-    return './content/module1_propositional_logic.json';
+    return './content/module2.json';
   }
 
   function _load(jsonPath, cb) {
@@ -64,7 +61,7 @@
       if (err) { _showErr(container, err); return; }
       _score = { correct: 0, total: 0 };
       _buildExercises(data.module.exercises, data.module.lessons, container);
-      _activateSidebar('module1-exercises');
+      _activateSidebar('module2-exercises');
       _initReveal(container);
     });
   }
@@ -109,12 +106,12 @@
     div.className = 'm1-hero reveal';
     div.innerHTML =
       '<div class="m1-hero-top">' +
-        '<span class="m1-hero-module">📐 Module 1 — Propositional Logic</span>' +
+        '<span class="m1-hero-module">🔮 Module 2 — Predicate Logic</span>' +
         '<span class="badge badge-tutorial">📖 Tutorial</span>' +
       '</div>' +
       '<div class="m1-hero-progress-row">' +
         '<span class="m1-hero-num">Lesson ' + (idx + 1) + ' of ' + total + '</span>' +
-        '<div class="m1-prog-bar-wrap"><div class="m1-prog-bar" style="width:' + pct + '%"></div></div>' +
+        '<div class="m1-prog-bar-wrap"><div class="m1-prog-bar" style="width:' + pct + '%;background:linear-gradient(90deg,#10b981,#06b6d4)"></div></div>' +
         '<span class="m1-prog-pct">' + pct + '%</span>' +
       '</div>' +
       '<h1 class="m1-hero-title">' + esc(lesson.title) + '</h1>' +
@@ -178,7 +175,7 @@
     var visHtml = '';
     if (sec.visual_idea) {
       var vi = sec.visual_idea;
-      var icons = { 'truth-table': '📊', 'diagram': '🗺️', 'flowchart': '🔀', 'svg': '🖼️' };
+      var icons = { 'truth-table': '📊', 'diagram': '🗺️', 'flowchart': '🔀', 'svg': '🖼️', 'table': '📊', 'simulation': '🎮' };
       var icon = icons[vi.type] || '🖼️';
       visHtml = '<div class="m1-visual">' +
         '<div class="m1-visual-header">' + icon + ' Visual — <em>' + esc(vi.type) + '</em></div>' +
@@ -209,7 +206,7 @@
     var div = document.createElement('div');
     div.className = 'm1-worked reveal';
     var cards = examples.map(function (ex, i) {
-      var uid = 'm1-we-' + i;
+      var uid = 'm2-we-' + i;
       var stepsHtml = (ex.step_by_step_solution || []).map(function (s, j) {
         return '<div class="m1-step"><span class="m1-step-num">' + (j + 1) + '</span><span>' + esc(s) + '</span></div>';
       }).join('');
@@ -244,7 +241,7 @@
     var div = document.createElement('div');
     div.className = 'm1-quickchecks reveal';
     var qHtml = checks.map(function (qc, i) {
-      return _renderQC(qc, 'm1-qc-' + i);
+      return _renderQC(qc, 'm2-qc-' + i);
     }).join('');
     div.innerHTML =
       '<div class="m1-block-header">' +
@@ -260,7 +257,7 @@
       var choicesHtml = (qc.choices || []).map(function (c, j) {
         return '<button class="m1-choice" data-qid="' + uid + '" data-val="' + esc(c) + '" ' +
           'data-correct="' + (c === qc.answer ? '1' : '0') + '" ' +
-          'onclick="Module1Engine.checkAnswer(this)">' +
+          'onclick="Module2Engine.checkAnswer(this)">' +
           '<span class="m1-choice-letter">' + String.fromCharCode(65 + j) + '</span>' +
           '<span>' + esc(c) + '</span>' +
           '</button>';
@@ -317,13 +314,13 @@
     var div = document.createElement('div');
     div.className = 'bottom-nav';
     var prevHtml = idx > 0
-      ? '<a href="module1-propositional-logic-lesson' + idx + '.html" class="btn-nav">‹ Lesson ' + idx + ': ' + esc(lessons[idx - 1].title) + '</a>'
-      : '<a href="../index.html" class="btn-nav">‹ Home</a>';
+      ? '<a href="module2-lesson' + idx + '.html" class="btn-nav">‹ Lesson ' + idx + ': ' + esc(lessons[idx - 1].title) + '</a>'
+      : '<a href="module1-propositional-logic-exercises.html" class="btn-nav">‹ Module 1 Exercises</a>';
     var nextHtml = idx < lessons.length - 1
-      ? '<a href="module1-propositional-logic-lesson' + (idx + 2) + '.html" class="btn-nav next">Lesson ' + (idx + 2) + ': ' + esc(lessons[idx + 1].title) + ' ›</a>'
-      : '<a href="module1-propositional-logic-exercises.html" class="btn-nav next m1-nav-exercises">Module 1 Exercises 🧪 ›</a>';
+      ? '<a href="module2-lesson' + (idx + 2) + '.html" class="btn-nav next">Lesson ' + (idx + 2) + ': ' + esc(lessons[idx + 1].title) + ' ›</a>'
+      : '<a href="module2-exercises.html" class="btn-nav next m1-nav-exercises">Module 2 Exercises 🧪 ›</a>';
     div.innerHTML = prevHtml +
-      '<div class="lesson-indicator"><strong>' + (idx + 1) + ' / ' + lessons.length + '</strong><span>Module 1</span></div>' +
+      '<div class="lesson-indicator"><strong>' + (idx + 1) + ' / ' + lessons.length + '</strong><span>Module 2</span></div>' +
       nextHtml;
     return div;
   }
@@ -335,12 +332,11 @@
     var art = document.createElement('article');
     art.className = 'm1-exercises-page';
 
-    /* Hero */
     var hero = document.createElement('div');
     hero.className = 'm1-hero m1-ex-hero reveal';
     hero.innerHTML =
       '<div class="m1-hero-top">' +
-        '<span class="m1-hero-module">📐 Module 1 — Propositional Logic</span>' +
+        '<span class="m1-hero-module">🔮 Module 2 — Predicate Logic</span>' +
         '<span class="badge badge-exercise">🧪 Exercises</span>' +
       '</div>' +
       '<h1 class="m1-hero-title">' + esc(exercises.title) + '</h1>' +
@@ -348,13 +344,18 @@
       '<div class="m1-score-bar">' +
         '🏆 Score: <span class="m1-score-num" id="ex-correct">0</span> / ' +
         '<span class="m1-score-num" id="ex-total">0</span>' +
-        '<button class="m1-retry-btn" onclick="Module1Engine.retryAll()">↺ Retry All</button>' +
+        '<button class="m1-retry-btn" onclick="Module2Engine.retryAll()">↺ Retry All</button>' +
       '</div>';
     art.appendChild(hero);
 
-    var setLabels = { mcq: '🔘 Multiple Choice', true_false: '✔️ True / False',
-      short_answer: '✏️ Short Answer', step_by_step: '🔢 Step-by-Step Truth Tables',
-      exam_style: '📋 Exam-Style', randomized: '🎲 Randomized Drill' };
+    var setLabels = {
+      mcq: '🔘 Multiple Choice',
+      true_false: '✔️ True / False',
+      short_answer: '✏️ Short Answer',
+      step_by_step: '🔢 Step-by-Step',
+      exam_style: '📋 Exam-Style',
+      randomized: '🎲 Randomized Drill'
+    };
 
     exercises.question_sets.forEach(function (qset, si) {
       var section = document.createElement('div');
@@ -366,40 +367,34 @@
         section.appendChild(_buildRandomized(qset));
       } else {
         (qset.questions || []).forEach(function (q, qi) {
-          var uid = 'ex-' + si + '-' + qi;
+          var uid = 'ex2-' + si + '-' + qi;
           section.appendChild(_buildExQuestion(q, qset.type, uid));
         });
       }
       art.appendChild(section);
     });
 
-    /* Bottom nav */
     var nav = document.createElement('div');
     nav.className = 'bottom-nav';
     nav.innerHTML =
-      '<a href="module1-propositional-logic-lesson3.html" class="btn-nav">‹ Back to Lesson 3</a>' +
-      '<div class="lesson-indicator"><strong>Exercises</strong><span>Module 1</span></div>' +
-      '<a href="module2-lesson1.html" class="btn-nav next">Module 2: Predicate Logic →</a>';
+      '<a href="module2-lesson3.html" class="btn-nav">‹ Back to Lesson 3</a>' +
+      '<div class="lesson-indicator"><strong>Exercises</strong><span>Module 2</span></div>' +
+      '<a href="../index.html" class="btn-nav next">Home ›</a>';
     art.appendChild(nav);
 
     container.appendChild(art);
   }
 
-  /* ── ANSWER FORMATTER ────────────────────────────────────────
-     Decides how to render an answer string:
-       • truth table  (contains | + \n) → monospace <pre> with scroll
-       • structured   (Converse:, etc.) → split at label boundaries
-       • plain text                     → wrapping <span>              */
+  /* ── ANSWER FORMATTER ─────────────────────────────────────── */
+
   var _LABEL_TEST  = /\b(?:Converse|Contrapositive|Inverse|Original|Final answer|Step\s+\d+|Reason|Result):/;
   var _LABEL_SPLIT = /(?=\b(?:Converse|Contrapositive|Inverse|Original|Final answer|Step\s+\d+|Reason|Result):)/;
 
   function _formatAnswer(text) {
     if (!text) return '';
-    /* Truth table: preserve monospace alignment, allow horizontal scroll */
     if (text.indexOf('|') !== -1 && text.indexOf('\n') !== -1) {
       return '<pre class="m1-pre">' + esc(text) + '</pre>';
     }
-    /* Structured labeled answer: split at known label prefixes */
     if (_LABEL_TEST.test(text)) {
       var parts = text.split(_LABEL_SPLIT).filter(function (p) { return p.trim(); });
       if (parts.length > 1) {
@@ -410,7 +405,6 @@
         '</div>';
       }
     }
-    /* Plain paragraph or short answer: wrap naturally */
     return '<span class="m1-ans-text">' + esc(text) + '</span>';
   }
 
@@ -423,7 +417,7 @@
       var choicesHtml = (q.choices || []).map(function (c, j) {
         return '<button class="m1-choice" data-qid="' + uid + '" data-val="' + esc(c) + '" ' +
           'data-correct="' + (c === q.answer ? '1' : '0') + '" ' +
-          'onclick="Module1Engine.checkAnswer(this)">' +
+          'onclick="Module2Engine.checkAnswer(this)">' +
           '<span class="m1-choice-letter">' + String.fromCharCode(65 + j) + '</span>' +
           '<span>' + esc(c) + '</span></button>';
       }).join('');
@@ -460,7 +454,6 @@
     var templates = qset.questions || [];
     var currentIdx = 0;
 
-    /* Pick random values for every {VARIABLE} in the template at tIdx */
     function pickQuestion(tIdx) {
       var tmpl = templates[tIdx];
       var vars = tmpl.variables || {};
@@ -473,7 +466,6 @@
       return { q: filled, hint: tmpl.instructions || '', ex: tmpl.example_realization || '' };
     }
 
-    /* Re-render the question panel with freshly randomized values */
     function show() {
       var tIdx = currentIdx;
       var r = pickQuestion(tIdx);
@@ -486,7 +478,6 @@
         '<div class="m1-qc-feedback m1-sa-answer" style="display:none"><strong>Example answer:</strong> ' + esc(r.ex) + '</div>';
     }
 
-    /* Build skeleton — buttons wired with closures, no global calls */
     div.innerHTML =
       '<div class="m1-rand-q"></div>' +
       '<div class="m1-rand-btns">' +
@@ -496,20 +487,16 @@
       '</div>';
 
     var btns = div.querySelectorAll('.m1-rand-btns button');
-    /* New Question: re-randomize same template */
     btns[0].addEventListener('click', function () { show(); });
-    /* Prev Template */
     btns[1].addEventListener('click', function () {
       currentIdx = (currentIdx - 1 + templates.length) % templates.length;
       show();
     });
-    /* Next Template */
     btns[2].addEventListener('click', function () {
       currentIdx = (currentIdx + 1) % templates.length;
       show();
     });
 
-    /* Initial render after element is in DOM */
     setTimeout(function () { show(); }, 0);
     return div;
   }
@@ -535,8 +522,7 @@
     var fb = document.getElementById(qid + '-fb');
     if (fb) { fb.classList.add('show'); }
 
-    /* update score only for exercises page (has ex- prefix) */
-    if (qid.indexOf('ex-') === 0) {
+    if (qid.indexOf('ex2-') === 0) {
       _score.total++;
       if (isCorrect) _score.correct++;
       var ce = document.getElementById('ex-correct');
@@ -571,7 +557,7 @@
   /* ── HELPERS ──────────────────────────────────────────────── */
 
   function _activateSidebar(lessonId) {
-    document.querySelectorAll('.m1-sidebar-link').forEach(function (el) {
+    document.querySelectorAll('.m2-sidebar-link').forEach(function (el) {
       el.classList.toggle('active', el.getAttribute('data-id') === lessonId);
     });
   }
@@ -595,12 +581,12 @@
         '<div class="icon">⚠️</div>' +
         '<h3>Could not load content</h3>' +
         '<p>' + esc(String(err)) + '</p>' +
-        '<p>Make sure the JSON file is at <code>content/module1_propositional_logic.json</code>.</p>' +
+        '<p>Make sure the JSON file is at <code>content/module2.json</code>.</p>' +
       '</div>';
   }
 
   /* ── EXPORT ───────────────────────────────────────────────── */
-  global.Module1Engine = {
+  global.Module2Engine = {
     renderLesson: renderLesson,
     renderExercises: renderExercises,
     checkAnswer: checkAnswer,
