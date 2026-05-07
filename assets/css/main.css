@@ -2064,6 +2064,34 @@ body {
 /* --- Lesson article wrapper ------------------------------ */
 .m1-lesson { max-width: var(--content-max); margin: 0 auto; }
 
+/* --- Universal engine article wrappers ------------------- */
+.me-lesson         { max-width: var(--content-max); margin: 0 auto; }
+.me-exercises-page { max-width: var(--content-max); margin: 0 auto; }
+
+/* --- Module color dots ch7–ch10 (extends ch1–ch6 above) --- */
+.module-color-dot.ch7  { background: linear-gradient(135deg, #7c3aed, #ec4899); }
+.module-color-dot.ch8  { background: linear-gradient(135deg, #ef4444, #f59e0b); }
+.module-color-dot.ch9  { background: linear-gradient(135deg, #06b6d4, #10b981); }
+.module-color-dot.ch10 { background: linear-gradient(135deg, #4f46e5, #0ea5e9); }
+
+/* --- Module card gradient borders ch7–ch10 ---------------- */
+.module-card.ch7  { --card-grad: linear-gradient(90deg,#7c3aed,#ec4899); }
+.module-card.ch8  { --card-grad: linear-gradient(90deg,#ef4444,#f59e0b); }
+.module-card.ch9  { --card-grad: linear-gradient(90deg,#06b6d4,#10b981); }
+.module-card.ch10 { --card-grad: linear-gradient(90deg,#4f46e5,#0ea5e9); }
+
+/* --- Sidebar: me-sidebar-exercises active state ----------- */
+.me-sidebar-exercises .lli-section { color: #059669 !important; }
+.me-sidebar-exercises.active .lli-dot { background: #10b981 !important; box-shadow: 0 0 8px rgba(16,185,129,.6) !important; }
+
+/* --- me-nav-exercises (universal engine nav button) ------- */
+.me-nav-exercises {
+  background: rgba(16,185,129,.08) !important;
+  border-color: rgba(16,185,129,.25) !important;
+  color: #059669 !important;
+}
+.me-nav-exercises:hover { background: rgba(16,185,129,.15) !important; transform: translateX(2px) !important; }
+
 /* ============================================================
    END MODULE 1 ENGINE STYLES
    ============================================================ */

@@ -1,0 +1,1011 @@
+{
+  "course": "CPCS 222 — Discrete Mathematics",
+  "module": {
+    "module_id": 7,
+    "title": "Functions",
+    "description": "Module 7 introduces functions as a foundational structure of discrete mathematics. Starting from the formal definition of a function as a mapping between sets, the module builds through domain, codomain, range, image, and preimage, then advances to the three critical classifications — injective (one-to-one), surjective (onto), and bijective — and their consequences for inverse functions. The module closes with function composition and the special floor and ceiling functions that appear throughout algorithm analysis.",
+    "source_files": [
+      "CPCS222_07_Functions.pdf",
+      "CPCS 222 - Lab 09 -Functions.pdf"
+    ],
+    "lessons": [
+      {
+        "lesson_id": "module7-lesson1",
+        "type": "tutorial",
+        "title": "Functions — Definitions, Domain, Codomain, and Range",
+        "slug": "functions-definitions-domain-codomain-range",
+        "welcome": "Welcome to Module 7. Every algorithm you will ever write computes a function — it takes an input and produces an output. Before you can reason precisely about programs, databases, or cryptography, you need a rigorous mathematical definition of what a function is and what it means for one to be well-defined. In this lesson you will meet the formal vocabulary: domain, codomain, range, image, and preimage. These words will appear in every topic that follows, so mastering them now pays dividends for the entire course.",
+        "objectives": [
+          "State the formal definition of a function f: A → B and explain what ‘exactly one element of B’ means.",
+          "Identify the domain, codomain, and range of a given function and explain how range differs from codomain.",
+          "Find the image of a given element and the preimage of a given element or set.",
+          "Represent a function using arrow diagrams, explicit tables, and formulas.",
+          "Determine when two functions are equal using the formal equality conditions."
+        ],
+        "storytelling": [
+          {
+            "speaker": "Student",
+            "text": "I thought I already understood functions from high school. Why are we starting from scratch?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "In high school, functions were mostly formulas like f(x) = x². Here we need functions between any two sets — students and grades, bit strings and integers, states and transitions. The formal definition makes all of these cases look the same."
+          },
+          {
+            "speaker": "Student",
+            "text": "So a function is just a rule that takes something from one set and gives something from another set?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "Almost. The key constraint is ‘exactly one output for each input’. That word ‘exactly’ is doing a lot of work. If an element of the domain maps to two outputs, or to no output at all, you do not have a function."
+          },
+          {
+            "speaker": "Student",
+            "text": "What is the difference between the codomain and the range? They both sound like output."
+          },
+          {
+            "speaker": "Professor",
+            "text": "The codomain is the set you declared as the target — the type of outputs. The range is the set of outputs that actually get used. The codomain may be larger. For example, if f: Z → Z is defined by f(x) = x², the codomain is all integers, but the range is only the non-negative integers, because a square is never negative."
+          },
+          {
+            "speaker": "Student",
+            "text": "Why does that distinction matter?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "It matters enormously when you ask whether f is onto — that is, whether every element of the codomain is actually hit. We will return to that question in the next lesson."
+          }
+        ],
+        "sections": [
+          {
+            "number": 1,
+            "heading": "The Formal Definition of a Function",
+            "explanation": "Let A and B be nonempty sets. A function f from A to B, written f: A → B, is an assignment of exactly one element of B to each element of A. We write f(a) = b if b is the unique element of B assigned to a. Functions are also called mappings or transformations. The phrase ‘exactly one’ encodes two conditions simultaneously: (1) every element of A is assigned something (totality), and (2) no element of A is assigned more than one thing (single-valuedness). A relation that fails either condition is not a function.",
+            "examples": [
+              "f: {students} → {A, B, C, D, F} where f(student) = their final grade is a function, because every student gets exactly one grade.",
+              "g: Z → Z defined by g(n) = n + 1 is a function — every integer maps to exactly one integer.",
+              "h: R → R defined by h(x) = 1/x is NOT a function from R to R, because h(0) is undefined — 0 has no image.",
+              "k: R → R defined by k(x) = ±√x is NOT a function, because each positive x maps to two values."
+            ],
+            "common_mistakes": [
+              "Forgetting that the domain must be specified. f(x) = 1/x is a function from R−{0} to R, not from R to R.",
+              "Confusing the arrow in f: A → B (type signature) with the arrow in f(a) = b (individual mapping)."
+            ],
+            "visual_idea": {
+              "type": "diagram",
+              "description": "Two arrow diagrams side by side. Left (valid function): each node in set A has exactly one arrow leaving it and pointing to a node in B. Right (invalid): one node has two arrows, another has none. Labels under each: ‘Function’ (green) and ‘Not a Function’ (red).",
+              "interactive_hint": "Let the learner draw arrows between two small sets. After each drawing the system checks and reports whether the result is a valid function, highlighting violations in red."
+            }
+          },
+          {
+            "number": 2,
+            "heading": "Domain, Codomain, and Range",
+            "explanation": "Given f: A → B, the set A is the domain and the set B is the codomain. The range of f (also called the image of A under f, written f(A)) is the set of all actual outputs: f(A) = {f(a) | a ∈ A}. The range is always a subset of the codomain, but they need not be equal. When the range equals the codomain every element of B is produced by at least one input — this is the property of surjectivity we study in Lesson 2.",
+            "examples": [
+              "f: Z → Z, f(n) = n². Domain = Z, Codomain = Z, Range = {0, 1, 4, 9, 16, …} = non-negative integers. Range ≠ Codomain.",
+              "f: {a,b,c,d} → {x,y,z} with f(a)=x, f(b)=y, f(c)=z, f(d)=z. Domain = {a,b,c,d}, Codomain = {x,y,z}, Range = {x,y,z}. Here Range = Codomain.",
+              "f: {a,b,c,d} → {x,y,z,w} with f(a)=x, f(b)=y, f(c)=z, f(d)=z. Range = {x,y,z} ⊂ Codomain = {x,y,z,w}. The element w is never hit."
+            ],
+            "common_mistakes": [
+              "Writing Range = Codomain when elements of the codomain are not in the image. Always check which outputs actually appear.",
+              "Listing codomain elements that are never mapped to as part of the range."
+            ],
+            "visual_idea": {
+              "type": "diagram",
+              "description": "Arrow diagram with A on the left (4 nodes), B on the right (5 nodes). Arrows cover 3 of the 5 nodes in B. The 3 covered nodes are highlighted in gold and labelled ‘Range’. The 2 uncovered nodes are grey and labelled ‘Codomain only’. A brace around all 5 B-nodes is labelled ‘Codomain’.",
+              "interactive_hint": "Let the student drag arrows onto the diagram; after each placement, the system recomputes and highlights the current range in real time."
+            }
+          },
+          {
+            "number": 3,
+            "heading": "Image and Preimage",
+            "explanation": "If f(a) = b, then b is called the image of a under f, and a is called a preimage of b. Note that an element b in the codomain may have zero, one, or many preimages, depending on the function. The image of a subset S ⊆ A is the set f(S) = {f(s) | s ∈ S} — all outputs produced by inputs in S. The preimage of a subset T ⊆ B is f⁻¹(T) = {a ∈ A | f(a) ∈ T} — all inputs that land inside T.",
+            "examples": [
+              "For f: {a,b,c,d} → {x,y,z} with f(a)=z, f(b)=y, f(c)=z, f(d)=z: the image of a is z; the preimage of z is {a,c,d}; the preimage of y is {b}; the preimage of x is ∅.",
+              "f(S) where S = {a,b,c}: f(S) = {f(a),f(b),f(c)} = {z,y,z} = {y,z}.",
+              "For f: Z → Z, f(n)=n², f⁻¹({4}) = {-2, 2} because both (−2)² = 4 and 2² = 4."
+            ],
+            "common_mistakes": [
+              "Writing f⁻¹(b) and meaning the inverse function — preimage notation does not require f to be invertible.",
+              "Forgetting that a preimage is a set, even when only one element maps to b."
+            ],
+            "visual_idea": {
+              "type": "diagram",
+              "description": "Arrow diagram labelling one specific arrow from node a to node b. A callout on b reads ‘b = image of a’; a callout on a reads ‘a = preimage of b’. A shaded region S ⊆ A has arrows leading to a shaded region f(S) ⊆ B, labelled ‘image of S’.",
+              "interactive_hint": "Hover over any node in A to highlight its image in B in yellow; hover over any node in B to highlight all its preimages in A in blue."
+            }
+          },
+          {
+            "number": 4,
+            "heading": "Ways to Represent a Function",
+            "explanation": "A function can be specified in several equivalent ways: (1) An explicit table or arrow diagram listing each input–output pair. (2) A formula or algebraic rule, such as f(x) = 2x + 1. (3) A computer program that, given any input in the domain, returns the unique output. All three are legitimate; the choice depends on the context. For finite domains a table is clearest; for infinite domains a formula is typically required.",
+            "examples": [
+              "Table: domain = {1,2,3,4}, f(1)=a, f(2)=b, f(3)=a, f(4)=c. This is complete and unambiguous.",
+              "Formula: f: R → R, f(x) = x² + 1. The formula determines f(x) for every real x without listing each case.",
+              "Program: a Java method that takes n and returns the n-th Fibonacci number specifies a function f: N → N, even without an explicit closed-form formula."
+            ],
+            "common_mistakes": [
+              "Writing f(x) = √x and claiming the domain is R. The square root of a negative number is not real, so the domain must be restricted to non-negative reals.",
+              "Giving an ambiguous rule like ‘f(x) = the integer nearest x’ when x = 0.5 — two integers are equally near, so this is not a function until a tie-breaking rule is added."
+            ],
+            "visual_idea": {
+              "type": "diagram",
+              "description": "Three panels side by side: (1) an arrow diagram for a 4-element finite function; (2) a graph of f(x)=x² on a coordinate axis; (3) pseudocode for the Fibonacci function. All three are labelled as alternative representations of functions.",
+              "interactive_hint": "Toggle between representations: clicking a node in the arrow diagram highlights the corresponding point on the graph and the corresponding line in the pseudocode."
+            }
+          },
+          {
+            "number": 5,
+            "heading": "Equality of Functions",
+            "explanation": "Two functions f and g are equal if and only if they have (i) the same domain, (ii) the same codomain, and (iii) f(a) = g(a) for every element a of the domain. All three conditions must hold simultaneously. Two functions may agree on every input value but still be unequal if their codomains differ — a subtle point that matters when we classify functions as onto.",
+            "examples": [
+              "f: Z → Z with f(n)=|n| and g: Z → N with g(n)=|n|. Same formula, same domain, but different codomains — f ≠ g as formal functions.",
+              "f: {1,2} → {a,b} with f(1)=a, f(2)=b and g: {1,2} → {a,b} with g(1)=a, g(2)=b. All three conditions match, so f = g.",
+              "f(x)=x+1 and g(x)=1+x defined on the same domain with the same codomain are equal because addition is commutative."
+            ],
+            "common_mistakes": [
+              "Calling two functions equal just because they produce the same outputs for every input, ignoring codomain differences.",
+              "Forgetting to verify all three conditions; a common shortcut is to check only the formula."
+            ],
+            "visual_idea": {
+              "type": "diagram",
+              "description": "Two arrow diagrams with identical arrows but different B-sets drawn. The first B-set is larger (contains extra elements). A red X labels them as unequal despite identical arrows; a second pair with identical B-sets is labelled Equal in green.",
+              "interactive_hint": "A checklist panel shows three checkboxes: Same domain? Same codomain? Same output for every input? Only when all three are ticked does the label change to ‘Equal’."
+            }
+          }
+        ],
+        "worked_examples": [
+          {
+            "problem": "Let f: {a,b,c,d} → {x,y,z} be defined by f(a)=z, f(b)=y, f(c)=z, f(d)=z. (i) State the domain, codomain, and range. (ii) Find the image of b. (iii) Find all preimages of z. (iv) Find f({a,b}).",
+            "step_by_step_solution": [
+              "Domain = {a,b,c,d} — the left-hand set A.",
+              "Codomain = {x,y,z} — the declared right-hand set B.",
+              "Range = set of all actual outputs = {f(a),f(b),f(c),f(d)} = {z,y,z,z} = {y,z}. Note x never appears, so x is NOT in the range.",
+              "Image of b: f(b) = y.",
+              "Preimage of z: find all a ∈ A with f(a)=z. That is a, c, d. Preimage = {a,c,d}.",
+              "f({a,b}) = {f(a), f(b)} = {z, y}."
+            ],
+            "final_answer": "Domain={a,b,c,d}; Codomain={x,y,z}; Range={y,z}. Image of b = y. Preimage of z = {a,c,d}. f({a,b}) = {y,z}.",
+            "why_it_works": "Range is built by collecting every output value used by the function. Preimage collects every input that maps to a given target. Both are read directly from the definition of f.",
+            "common_mistake": "Including x in the range because it belongs to the codomain. Range is only the outputs that are actually used."
+          },
+          {
+            "problem": "Is f: R → R defined by f(x) = √x a valid function? If not, propose a corrected domain so that it becomes one.",
+            "step_by_step_solution": [
+              "Check totality: for x = −1, √(−1) is not a real number. So f(−1) is undefined — the domain element −1 has no image in R.",
+              "Since at least one domain element lacks an image, f is NOT a function from R to R.",
+              "To fix it, restrict the domain to [0, ∞): every non-negative real has a unique non-negative square root.",
+              "Define f: [0,∞) → R by f(x) = √x. Now every domain element maps to exactly one element of R. f is a valid function."
+            ],
+            "final_answer": "f: R → R is not a function. The corrected version f: [0,∞) → R defined by f(x) = √x is a valid function.",
+            "why_it_works": "A function must be defined (produce a real output) for every element of its stated domain. Negative reals violate this for √x, so the domain must be restricted.",
+            "common_mistake": "Accepting f(x) = √x as a function from R to R because it works for most values. One undefined point is enough to disqualify it."
+          }
+        ],
+        "quick_checks": [
+          {
+            "type": "mcq",
+            "question": "f: A → B is called the _____ of f.",
+            "choices": [
+              "range",
+              "codomain",
+              "image",
+              "preimage"
+            ],
+            "answer": "codomain",
+            "explanation": "B is the codomain — the declared target set. The range is the subset of B actually used."
+          },
+          {
+            "type": "mcq",
+            "question": "Which of the following is NOT a valid function from R to R?",
+            "choices": [
+              "f(x) = x + 1",
+              "f(x) = x²",
+              "f(x) = 1/x",
+              "f(x) = |x|"
+            ],
+            "answer": "f(x) = 1/x",
+            "explanation": "f(0) = 1/0 is undefined, so 0 ∈ R has no image. The function is not total on R."
+          },
+          {
+            "type": "mcq",
+            "question": "For f: {a,b,c,d} → {1,2,3} with f(a)=1, f(b)=2, f(c)=1, f(d)=3, what is the range?",
+            "choices": [
+              "{1,2,3}",
+              "{1,2}",
+              "{a,b,c,d}",
+              "{1,1,2,3}"
+            ],
+            "answer": "{1,2,3}",
+            "explanation": "Range = set of distinct output values = {f(a),f(b),f(c),f(d)} = {1,2,1,3} = {1,2,3}. All three codomain elements are used."
+          }
+        ],
+        "summary": {
+          "key_takeaways": [
+            "A function f: A → B assigns exactly one element of B to each element of A; totality and single-valuedness are both required.",
+            "The domain is A, the codomain is B, and the range (image of A) is the subset of B actually produced — range ⊆ codomain.",
+            "The image of an element a is f(a); the preimage of b is the set of all inputs that map to b.",
+            "Functions can be represented by arrow diagrams, tables, formulas, or programs — all are equivalent.",
+            "Two functions are equal only when they share the same domain, same codomain, and produce identical outputs for every input."
+          ],
+          "next": "In Lesson 2 we classify functions by how their inputs and outputs relate: injective functions never map two inputs to the same output, surjective functions hit every codomain element, and bijective functions do both — a requirement for an inverse to exist."
+        }
+      },
+      {
+        "lesson_id": "module7-lesson2",
+        "type": "tutorial",
+        "title": "Injective, Surjective, and Bijective Functions",
+        "slug": "injective-surjective-bijective-functions",
+        "welcome": "In Lesson 1 you learned what a function is. Now the natural next question is: how does a function distribute its inputs across its outputs? This lesson introduces the three critical classifications — injection, surjection, and bijection — that appear constantly in algorithm design, cryptography, and database theory. You will also see why only a bijection can have a true inverse function, connecting this lesson directly to the inverse functions you will compute in practice.",
+        "objectives": [
+          "Define injective (one-to-one) functions and verify whether a given function is injective.",
+          "Define surjective (onto) functions and verify whether a given function is surjective.",
+          "Define bijective functions as functions that are both injective and surjective.",
+          "Explain why a function must be bijective for its inverse to exist.",
+          "Construct the inverse of a bijection and verify it using the composition criterion."
+        ],
+        "storytelling": [
+          {
+            "speaker": "Student",
+            "text": "In the previous lesson, multiple inputs could map to the same output. Is that always allowed?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "It is allowed by the basic definition, but sometimes it is undesirable. In a seating chart, you want each seat to be occupied by at most one student. That is the idea behind an injective function: no two inputs share the same output."
+          },
+          {
+            "speaker": "Student",
+            "text": "What if I also want every seat to be occupied?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "Then you want a surjection: every element of the codomain is the image of at least one input. If every seat is occupied and by at most one student, you have a bijection — a perfect one-to-one pairing."
+          },
+          {
+            "speaker": "Student",
+            "text": "Why does a bijection let you define an inverse but an injection or surjection alone does not?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "Think about it from both sides. If f is not injective, two students sit in the same seat; the inverse function f⁻¹ would have to send that seat back to two students, which breaks the rule that a function has exactly one output. If f is not surjective, some seats are empty; f⁻¹ would have no input to produce those empty seats. Only a bijection avoids both problems."
+          }
+        ],
+        "sections": [
+          {
+            "number": 1,
+            "heading": "Injective (One-to-One) Functions",
+            "explanation": "A function f: A → B is injective (one-to-one) if and only if f(a₁) = f(a₂) implies a₁ = a₂ for all a₁, a₂ in A. Equivalently, distinct inputs always produce distinct outputs: a₁ ≠ a₂ ⇒ f(a₁) ≠ f(a₂). In an arrow diagram, no two arrows from A point to the same node in B. The range of an injective function has exactly |A| elements — one for each input — so |A| ≤ |B| is a necessary condition for injection to be possible.",
+            "examples": [
+              "f: {a,b,c} → {1,2,3,4} with f(a)=1, f(b)=2, f(c)=4. Each output is distinct — injective.",
+              "g: {a,b,c,d} → {x,y,z} with g(a)=x, g(b)=y, g(c)=z, g(d)=z. Both c and d map to z — NOT injective.",
+              "h: Z → Z, h(n) = 2n. If 2a = 2b then a = b — injective.",
+              "k: Z → Z, k(n) = n². k(2) = k(−2) = 4 but 2 ≠ −2 — NOT injective."
+            ],
+            "common_mistakes": [
+              "Concluding a function is injective because the formula looks monotone — always check with the definition or a counterexample.",
+              "Forgetting that |A| > |B| makes injection impossible by the pigeonhole principle."
+            ],
+            "visual_idea": {
+              "type": "diagram",
+              "description": "Two arrow diagrams. Left (injective): 3-node A, 4-node B, each arrow hits a distinct node in B. Right (not injective): 4-node A, 3-node B, two arrows converge on one node in B highlighted in red.",
+              "interactive_hint": "Draw arrows between two sets. System flags in red any node in B that receives more than one arrow, updating an injective/not-injective verdict in real time."
+            }
+          },
+          {
+            "number": 2,
+            "heading": "Surjective (Onto) Functions",
+            "explanation": "A function f: A → B is surjective (onto) if every element of B is the image of at least one element of A. Formally, for every b ∈ B there exists some a ∈ A with f(a) = b. Equivalently, the range of f equals the entire codomain. In an arrow diagram every node in B receives at least one arrow. Surjection requires |A| ≥ |B| for finite sets. If any codomain element is unmatched, f is not surjective.",
+            "examples": [
+              "f: {a,b,c,d} → {x,y,z} with f(a)=x, f(b)=y, f(c)=z, f(d)=z. Every element of {x,y,z} is hit — surjective.",
+              "g: {a,b,c} → {x,y,z,w} with g(a)=x, g(b)=y, g(c)=z. Element w ∈ codomain is never hit — NOT surjective.",
+              "f: Z → Z, f(n) = n + 1. For any integer b, f(b-1) = b. Every integer is hit — surjective.",
+              "f: Z → Z, f(n) = 2n. No odd integer is the image of any integer — NOT surjective onto Z."
+            ],
+            "common_mistakes": [
+              "Checking only a few codomain elements and concluding surjectivity. A single unhit element disqualifies the function.",
+              "Confusing surjectivity with injectivity. A surjective function may send multiple inputs to the same output."
+            ],
+            "visual_idea": {
+              "type": "diagram",
+              "description": "Two arrow diagrams. Left (surjective): every B-node has at least one incoming arrow highlighted in green. Right (not surjective): one B-node is grey with no incoming arrows and labelled ‘never reached’.",
+              "interactive_hint": "Click a B-node to highlight all arrows pointing to it. A badge on each B-node shows how many preimages it has; nodes with zero preimages flash red."
+            }
+          },
+          {
+            "number": 3,
+            "heading": "Bijective Functions",
+            "explanation": "A function f: A → B is bijective (a one-to-one correspondence) if it is both injective and surjective. In an arrow diagram every node in B receives exactly one arrow. For finite sets, bijection requires |A| = |B|. Bijections establish a perfect pairing between the two sets and are the vehicle for proving two sets have the same cardinality. Crucially, a bijection is the only type of function that has a well-defined inverse.",
+            "examples": [
+              "f: {a,b,c} → {1,2,3} with f(a)=2, f(b)=3, f(c)=1. Each output is distinct (injective) and every output is covered (surjective) — bijective.",
+              "g: Z → Z, g(n) = n + 1. Injective (shown above) and surjective (shown above) — bijective.",
+              "h: R → R, h(x) = x³. Strictly increasing, so injective, and every real is a cube root of some real, so surjective — bijective.",
+              "k: R → R, k(x) = x². Not injective (k(2)=k(−2)) and not surjective (no preimage for −1) — not bijective."
+            ],
+            "common_mistakes": [
+              "Assuming |A| = |B| implies bijection. The sizes must match, but you still need to verify both the injective and surjective conditions.",
+              "Believing every bijection looks like the identity function. Many bijections are complex re-arrangements."
+            ],
+            "visual_idea": {
+              "type": "diagram",
+              "description": "Arrow diagram with |A| = |B| = 4, exactly one arrow from each A-node, exactly one arrow into each B-node. Every arrow is highlighted gold. Caption: ‘Bijection: each A-node and each B-node are paired exactly once’.",
+              "interactive_hint": "Sliders control |A| and |B|. When |A| ≠ |B| the bijection label turns red with a tooltip explaining why bijection becomes impossible."
+            }
+          },
+          {
+            "number": 4,
+            "heading": "Inverse Functions",
+            "explanation": "Let f: A → B be a bijection. The inverse of f, denoted f⁻¹: B → A, is defined by f⁻¹(b) = a whenever f(a) = b. The inverse reverses every arrow of f. For f⁻¹ to be a valid function, f must be bijective: injectivity ensures no two A-elements compete for the same B-element when reversing, and surjectivity ensures every B-element has somewhere to reverse to. If f is not a bijection, at least one of these two conditions fails and f⁻¹ cannot be defined as a function.",
+            "examples": [
+              "f: {a,b,c} → {1,2,3}, f(a)=2, f(b)=3, f(c)=1. f is bijective. f⁻¹: f⁻¹(1)=c, f⁻¹(2)=a, f⁻¹(3)=b.",
+              "f: Z → Z, f(x) = x + 1. f is bijective. f⁻¹(y) = y − 1 for all y ∈ Z.",
+              "f: R → R, f(x) = x³. f is bijective. f⁻¹(y) = y^(1/3) — the real cube root.",
+              "f: R → R, f(x) = x². NOT bijective. No inverse exists over all of R."
+            ],
+            "common_mistakes": [
+              "Writing f⁻¹ when f is only injective or only surjective. Both properties are required simultaneously.",
+              "Confusing f⁻¹(b) (inverse function evaluated at b) with 1/f(b) (reciprocal). They are completely different notations."
+            ],
+            "visual_idea": {
+              "type": "diagram",
+              "description": "Side-by-side arrow diagrams. Left shows f: A → B with arrows going right. Right shows f⁻¹: B → A with the same arrows reversed. Each pair of nodes is connected by a two-headed arrow to emphasise the reversal.",
+              "interactive_hint": "Toggle button labelled ‘Apply f⁻¹’. Clicking it animates the arrows flipping direction, reversing each mapping."
+            }
+          },
+          {
+            "number": 5,
+            "heading": "Proving a Function is Injective or Surjective",
+            "explanation": "To prove f is injective: assume f(a₁) = f(a₂) and derive a₁ = a₂ algebraically. To prove f is NOT injective: find a concrete counterexample where f(a₁) = f(a₂) but a₁ ≠ a₂. To prove f is surjective: take an arbitrary b in the codomain, solve f(a) = b for a in the domain, and verify a is indeed in the domain. To prove f is NOT surjective: exhibit a specific b in the codomain for which no a satisfies f(a) = b.",
+            "examples": [
+              "Prove f: Z → Z, f(n) = 3n + 1 is injective. Assume 3a + 1 = 3b + 1. Then 3a = 3b so a = b. ✓ Injective.",
+              "Prove f: Z → Z, f(n) = 3n + 1 is NOT surjective. Try b = 2: solve 3n+1=2 ⇒ n = 1/3 ∉ Z. So 2 has no preimage. ✓ Not surjective.",
+              "Prove f: Z×Z → Z, f(m,n) = m+n is surjective. Given any b ∈ Z, choose m=b, n=0. f(b,0) = b. ✓ Surjective.",
+              "Is f: Z×Z → Z, f(m,n) = m²+n² onto? No: b = −1 has no preimage since m²+n² ≥ 0 always."
+            ],
+            "common_mistakes": [
+              "Trying to prove surjectivity for a specific value of b rather than an arbitrary b. The proof must work for all b in the codomain.",
+              "Proving injection by exhibiting one pair of distinct inputs with distinct outputs. You need the implication for all pairs."
+            ],
+            "visual_idea": {
+              "type": "flowchart",
+              "description": "Two parallel proof flowcharts. Left (injectivity): box ‘Assume f(a₁)=f(a₂)’ → ‘Algebraic steps’ → ‘Conclude a₁=a₂’ → green ‘Injective’. Right (surjectivity): box ‘Take arbitrary b in B’ → ‘Solve f(a)=b for a’ → ‘Verify a is in domain’ → green ‘Surjective’.",
+              "interactive_hint": "Step-by-step animation shows each proof block filling in for f(n)=3n+1. The student can pause and drag the algebra steps."
+            }
+          }
+        ],
+        "worked_examples": [
+          {
+            "problem": "Determine whether f: R → R defined by f(x) = 2x + 1 is (a) injective, (b) surjective, and (c) bijective. If bijective, find f⁻¹.",
+            "step_by_step_solution": [
+              "(a) Injectivity: Assume f(x₁) = f(x₂). Then 2x₁ + 1 = 2x₂ + 1. Subtracting 1: 2x₁ = 2x₂. Dividing by 2: x₁ = x₂. Since f(x₁)=f(x₂) implies x₁=x₂, f is injective.",
+              "(b) Surjectivity: Take any y ∈ R. We need x such that 2x+1 = y. Solving: x = (y-1)/2. Since y is real, x = (y-1)/2 is real, so x ∈ R. Therefore every y has a preimage, and f is surjective.",
+              "(c) f is both injective and surjective, so f is bijective.",
+              "Inverse: from 2x+1 = y we found x = (y-1)/2. So f⁻¹(y) = (y-1)/2, or equivalently f⁻¹(x) = (x-1)/2."
+            ],
+            "final_answer": "f is bijective. f⁻¹(x) = (x − 1)/2.",
+            "why_it_works": "Linear functions ax+b with a≠0 are always bijections from R to R: the non-zero slope guarantees injectivity, and the ability to solve for x given any y guarantees surjectivity.",
+            "common_mistake": "Checking surjectivity for only one or two values of y instead of an arbitrary y. The proof must hold for all y ∈ R."
+          },
+          {
+            "problem": "Determine whether f: R → R defined by f(x) = x² + 1 is (a) injective, (b) surjective. Justify each answer.",
+            "step_by_step_solution": [
+              "(a) Injectivity: Consider x₁ = 2 and x₂ = −2. f(2) = 4+1 = 5 and f(−2) = 4+1 = 5. We have f(2)=f(−2) but 2≠0−2. Counterexample found — f is NOT injective.",
+              "(b) Surjectivity: We need every y ∈ R to satisfy f(x) = y for some real x. Try y = 0: 0 = x²+1 means x² = −1, which has no real solution. So 0 ∈ R has no preimage — f is NOT surjective.",
+              "Conclusion: f is neither injective nor surjective, so it is not bijective and has no inverse."
+            ],
+            "final_answer": "f(x) = x² + 1 is neither injective nor surjective over R.",
+            "why_it_works": "Even-degree polynomials are symmetric about an axis, immediately producing counterexamples to injectivity. Their minimum value gives a quick counterexample to surjectivity.",
+            "common_mistake": "Thinking f(x)=x²+1 is injective for positive x and concluding it is injective overall. The domain includes negative reals too."
+          }
+        ],
+        "quick_checks": [
+          {
+            "type": "mcq",
+            "question": "Which condition must hold for f: A → B to be surjective?",
+            "choices": [
+              "Every element of A maps to a unique element of B.",
+              "Every element of B is the image of at least one element of A.",
+              "|A| = |B|.",
+              "f has an inverse."
+            ],
+            "answer": "Every element of B is the image of at least one element of A.",
+            "explanation": "Surjectivity (onto) means the range equals the entire codomain B. Every element of B must be hit."
+          },
+          {
+            "type": "mcq",
+            "question": "f: Z → Z defined by f(n) = n² is:",
+            "choices": [
+              "Injective but not surjective.",
+              "Surjective but not injective.",
+              "Both injective and surjective.",
+              "Neither injective nor surjective."
+            ],
+            "answer": "Neither injective nor surjective.",
+            "explanation": "Not injective: f(2)=f(−2)=4. Not surjective: f(n)=−1 has no solution in Z (squares are non-negative)."
+          },
+          {
+            "type": "mcq",
+            "question": "For a function f: A → B to have an inverse function f⁻¹: B → A, f must be:",
+            "choices": [
+              "Injective only.",
+              "Surjective only.",
+              "Bijective.",
+              "Defined on a finite set."
+            ],
+            "answer": "Bijective.",
+            "explanation": "Both injectivity (so the reverse mapping is single-valued) and surjectivity (so every B-element has a preimage) are required for f⁻¹ to be a valid function."
+          }
+        ],
+        "summary": {
+          "key_takeaways": [
+            "Injective (one-to-one): distinct inputs always produce distinct outputs; f(a₁)=f(a₂) ⇒ a₁=a₂.",
+            "Surjective (onto): every element of the codomain is the image of at least one input; range = codomain.",
+            "Bijective: both injective and surjective; establishes a perfect one-to-one pairing between domain and codomain.",
+            "A function has an inverse if and only if it is bijective.",
+            "To prove injectivity assume equal outputs and derive equal inputs; to prove surjectivity start with an arbitrary codomain element and construct its preimage."
+          ],
+          "next": "In Lesson 3 we study the composition of two functions — chaining one function’s output into another’s input — and meet the floor and ceiling functions, which appear throughout algorithm analysis and computer arithmetic."
+        }
+      },
+      {
+        "lesson_id": "module7-lesson3",
+        "type": "tutorial",
+        "title": "Function Composition and Special Functions",
+        "slug": "function-composition-and-special-functions",
+        "welcome": "The most powerful operations in mathematics involve combining simpler pieces into larger structures. For functions, this combination is called composition: the output of one function becomes the input of the next. In this lesson you will master the composition operator, understand when it is defined and when it is not, and explore two indispensable special functions — floor and ceiling — that appear in every algorithm that deals with integer arithmetic, memory allocation, and hash tables.",
+        "objectives": [
+          "Define the composition f∘g and compute (f∘g)(x) for given functions f and g.",
+          "State the domain and codomain requirements for f∘g to be defined.",
+          "Demonstrate with examples that function composition is not commutative in general.",
+          "Evaluate the floor ⌊x⌋ and ceiling ⌈x⌉ functions for any real input.",
+          "Apply floor and ceiling to compute byte-encoding and related problems."
+        ],
+        "storytelling": [
+          {
+            "speaker": "Student",
+            "text": "Can I chain two functions together? Like, use the output of one as the input of another?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "Yes — that is exactly what function composition does. If g maps A to B and f maps B to C, then f∘g maps A directly to C by applying g first, then f. The notation f∘g is read ‘f composed with g’ or ‘f after g’."
+          },
+          {
+            "speaker": "Student",
+            "text": "Does the order matter? Can I also write g∘f?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "Order matters enormously. f∘g means apply g first, then f. g∘f means apply f first, then g. Not only may the two give different results, sometimes one is defined while the other is not."
+          },
+          {
+            "speaker": "Student",
+            "text": "What are floor and ceiling? I see them in algorithm pseudocode all the time."
+          },
+          {
+            "speaker": "Professor",
+            "text": "They are rounding functions. Floor of x is the greatest integer ≤ x — round down. Ceiling of x is the smallest integer ≥ x — round up. If n is the number of items and you store them in buckets of size k, you need ⌈n/k⌉ buckets — always round up so nothing is left out."
+          }
+        ],
+        "sections": [
+          {
+            "number": 1,
+            "heading": "Definition and Computation of Composition",
+            "explanation": "Let f: B → C and g: A → B. The composition of f with g, written f∘g: A → C, is defined by (f∘g)(x) = f(g(x)) for all x ∈ A. Read the notation right-to-left: g is applied first, then f. The composition is only defined when the codomain of g equals the domain of f — or at minimum, when the range of g is a subset of the domain of f. The domain of f∘g is the domain of g (A) and the codomain is the codomain of f (C).",
+            "examples": [
+              "f(x) = 2x + 3 and g(x) = 3x + 2 (both Z → Z). (f∘g)(x) = f(g(x)) = f(3x+2) = 2(3x+2)+3 = 6x+7. (g∘f)(x) = g(f(x)) = g(2x+3) = 3(2x+3)+2 = 6x+11. Note f∘g ≠ g∘f.",
+              "g: {a,b,c} → {a,b,c} with g(a)=b, g(b)=c, g(c)=a. f: {a,b,c} → {1,2,3} with f(a)=3, f(b)=2, f(c)=1. (f∘g)(a)=f(g(a))=f(b)=2. (f∘g)(b)=f(g(b))=f(c)=1. (f∘g)(c)=f(g(c))=f(a)=3. Note g∘f is undefined because the range of f is {1,2,3} but the domain of g is {a,b,c}.",
+              "f(x) = x² (R → R) and g(x) = x+1 (R → R). (f∘g)(x) = (x+1)². (g∘f)(x) = x²+1."
+            ],
+            "common_mistakes": [
+              "Reading f∘g as ‘apply f first’. The rightmost function is always applied first: (f∘g)(x) = f(g(x)).",
+              "Assuming f∘g = g∘f. Composition is generally not commutative."
+            ],
+            "visual_idea": {
+              "type": "diagram",
+              "description": "Three ovals labelled A, B, C from left to right. Arrow g goes from A to B, arrow f goes from B to C, and a curved arrow f∘g goes directly from A to C, arching over B. A specific element x ∈ A is shown mapping to g(x) ∈ B then to f(g(x)) ∈ C.",
+              "interactive_hint": "Type any x value; the diagram animates x → g(x) → f(g(x)) step by step, highlighting each arrow as it activates."
+            }
+          },
+          {
+            "number": 2,
+            "heading": "Properties of Composition",
+            "explanation": "Composition is associative: (f∘g)∘h = f∘(g∘h) whenever the compositions are defined. This means a chain of three functions can be bracketed in any order without changing the result. Composition is NOT commutative in general: f∘g and g∘f are usually different functions. The identity function idₐ: A → A defined by idₐ(x) = x satisfies f∘idₐ = f and id₃∘f = f. If f is a bijection, f∘f⁻¹ = id₃ and f⁻¹∘f = idₐ, confirming that f⁻¹ truly undoes f.",
+            "examples": [
+              "f(x)=x+1, g(x)=2x, h(x)=x² (all R→R). (f∘g)∘h: first h→x², then g→2x², then f→2x²+1. f∘(g∘h): g∘h maps x→2x², then f→2x²+1. Same result — associativity confirmed.",
+              "f(x)=x+1, g(x)=2x. f∘g gives 2x+1. g∘f gives 2(x+1)=2x+2. Different — not commutative.",
+              "f: A→B bijection. f∘f⁻¹(b) = f(f⁻¹(b)) = b for all b∈B — that is id₃. f⁻¹∘f(a) = a for all a∈A — that is idₐ."
+            ],
+            "common_mistakes": [
+              "Applying commutativity to composition. Always verify which function acts first.",
+              "Forgetting that h∘(f∘g) requires the output of g to lie in the domain of f before the domain of h becomes relevant."
+            ],
+            "visual_idea": {
+              "type": "diagram",
+              "description": "Side-by-side computation boxes for f∘g and g∘f applied to the same x = 3. Each box shows the step-by-step evaluation with numeric values at each arrow, arriving at different final numbers. A large ≠ symbol between the boxes.",
+              "interactive_hint": "Input slider for x; both sides update live showing (f∘g)(x) and (g∘f)(x) simultaneously, confirming they are equal only for special values if at all."
+            }
+          },
+          {
+            "number": 3,
+            "heading": "The Floor and Ceiling Functions",
+            "explanation": "The floor function ⌊x⌋ maps a real number x to the largest integer less than or equal to x (round toward −∞). The ceiling function ⌈x⌉ maps x to the smallest integer greater than or equal to x (round toward +∞). For any integer n, ⌊n⌋ = ⌈n⌉ = n. For non-integer x, ⌊x⌋ = ⌈x⌉ − 1. These functions appear whenever a continuous quantity must be discretized: how many full hours in a time period, how many memory pages, how many network packets.",
+            "examples": [
+              "⌊3.6⌋ = 3 (largest integer ≤ 3.6). ⌈3.6⌉ = 4 (smallest integer ≥ 3.6).",
+              "⌊−1.4⌋ = −2 (not −1: floor rounds toward −∞). ⌈−1.4⌉ = −1.",
+              "⌊7⌋ = 7. ⌈7⌉ = 7 (integers are their own floor and ceiling).",
+              "⌊1/2⌋ = 0. ⌈1/2⌉ = 1.",
+              "Bytes to encode 17 bits: ⌈17/8⌉ = ⌈2.125⌉ = 3 bytes. (You need 3 full bytes.)"
+            ],
+            "common_mistakes": [
+              "Taking ⌊−1.4⌋ = −1 (truncating toward zero instead of rounding down). Floor always goes toward −∞.",
+              "Confusing floor with rounding: ⌊0.9⌋ = 0, not 1. Floor never rounds up."
+            ],
+            "visual_idea": {
+              "type": "diagram",
+              "description": "A number line from −3 to 4. For each non-integer real x, two colored dots are shown: a blue dot on the integer to the left (floor) and an orange dot on the integer to the right (ceiling). An interactive slider lets the learner drag x and watch both dots jump.",
+              "interactive_hint": "Drag a point along the number line; a panel shows ⌊x⌋ and ⌈x⌉ updating live. A special indicator fires when x is exactly an integer."
+            }
+          },
+          {
+            "number": 4,
+            "heading": "Graphs of Functions",
+            "explanation": "The graph of a function f: A → B is the set of all ordered pairs {(a, b) | a ∈ A and f(a) = b}. For functions from real numbers to real numbers, the graph is a curve in the xy-plane and provides geometric insight into the function’s properties: a function is injective if and only if every horizontal line crosses the graph at most once (the horizontal line test); it is surjective if and only if every horizontal line crosses the graph at least once. Floor and ceiling produce step-function graphs, with each integer value maintained over a half-open unit interval.",
+            "examples": [
+              "f(n) = 2n + 1 (Z → Z): the graph is a set of discrete points lying on the line y = 2x + 1.",
+              "f(x) = x² (Z → Z): points on the parabola y = x². Horizontal line y = 4 crosses at x = −2 and x = 2 — confirming f is not injective.",
+              "⌊x⌋ (R → Z): a staircase graph with a closed left endpoint and open right endpoint at each step.",
+              "⌈x⌉ (R → Z): a staircase graph with an open left endpoint and closed right endpoint at each step."
+            ],
+            "common_mistakes": [
+              "Drawing the floor graph with closed endpoints on the right — the convention is closed on the left, open on the right (since ⌊x⌋ is the floor, the value changes at the integer).",
+              "Applying the vertical line test (which checks if a graph represents a function) instead of the horizontal line test (which checks injectivity)."
+            ],
+            "visual_idea": {
+              "type": "diagram",
+              "description": "Two graphs side by side: (a) ⌊x⌋ from −3 to 3 — a step function with closed dots on left ends of each step, open dots on right; (b) ⌈x⌉ over the same range — closed dots on right ends, open dots on left. Both graphs are on a standard coordinate grid with gridlines at each integer.",
+              "interactive_hint": "A draggable horizontal line sweeps through the graph. A counter below shows how many intersection points it currently has, and a verdict panel updates: ‘Injective’ if always ≤ 1, ‘Surjective’ if always ≥ 1."
+            }
+          }
+        ],
+        "worked_examples": [
+          {
+            "problem": "Let f(x) = 2x + 3 and g(x) = −x + 5 (both R → R). Compute (a) (f∘g)(x), (b) (g∘f)(x), (c) (f∘g)(2), (d) (g∘f)(2).",
+            "step_by_step_solution": [
+              "(a) (f∘g)(x) = f(g(x)) = f(−x+5) = 2(−x+5)+3 = −2x+10+3 = −2x+13.",
+              "(b) (g∘f)(x) = g(f(x)) = g(2x+3) = −(2x+3)+5 = −2x−3+5 = −2x+2.",
+              "(c) (f∘g)(2) = −2(2)+13 = −4+13 = 9. Verify: g(2)=−2+5=3, then f(3)=2(3)+3=9. ✓",
+              "(d) (g∘f)(2) = −2(2)+2 = −4+2 = −2. Verify: f(2)=2(2)+3=7, then g(7)=−7+5=−2. ✓"
+            ],
+            "final_answer": "(f∘g)(x) = −2x + 13. (g∘f)(x) = −2x + 2. (f∘g)(2) = 9. (g∘f)(2) = −2.",
+            "why_it_works": "Composition is computed by substituting the inner function’s formula wherever the outer function has its variable. Always simplify fully before substituting a numeric value.",
+            "common_mistake": "Writing (f∘g)(x) = f(x)·g(x) (product). Composition is substitution, not multiplication."
+          },
+          {
+            "problem": "How many bytes are required to encode the following numbers of bits? (a) 7, (b) 17, (c) 1001, (d) 28800.",
+            "step_by_step_solution": [
+              "One byte = 8 bits. Bytes needed = ⌈n/8⌉ (ceiling because a partial byte still requires a full byte).",
+              "(a) ⌈7/8⌉ = ⌈0.875⌉ = 1 byte.",
+              "(b) ⌈17/8⌉ = ⌈2.125⌉ = 3 bytes.",
+              "(c) ⌈1001/8⌉ = ⌈125.125⌉ = 126 bytes.",
+              "(d) ⌈28800/8⌉ = ⌈3600⌉ = 3600 bytes (28800 is exactly divisible by 8, so no rounding needed)."
+            ],
+            "final_answer": "(a) 1 byte, (b) 3 bytes, (c) 126 bytes, (d) 3600 bytes.",
+            "why_it_works": "Ceiling is used because partial bytes cannot be dropped — every bit must be stored. When n is divisible by 8, ceiling and floor agree.",
+            "common_mistake": "Using floor instead of ceiling. ⌀17/8⌋ = 2, but 2 bytes = 16 bits, which is not enough to hold 17 bits."
+          }
+        ],
+        "quick_checks": [
+          {
+            "type": "mcq",
+            "question": "For f(x) = x + 1 and g(x) = 2x (both Z → Z), what is (f∘g)(3)?",
+            "choices": [
+              "7",
+              "8",
+              "6",
+              "9"
+            ],
+            "answer": "7",
+            "explanation": "(f∘g)(3) = f(g(3)) = f(6) = 7. Apply g first: g(3)=6. Then f: f(6)=7."
+          },
+          {
+            "type": "mcq",
+            "question": "What is ⌊−2.3⌋?",
+            "choices": [
+              "−2",
+              "−3",
+              "−1",
+              "2"
+            ],
+            "answer": "−3",
+            "explanation": "Floor rounds toward −∞. The largest integer ≤ −2.3 is −3 (since −2 > −2.3)."
+          },
+          {
+            "type": "mcq",
+            "question": "Under what condition is f∘g defined?",
+            "choices": [
+              "The domain of f equals the domain of g.",
+              "The codomain of g is a subset of the domain of f.",
+              "The codomain of f equals the domain of g.",
+              "f and g have the same codomain."
+            ],
+            "answer": "The codomain of g is a subset of the domain of f.",
+            "explanation": "The output of g (which lives in g’s codomain) must be usable as input to f (which requires input from f’s domain). So g’s codomain must be contained in f’s domain."
+          }
+        ],
+        "summary": {
+          "key_takeaways": [
+            "Composition (f∘g)(x) = f(g(x)): apply g first, then f. The codomain of g must be contained in the domain of f.",
+            "Composition is associative but NOT commutative: f∘g and g∘f are generally different.",
+            "f∘f⁻¹ = id and f⁻¹∘f = id confirm that a bijection and its inverse undo each other.",
+            "⌊x⌋ (floor) is the greatest integer ≤ x; ⌈x⌉ (ceiling) is the smallest integer ≥ x.",
+            "Use ceiling when counting containers that must fit all items; use floor when counting complete groups."
+          ],
+          "next": "Module 7 is complete. You have mastered functions from first principles through composition. Module 8 will extend this to relations — a generalization that drops the ‘exactly one output’ requirement and opens the door to equivalence relations, partial orders, and database schemas."
+        }
+      }
+    ],
+    "exercises": {
+      "lesson_id": "module7-exercises",
+      "type": "exercises",
+      "title": "Module 7 Exercises — Functions",
+      "description": "Practice problems covering Module 7: function definitions, domain/codomain/range, injectivity, surjectivity, bijectivity, inverse functions, composition, and floor/ceiling. Mix of multiple choice, true/false, short answer, step-by-step, exam-style, and randomized templates for unlimited drill.",
+      "question_sets": [
+        {
+          "type": "mcq",
+          "questions": [
+            {
+              "question": "Which of the following is NOT a valid function from R to R?",
+              "choices": [
+                "f(x) = x + 5",
+                "f(x) = √x",
+                "f(x) = x³",
+                "f(x) = |x|"
+              ],
+              "answer": "f(x) = √x",
+              "explanation": "√x is undefined for negative reals, so f has no output for those domain elements. The domain must be restricted to [0,∞) for it to be a function."
+            },
+            {
+              "question": "Let f: A → B. The range of f is:",
+              "choices": [
+                "The set A.",
+                "The set B.",
+                "The set of all elements of B that are images of some element of A.",
+                "The set of all elements of A that have an image in B."
+              ],
+              "answer": "The set of all elements of B that are images of some element of A.",
+              "explanation": "Range = {f(a) | a ∈ A} ⊆ B. It is the set of actual outputs, which may be smaller than the codomain B."
+            },
+            {
+              "question": "Which function is injective?",
+              "choices": [
+                "f: Z → Z, f(n) = n²",
+                "f: Z → Z, f(n) = 3n + 1",
+                "f: R → R, f(x) = sin(x)",
+                "f: Z → Z, f(n) = n mod 5"
+              ],
+              "answer": "f: Z → Z, f(n) = 3n + 1",
+              "explanation": "If 3a+1 = 3b+1 then a = b. The others have repeated outputs: n² maps n and −n to the same value; sin is periodic; mod 5 repeats every 5 integers."
+            },
+            {
+              "question": "Which function is surjective onto Z?",
+              "choices": [
+                "f: Z → Z, f(n) = 2n",
+                "f: Z → Z, f(n) = n²",
+                "f: Z×Z → Z, f(m,n) = m + n",
+                "f: Z → Z, f(n) = |n|"
+              ],
+              "answer": "f: Z×Z → Z, f(m,n) = m + n",
+              "explanation": "For any integer b, choose m=b, n=0: f(b,0)=b. Every integer is achieved. The others miss values: 2n misses odd integers; n² misses negatives; |n| misses negatives."
+            },
+            {
+              "question": "For a bijection f: A → B, which of the following is true?",
+              "choices": [
+                "f⁻¹ maps A to B.",
+                "f⁻¹ maps B to A.",
+                "f⁻¹ exists only when |A| < |B|.",
+                "f⁻¹ is defined only for elements in the range of f."
+              ],
+              "answer": "f⁻¹ maps B to A.",
+              "explanation": "The inverse reverses the mapping direction: f⁻¹: B → A, defined by f⁻¹(b)=a whenever f(a)=b."
+            },
+            {
+              "question": "For f(x) = 3x + 2 and g(x) = x − 1 (both R → R), (f∘g)(x) equals:",
+              "choices": [
+                "3x − 1",
+                "3x + 1",
+                "3x + 5",
+                "3x − 5"
+              ],
+              "answer": "3x − 1",
+              "explanation": "(f∘g)(x) = f(g(x)) = f(x−1) = 3(x−1)+2 = 3x−3+2 = 3x−1."
+            },
+            {
+              "question": "What is ⌈2.001⌉?",
+              "choices": [
+                "2",
+                "3",
+                "1",
+                "2.001"
+              ],
+              "answer": "3",
+              "explanation": "Ceiling is the smallest integer ≥ 2.001. That integer is 3 (since 2 < 2.001)."
+            },
+            {
+              "question": "What is ⌊−0.5⌋?",
+              "choices": [
+                "0",
+                "−1",
+                "1",
+                "−0.5"
+              ],
+              "answer": "−1",
+              "explanation": "Floor rounds toward −∞. The largest integer ≤ −0.5 is −1 (since 0 > −0.5)."
+            }
+          ]
+        },
+        {
+          "type": "true_false",
+          "questions": [
+            {
+              "question": "The range of a function is always equal to its codomain.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "False",
+              "explanation": "The range is a subset of the codomain but equals it only when the function is surjective."
+            },
+            {
+              "question": "A function can map two different domain elements to the same codomain element.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "True",
+              "explanation": "The definition of a function only requires each input to have exactly one output, not that outputs are unique. Non-injective functions do this."
+            },
+            {
+              "question": "If |A| > |B|, then no function f: A → B can be injective.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "True",
+              "explanation": "By the pigeonhole principle, with more inputs than outputs, at least two inputs must share an output, violating injectivity."
+            },
+            {
+              "question": "Every bijection has an inverse that is also a bijection.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "True",
+              "explanation": "If f: A → B is bijective, then f⁻¹: B → A is also bijective (injective and surjective) by symmetry of the one-to-one correspondence."
+            },
+            {
+              "question": "Function composition is commutative: f∘g = g∘f for all functions f and g.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "False",
+              "explanation": "Composition is generally not commutative. For f(x)=x+1 and g(x)=2x: (f∘g)(x)=2x+1 but (g∘f)(x)=2x+2."
+            },
+            {
+              "question": "⌊3.0⌋ = ⌈3.0⌉",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "True",
+              "explanation": "For any integer n, ⌊n⌋ = ⌈n⌉ = n. Here ⌊3.0⌋ = 3 and ⌈3.0⌉ = 3."
+            },
+            {
+              "question": "If f: A → B is surjective and g: B → C is surjective, then g∘f: A → C is surjective.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "True",
+              "explanation": "For any c ∈ C, since g is surjective there exists b ∈ B with g(b)=c. Since f is surjective there exists a ∈ A with f(a)=b. So (g∘f)(a)=g(f(a))=g(b)=c."
+            }
+          ]
+        },
+        {
+          "type": "short_answer",
+          "questions": [
+            {
+              "question": "Let f: {1,2,3,4} → {a,b,c} be defined by f(1)=a, f(2)=b, f(3)=a, f(4)=c. State the domain, codomain, and range. Find the preimage of a.",
+              "answer": "Domain = {1,2,3,4}; Codomain = {a,b,c}; Range = {a,b,c}. Preimage of a = {1,3}.",
+              "explanation": "Range is the set of distinct outputs: {a,b,a,c}={a,b,c}. Elements 1 and 3 both map to a, so both are preimages of a."
+            },
+            {
+              "question": "Explain why f: R → R defined by f(x) = x² is neither injective nor surjective, and propose a restricted domain and codomain that make it bijective.",
+              "answer": "Not injective: f(2)=f(−2)=4. Not surjective: f(x)=−1 has no real solution. Bijective version: f: [0,∞) → [0,∞), f(x)=x². On non-negative reals the function is strictly increasing (injective) and every non-negative real is a perfect square (surjective).",
+              "explanation": "Restricting to [0,∞) removes the symmetry that caused non-injectivity, and restricting the codomain to [0,∞) removes unreachable negative values."
+            },
+            {
+              "question": "Let f: Z → Z, f(x) = x + 4. Find f⁻¹ and verify that (f∘f⁻¹)(y) = y.",
+              "answer": "f⁻¹(y) = y − 4. Verification: (f∘f⁻¹)(y) = f(f⁻¹(y)) = f(y−4) = (y−4)+4 = y. ✓",
+              "explanation": "Solve f(x)=y: x+4=y ⇒ x=y−4. The composition identity confirms the inverse is correct."
+            },
+            {
+              "question": "Compute (f∘g)(x) and (g∘f)(x) for f(x) = x² and g(x) = x + 3 (both R → R).",
+              "answer": "(f∘g)(x) = (x+3)² = x²+6x+9. (g∘f)(x) = x²+3. These are different, confirming composition is not commutative.",
+              "explanation": "(f∘g)(x)=f(g(x))=f(x+3)=(x+3)². (g∘f)(x)=g(f(x))=g(x²)=x²+3."
+            },
+            {
+              "question": "How many bytes are needed to store 1001 bits of data? Justify using the ceiling function.",
+              "answer": "⌈1001/8⌉ = ⌈125.125⌉ = 126 bytes. Since 125 bytes = 1000 bits is not enough, a 126th byte is required for the remaining 1 bit.",
+              "explanation": "Ceiling is used because any leftover bits still require a full extra byte."
+            }
+          ]
+        },
+        {
+          "type": "step_by_step",
+          "questions": [
+            {
+              "question": "Prove that f: Z → Z defined by f(n) = 5n − 3 is injective. Then determine whether it is surjective onto Z.",
+              "answer": "Injection proof: Assume f(a)=f(b). Then 5a−3=5b−3. Adding 3: 5a=5b. Dividing by 5: a=b. ✓ Injective.\nSurjection check: We need every integer b to satisfy 5n−3=b, i.e., n=(b+3)/5. For b=0: n=3/5 ∉ Z. So 0 has no preimage. ✗ Not surjective.",
+              "explanation": "Standard proof pattern: assume equal outputs, algebraically derive equal inputs for injectivity; exhibit one unhit codomain element for non-surjectivity."
+            },
+            {
+              "question": "Let f: {a,b,c} → {1,2,3} with f(a)=2, f(b)=3, f(c)=1. Show f is bijective and find f⁻¹.",
+              "answer": "Injective: f(a)=2, f(b)=3, f(c)=1 are all distinct outputs for distinct inputs. ✓\nSurjective: every element of {1,2,3} appears — 1 is f(c), 2 is f(a), 3 is f(b). ✓\nBijective: ✓\nf⁻¹: reverse each arrow. f⁻¹(1)=c, f⁻¹(2)=a, f⁻¹(3)=b.",
+              "explanation": "For finite functions, list all outputs and check distinctness (injection) and completeness (surjection). Inverse is obtained by swapping each (a,b) pair to (b,a)."
+            },
+            {
+              "question": "Given f(x) = 2x + 3 and g(x) = −x + 5, compute (f∘g)(x) and (g∘f)(x). Then evaluate each at x = 0 and x = 4.",
+              "answer": "(f∘g)(x)=f(g(x))=f(−x+5)=2(−x+5)+3=−2x+13.\n(g∘f)(x)=g(f(x))=g(2x+3)=−(2x+3)+5=−2x+2.\nAt x=0: (f∘g)(0)=13, (g∘f)(0)=2.\nAt x=4: (f∘g)(4)=−8+13=5, (g∘f)(4)=−8+2=−6.",
+              "explanation": "Substitute the inner formula into the outer formula. Evaluate by plugging in the numeric value after simplifying the composition formula."
+            },
+            {
+              "question": "Evaluate ⌊x⌋ and ⌈x⌉ for x = −3.7, x = 0, x = 2.5, x = −0.1. Then compute how many full groups of 8 and how many bytes are needed for each of these counts of bits: 0, 8, 9, 64, 100.",
+              "answer": "Floor/Ceiling table:\n  x = −3.7: ⌊−3.7⌋ = −4, ⌈−3.7⌉ = −3.\n  x = 0:    ⌊0⌋ = 0,      ⌈0⌉ = 0.\n  x = 2.5:  ⌊2.5⌋ = 2,    ⌈2.5⌉ = 3.\n  x = −0.1:⌊−0.1⌋=−1, ⌈−0.1⌉=0.\nBytes needed = ⌈bits/8⌉:\n  0 bits: ⌈0/8⌉ = 0 bytes.\n  8 bits: ⌈8/8⌉ = 1 byte.\n  9 bits: ⌈9/8⌉ = ⌈1.125⌉ = 2 bytes.\n  64 bits: ⌈64/8⌉ = 8 bytes.\n  100 bits: ⌈100/8⌉ = ⌈12.5⌉ = 13 bytes.",
+              "explanation": "Always round floor toward −∞ and ceiling toward +∞. For byte encoding always ceiling-divide by 8."
+            }
+          ]
+        },
+        {
+          "type": "exam_style",
+          "questions": [
+            {
+              "question": "Let A = {1,2,3,4,5} and B = {a,b,c,d}. (i) Is it possible for f: A → B to be injective? Explain. (ii) Is it possible for f: A → B to be surjective? Explain. (iii) Is it possible for f: A → B to be bijective? Explain.",
+              "answer": "(i) No. By the pigeonhole principle, with |A|=5 and |B|=4, at least two elements of A must share the same image in B. Injectivity requires distinct outputs for distinct inputs, so it is impossible.\n(ii) Yes. For example: f(1)=a, f(2)=b, f(3)=c, f(4)=d, f(5)=a. Every element of B appears.\n(iii) No. Bijection requires injectivity, which is impossible here since |A| > |B|.",
+              "explanation": "Injection requires |A| ≤ |B|; surjection requires |A| ≥ |B|; bijection requires |A| = |B|. With |A|=5, |B|=4, only surjection is achievable."
+            },
+            {
+              "question": "Determine whether f: Z×Z → Z defined by f(m,n) = m − n is (a) injective, (b) surjective.",
+              "answer": "(a) NOT injective. Counterexample: f(3,1)=2 and f(5,3)=2, but (3,1)≠(5,3).\n(b) Surjective. For any b ∈ Z, choose m=b, n=0: f(b,0)=b−0=b. Every integer b is achieved.",
+              "explanation": "For injectivity one counterexample suffices. For surjectivity we must construct a preimage for every possible output."
+            },
+            {
+              "question": "Let f(x) = x³ (f: R → R). (a) Is f injective? Prove or disprove. (b) Is f surjective? Prove or disprove. (c) Find f⁻¹ if it exists.",
+              "answer": "(a) Injective. Assume a³=b³. Cube root is strictly increasing on R: a³=b³ ⇒ a=b. ✓\n(b) Surjective. For any y ∈ R, let x = y^(1/3) ∈ R. Then x³ = y. ✓\n(c) f is bijective, so f⁻¹(y) = y^(1/3) (the real cube root).",
+              "explanation": "x³ is a strictly monotone bijection from R to R, making both proofs straightforward. The inverse is the cube root function."
+            },
+            {
+              "question": "Prove: if f: A → B and g: B → C are both injective, then g∘f: A → C is injective.",
+              "answer": "Proof: Assume (g∘f)(a₁) = (g∘f)(a₂). Then g(f(a₁)) = g(f(a₂)). Since g is injective, f(a₁) = f(a₂). Since f is injective, a₁ = a₂. Therefore g∘f is injective. ∎",
+              "explanation": "The proof applies the injectivity of g first (to strip the outer function) and then the injectivity of f (to strip the inner function), arriving at equality of inputs."
+            },
+            {
+              "question": "A hash table uses the function h: Z → {0,1,…,9} defined by h(k) = k mod 10. (a) Is h injective? (b) Is h surjective onto {0,…,9}? (c) Can h have an inverse? (d) What is h(73) and h(−13)?",
+              "answer": "(a) Not injective: h(3)=3 and h(13)=3 but 3∆13.\n(b) Surjective: every digit 0–9 is the last digit of some integer (e.g., h(d)=d for d∈{0,…,9}).\n(c) No inverse — h is not bijective (not injective).\n(d) h(73)=73 mod 10=3. h(−13)=(−13) mod 10=7 (since −13+20=7 and 7∈{0,…,9}).",
+              "explanation": "Mod functions onto a finite codomain are never injective (infinitely many integers share each remainder) but are always surjective onto their codomain range."
+            }
+          ]
+        },
+        {
+          "type": "randomized",
+          "questions": [
+            {
+              "template": "Let f: Z → Z be defined by f(n) = {A}n + {B}. Is f injective? Is it surjective? If bijective, find f⁻¹.",
+              "variables": {
+                "A": [
+                  1,
+                  2,
+                  3,
+                  5,
+                  -1,
+                  -2
+                ],
+                "B": [
+                  0,
+                  1,
+                  2,
+                  3,
+                  -1,
+                  -3,
+                  4
+                ]
+              },
+              "instructions": "Pick A ≠ 0 and any B. If A = ±1 the function is bijective; for |A| > 1 it is injective but not surjective onto Z. Verify by constructing a proof or counterexample.",
+              "example_realization": "A=2, B=3: f(n)=2n+3. Injective (if 2a+3=2b+3 then a=b). Not surjective (f(n)=0 requires n=-3/2 ∉ Z). Not bijective.",
+              "explanation": "Linear functions an+b are always injective when a≠0. They are surjective onto Z only when |a|=1."
+            },
+            {
+              "template": "Compute (f∘g)(x) and (g∘f)(x) for f(x) = {A}x + {B} and g(x) = {C}x + {D}.",
+              "variables": {
+                "A": [
+                  1,
+                  2,
+                  3,
+                  -1
+                ],
+                "B": [
+                  0,
+                  1,
+                  2,
+                  -1,
+                  3
+                ],
+                "C": [
+                  1,
+                  2,
+                  -1,
+                  3
+                ],
+                "D": [
+                  0,
+                  1,
+                  -1,
+                  2,
+                  -2
+                ]
+              },
+              "instructions": "Pick any values. Compute each composition formula symbolically, then evaluate at x=1 and x=−1 to verify.",
+              "example_realization": "f(x)=2x+1, g(x)=3x−2. (f∘g)(x)=2(3x−2)+1=6x−3. (g∘f)(x)=3(2x+1)−2=6x+1.",
+              "explanation": "Linear composition is the most common drill for building fluency with the f∘g notation."
+            },
+            {
+              "template": "Evaluate ⌊x⌋ and ⌈x⌉ for x = {X}.",
+              "variables": {
+                "X": [
+                  0.5,
+                  -0.5,
+                  2.9,
+                  -2.9,
+                  3.0,
+                  -3.0,
+                  1.01,
+                  -1.01,
+                  7.5,
+                  -7.5,
+                  0.001,
+                  -0.001
+                ]
+              },
+              "instructions": "For each x, determine the floor and ceiling by identifying the two nearest integers and applying the definitions.",
+              "example_realization": "x=−2.9: ⌊−2.9⌋=−3 (round toward −∞), ⌈−2.9⌉=−2 (round toward +∞).",
+              "explanation": "Repeated floor/ceiling drill builds the intuition needed for algorithm analysis."
+            },
+            {
+              "template": "How many bytes are needed to store {N} bits? How many complete bytes of {N} bits can fill without any partial byte?",
+              "variables": {
+                "N": [
+                  1,
+                  7,
+                  8,
+                  9,
+                  15,
+                  16,
+                  17,
+                  63,
+                  64,
+                  65,
+                  100,
+                  256,
+                  1000,
+                  1024
+                ]
+              },
+              "instructions": "Bytes needed = ⌈N/8⌉. Complete full bytes = ⌊N/8⌋.",
+              "example_realization": "N=17: bytes needed=⌈17/8⌉=3. Full bytes=⌊17/8⌋=2.",
+              "explanation": "Ceiling for minimum bytes to encode all bits; floor for maximum full bytes without leftover."
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

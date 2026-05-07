@@ -1,0 +1,802 @@
+{
+  "course": "CPCS 222 — Discrete Mathematics",
+  "module": {
+    "module_id": 4,
+    "title": "Sets",
+    "description": "Module 4 covers SETS in depth: the definition of a set, the membership relation, roster and set-builder notation, the standard number sets (ℕ, ℤ, ℚ, ℝ, ℂ), subsets and proper subsets, set equality, cardinality, power sets, and Cartesian products; the four core set operations (union, intersection, complement, difference) plus symmetric difference and the inclusion-exclusion principle; and the standard set identities (commutative, associative, distributive, De Morgan, absorption, identity, domination, complement) together with three methods for proving them (two-direction subset, set-builder + propositional logic, and membership tables).",
+    "source_files": [
+      "CPCS222_04_Sets.pdf"
+    ],
+    "lessons": [
+      {
+        "lesson_id": "module4-lesson1",
+        "type": "tutorial",
+        "title": "Sets — Definitions, Notation, and Membership",
+        "slug": "sets-definitions-notation-and-membership",
+        "welcome": "Welcome to Module 4. After three modules of pure logic, you are ready to meet the most fundamental DATA STRUCTURE in mathematics: the SET. Every other object you will study — sequences, functions, relations, graphs — is built on top of sets. In this lesson you will learn what a set is, how to describe one in two different notations, name the standard number sets you'll see everywhere, and master the ideas of subset, equality, cardinality, power set, and Cartesian product.",
+        "objectives": [
+          "Define a set and the membership relation ∈ / ∉.",
+          "Describe a set using both the ROSTER method and SET-BUILDER notation.",
+          "Recognize the standard number sets ℕ, ℤ, ℤ⁺, ℚ, ℝ, ℂ.",
+          "Use ∅, ⊆, ⊂, =, |·|, P(A), and A × B correctly.",
+          "Compute the cardinality of a finite set, the size of a power set (2^n), and the size of a Cartesian product."
+        ],
+        "storytelling": [
+          {
+            "speaker": "Student",
+            "text": "Why does {1, 2, 3} equal {3, 2, 1, 1}? Aren't those different?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "A set is an UNORDERED collection where each element is either in or out — duplicates and order do not matter. {1, 2, 3} = {3, 2, 1, 1} because both list exactly the same three elements."
+          },
+          {
+            "speaker": "Student",
+            "text": "And the empty set ∅ — is it the same as the set containing the empty set, {∅}?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "No. ∅ has zero elements. {∅} has one element, namely the empty set itself. Cardinalities differ: |∅| = 0, |{∅}| = 1."
+          },
+          {
+            "speaker": "Student",
+            "text": "What about subsets — every set is a subset of itself?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "Yes. A ⊆ A always. And ∅ ⊆ A for every set A. The proper subset symbol ⊂ rules out equality, so A ⊂ A is false but A ⊆ A is true."
+          }
+        ],
+        "sections": [
+          {
+            "number": 1,
+            "heading": "What Is a Set?",
+            "explanation": "A SET is an unordered collection of distinct objects called its ELEMENTS or MEMBERS. We write a ∈ A to say 'a is an element of A' and a ∉ A to say 'a is not an element of A'. Two key properties:\n\n  • Sets are UNORDERED. {1, 2, 3} = {3, 1, 2}.\n  • Sets contain DISTINCT elements. {1, 1, 2} = {1, 2}.\n\nSets can contain almost any objects — numbers, letters, people, even other sets.",
+            "examples": [
+              "S = {a, e, i, o, u} — the set of English vowels.",
+              "T = {1, 2, 3} = {3, 2, 1, 1, 2} — order and duplicates do not matter.",
+              "U = {ℕ, ℤ, ℚ, ℝ} — a set whose four elements are themselves sets."
+            ],
+            "common_mistakes": [
+              "Treating sets like lists. A list (a, b, c) has order; a set {a, b, c} does not.",
+              "Counting duplicates. Listing the same element twice in a set does not increase its size."
+            ],
+            "visual_idea": {
+              "type": "diagram",
+              "description": "A bag with elements floating freely inside (no order). Hover any element to see ∈ A; hover anything outside the bag to see ∉ A. Adding the same element twice shows the duplicate fading and the cardinality staying the same.",
+              "interactive_hint": "Drag elements in and out; the cardinality counter updates and visibly skips duplicates."
+            }
+          },
+          {
+            "number": 2,
+            "heading": "Two Ways to Describe a Set",
+            "explanation": "ROSTER METHOD — list every element inside braces: S = {a, b, c, d}. For long but patterned sets you may use ellipses: O = {1, 3, 5, …, 99}.\n\nSET-BUILDER NOTATION — describe a set by the property its members share:\n\n  S = { x | P(x) }   means 'the set of all x such that P(x) is true'.\n\nYou may also restrict the universe before the bar:\n\n  Q⁺ = { x ∈ ℝ | x = p/q for some positive integers p, q }.\n\nUse roster when the elements are few or follow an obvious pattern; use set-builder when the elements are infinite in number or defined by a property.",
+            "examples": [
+              "Roster: V = {a, e, i, o, u}.",
+              "Roster with ellipsis: ℤ⁻ = {…, −3, −2, −1}.",
+              "Set-builder: S = {x | x is a prime less than 20} = {2, 3, 5, 7, 11, 13, 17, 19}.",
+              "Set-builder with universe: E = {x ∈ ℤ | x is even}."
+            ],
+            "common_mistakes": [
+              "Writing set-builder without a property — { x } is just a one-element set, not a description.",
+              "Confusing | (such that) with set difference. In set-builder it means 'such that'."
+            ],
+            "visual_idea": {
+              "type": "diagram",
+              "description": "Side-by-side panels: left shows a roster {2, 4, 6, 8, 10}; right shows a set-builder { x ∈ ℤ⁺ | x even and x ≤ 10 }. A toggle button morphs one into the other.",
+              "interactive_hint": "Type a property and watch the matching elements pop into a roster on the left."
+            }
+          },
+          {
+            "number": 3,
+            "heading": "Important Number Sets and Special Sets",
+            "explanation": "These names appear constantly in mathematics — memorize them.\n\n  ℕ — natural numbers: {0, 1, 2, 3, …}.\n  ℤ — integers: {…, −2, −1, 0, 1, 2, …}.\n  ℤ⁺ — positive integers: {1, 2, 3, …}.\n  ℚ — rational numbers: ratios p/q with integer p, q ≠ 0.\n  ℝ — real numbers.\n  ℝ⁺ — positive real numbers.\n  ℂ — complex numbers.\n\nTwo special sets are also crucial:\n  ∅ (or {}) — the EMPTY SET, with no elements.\n  U — the UNIVERSAL SET, containing every object currently under consideration. Its content depends on the context.\n\nNote: ∅ and {∅} are NOT the same set.",
+            "examples": [
+              "ℕ contains 0; ℤ⁺ does not (it starts at 1).",
+              "If U = students in your class, then 'all students' = U.",
+              "∅ ⊆ A for any set A — the empty set is a subset of every set."
+            ],
+            "common_mistakes": [
+              "Forgetting that ℕ in this course includes 0. Some textbooks exclude it; check the convention.",
+              "Confusing ∅ with {0} or with {∅}."
+            ],
+            "visual_idea": {
+              "type": "diagram",
+              "description": "A nested circles diagram: ℕ inside ℤ inside ℚ inside ℝ inside ℂ. ∅ shown as a tiny dot outside the family, with a label '⊆ every set'.",
+              "interactive_hint": "Click any circle to see the defining property and a few example elements."
+            }
+          },
+          {
+            "number": 4,
+            "heading": "Subsets, Proper Subsets, and Set Equality",
+            "explanation": "A is a SUBSET of B (written A ⊆ B) iff every element of A is also in B. Formally:\n\n  A ⊆ B  ⇔  ∀x (x ∈ A → x ∈ B).\n\nA is a PROPER SUBSET of B (written A ⊂ B or A ⊊ B) iff A ⊆ B AND A ≠ B.\n\nTwo sets are EQUAL iff they have exactly the same elements:\n\n  A = B  ⇔  A ⊆ B  ∧  B ⊆ A.\n\nAlways: ∅ ⊆ A for every A, and A ⊆ A for every A.",
+            "examples": [
+              "{1, 2} ⊆ {1, 2, 3} and {1, 2} ⊂ {1, 2, 3}.",
+              "{1, 2, 3} ⊆ {1, 2, 3} but {1, 2, 3} ⊄ {1, 2, 3} (not proper).",
+              "∅ ⊆ {1, 2}; ∅ ⊂ {1, 2}.",
+              "{1, 2} = {2, 1} because each is a subset of the other."
+            ],
+            "common_mistakes": [
+              "Writing ⊂ when you mean ⊆. The proper-subset symbol excludes equality.",
+              "Forgetting that to prove A = B you must show BOTH A ⊆ B and B ⊆ A."
+            ],
+            "visual_idea": {
+              "type": "diagram",
+              "description": "Two overlapping circles labeled A and B. Toggling between 'A ⊆ B', 'A ⊂ B', 'A = B' rearranges the circles.",
+              "interactive_hint": "Drag elements between A and B; the page reports live whether A ⊆ B, A ⊂ B, or A = B."
+            }
+          },
+          {
+            "number": 5,
+            "heading": "Cardinality and Power Sets",
+            "explanation": "The CARDINALITY |A| of a finite set A is the number of distinct elements in A.\n\n  |∅| = 0,  |{a, b, c}| = 3,  |{∅}| = 1.\n\nThe POWER SET P(A) is the SET OF ALL SUBSETS of A. It always includes ∅ and A itself.\n\n  If |A| = n, then |P(A)| = 2ⁿ.\n\nExample: A = {a, b}.\n  P(A) = { ∅, {a}, {b}, {a, b} }.  |P(A)| = 4 = 2².",
+            "examples": [
+              "|{1, 2, 3, 4}| = 4. |P({1, 2, 3, 4})| = 16.",
+              "P(∅) = {∅}. So |P(∅)| = 1 = 2⁰.",
+              "|P({a, b, c})| = 8."
+            ],
+            "common_mistakes": [
+              "Computing |P(A)| as 2|A| (linear) instead of 2^|A| (exponential).",
+              "Forgetting ∅ as a subset when listing P(A)."
+            ],
+            "visual_idea": {
+              "type": "diagram",
+              "description": "A binary tree where each level decides one element of A: 'include' or 'exclude'. Each leaf is a subset. Leaf count = 2^n.",
+              "interactive_hint": "Click a leaf to highlight which elements were chosen; the matching subset appears in roster form."
+            }
+          },
+          {
+            "number": 6,
+            "heading": "Tuples and Cartesian Products",
+            "explanation": "An ORDERED PAIR (a, b) is different from an unordered pair {a, b}: order matters and so does each entry individually. (a, b) = (c, d) iff a = c AND b = d. Tuples generalize: (a₁, a₂, …, aₙ) is an n-TUPLE.\n\nThe CARTESIAN PRODUCT of A and B is\n\n  A × B = { (a, b) | a ∈ A ∧ b ∈ B }.\n\nIf |A| = m and |B| = n, then |A × B| = m·n. Cartesian products generalize to A₁ × A₂ × ⋯ × Aₖ.",
+            "examples": [
+              "{1, 2} × {a, b} = {(1, a), (1, b), (2, a), (2, b)}. Cardinality 2 · 2 = 4.",
+              "ℝ × ℝ is the familiar coordinate plane.",
+              "{0, 1} × {1, 2} × {0, 1, 2} has 2 · 2 · 3 = 12 ordered triples."
+            ],
+            "common_mistakes": [
+              "Confusing A × B with B × A. They have the same cardinality but their tuples are different: (1, 2) ≠ (2, 1).",
+              "Treating (a, b) as the same as {a, b}."
+            ],
+            "visual_idea": {
+              "type": "table",
+              "description": "A grid: rows labelled by elements of A, columns by elements of B. Each cell holds the ordered pair (a, b). Total cells = |A| · |B|.",
+              "interactive_hint": "Edit either set and watch the grid resize live, previewing the new product."
+            }
+          }
+        ],
+        "worked_examples": [
+          {
+            "problem": "Express in roster form: A = {x ∈ ℤ | x² < 17}.",
+            "step_by_step_solution": [
+              "Find every integer whose square is less than 17.",
+              "0² = 0 ✓; 1² = 1 ✓; 2² = 4 ✓; 3² = 9 ✓; 4² = 16 ✓; 5² = 25 ✗.",
+              "Negatives by symmetry: −1, −2, −3, −4 also satisfy.",
+              "List in order: A = {−4, −3, −2, −1, 0, 1, 2, 3, 4}."
+            ],
+            "final_answer": "A = {−4, −3, −2, −1, 0, 1, 2, 3, 4}.",
+            "why_it_works": "Direct enumeration over the integer values for which the property holds.",
+            "common_mistake": "Forgetting the negative integers. The square of a negative is the same as the square of its positive."
+          },
+          {
+            "problem": "List P(A) for A = {a, b, c} and verify |P(A)| = 2³.",
+            "step_by_step_solution": [
+              "List every subset by deciding 'in' or 'out' for each element.",
+              "∅, {a}, {b}, {c}, {a, b}, {a, c}, {b, c}, {a, b, c}.",
+              "Count: 8 subsets. Check formula: 2³ = 8. Match."
+            ],
+            "final_answer": "P(A) = {∅, {a}, {b}, {c}, {a, b}, {a, c}, {b, c}, {a, b, c}}; |P(A)| = 8.",
+            "why_it_works": "Each element contributes a binary choice; the total number of subsets is 2 raised to the cardinality.",
+            "common_mistake": "Forgetting ∅ or A itself. Both are always elements of P(A)."
+          },
+          {
+            "problem": "Compute A × B × C for A = {0, 1}, B = {1, 2}, C = {0, 1, 2}.",
+            "step_by_step_solution": [
+              "Form every ordered triple (a, b, c) with a ∈ A, b ∈ B, c ∈ C.",
+              "Cardinality check: 2 · 2 · 3 = 12 triples.",
+              "Enumerate: (0,1,0), (0,1,1), (0,1,2), (0,2,0), (0,2,1), (0,2,2), (1,1,0), (1,1,1), (1,1,2), (1,2,0), (1,2,1), (1,2,2)."
+            ],
+            "final_answer": "12 triples as listed.",
+            "why_it_works": "Multiplication of cardinalities and systematic enumeration.",
+            "common_mistake": "Reusing the same element across all three coordinates."
+          }
+        ],
+        "quick_checks": [
+          {
+            "type": "mcq",
+            "question": "Which equality is correct?",
+            "choices": [
+              "{1, 2, 3} = {1, 2, 3, 1}",
+              "{1, 2, 3} = (1, 2, 3)",
+              "{1, 2, 3} ⊂ {1, 2, 3}",
+              "∅ = {∅}"
+            ],
+            "answer": "{1, 2, 3} = {1, 2, 3, 1}",
+            "explanation": "Sets ignore duplicates and order."
+          },
+          {
+            "type": "mcq",
+            "question": "If |A| = 5, what is |P(A)|?",
+            "choices": [
+              "5",
+              "10",
+              "25",
+              "32"
+            ],
+            "answer": "32",
+            "explanation": "|P(A)| = 2^5 = 32."
+          },
+          {
+            "type": "true_false",
+            "question": "∅ ⊆ A for every set A.",
+            "choices": [
+              "True",
+              "False"
+            ],
+            "answer": "True",
+            "explanation": "The empty set is a subset of every set — vacuously true."
+          }
+        ],
+        "summary": {
+          "key_takeaways": [
+            "A set is an unordered collection of distinct elements; ∈ and ∉ describe membership.",
+            "Roster method lists elements; set-builder notation describes them by property.",
+            "Standard sets: ℕ, ℤ, ℤ⁺, ℚ, ℝ, ℝ⁺, ℂ; special sets ∅ and U.",
+            "A ⊆ B means every element of A is in B; A = B means A ⊆ B and B ⊆ A.",
+            "|A| is cardinality; |P(A)| = 2^|A|.",
+            "Cartesian product A × B is the set of ordered pairs; |A × B| = |A|·|B|."
+          ],
+          "next": "Next we put sets to work with the four core OPERATIONS — union, intersection, complement, difference — and the SET IDENTITIES that govern them."
+        }
+      },
+      {
+        "lesson_id": "module4-lesson2",
+        "type": "tutorial",
+        "title": "Set Operations and Set Identities",
+        "slug": "set-operations-and-set-identities",
+        "welcome": "Sets become useful when we COMBINE them. In this lesson you will master the four core set operations — union, intersection, complement, and difference — together with their Venn-diagram interpretations and cardinality rules. You'll then meet the SET IDENTITIES (the De Morgan, distributive, absorption, and complement laws), and learn three standard ways to PROVE a set identity: subset arguments, set-builder + propositional logic, and membership tables.",
+        "objectives": [
+          "Define union ∪, intersection ∩, complement ̄, difference −, and symmetric difference ⊕ over sets.",
+          "Interpret each operation visually with Venn diagrams.",
+          "Apply the inclusion-exclusion principle |A ∪ B| = |A| + |B| − |A ∩ B|.",
+          "State the standard set identities (commutative, associative, distributive, De Morgan, absorption, identity, domination, complement).",
+          "Prove a set identity using (a) the two-direction subset method, (b) set-builder + logic, or (c) a membership table."
+        ],
+        "storytelling": [
+          {
+            "speaker": "Student",
+            "text": "Why does the De Morgan law for sets look so much like the one for logic?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "Because they ARE the same law. ¬(P ∧ Q) ≡ ¬P ∨ ¬Q for propositions becomes (A ∩ B)ᶜ = Aᶜ ∪ Bᶜ for sets. Set membership is just a predicate, and the propositional rules transfer directly."
+          },
+          {
+            "speaker": "Student",
+            "text": "How do I prove A ∪ (B ∩ C) = (A ∪ B) ∩ (A ∪ C)?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "You have three options: show each side is a subset of the other; rewrite both sides in set-builder form and use propositional equivalences; or build a membership table."
+          }
+        ],
+        "sections": [
+          {
+            "number": 1,
+            "heading": "Union, Intersection, Complement, Difference",
+            "explanation": "Let A and B be subsets of a universal set U.\n\n  UNION:        A ∪ B = { x | x ∈ A ∨ x ∈ B }.\n  INTERSECTION: A ∩ B = { x | x ∈ A ∧ x ∈ B }.\n  COMPLEMENT:   Ā = { x ∈ U | x ∉ A }.\n  DIFFERENCE:   A − B = { x | x ∈ A ∧ x ∉ B } = A ∩ B̄.\n\nIf A ∩ B = ∅, the sets A and B are DISJOINT.\n\nAn optional fifth operator is the SYMMETRIC DIFFERENCE:\n  A ⊕ B = (A − B) ∪ (B − A) = (A ∪ B) − (A ∩ B).",
+            "examples": [
+              "{1, 2, 3} ∪ {3, 4, 5} = {1, 2, 3, 4, 5}.",
+              "{1, 2, 3} ∩ {3, 4, 5} = {3}.",
+              "{1, 2, 3} − {3, 4, 5} = {1, 2}.",
+              "If U = {0,1,…,9} and A = {2,4,6,8}, then Ā = {0,1,3,5,7,9}.",
+              "{1, 2, 3} ⊕ {3, 4, 5} = {1, 2, 4, 5}."
+            ],
+            "common_mistakes": [
+              "Treating A − B as B − A. Difference is NOT commutative.",
+              "Forgetting that complement requires a universal set U."
+            ],
+            "visual_idea": {
+              "type": "diagram",
+              "description": "Five Venn diagrams in a row: A ∪ B, A ∩ B, Ā, A − B, A ⊕ B. The relevant region of each is shaded; the set-builder definition appears below each diagram.",
+              "interactive_hint": "Hover any diagram to see the operation's truth-table-style row (∈A, ∈B, ∈result)."
+            }
+          },
+          {
+            "number": 2,
+            "heading": "Cardinality and Inclusion-Exclusion",
+            "explanation": "For finite sets, cardinality interacts with set operations.\n\n  |A ∪ B| = |A| + |B| − |A ∩ B|.\n\nThis is the INCLUSION-EXCLUSION principle: each element in the intersection was counted twice (once in |A|, once in |B|), so we subtract |A ∩ B| once to correct.\n\nIf A and B are disjoint, |A ∪ B| = |A| + |B|.\n\nFor three sets:\n\n  |A ∪ B ∪ C| = |A| + |B| + |C|\n                − |A ∩ B| − |A ∩ C| − |B ∩ C|\n                + |A ∩ B ∩ C|.",
+            "examples": [
+              "30 students take Math, 25 take CS, 10 take both. Either-or count = 30 + 25 − 10 = 45.",
+              "Disjoint case: |{1,2,3} ∪ {4,5,6}| = 3 + 3 = 6.",
+              "Three sets: 100 students. 60 like A, 50 like B, 40 like C. 30 like A ∩ B, 20 like A ∩ C, 15 like B ∩ C, 10 like all three. |A ∪ B ∪ C| = 60+50+40 − 30−20−15 + 10 = 95."
+            ],
+            "common_mistakes": [
+              "Adding |A| + |B| without subtracting |A ∩ B|.",
+              "Forgetting the alternating sign in three-set inclusion-exclusion."
+            ],
+            "visual_idea": {
+              "type": "diagram",
+              "description": "A two-circle Venn diagram with each region labelled by its cardinality. The formula |A ∪ B| = |A| + |B| − |A ∩ B| is annotated with arrows showing the double-count.",
+              "interactive_hint": "Click a region to highlight which terms in the formula contribute to it."
+            }
+          },
+          {
+            "number": 3,
+            "heading": "Set Identities — The Reference List",
+            "explanation": "Memorize these laws. They are the algebraic backbone of set manipulation, and they MIRROR the propositional equivalences from Module 1.\n\n  Identity:        A ∪ ∅ = A,        A ∩ U = A.\n  Domination:      A ∪ U = U,        A ∩ ∅ = ∅.\n  Idempotent:      A ∪ A = A,        A ∩ A = A.\n  Complementation: =̿A = A.\n  Commutative:     A ∪ B = B ∪ A,    A ∩ B = B ∩ A.\n  Associative:     (A ∪ B) ∪ C = A ∪ (B ∪ C); same for ∩.\n  Distributive:    A ∪ (B ∩ C) = (A ∪ B) ∩ (A ∪ C);\n                   A ∩ (B ∪ C) = (A ∩ B) ∪ (A ∩ C).\n  De Morgan:       (A ∪ B)ᶜ = Aᶜ ∩ Bᶜ;\n                   (A ∩ B)ᶜ = Aᶜ ∪ Bᶜ.\n  Absorption:      A ∪ (A ∩ B) = A;  A ∩ (A ∪ B) = A.\n  Complement:      A ∪ Aᶜ = U;       A ∩ Aᶜ = ∅.",
+            "examples": [
+              "Apply distributive: A ∩ (B ∪ ∅) = (A ∩ B) ∪ (A ∩ ∅) = (A ∩ B) ∪ ∅ = A ∩ B.",
+              "Apply De Morgan: (A ∪ Bᶜ)ᶜ = Aᶜ ∩ B.",
+              "Apply absorption: (A ∩ B) ∪ A = A."
+            ],
+            "common_mistakes": [
+              "Mixing ∪ with ∩ in De Morgan's law. The connective FLIPS when the bar passes through.",
+              "Forgetting that complementation needs a universal set."
+            ],
+            "visual_idea": {
+              "type": "table",
+              "description": "A two-column reference card: left column shows the law name, right column shows the identity. Color-coded by family.",
+              "interactive_hint": "Click any row to see a Venn-diagram proof of that specific identity."
+            }
+          },
+          {
+            "number": 4,
+            "heading": "Three Ways to Prove a Set Identity",
+            "explanation": "Method 1 — TWO-DIRECTION SUBSET PROOF.  Show A ⊆ B and B ⊆ A separately. Take an arbitrary element of one side and prove it lies in the other.\n\nMethod 2 — SET-BUILDER + PROPOSITIONAL LOGIC.  Translate each side into set-builder notation, then use propositional equivalences (from Module 1) to rewrite one side into the other.\n\nMethod 3 — MEMBERSHIP TABLE.  Build a table where each row is a possible membership pattern (1 = in, 0 = out) for the atomic sets. Add a column for each subexpression and verify that the columns for the two sides match in every row. With n atomic sets the table has 2ⁿ rows.",
+            "examples": [
+              "Method 1 (two-direction): show A ∪ (A ∩ B) = A by proving both directions.",
+              "Method 2 (set-builder): A ∩ (B ∪ C) = {x | x ∈ A ∧ (x ∈ B ∨ x ∈ C)} → distribute → (A ∩ B) ∪ (A ∩ C).",
+              "Method 3 (table): verify (A ∪ B)ᶜ = Aᶜ ∩ Bᶜ by listing all 4 rows."
+            ],
+            "common_mistakes": [
+              "Using only ONE direction in a two-direction proof.",
+              "Skipping rows in a membership table. With n atoms you must check all 2ⁿ patterns."
+            ],
+            "visual_idea": {
+              "type": "table",
+              "description": "A 2-column membership table for two sets A and B showing the four atomic combinations. The learner fills in subexpression columns; the tool verifies the final two columns match.",
+              "interactive_hint": "Click a row to see the corresponding Venn-diagram region."
+            }
+          }
+        ],
+        "worked_examples": [
+          {
+            "problem": "U = {0, 1, …, 10}. A = {1, 2, 3, 4, 5}, B = {4, 5, 6, 7, 8}. Compute A ∪ B, A ∩ B, Ā, A − B, B − A, A ⊕ B.",
+            "step_by_step_solution": [
+              "A ∪ B = {1,2,3,4,5,6,7,8}.",
+              "A ∩ B = {4,5}.",
+              "Ā = U − A = {0,6,7,8,9,10}.",
+              "A − B = {1,2,3}.",
+              "B − A = {6,7,8}.",
+              "A ⊕ B = (A − B) ∪ (B − A) = {1,2,3,6,7,8}."
+            ],
+            "final_answer": "Six results as listed.",
+            "why_it_works": "Each operation is applied directly from its definition.",
+            "common_mistake": "Confusing A − B with the complement of B."
+          },
+          {
+            "problem": "Prove A ∪ (B ∩ C) = (A ∪ B) ∩ (A ∪ C) using set-builder + propositional logic.",
+            "step_by_step_solution": [
+              "LHS = {x | x ∈ A ∨ (x ∈ B ∧ x ∈ C)}.",
+              "Distributive law for ∨ over ∧: ≡ {x | (x ∈ A ∨ x ∈ B) ∧ (x ∈ A ∨ x ∈ C)}.",
+              "Translate back: = (A ∪ B) ∩ (A ∪ C) = RHS."
+            ],
+            "final_answer": "A ∪ (B ∩ C) = (A ∪ B) ∩ (A ∪ C). ∎",
+            "why_it_works": "Set membership translates one-to-one with a propositional formula.",
+            "common_mistake": "Skipping the distributive step or applying the wrong direction."
+          },
+          {
+            "problem": "Prove (A ∪ B)ᶜ = Aᶜ ∩ Bᶜ using a membership table.",
+            "step_by_step_solution": [
+              "Atomic sets A, B ⇒ 4 rows.",
+              "Columns: A, B, A ∪ B, (A ∪ B)ᶜ, Aᶜ, Bᶜ, Aᶜ ∩ Bᶜ.",
+              "Row (1,1): A∪B=1, ᶜ=0; Aᶜ=0, Bᶜ=0, ∩=0. Match.",
+              "Row (1,0): A∪B=1, ᶜ=0; Aᶜ=0, Bᶜ=1, ∩=0. Match.",
+              "Row (0,1): A∪B=1, ᶜ=0; Aᶜ=1, Bᶜ=0, ∩=0. Match.",
+              "Row (0,0): A∪B=0, ᶜ=1; Aᶜ=1, Bᶜ=1, ∩=1. Match."
+            ],
+            "final_answer": "(A ∪ B)ᶜ = Aᶜ ∩ Bᶜ. ∎",
+            "why_it_works": "Matching final columns prove identity for every membership pattern.",
+            "common_mistake": "Listing only the rows with both atoms in the same state."
+          }
+        ],
+        "quick_checks": [
+          {
+            "type": "mcq",
+            "question": "If A and B are disjoint with |A| = 7, |B| = 5, then |A ∪ B| =",
+            "choices": [
+              "2",
+              "5",
+              "12",
+              "35"
+            ],
+            "answer": "12",
+            "explanation": "|A ∪ B| = |A| + |B| = 12."
+          },
+          {
+            "type": "mcq",
+            "question": "Which is De Morgan's law for sets?",
+            "choices": [
+              "(A ∩ B)ᶜ = Aᶜ ∩ Bᶜ",
+              "(A ∪ B)ᶜ = Aᶜ ∩ Bᶜ",
+              "Aᶜ ∪ Bᶜ = (A ∪ B)ᶜ",
+              "(A − B)ᶜ = A ∪ Bᶜ"
+            ],
+            "answer": "(A ∪ B)ᶜ = Aᶜ ∩ Bᶜ",
+            "explanation": "Complementation flips ∪ to ∩."
+          },
+          {
+            "type": "true_false",
+            "question": "A − B equals B − A.",
+            "choices": [
+              "True",
+              "False"
+            ],
+            "answer": "False",
+            "explanation": "Set difference is NOT commutative."
+          }
+        ],
+        "summary": {
+          "key_takeaways": [
+            "Union (∪), intersection (∩), complement (ᶜ), difference (−), and symmetric difference (⊕) define every standard set operation.",
+            "Inclusion-exclusion: |A ∪ B| = |A| + |B| − |A ∩ B|.",
+            "Set identities mirror propositional equivalences exactly.",
+            "Three proof methods: two-direction subset, set-builder + logic, and membership table.",
+            "Empty set and universal set behave like F and T in propositional logic."
+          ],
+          "next": "You now have the complete Sets toolkit. Move to the Module 4 exercises to practice. After Module 4 we move to SEQUENCES (Module 5) and SUMMATIONS (Module 6)."
+        }
+      }
+    ],
+    "exercises": {
+      "lesson_id": "module4-exercises",
+      "type": "exercises",
+      "title": "Module 4 Exercises — Sets",
+      "description": "Practice problems covering set notation, subsets, cardinality, power sets, Cartesian products, set operations (union, intersection, complement, difference, symmetric difference), inclusion-exclusion, set identities, and the three identity-proof methods.",
+      "question_sets": [
+        {
+          "type": "mcq",
+          "questions": [
+            {
+              "question": "Which of the following is the empty set?",
+              "choices": [
+                "{0}",
+                "{∅}",
+                "∅",
+                "{ }"
+              ],
+              "answer": "∅",
+              "explanation": "Both ∅ and {} represent the empty set; ∅ is the canonical symbol."
+            },
+            {
+              "question": "If A = {1, 2, 3, 4} and B = {3, 4, 5, 6}, then A ∩ B =",
+              "choices": [
+                "{1, 2}",
+                "{3, 4}",
+                "{1, 2, 5, 6}",
+                "{1, 2, 3, 4, 5, 6}"
+              ],
+              "answer": "{3, 4}",
+              "explanation": "Intersection keeps only elements in BOTH sets."
+            },
+            {
+              "question": "If |A| = 6, what is |P(A)|?",
+              "choices": [
+                "12",
+                "32",
+                "64",
+                "128"
+              ],
+              "answer": "64",
+              "explanation": "|P(A)| = 2^|A| = 2^6 = 64."
+            },
+            {
+              "question": "Which is De Morgan's law for sets?",
+              "choices": [
+                "(A ∪ B)ᶜ = Aᶜ ∪ Bᶜ",
+                "(A ∪ B)ᶜ = Aᶜ ∩ Bᶜ",
+                "(A ∩ B)ᶜ = Aᶜ ∩ Bᶜ",
+                "Aᶜ = U − A only when A is non-empty"
+              ],
+              "answer": "(A ∪ B)ᶜ = Aᶜ ∩ Bᶜ",
+              "explanation": "Complementation flips ∪ to ∩."
+            },
+            {
+              "question": "If |A| = 3 and |B| = 4, then |A × B| =",
+              "choices": [
+                "7",
+                "12",
+                "16",
+                "64"
+              ],
+              "answer": "12",
+              "explanation": "Cardinality of Cartesian product MULTIPLIES: 3 · 4 = 12."
+            },
+            {
+              "question": "Which set is a proper subset of {1, 2, 3}?",
+              "choices": [
+                "{1, 2, 3}",
+                "{1, 2, 4}",
+                "{2, 3}",
+                "{0, 1}"
+              ],
+              "answer": "{2, 3}",
+              "explanation": "{2, 3} ⊆ {1, 2, 3} and {2, 3} ≠ {1, 2, 3}."
+            },
+            {
+              "question": "U = {1, …, 10}, A = {2, 4, 6, 8}. Compute Ā.",
+              "choices": [
+                "{1, 3, 5, 7, 9}",
+                "{1, 3, 5, 7, 9, 10}",
+                "∅",
+                "{2, 4, 6, 8}"
+              ],
+              "answer": "{1, 3, 5, 7, 9, 10}",
+              "explanation": "Complement is U minus A; remember 10 is in U."
+            },
+            {
+              "question": "If A and B are disjoint, then A ∩ B =",
+              "choices": [
+                "A",
+                "B",
+                "A ∪ B",
+                "∅"
+              ],
+              "answer": "∅",
+              "explanation": "Disjoint = empty intersection."
+            }
+          ]
+        },
+        {
+          "type": "true_false",
+          "questions": [
+            {
+              "question": "{1, 2, 3} = {3, 2, 1, 1}.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "True",
+              "explanation": "Sets ignore order and duplicates."
+            },
+            {
+              "question": "∅ ⊂ ∅.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "False",
+              "explanation": "Proper subset excludes equality. ∅ ⊆ ∅ is true; ∅ ⊂ ∅ is false."
+            },
+            {
+              "question": "If A and B are disjoint, then A ∩ B = ∅.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "True",
+              "explanation": "Disjoint is exactly the condition that the intersection is empty."
+            },
+            {
+              "question": "|A × B| = |A| + |B|.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "False",
+              "explanation": "Cardinality of a Cartesian product MULTIPLIES."
+            },
+            {
+              "question": "P(A) always contains ∅ and A itself.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "True",
+              "explanation": "Both are always subsets of A."
+            },
+            {
+              "question": "(A ∪ B)ᶜ = Aᶜ ∪ Bᶜ.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "False",
+              "explanation": "De Morgan flips ∪ to ∩: (A ∪ B)ᶜ = Aᶜ ∩ Bᶜ."
+            },
+            {
+              "question": "A ∪ ∅ = A for every set A.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "True",
+              "explanation": "Identity law for union."
+            }
+          ]
+        },
+        {
+          "type": "short_answer",
+          "questions": [
+            {
+              "question": "Express in roster form: A = {x ∈ ℤ | x² ≤ 9}.",
+              "answer": "A = {−3, −2, −1, 0, 1, 2, 3}.",
+              "explanation": "Integers whose squares are at most 9 are −3 through 3."
+            },
+            {
+              "question": "List P(A) for A = {a, b}.",
+              "answer": "P(A) = {∅, {a}, {b}, {a, b}}. |P(A)| = 4.",
+              "explanation": "All 2² = 4 subsets."
+            },
+            {
+              "question": "Compute (A ∪ B) − (A ∩ B) where A = {1, 2, 3} and B = {2, 3, 4}.",
+              "answer": "A ∪ B = {1, 2, 3, 4}; A ∩ B = {2, 3}; difference = {1, 4}. (This is A ⊕ B.)",
+              "explanation": "Symmetric difference."
+            },
+            {
+              "question": "Why is the equation A ⊕ B = (A ∪ B) − (A ∩ B) true?",
+              "answer": "Both sides describe elements that are in exactly one of A, B (in the union but not the intersection).",
+              "explanation": "Two equivalent definitions of symmetric difference."
+            },
+            {
+              "question": "Give a counterexample showing A − B ≠ B − A in general.",
+              "answer": "Let A = {1, 2}, B = {2, 3}. Then A − B = {1} and B − A = {3}. Different sets.",
+              "explanation": "Set difference is not commutative."
+            }
+          ]
+        },
+        {
+          "type": "step_by_step",
+          "questions": [
+            {
+              "question": "Prove by membership table: (A ∩ B)ᶜ = Aᶜ ∪ Bᶜ.",
+              "answer": "A | B | A∩B | (A∩B)ᶜ | Aᶜ | Bᶜ | Aᶜ∪Bᶜ\n1 | 1 |  1  |   0    |  0 |  0 |   0\n1 | 0 |  0  |   1    |  0 |  1 |   1\n0 | 1 |  0  |   1    |  1 |  0 |   1\n0 | 0 |  0  |   1    |  1 |  1 |   1\nFinal two columns match. ∎",
+              "explanation": "De Morgan's second law."
+            },
+            {
+              "question": "Use the two-direction subset method to prove A ∩ (B ∪ C) = (A ∩ B) ∪ (A ∩ C).",
+              "answer": "(⊆) Let x ∈ A ∩ (B ∪ C). Then x ∈ A and (x ∈ B ∨ x ∈ C). Case x ∈ B: x ∈ A ∩ B ⊆ RHS. Case x ∈ C: x ∈ A ∩ C ⊆ RHS.\n(⊇) Let x ∈ (A ∩ B) ∪ (A ∩ C). Then x ∈ A ∩ B or x ∈ A ∩ C. Either way x ∈ A and x ∈ B ∪ C. So x ∈ LHS.\nBoth directions hold. ∎",
+              "explanation": "Distributive law for ∩ over ∪."
+            },
+            {
+              "question": "Compute |A ∪ B ∪ C| if |A| = 50, |B| = 60, |C| = 70, |A ∩ B| = 20, |A ∩ C| = 25, |B ∩ C| = 30, |A ∩ B ∩ C| = 10.",
+              "answer": "Apply three-set inclusion-exclusion:\n|A ∪ B ∪ C| = 50 + 60 + 70 − 20 − 25 − 30 + 10 = 115.",
+              "explanation": "Standard formula application."
+            },
+            {
+              "question": "Simplify A ∩ (Aᶜ ∪ B) using set identities, naming each step.",
+              "answer": "A ∩ (Aᶜ ∪ B)\n= (A ∩ Aᶜ) ∪ (A ∩ B)    [distributive]\n= ∅ ∪ (A ∩ B)            [complement]\n= A ∩ B                  [identity].",
+              "explanation": "Three identities applied in sequence."
+            }
+          ]
+        },
+        {
+          "type": "exam_style",
+          "questions": [
+            {
+              "question": "Let U = {0, 1, 2, …, 10}, A = {1, 3, 5, 7, 9}, B = {2, 3, 5, 7}. Compute (a) A ∩ B, (b) A ∪ B, (c) Aᶜ, (d) A − B, (e) |A × B|, (f) A ⊕ B.",
+              "answer": "(a) {3, 5, 7}. (b) {1, 2, 3, 5, 7, 9}. (c) {0, 2, 4, 6, 8, 10}. (d) {1, 9}. (e) 5 · 4 = 20. (f) {1, 2, 9}.",
+              "explanation": "Direct application of the operation definitions."
+            },
+            {
+              "question": "Prove A ∪ (A ∩ B) = A using subset method and using set identities.",
+              "answer": "Subset: (⊆) every x ∈ A is in A ∪ (A ∩ B) trivially; every x ∈ A ∩ B is in A. (⊇) every x ∈ A is in A ∪ anything. Identities: A ∪ (A ∩ B) = (A ∩ U) ∪ (A ∩ B) = A ∩ (U ∪ B) = A ∩ U = A.",
+              "explanation": "Absorption law, two ways."
+            },
+            {
+              "question": "Survey: 100 students. 60 study Math, 50 study CS, 40 study Physics. 30 Math∩CS, 20 Math∩Physics, 25 CS∩Physics, 10 study all three. How many study at least one of the three?",
+              "answer": "By inclusion-exclusion: 60 + 50 + 40 − 30 − 20 − 25 + 10 = 85.",
+              "explanation": "Three-set inclusion-exclusion."
+            },
+            {
+              "question": "Prove: if A ⊆ B and B ⊆ C, then A ⊆ C.",
+              "answer": "Let x ∈ A. Then x ∈ B (because A ⊆ B). Then x ∈ C (because B ⊆ C). So every x ∈ A is in C, i.e., A ⊆ C. ∎",
+              "explanation": "Transitivity of subset."
+            },
+            {
+              "question": "Show that for any sets, |P(A ∪ B)| ≥ |P(A)| + |P(B)| − |P(A ∩ B)|.",
+              "answer": "Each subset of A is a subset of A ∪ B, and similarly for B; subsets of A ∩ B are double-counted. By inclusion-exclusion on power sets, the number of subsets of A ∪ B that are subsets of A or of B is exactly |P(A)| + |P(B)| − |P(A ∩ B)|. Since this is at most |P(A ∪ B)|, the inequality follows.",
+              "explanation": "Inclusion-exclusion applied to families of subsets."
+            }
+          ]
+        },
+        {
+          "type": "randomized",
+          "questions": [
+            {
+              "template": "Let A = {RAND_A} and B = {RAND_B}. Compute {OP}.",
+              "variables": {
+                "RAND_A": [
+                  "1, 2, 3, 4, 5",
+                  "0, 2, 4, 6, 8",
+                  "a, b, c",
+                  "1, 4, 9, 16"
+                ],
+                "RAND_B": [
+                  "3, 4, 5, 6, 7",
+                  "1, 2, 3, 4",
+                  "b, c, d",
+                  "4, 9, 16, 25"
+                ],
+                "OP": [
+                  "A ∪ B",
+                  "A ∩ B",
+                  "A − B",
+                  "B − A",
+                  "A ⊕ B",
+                  "|A × B|"
+                ]
+              },
+              "instructions": "Pick a (A, B, OP) triple. Apply the definition of OP using element-by-element comparison.",
+              "example_realization": "Realization: A = {1, 2, 3, 4, 5}, B = {3, 4, 5, 6, 7}, OP = A ∩ B. Answer: {3, 4, 5}.",
+              "explanation": "Random drill on basic set operations."
+            },
+            {
+              "template": "If |A| = {SIZE_A} and |B| = {SIZE_B}, find (a) |P(A)| and (b) |A × B|.",
+              "variables": {
+                "SIZE_A": [
+                  "3",
+                  "5",
+                  "7",
+                  "10"
+                ],
+                "SIZE_B": [
+                  "2",
+                  "4",
+                  "6",
+                  "8"
+                ]
+              },
+              "instructions": "Apply |P(A)| = 2^|A| and |A × B| = |A| · |B|.",
+              "example_realization": "Realization: |A| = 5, |B| = 4. (a) 32. (b) 20.",
+              "explanation": "Drill on the two cardinality formulas."
+            },
+            {
+              "template": "Decide whether the set identity {ID} is TRUE or FALSE. If true, name the law; if false, give a counterexample.",
+              "variables": {
+                "ID": [
+                  "A ∪ ∅ = A",
+                  "A ∩ ∅ = A",
+                  "(Aᶜ)ᶜ = A",
+                  "A − B = B − A",
+                  "(A ∪ B)ᶜ = Aᶜ ∩ Bᶜ",
+                  "A ∩ (B ∪ C) = (A ∩ B) ∪ C"
+                ]
+              },
+              "instructions": "Match each candidate to the standard identities.",
+              "example_realization": "Realization: ID = 'A − B = B − A'. FALSE; e.g., A = {1, 2}, B = {2, 3}: A − B = {1}, B − A = {3}.",
+              "explanation": "Random drill on identity recognition."
+            },
+            {
+              "template": "Use inclusion-exclusion: |A| = {SA}, |B| = {SB}, |A ∩ B| = {SAB}. Find |A ∪ B|.",
+              "variables": {
+                "SA": [
+                  "10",
+                  "15",
+                  "20",
+                  "30"
+                ],
+                "SB": [
+                  "8",
+                  "12",
+                  "25",
+                  "40"
+                ],
+                "SAB": [
+                  "3",
+                  "5",
+                  "10",
+                  "15"
+                ]
+              },
+              "instructions": "|A ∪ B| = |A| + |B| − |A ∩ B|.",
+              "example_realization": "Realization: |A| = 30, |B| = 25, |A ∩ B| = 10. |A ∪ B| = 30 + 25 − 10 = 45.",
+              "explanation": "Random drill on two-set inclusion-exclusion."
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

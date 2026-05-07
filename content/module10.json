@@ -1,0 +1,918 @@
+{
+  "course": "CPCS-222 Discrete Structures",
+  "module": {
+    "module_id": "module10",
+    "title": "Mathematical Induction",
+    "description": "A complete guide to Mathematical Induction: from summation basics and the telescoping trick, through the three-step proof template, to worked proofs of classical closed-form identities. Students learn to conjecture, structure, and rigorously verify statements about all positive integers.",
+    "source_files": [
+      "CPCS222_MathematicalInduction.txt"
+    ],
+    "lessons": [
+      {
+        "lesson_id": "module10_lesson1",
+        "type": "tutorial",
+        "title": "Summations and the Telescoping Trick",
+        "slug": "summations-telescoping-trick",
+        "welcome": "Before we can prove things by induction, we need a solid command of summation notation and one key observation — the 'telescoping trick' — that unlocks every inductive step. Let's build that foundation now.",
+        "objectives": [
+          "Read and evaluate sigma (Σ) notation for finite sums",
+          "Connect summation notation to the equivalent for-loop",
+          "Evaluate summations with different functions (i, i², 2i+1, powers)",
+          "Apply the closed-form formula for the sum of the first n integers",
+          "Explain and use the telescoping (n+1 term) trick"
+        ],
+        "storytelling": [
+          {
+            "speaker": "Student",
+            "text": "I keep seeing this Σ symbol and I honestly have no idea what it means."
+          },
+          {
+            "speaker": "Professor",
+            "text": "It's just a fancy 'add everything up'. Think of it as a for-loop: start at the bottom number, stop at the top, and add the function value at each step."
+          },
+          {
+            "speaker": "Student",
+            "text": "So Σ from i=1 to 5 of i is just 1+2+3+4+5 = 15?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "Exactly. And the variable name doesn't matter — call it i, j, or Jason. The result is the same."
+          },
+          {
+            "speaker": "Student",
+            "text": "What about summing 1 to 1000? That would take forever!"
+          },
+          {
+            "speaker": "Professor",
+            "text": "That's the beauty of closed-form solutions. n(n+1)/2 gives you the answer instantly. Plug in 1000 and get 500,500. Later, induction is exactly how we prove those formulas are correct."
+          }
+        ],
+        "sections": [
+          {
+            "number": 1,
+            "heading": "Summation Notation",
+            "explanation": "A summation Σ_{j=m}^{n} f(j) means: evaluate f at every integer from m to n and add the results. The lower index m and upper index n are the limits; j is the index variable (the name is arbitrary). This is identical to the loop: sum=0; for(j=m; j<=n; j++) sum+=f(j). The function f(j) can be anything: j itself, j², 2j+1, or any algebraic expression.",
+            "examples": [
+              "Σ_{i=1}^{5} i = 1+2+3+4+5 = 15",
+              "Σ_{i=1}^{5} i² = 1+4+9+16+25 = 55",
+              "Σ_{i=1}^{5} (2i+1) = 3+5+7+9+11 = 35",
+              "Σ_{k=1}^{5} (k+1) = 2+3+4+5+6 = 20",
+              "Σ_{i=1}^{10} 3 = 3×10 = 30 (constant term)"
+            ],
+            "common_mistakes": [
+              "Confusing the index variable name — i, j, Jason all give the same result",
+              "Forgetting to include the lower limit value (e.g., j=0 means f(0) is the first term)",
+              "Treating f(j) as a label rather than as a function to be evaluated at each j"
+            ],
+            "visual_idea": {
+              "type": "diagram",
+              "description": "Annotated sigma notation diagram mapping 'lower limit', 'upper limit', 'index', and 'function' labels onto Σ_{j=m}^{n} f(j), alongside a matching for-loop pseudocode block",
+              "interactive_hint": "Slider for upper limit n; live sum updates as n increases"
+            }
+          },
+          {
+            "number": 2,
+            "heading": "Closed-Form Formulas",
+            "explanation": "For large n, evaluating summations term-by-term is impractical. Closed-form formulas give the answer in constant time. The most important: Σ_{i=1}^{n} i = n(n+1)/2. For n=1000 this yields 1000×1001/2 = 500,500 without adding a single intermediate term. Mathematical induction is the standard proof technique used to verify these identities.",
+            "examples": [
+              "Σ_{i=1}^{1000} i = 1000×1001/2 = 500,500",
+              "Σ_{i=1}^{100} i = 100×101/2 = 5050",
+              "Σ_{i=1}^{n} i = n(n+1)/2 (general formula)"
+            ],
+            "common_mistakes": [
+              "Applying n(n+1)/2 when the lower limit is not 1 — the formula requires summing from 1",
+              "Forgetting to verify a formula on small cases before applying it generally"
+            ],
+            "visual_idea": {
+              "type": "diagram",
+              "description": "Side-by-side: left column shows full term expansion for n=5; right column shows the closed-form calculation, with arrow connecting both to '= 15'",
+              "interactive_hint": "Input box for n; shows both term-by-term and closed-form answer"
+            }
+          },
+          {
+            "number": 3,
+            "heading": "The Telescoping Trick",
+            "explanation": "The key insight powering every inductive step: the sum to (n+1) terms equals the sum to n terms plus one extra term. Formally: Σ_{i=1}^{n+1} f(i) = Σ_{i=1}^{n} f(i) + f(n+1). This is trivially true — you are just splitting off the last term. But it is powerful because it lets you substitute the inductive hypothesis (the known answer for n terms) into the (n+1)-term sum during the inductive step.",
+            "examples": [
+              "Σ_{i=1}^{6} i = Σ_{i=1}^{5} i + 6 = 15 + 6 = 21",
+              "Σ_{i=1}^{k+1} f(i) = Σ_{i=1}^{k} f(i) + f(k+1)  [general telescoping identity]",
+              "If we know Σ_{i=1}^{n} f(i) = BLAH, then Σ_{i=1}^{n+1} f(i) = BLAH + f(n+1)"
+            ],
+            "common_mistakes": [
+              "Forgetting this step exists — students try to compute the (k+1) sum from scratch instead of splitting off the last term",
+              "Writing the extra term as f(k) instead of f(k+1) — the new term is always the (k+1)th one"
+            ],
+            "visual_idea": {
+              "type": "diagram",
+              "description": "Two rows of numbered boxes 1 through 6. The first row highlights boxes 1–5 as 'known sum'; an arrow points to box 6 labelled '+f(6)'. The combined total equals the full sum to 6.",
+              "interactive_hint": "Click a box to add/remove it and watch the sum update"
+            }
+          }
+        ],
+        "worked_examples": [
+          {
+            "problem": "Evaluate Σ_{j=0}^{4} (−2)^j",
+            "step_by_step_solution": [
+              "Identify the function: f(j) = (−2)^j, summed from j=0 to j=4.",
+              "Evaluate at each index: j=0 → (−2)^0=1; j=1 → (−2)^1=−2; j=2 → (−2)^2=4; j=3 → (−2)^3=−8; j=4 → (−2)^4=16.",
+              "Add all terms: 1 + (−2) + 4 + (−8) + 16 = 11."
+            ],
+            "final_answer": "11",
+            "why_it_works": "Summation notation is simply a compact instruction to evaluate f at each index and add the results. The negative base causes the sign to alternate, so careful sign tracking at each step is essential.",
+            "common_mistake": "Treating (−2)^j as −(2^j) — parentheses matter. (−2)^2 = 4, not −4."
+          },
+          {
+            "problem": "Given that Σ_{i=1}^{n} f(i) = BLAH, express Σ_{i=1}^{n+1} f(i) in terms of BLAH",
+            "step_by_step_solution": [
+              "Recognise that the sum to n+1 terms is the same as the sum to n terms plus one extra term.",
+              "Apply the telescoping identity: Σ_{i=1}^{n+1} f(i) = Σ_{i=1}^{n} f(i) + f(n+1).",
+              "Substitute the known value: Σ_{i=1}^{n} f(i) = BLAH.",
+              "Result: Σ_{i=1}^{n+1} f(i) = BLAH + f(n+1)."
+            ],
+            "final_answer": "BLAH + f(n+1)",
+            "why_it_works": "The telescoping trick is always valid — it is simply separating the last term from the rest of the sum. This is the key move that makes inductive steps possible: you reveal the partial sum Σ to n, then substitute the known (hypothesised) value for it.",
+            "common_mistake": "Writing f(n) instead of f(n+1) as the extra term. The new term is always the function evaluated at the new upper limit."
+          },
+          {
+            "problem": "Use the closed form to find Σ_{i=1}^{50} i",
+            "step_by_step_solution": [
+              "Identify the formula: Σ_{i=1}^{n} i = n(n+1)/2.",
+              "Substitute n = 50: 50 × (50+1) / 2.",
+              "Compute: 50 × 51 / 2 = 2550 / 2 = 1275."
+            ],
+            "final_answer": "1275",
+            "why_it_works": "The closed-form formula replaces n additions with a single multiplication and division, giving an exact answer in constant time regardless of how large n is.",
+            "common_mistake": "Applying the formula when the lower limit is not 1. The formula n(n+1)/2 assumes summation starts at i=1."
+          }
+        ],
+        "quick_checks": [
+          {
+            "type": "mcq",
+            "question": "What is Σ_{i=1}^{4} (2i+1)?",
+            "choices": [
+              "20",
+              "24",
+              "28",
+              "16"
+            ],
+            "answer": "24",
+            "explanation": "Evaluate at i=1,2,3,4: 3+5+7+9 = 24"
+          },
+          {
+            "type": "mcq",
+            "question": "Apply the telescoping trick: Σ_{i=1}^{k+1} i equals:",
+            "choices": [
+              "Σ_{i=1}^{k} i − (k+1)",
+              "Σ_{i=1}^{k} i + k",
+              "Σ_{i=1}^{k} i + (k+1)",
+              "Σ_{i=1}^{k+1} i − 1"
+            ],
+            "answer": "Σ_{i=1}^{k} i + (k+1)",
+            "explanation": "The telescoping trick splits off the last term: sum to k+1 = sum to k plus the (k+1)th term"
+          },
+          {
+            "type": "mcq",
+            "question": "Using the closed form, Σ_{i=1}^{10} i equals:",
+            "choices": [
+              "45",
+              "50",
+              "55",
+              "60"
+            ],
+            "answer": "55",
+            "explanation": "n(n+1)/2 with n=10: 10×11/2 = 55"
+          }
+        ],
+        "summary": {
+          "key_takeaways": [
+            "Σ notation means: evaluate f at every index from lower to upper limit and sum the results",
+            "The variable name (i, j, k) is irrelevant — only the limits and function matter",
+            "Closed-form formulas (e.g., n(n+1)/2) give exact answers without term-by-term evaluation",
+            "Telescoping trick: Σ_{i=1}^{n+1} f(i) = Σ_{i=1}^{n} f(i) + f(n+1) — split off the last term"
+          ],
+          "next": "In Lesson 2 we meet the principle of mathematical induction — the three-step proof structure that uses the telescoping trick to verify formulas about all positive integers."
+        }
+      },
+      {
+        "lesson_id": "module10_lesson2",
+        "type": "tutorial",
+        "title": "The Principle of Mathematical Induction",
+        "slug": "principle-mathematical-induction",
+        "welcome": "Mathematical induction is a powerful proof method that lets us verify a statement about every positive integer with just three structured steps. Think of it as an infinite domino chain — knock down the first domino (base case), prove each domino knocks down the next (inductive step), and every domino falls.",
+        "objectives": [
+          "State the three steps of mathematical induction (base case, inductive hypothesis, inductive step)",
+          "Explain the infinite-ladder intuition for why induction works",
+          "Describe what P(n) represents in an induction proof",
+          "Distinguish between what the inductive hypothesis assumes and what the inductive step must prove",
+          "Recognize the logical structure [P(1) ∧ ∀k(P(k)→P(k+1))] → ∀n P(n)"
+        ],
+        "storytelling": [
+          {
+            "speaker": "Student",
+            "text": "I can sort of see how we verified the formula for small numbers, but how does that prove it for ALL numbers?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "Imagine an infinite ladder. You know you can reach the first step, and you know that from any step you can always reach the next one. Can you reach every step?"
+          },
+          {
+            "speaker": "Student",
+            "text": "Well... yes? Because you start at step 1, climb to 2, then 3, and keep going forever."
+          },
+          {
+            "speaker": "Professor",
+            "text": "Exactly. That's induction. The base case is 'I can reach step 1'. The inductive step is 'if I can reach step k, I can reach step k+1'. Together, they guarantee every step."
+          },
+          {
+            "speaker": "Student",
+            "text": "But we're assuming P(k) is true in the inductive hypothesis — isn't that circular reasoning?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "No — we're assuming P(k) temporarily to prove P(k+1). The base case ensures the chain starts. Once the chain starts and every link holds, all of infinity is covered. There's no circularity."
+          }
+        ],
+        "sections": [
+          {
+            "number": 1,
+            "heading": "The Infinite Ladder Intuition",
+            "explanation": "Suppose you have an infinite ladder and you know two things: (1) you can reach the first step, and (2) if you can reach any particular step, you can reach the next one. From these two facts alone, you can conclude you can reach every step. Rule (1) gets you to step 1; rule (2) applied once gets you to step 2; applied again to step 3; and so on, to any finite step k, no matter how large. Mathematical induction formalises this reasoning into a rigorous proof method.",
+            "examples": [
+              "P(1) is true (reach step 1) — BASE CASE",
+              "P(k) → P(k+1) for all k ≥ 1 — INDUCTIVE STEP",
+              "Conclusion: P(n) is true for all positive integers n"
+            ],
+            "common_mistakes": [
+              "Thinking induction 'only checks finitely many cases' — the ladder argument shows it covers all infinitely many cases",
+              "Confusing the inductive step with verification — you do not check P(k+1) directly; you derive it from P(k)"
+            ],
+            "visual_idea": {
+              "type": "diagram",
+              "description": "Vertical ladder with numbered rungs. Rung 1 is highlighted green (base case). An arrow between each pair of adjacent rungs is labelled 'P(k)→P(k+1)'. A bracket labels all rungs '∀n: P(n) true'.",
+              "interactive_hint": "Click 'Start' to animate the domino-chain progression rung by rung"
+            }
+          },
+          {
+            "number": 2,
+            "heading": "The Three Steps of Induction",
+            "explanation": "Given a propositional function P(n), mathematical induction proves P(n) is true for all positive integers n via three clearly labelled steps. Step 1 — Base Case: verify P(1) is true by direct substitution. Step 2 — Inductive Hypothesis (I.H.): explicitly state 'Assume P(k) is true for an arbitrary positive integer k'. Step 3 — Inductive Step: under the assumption of P(k), prove P(k+1) is true. All three steps must appear and be labelled in every proof.",
+            "examples": [
+              "Base Case: substitute n=1 into P(n) and verify LS = RS",
+              "I.H.: 'Assume P(k): [formula with k] is true for arbitrary k ≥ 1'",
+              "Inductive Step: prove P(k+1): [formula with k+1], using the I.H. as a tool"
+            ],
+            "common_mistakes": [
+              "Skipping the base case — without it, the chain has no starting point",
+              "Forgetting to label the Inductive Hypothesis clearly — the I.H. label is mandatory",
+              "Not using the I.H. in the inductive step — if you never substitute it, you have not used induction",
+              "Proving P(2) as the inductive step instead of proving P(k+1) for general k"
+            ],
+            "visual_idea": {
+              "type": "flowchart",
+              "description": "Three-box flowchart: Box 1 'Base Case: Verify P(1)' → Box 2 'I.H.: Assume P(k) true' → Box 3 'Inductive Step: Prove P(k+1) using P(k)' → Diamond 'All three complete?' → 'P(n) true for all n ∈ ℤ⁺'",
+              "interactive_hint": "Hover each box to see a common mistake to avoid"
+            }
+          },
+          {
+            "number": 3,
+            "heading": "What Induction Does and Does Not Do",
+            "explanation": "Mathematical induction is a proof method, not a discovery tool. It verifies that a proposed formula is correct — it does not generate the formula. The workflow is: (1) conjecture a formula (often by spotting a pattern in small cases), (2) state P(n), (3) prove it by induction. Induction guarantees that if the base case holds and the inductive step holds, then P(n) is true for every positive integer n. Formally: [P(1) ∧ ∀k(P(k)→P(k+1))] → ∀n P(n).",
+            "examples": [
+              "Conjecture: sum of first n odd integers appears to equal n²",
+              "State: P(n): Σ_{i=1}^{n} (2i−1) = n²",
+              "Prove: by induction, confirming the pattern holds for all n"
+            ],
+            "common_mistakes": [
+              "Trying to 'derive' the formula inside the induction proof — you must already have the formula before you start",
+              "Assuming induction can prove any claim — it only applies to statements indexed by positive integers (or integers ≥ some base)"
+            ],
+            "visual_idea": {
+              "type": "diagram",
+              "description": "Two-column table: left column 'What Induction IS' (proof method, verification tool, guarantees all n); right column 'What Induction IS NOT' (a formula finder, a pattern creator, limited to small n)",
+              "interactive_hint": "Clickable cards that flip to reveal examples"
+            }
+          }
+        ],
+        "worked_examples": [
+          {
+            "problem": "State what each of the three steps looks like for proving P(n): n < 2^n for all n ≥ 1",
+            "step_by_step_solution": [
+              "Base Case (n=1): Check 1 < 2^1 = 2. True. ✓",
+              "Inductive Hypothesis: Assume k < 2^k for some arbitrary k ≥ 1.",
+              "Inductive Step: Prove k+1 < 2^(k+1). From the I.H., k < 2^k, so k+1 ≤ k+k = 2k (since k ≥ 1 means 1 ≤ k). Then 2k < 2·2^k = 2^(k+1). Therefore k+1 < 2^(k+1). ✓",
+              "Conclusion: By induction, n < 2^n for all n ≥ 1."
+            ],
+            "final_answer": "n < 2^n for all n ≥ 1 is proven by induction",
+            "why_it_works": "The I.H. (k < 2^k) appears explicitly in the inductive step. Without using it, the step cannot be completed — this is why the I.H. must be clearly stated and then actively substituted.",
+            "common_mistake": "Attempting to prove P(k+1) directly from scratch without using the I.H. The entire power of induction lies in being allowed to assume P(k)."
+          },
+          {
+            "problem": "Why is it not circular reasoning to assume P(k) in the inductive hypothesis?",
+            "step_by_step_solution": [
+              "The I.H. does NOT assert that P(k) is true. It assumes P(k) temporarily to prove a conditional: IF P(k) THEN P(k+1).",
+              "The base case separately establishes that P(1) is actually and unconditionally true.",
+              "Once P(1) is confirmed, the implication P(1)→P(2) yields P(2) as true.",
+              "Then P(2)→P(3) yields P(3), and so on — truth propagates forward through all positive integers.",
+              "The chain of reasoning is linear (not circular): P(1) is true → P(2) → P(3) → ... → P(n) for any n."
+            ],
+            "final_answer": "No circularity: the I.H. proves a conditional; the base case supplies the unconditional starting truth",
+            "why_it_works": "Induction separates the proof into two independent pieces: an unconditional base and a conditional implication. There is no loop because the implication always points forward (k → k+1), never backward.",
+            "common_mistake": "Confusing 'assume P(k)' with 'assert P(k) is true without proof'. The I.H. is a conditional assumption, not an unconditional claim."
+          }
+        ],
+        "quick_checks": [
+          {
+            "type": "mcq",
+            "question": "In a mathematical induction proof, which step is labelled 'I.H.'?",
+            "choices": [
+              "Base case",
+              "Inductive hypothesis",
+              "Inductive step",
+              "Conclusion"
+            ],
+            "answer": "Inductive hypothesis",
+            "explanation": "The Inductive Hypothesis (I.H.) is step 2 — it explicitly assumes P(k) is true for arbitrary k ≥ 1"
+          },
+          {
+            "type": "mcq",
+            "question": "In the infinite-ladder analogy, the BASE CASE corresponds to:",
+            "choices": [
+              "Knowing you can reach step k implies you can reach step k+1",
+              "Knowing you can reach the first step",
+              "Proving every step is reachable simultaneously",
+              "Assuming the ladder is finite"
+            ],
+            "answer": "Knowing you can reach the first step",
+            "explanation": "The base case establishes the starting point — reaching step 1. The inductive step is the 'each step leads to the next' part."
+          },
+          {
+            "type": "mcq",
+            "question": "Mathematical induction is best described as:",
+            "choices": [
+              "A method to generate closed-form formulas",
+              "A method to verify statements about all positive integers",
+              "A method to check finitely many cases of a pattern",
+              "A method to find counter-examples to conjectures"
+            ],
+            "answer": "A method to verify statements about all positive integers",
+            "explanation": "Induction proves a given statement is true for all positive integers — it verifies, it does not discover or generate"
+          }
+        ],
+        "summary": {
+          "key_takeaways": [
+            "Induction proves P(n) for all positive integers via three steps: base case, inductive hypothesis, inductive step",
+            "The infinite-ladder analogy: base case = reaching step 1; inductive step = every step leads to the next",
+            "The I.H. assumes P(k) true; the inductive step derives P(k+1) — there is no circular reasoning",
+            "Formal structure: [P(1) ∧ ∀k(P(k)→P(k+1))] → ∀n P(n)",
+            "Induction verifies formulas; it does not discover them"
+          ],
+          "next": "Lesson 3 applies the three-step template to three classical summation identities, building skill through progressively more complex algebraic manipulation."
+        }
+      },
+      {
+        "lesson_id": "module10_lesson3",
+        "type": "tutorial",
+        "title": "Proving Summation Identities by Induction",
+        "slug": "proving-summation-identities-induction",
+        "welcome": "Theory becomes skill through practice. In this lesson, we apply the three-step induction template to three classic summation identities, each slightly more algebraically demanding than the last. By the end, you will have a reliable, repeatable proof strategy.",
+        "objectives": [
+          "Prove Σ_{i=1}^{n} i = n(n+1)/2 by mathematical induction",
+          "Conjecture and prove Σ_{i=1}^{n} (2i−1) = n² by mathematical induction",
+          "Prove Σ_{i=1}^{n} i·2^i = (n−1)·2^(n+1)+2 by mathematical induction",
+          "Apply the telescoping trick and inductive hypothesis substitution in every inductive step",
+          "Verify each proof by confirming LS = RS after algebraic manipulation"
+        ],
+        "storytelling": [
+          {
+            "speaker": "Student",
+            "text": "I understand the theory of induction, but when I sit down to write a proof, I don't know where to start the inductive step."
+          },
+          {
+            "speaker": "Professor",
+            "text": "Your first move is always the same: write out Σ to the (k+1) term, then immediately apply the telescoping trick to split off the last term."
+          },
+          {
+            "speaker": "Student",
+            "text": "Then I have Σ to k terms, and I can replace that with the I.H.?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "Exactly. That substitution is where the inductive hypothesis earns its keep. After that, it is pure algebra to reach the target form."
+          },
+          {
+            "speaker": "Student",
+            "text": "What is the 'target form'?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "Whatever the right-hand side of P(k+1) is — substitute k+1 everywhere you see n in the original formula. That is what your algebra must reach."
+          }
+        ],
+        "sections": [
+          {
+            "number": 1,
+            "heading": "Proof 1: Sum of First n Integers",
+            "explanation": "Claim: For all n ≥ 1, Σ_{i=1}^{n} i = n(n+1)/2. | BASE CASE (n=1): LS = 1; RS = 1(2)/2 = 1. LS=RS. ✓ | INDUCTIVE HYPOTHESIS: Assume Σ_{i=1}^{k} i = k(k+1)/2 for arbitrary k ≥ 1. | INDUCTIVE STEP: Prove Σ_{i=1}^{k+1} i = (k+1)(k+2)/2. | Telescoping: Σ_{i=1}^{k+1} i = Σ_{i=1}^{k} i + (k+1). | Substitute I.H.: = k(k+1)/2 + (k+1). | Algebra: = k(k+1)/2 + 2(k+1)/2 = (k+1)(k+2)/2. ✓ This matches P(k+1). QED.",
+            "examples": [
+              "Base case check: LS=1, RS=1(1+1)/2=1 ✓",
+              "I.H.: Σ_{i=1}^{k} i = k(k+1)/2",
+              "Telescope: Σ to k+1 = (Σ to k) + (k+1)",
+              "Substitute I.H.: k(k+1)/2 + (k+1) = (k+1)[k/2 + 1] = (k+1)(k+2)/2 ✓"
+            ],
+            "common_mistakes": [
+              "Proving P(k+1) = P(k) + extra term but forgetting to factor the result to match the target form",
+              "Writing the target as (k)(k+1)/2 instead of (k+1)(k+2)/2 — replace every n with k+1"
+            ],
+            "visual_idea": {
+              "type": "diagram",
+              "description": "Three-column layout: Column 1 'Base Case' with n=1 substitution; Column 2 'I.H.' box showing the assumed formula; Column 3 'Inductive Step' showing telescoping, substitution, and algebraic simplification in step-by-step lines",
+              "interactive_hint": "Step through the algebra one line at a time with a 'Next Step' button"
+            }
+          },
+          {
+            "number": 2,
+            "heading": "Proof 2: Sum of First n Odd Integers",
+            "explanation": "Conjecture: The sum of the first n positive odd integers is n². The nth odd integer is 2n−1 (the sequence is 1,3,5,...). So the claim is: Σ_{i=1}^{n} (2i−1) = n². | BASE CASE (n=1): LS = 2(1)−1 = 1; RS = 1² = 1. ✓ | I.H.: Assume Σ_{i=1}^{k} (2i−1) = k² for arbitrary k ≥ 1. | INDUCTIVE STEP: Prove Σ_{i=1}^{k+1} (2i−1) = (k+1)². | Telescope: Σ_{i=1}^{k+1} (2i−1) = [Σ_{i=1}^{k} (2i−1)] + (2(k+1)−1). | Substitute I.H.: = k² + 2k+1 = (k+1)². ✓ QED.",
+            "examples": [
+              "Pattern check: 1=1², 1+3=4=2², 1+3+5=9=3², 1+3+5+7=16=4²",
+              "Base case: 2(1)−1 = 1 = 1² ✓",
+              "Last term of (k+1)th sum: 2(k+1)−1 = 2k+1",
+              "After I.H. substitution: k² + 2k+1 = (k+1)² ✓"
+            ],
+            "common_mistakes": [
+              "Forgetting to conjecture the formula before starting the proof — induction cannot begin without a claim",
+              "Computing the (k+1)th odd number incorrectly — substitute i=k+1 into 2i−1 to get 2k+1, not 2k+3"
+            ],
+            "visual_idea": {
+              "type": "diagram",
+              "description": "Left side: dot-grid visualisation showing 1, 4, 9, 16 as perfect squares formed by adding L-shaped rows of dots. Right side: algebraic induction proof steps in parallel.",
+              "interactive_hint": "Click each L-shape to see which odd number it adds and update the running total"
+            }
+          },
+          {
+            "number": 3,
+            "heading": "Proof 3: Sum of i·2^i",
+            "explanation": "Claim: Σ_{i=1}^{n} i·2^i = (n−1)·2^(n+1)+2. | BASE CASE (n=1): LS = 1·2^1 = 2; RS = (1−1)·2^2+2 = 0+2 = 2. ✓ | I.H.: Assume Σ_{i=1}^{k} i·2^i = (k−1)·2^(k+1)+2. | INDUCTIVE STEP: Prove Σ_{i=1}^{k+1} i·2^i = k·2^(k+2)+2. | Telescope: Σ to k+1 = [Σ to k] + (k+1)·2^(k+1). | Sub I.H.: = (k−1)·2^(k+1)+2+(k+1)·2^(k+1). | Combine: = [(k−1)+(k+1)]·2^(k+1)+2 = 2k·2^(k+1)+2 = k·2^(k+2)+2. ✓ This matches the target.",
+            "examples": [
+              "Target P(k+1): replace n with k+1 → (k+1−1)·2^(k+2)+2 = k·2^(k+2)+2",
+              "Telescope: split off last term (k+1)·2^(k+1)",
+              "Combine 2^(k+1) terms: (k−1+k+1)·2^(k+1) = 2k·2^(k+1) = k·2^(k+2)",
+              "Final line: k·2^(k+2)+2 = (k+1−1)·2^((k+1)+1)+2 = P(k+1) ✓"
+            ],
+            "common_mistakes": [
+              "Mis-computing the target: replace n with k+1 carefully — (k+1−1) simplifies to k, giving k·2^(k+2)+2",
+              "Not factoring out 2^(k+1) — without factoring, the two terms cannot be combined",
+              "Treating 2·2^(k+1) as 2^(k+1) instead of 2^(k+2)"
+            ],
+            "visual_idea": {
+              "type": "diagram",
+              "description": "Annotated chain-of-equalities: each line of algebra is displayed with the justification (e.g., 'Telescoping', 'I.H. substitution', 'Factor 2^(k+1)', 'Simplify exponent') shown in a side column",
+              "interactive_hint": "Toggle each justification label to see/hide the explanation"
+            }
+          }
+        ],
+        "worked_examples": [
+          {
+            "problem": "Full structured proof: Prove Σ_{i=1}^{n} i = n(n+1)/2 by induction",
+            "step_by_step_solution": [
+              "Base Case (n=1): LS = 1, RS = 1(2)/2 = 1. LS = RS. ✓",
+              "Inductive Hypothesis: Assume Σ_{i=1}^{k} i = k(k+1)/2 for arbitrary k ≥ 1.",
+              "Inductive Step Goal: Prove Σ_{i=1}^{k+1} i = (k+1)(k+2)/2.",
+              "Telescoping: Σ_{i=1}^{k+1} i = Σ_{i=1}^{k} i + (k+1).",
+              "Substitute I.H.: = k(k+1)/2 + (k+1) = k(k+1)/2 + 2(k+1)/2 = (k+1)(k+2)/2. ✓",
+              "Conclusion: All three steps complete. By induction, Σ_{i=1}^{n} i = n(n+1)/2 for all n ≥ 1."
+            ],
+            "final_answer": "Σ_{i=1}^{n} i = n(n+1)/2 for all n ≥ 1 (proven)",
+            "why_it_works": "The telescoping trick splits off the (k+1)th term, exposing the Σ to k sum which is then replaced by the I.H. The remaining algebra factors cleanly to match the target (k+1)(k+2)/2.",
+            "common_mistake": "Using k(k+1)/2 as the target (P(k) form) instead of (k+1)(k+2)/2 (P(k+1) form). Always replace every n with k+1 to find the target."
+          },
+          {
+            "problem": "Full structured proof: Prove Σ_{i=1}^{n} (2i−1) = n² by induction",
+            "step_by_step_solution": [
+              "Base Case (n=1): LS = 2(1)−1 = 1, RS = 1² = 1. ✓",
+              "Inductive Hypothesis: Assume Σ_{i=1}^{k} (2i−1) = k² for arbitrary k ≥ 1.",
+              "Inductive Step Goal: Prove Σ_{i=1}^{k+1} (2i−1) = (k+1)².",
+              "Telescoping: Σ_{i=1}^{k+1} (2i−1) = [Σ_{i=1}^{k} (2i−1)] + [2(k+1)−1].",
+              "Substitute I.H. and simplify: = k² + (2k+1) = k²+2k+1 = (k+1)². ✓",
+              "Conclusion: By induction, Σ_{i=1}^{n} (2i−1) = n² for all n ≥ 1."
+            ],
+            "final_answer": "Σ_{i=1}^{n} (2i−1) = n² for all n ≥ 1 (proven)",
+            "why_it_works": "The (k+1)th odd integer is 2(k+1)−1 = 2k+1. Adding k²+2k+1 instantly gives (k+1)² — the algebra is minimal once the I.H. is substituted.",
+            "common_mistake": "Computing the extra term as 2k−1 (the kth odd number) rather than 2(k+1)−1 = 2k+1 (the (k+1)th odd number)."
+          }
+        ],
+        "quick_checks": [
+          {
+            "type": "mcq",
+            "question": "What is the very FIRST move in the inductive step of a summation induction proof?",
+            "choices": [
+              "Substitute the inductive hypothesis immediately",
+              "Apply the telescoping trick to split off the last term",
+              "Compute the base case again",
+              "Write the target expression and work backwards"
+            ],
+            "answer": "Apply the telescoping trick to split off the last term",
+            "explanation": "Telescoping always comes first — it reveals the Σ to k sub-sum that you then replace with the I.H."
+          },
+          {
+            "type": "mcq",
+            "question": "In the proof that Σ(2i−1) = n², what is the (k+1)th odd integer?",
+            "choices": [
+              "2k−1",
+              "2k+1",
+              "2k+3",
+              "2(k+1)"
+            ],
+            "answer": "2k+1",
+            "explanation": "Substitute i=k+1 into the general formula 2i−1: 2(k+1)−1 = 2k+1"
+          },
+          {
+            "type": "mcq",
+            "question": "After the I.H. substitution in Proof 3 (Σ i·2^i), the coefficient in front of 2^(k+1) becomes:",
+            "choices": [
+              "k−1",
+              "k+1",
+              "2k",
+              "k"
+            ],
+            "answer": "2k",
+            "explanation": "From I.H.: (k−1); from the extra term: +(k+1). Total coefficient: (k−1)+(k+1) = 2k, giving 2k·2^(k+1) = k·2^(k+2)"
+          }
+        ],
+        "summary": {
+          "key_takeaways": [
+            "Every summation induction proof follows: Base Case → I.H. → Telescope → Substitute I.H. → Algebra to target",
+            "The target for P(k+1) is the original formula with every n replaced by k+1",
+            "The telescoping trick is always the first move in the inductive step",
+            "After telescoping, substitute the I.H. to replace Σ_{i=1}^{k} with the known closed form",
+            "The remaining work is algebra — factor, combine, simplify until you reach the target"
+          ],
+          "next": "Practice all three proof types in the Exercises section — exam questions will give you a closed-form formula and ask for a complete induction proof with all three steps labelled."
+        }
+      }
+    ],
+    "exercises": {
+      "lesson_id": "module10_exercises",
+      "type": "exercises",
+      "title": "Mathematical Induction — Practice and Assessment",
+      "description": "Comprehensive practice across all three lessons: summation evaluation, closed-form formulas, induction structure, and full induction proofs with varying complexity.",
+      "question_sets": [
+        {
+          "type": "mcq",
+          "title": "Multiple Choice",
+          "questions": [
+            {
+              "id": "m10_mcq_1",
+              "question": "What is Σ_{i=1}^{5} i²?",
+              "options": [
+                "15",
+                "25",
+                "55",
+                "30"
+              ],
+              "answer": "55",
+              "explanation": "1²+2²+3²+4²+5² = 1+4+9+16+25 = 55"
+            },
+            {
+              "id": "m10_mcq_2",
+              "question": "Which step of mathematical induction assumes P(k) is true?",
+              "options": [
+                "Base case",
+                "Inductive hypothesis",
+                "Inductive step",
+                "Conclusion"
+              ],
+              "answer": "Inductive hypothesis",
+              "explanation": "The Inductive Hypothesis explicitly states 'Assume P(k) is true for an arbitrary positive integer k'"
+            },
+            {
+              "id": "m10_mcq_3",
+              "question": "Using the closed form, what is Σ_{i=1}^{100} i?",
+              "options": [
+                "5000",
+                "5050",
+                "10100",
+                "4950"
+              ],
+              "answer": "5050",
+              "explanation": "n(n+1)/2 = 100×101/2 = 10100/2 = 5050"
+            },
+            {
+              "id": "m10_mcq_4",
+              "question": "In a mathematical induction proof, what does the inductive step prove?",
+              "options": [
+                "P(1) is true",
+                "P(k) is true for a specific k",
+                "P(k+1) is true assuming P(k) is true",
+                "P(n) is true for all n by direct computation"
+              ],
+              "answer": "P(k+1) is true assuming P(k) is true",
+              "explanation": "The inductive step proves the implication P(k)→P(k+1), not P(k+1) outright"
+            },
+            {
+              "id": "m10_mcq_5",
+              "question": "The telescoping trick states that Σ_{i=1}^{k+1} f(i) equals:",
+              "options": [
+                "Σ_{i=1}^{k} f(i) − f(k+1)",
+                "Σ_{i=1}^{k} f(i) · f(k+1)",
+                "Σ_{i=1}^{k} f(i) + f(k+1)",
+                "f(k+1) only"
+              ],
+              "answer": "Σ_{i=1}^{k} f(i) + f(k+1)",
+              "explanation": "The sum to k+1 equals the sum to k plus the (k+1)th term — this is the fundamental telescoping identity"
+            },
+            {
+              "id": "m10_mcq_6",
+              "question": "The sum of the first n positive odd integers equals:",
+              "options": [
+                "n(n+1)/2",
+                "n²",
+                "2n−1",
+                "n(2n−1)"
+              ],
+              "answer": "n²",
+              "explanation": "1+3+5+…+(2n−1) = n². Verified: n=4 gives 1+3+5+7=16=4²"
+            },
+            {
+              "id": "m10_mcq_7",
+              "question": "Mathematical induction is best described as:",
+              "options": [
+                "A method to generate new formulas",
+                "A method to verify statements about all positive integers",
+                "A method to check only the first 10 cases of a pattern",
+                "A method to find counter-examples"
+              ],
+              "answer": "A method to verify statements about all positive integers",
+              "explanation": "Induction proves a given statement is true for all positive integers — it verifies, it does not discover"
+            },
+            {
+              "id": "m10_mcq_8",
+              "question": "In proving Σ_{i=1}^{n} i = n(n+1)/2 by induction, what is the target expression for P(k+1)?",
+              "options": [
+                "k(k+1)/2",
+                "(k+1)(k+2)/2",
+                "(k+1)k/2",
+                "k(k+2)/2"
+              ],
+              "answer": "(k+1)(k+2)/2",
+              "explanation": "Replace every n with k+1: (k+1)(k+1+1)/2 = (k+1)(k+2)/2"
+            }
+          ]
+        },
+        {
+          "type": "true_false",
+          "title": "True or False",
+          "questions": [
+            {
+              "id": "m10_tf_1",
+              "question": "The variable name used in a summation (i, j, k, etc.) affects the value of the sum.",
+              "answer": false,
+              "explanation": "The index variable is a dummy variable — renaming it does not change the sum's value"
+            },
+            {
+              "id": "m10_tf_2",
+              "question": "In a mathematical induction proof, the base case is usually n=1.",
+              "answer": true,
+              "explanation": "Most induction proofs start with the base case n=1, though sometimes n=0 or another value is appropriate"
+            },
+            {
+              "id": "m10_tf_3",
+              "question": "The inductive hypothesis assumes P(k+1) is true.",
+              "answer": false,
+              "explanation": "The I.H. assumes P(k) is true. The inductive step then proves P(k+1) using that assumption"
+            },
+            {
+              "id": "m10_tf_4",
+              "question": "Mathematical induction can generate (discover) new formulas.",
+              "answer": false,
+              "explanation": "Induction only verifies a given formula. The formula must be conjectured first — often by examining small cases"
+            },
+            {
+              "id": "m10_tf_5",
+              "question": "Σ_{i=1}^{n} (2i−1) = n² is a true identity for all positive integers n.",
+              "answer": true,
+              "explanation": "The sum of the first n odd integers equals n². This is proven in Lesson 3 using induction"
+            },
+            {
+              "id": "m10_tf_6",
+              "question": "If the base case and inductive step are both proven, P(n) is true for all positive integers n.",
+              "answer": true,
+              "explanation": "This is precisely the conclusion guaranteed by the principle of mathematical induction: [P(1) ∧ ∀k(P(k)→P(k+1))] → ∀n P(n)"
+            },
+            {
+              "id": "m10_tf_7",
+              "question": "The first move in the inductive step of a summation proof is to substitute the inductive hypothesis directly.",
+              "answer": false,
+              "explanation": "The first move is the telescoping trick — split off the (k+1)th term. Only then can you substitute the I.H. into the resulting Σ to k expression"
+            }
+          ]
+        },
+        {
+          "type": "short_answer",
+          "title": "Short Answer",
+          "questions": [
+            {
+              "id": "m10_sa_1",
+              "question": "Evaluate Σ_{j=0}^{4} (−2)^j. Show each term.",
+              "answer": "(−2)^0+(−2)^1+(−2)^2+(−2)^3+(−2)^4 = 1−2+4−8+16 = 11"
+            },
+            {
+              "id": "m10_sa_2",
+              "question": "State the inductive hypothesis for the claim: Σ_{i=1}^{n} i = n(n+1)/2.",
+              "answer": "Assume Σ_{i=1}^{k} i = k(k+1)/2 is true for an arbitrary positive integer k (Assume P(k) is True)"
+            },
+            {
+              "id": "m10_sa_3",
+              "question": "Use the closed-form formula to compute Σ_{i=1}^{200} i.",
+              "answer": "n(n+1)/2 with n=200: 200×201/2 = 40200/2 = 20100"
+            },
+            {
+              "id": "m10_sa_4",
+              "question": "What is the 7th positive odd integer? Write it using the general formula for the nth odd integer.",
+              "answer": "General formula: 2n−1. For n=7: 2(7)−1 = 13. The 7th positive odd integer is 13."
+            },
+            {
+              "id": "m10_sa_5",
+              "question": "In the proof of Σ_{i=1}^{n} i·2^i = (n−1)·2^(n+1)+2, what is the target expression P(k+1)?",
+              "answer": "Replace n with k+1: (k+1−1)·2^(k+2)+2 = k·2^(k+2)+2"
+            }
+          ]
+        },
+        {
+          "type": "step_by_step",
+          "title": "Step-by-Step",
+          "questions": [
+            {
+              "id": "m10_sbs_1",
+              "question": "Prove by mathematical induction that Σ_{i=1}^{n} i = n(n+1)/2.",
+              "steps": [
+                "Base Case (n=1): LS = Σ_{i=1}^{1} i = 1; RS = 1(1+1)/2 = 1. LS=RS. ✓",
+                "Inductive Hypothesis: Assume Σ_{i=1}^{k} i = k(k+1)/2 for arbitrary k ≥ 1.",
+                "Inductive Step Goal: Prove Σ_{i=1}^{k+1} i = (k+1)(k+2)/2.",
+                "Telescoping: Σ_{i=1}^{k+1} i = Σ_{i=1}^{k} i + (k+1).",
+                "Substitute I.H.: = k(k+1)/2 + (k+1) = k(k+1)/2 + 2(k+1)/2 = (k+1)(k+2)/2. ✓",
+                "Conclusion: All three steps complete. By induction, Σ_{i=1}^{n} i = n(n+1)/2 for all n ≥ 1."
+              ]
+            },
+            {
+              "id": "m10_sbs_2",
+              "question": "Conjecture a formula for 1+3+5+…+(2n−1), then prove it by induction.",
+              "steps": [
+                "Pattern check: n=1→1; n=2→4; n=3→9; n=4→16. Conjecture: Σ_{i=1}^{n}(2i−1)=n².",
+                "Base Case (n=1): LS = 2(1)−1=1; RS = 1²=1. ✓",
+                "I.H.: Assume Σ_{i=1}^{k}(2i−1) = k².",
+                "Inductive Step Goal: Prove Σ_{i=1}^{k+1}(2i−1) = (k+1)².",
+                "Telescope + I.H.: Σ to k+1 = k² + (2(k+1)−1) = k² + 2k+1 = (k+1)². ✓",
+                "Conclusion: By induction, Σ_{i=1}^{n}(2i−1)=n² for all n ≥ 1."
+              ]
+            },
+            {
+              "id": "m10_sbs_3",
+              "question": "For any induction proof, what are the three mandatory labelled steps and what does each accomplish?",
+              "steps": [
+                "Step 1 — BASE CASE: Verify P(n) is true for the smallest value (usually n=1) by direct substitution and checking LS=RS.",
+                "Step 2 — INDUCTIVE HYPOTHESIS (I.H.): Write 'Assume P(k) is true for an arbitrary k ≥ 1' and state the assumed formula explicitly.",
+                "Step 3 — INDUCTIVE STEP: Prove P(k+1) is true using the I.H. as a substitution tool. The first move is always the telescoping trick for summation proofs.",
+                "After all three steps, conclude: 'By mathematical induction, P(n) is true for all positive integers n.'"
+              ]
+            },
+            {
+              "id": "m10_sbs_4",
+              "question": "Prove by induction: for all n ≥ 1, 1+2+4+…+2^(n−1) = 2^n − 1 (sum of geometric series with ratio 2).",
+              "steps": [
+                "Rewrite as: Σ_{i=0}^{n−1} 2^i = 2^n − 1. Or equivalently prove P(n): Σ_{i=1}^{n} 2^(i−1) = 2^n − 1.",
+                "Base Case (n=1): LS = 2^0 = 1; RS = 2^1−1 = 1. ✓",
+                "I.H.: Assume Σ_{i=1}^{k} 2^(i−1) = 2^k − 1.",
+                "Inductive Step: Prove Σ_{i=1}^{k+1} 2^(i−1) = 2^(k+1)−1.",
+                "Telescope: Σ to k+1 = (Σ to k) + 2^k = (2^k−1) + 2^k [by I.H.] = 2·2^k − 1 = 2^(k+1)−1. ✓",
+                "Conclusion: By induction, the formula holds for all n ≥ 1."
+              ]
+            }
+          ]
+        },
+        {
+          "type": "exam_style",
+          "title": "Exam Style",
+          "questions": [
+            {
+              "id": "m10_ex_1",
+              "question": "State and prove by mathematical induction that Σ_{i=1}^{n} i = n(n+1)/2 for all positive integers n. Your answer must clearly label all three steps.",
+              "marks": 10,
+              "answer_outline": "Base Case [2 marks]: n=1; LS=1, RS=1(2)/2=1. ✓ | I.H. [2 marks]: Assume Σ_{i=1}^{k} i = k(k+1)/2 (clearly labelled). | Inductive Step [5 marks]: Prove (k+1)(k+2)/2. Apply telescope, sub I.H., algebraic simplification. | Conclusion [1 mark]: By induction, formula holds for all n ≥ 1."
+            },
+            {
+              "id": "m10_ex_2",
+              "question": "Conjecture a formula for Σ_{i=1}^{n} (2i−1) by computing the sum for n=1,2,3,4. Then prove your conjecture by mathematical induction.",
+              "marks": 12,
+              "answer_outline": "Conjecture [3 marks]: 1, 4, 9, 16 → formula is n². | Base Case [2 marks]: n=1, both sides equal 1. | I.H. [2 marks]: Assume Σ to k = k². | Inductive Step [4 marks]: Telescope, last term = 2k+1, k²+2k+1 = (k+1)². | Conclusion [1 mark]."
+            },
+            {
+              "id": "m10_ex_3",
+              "question": "Explain in your own words why the inductive hypothesis does NOT represent circular reasoning. Use the infinite-ladder analogy in your explanation.",
+              "marks": 6,
+              "answer_outline": "Explanation [3 marks]: I.H. assumes P(k) temporarily to prove a conditional (P(k)→P(k+1)), not to assert P(k) unconditionally. | Ladder analogy [2 marks]: Base case establishes P(1) unconditionally; I.H.+I.S. prove each rung leads to the next; together they propagate truth through all steps. | No circularity [1 mark]: truth flows from P(1) outward through the implication, not in a loop."
+            },
+            {
+              "id": "m10_ex_4",
+              "question": "Evaluate Σ_{k=1}^{5} (k+1) and Σ_{j=0}^{4} (−2)^j. Show all working.",
+              "marks": 6,
+              "answer_outline": "First sum [3 marks]: k+1 for k=1..5 → 2+3+4+5+6 = 20. | Second sum [3 marks]: (−2)^0+(−2)^1+(−2)^2+(−2)^3+(−2)^4 = 1−2+4−8+16 = 11."
+            },
+            {
+              "id": "m10_ex_5",
+              "question": "Without computing any terms, explain what Σ_{i=1}^{1000} i equals and how you know. Identify which formula you are using and what 'n' represents.",
+              "marks": 4,
+              "answer_outline": "Formula [1 mark]: n(n+1)/2. | Value [1 mark]: 1000×1001/2 = 500500. | n [1 mark]: n=1000, the upper limit. | Why valid [1 mark]: proven by mathematical induction for all positive integers n, so n=1000 is covered."
+            }
+          ]
+        },
+        {
+          "type": "randomized",
+          "title": "Randomized Practice",
+          "questions": [
+            {
+              "id": "m10_rand_1",
+              "question": "Evaluate Σ_{i=1}^{n} i for n = {6, 7, 8, 9, 10}",
+              "variants": [
+                {
+                  "n": 6,
+                  "answer": "6×7/2 = 21"
+                },
+                {
+                  "n": 7,
+                  "answer": "7×8/2 = 28"
+                },
+                {
+                  "n": 8,
+                  "answer": "8×9/2 = 36"
+                },
+                {
+                  "n": 9,
+                  "answer": "9×10/2 = 45"
+                },
+                {
+                  "n": 10,
+                  "answer": "10×11/2 = 55"
+                }
+              ]
+            },
+            {
+              "id": "m10_rand_2",
+              "question": "State the inductive hypothesis for the claim P(n): Σ_{i=1}^{n} (2i−1) = n²",
+              "variants": [
+                {
+                  "variant": "Formal",
+                  "answer": "Assume P(k): Σ_{i=1}^{k}(2i−1) = k² is true for arbitrary k ≥ 1"
+                },
+                {
+                  "variant": "Expanded",
+                  "answer": "Assume 1+3+5+…+(2k−1) = k² holds for some k ≥ 1"
+                },
+                {
+                  "variant": "Compact",
+                  "answer": "I.H.: Σ to k of (2i−1) = k²"
+                }
+              ]
+            },
+            {
+              "id": "m10_rand_3",
+              "question": "Apply the telescoping trick: express Σ_{i=1}^{k+1} f(i) where f(i) = {i, i², 2i−1}",
+              "variants": [
+                {
+                  "f": "i",
+                  "answer": "Σ_{i=1}^{k} i + (k+1)"
+                },
+                {
+                  "f": "i²",
+                  "answer": "Σ_{i=1}^{k} i² + (k+1)²"
+                },
+                {
+                  "f": "2i−1",
+                  "answer": "Σ_{i=1}^{k}(2i−1) + (2(k+1)−1) = Σ_{i=1}^{k}(2i−1) + (2k+1)"
+                }
+              ]
+            },
+            {
+              "id": "m10_rand_4",
+              "question": "Write the target expression P(k+1) for induction proofs of: {Σ i=n(n+1)/2, Σ(2i−1)=n², Σ i·2^i=(n−1)·2^(n+1)+2}",
+              "variants": [
+                {
+                  "formula": "n(n+1)/2",
+                  "target": "(k+1)(k+2)/2"
+                },
+                {
+                  "formula": "n²",
+                  "target": "(k+1)²"
+                },
+                {
+                  "formula": "(n−1)·2^(n+1)+2",
+                  "target": "k·2^(k+2)+2"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
