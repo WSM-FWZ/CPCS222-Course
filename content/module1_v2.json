@@ -1,0 +1,1669 @@
+{
+  "course": "CPCS 222 — Discrete Mathematics",
+  "version": "v2-pilot",
+  "module": {
+    "module_id": 1,
+    "title": "Propositional Logic",
+    "description": "Module 1 introduces the foundations of propositional logic: what counts as a proposition, the four connectives (¬, ∧, ∨, ⊕), the conditional (→) and biconditional (↔), the construction of truth tables, and the standard English-to-logic translations including the converse, contrapositive, and inverse of an implication. This v2 edition adds rich content blocks (definitions, callouts, tables, mermaid diagrams, SVG ideas, real-life examples), lesson-specific structure (hooks, why-it-matters, misconceptions, memory hooks), and exercises modeled on Labs 01–03, Assignment 1, and the Spring 2026 midterm.",
+    "source_files": [
+      "CPCS222_01n_LogicProofs.pdf",
+      "CPCS 222 - Lab 01 Propositional Logic.pdf",
+      "CPCS 222 - Lab 02 Applications of propositional logic.pdf",
+      "CPCS 222 - Lab 03 - Propositional Equivalance.pdf",
+      "Assignment_1_Spring 2026_.pdf",
+      "CPCS222-MidTerm-Spring2026 - Solution v02.pdf"
+    ],
+    "lessons": [
+      {
+        "lesson_id": "module1-lesson1",
+        "type": "tutorial",
+        "title": "What Is a Proposition?",
+        "slug": "what-is-a-proposition",
+        "hook": "Read this short paragraph and silently mark which sentences could be 'true' or 'false' and which cannot:\n\n_'Jeddah is on the Red Sea. Please close the door. Is the library open? 10 is greater than 5. x + 2 = 7. Wow, the weather is nice today!'_\n\nOnly **two** of those six sentences are propositions. By the end of this lesson you will know exactly which ones — and why.",
+        "why_it_matters": "Logic, programming, mathematical proofs, and even the registration rules of King Abdulaziz University are all built on the same atom: a sentence that is definitely **true** or **false**. Get this idea wrong and every later concept wobbles.",
+        "welcome": "Welcome to Module 1. Before you can prove anything in discrete mathematics — that an algorithm halts, that a query is correct, that a system specification is satisfiable — you need a precise language for talking about truth. That language begins with a single idea: the **proposition**.",
+        "objectives": [
+          "Define a proposition and identify its truth value.",
+          "Distinguish propositions from questions, commands, exclamations, and open sentences with free variables.",
+          "Recognize atomic propositions and assign propositional variables (p, q, r).",
+          "Spot the standard 'not-a-proposition' traps used on exams.",
+          "Connect propositions to their role inside compound logical statements."
+        ],
+        "storytelling": [
+          {
+            "speaker": "Student",
+            "text": "Professor, my friend insists 'x + 1 = 2' is a proposition. I disagree. Who's right?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "You are. A proposition must be a declarative sentence that is definitely true or false. 'x + 1 = 2' depends on x — it is an open sentence, not yet a proposition. Plug in x = 1 and it becomes the true proposition '1 + 1 = 2'."
+          },
+          {
+            "speaker": "Student",
+            "text": "So commands and questions don't count?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "Right. 'Close the door!' is a command and 'What time is it?' is a question. Neither has a truth value. Logic does not handle them directly."
+          },
+          {
+            "speaker": "Student",
+            "text": "What truth value does 'The Moon is made of green cheese' have?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "False. But it is still a proposition — what matters is that it has a definite truth value, not that it is correct."
+          }
+        ],
+        "rich_content_blocks": [
+          {
+            "type": "definition",
+            "title": "Proposition",
+            "content": "A **proposition** is a declarative sentence that is either **true (T)** or **false (F)**, but never both."
+          },
+          {
+            "type": "callout",
+            "title": "Three things a proposition is NOT",
+            "items": [
+              "Not a question — `Is the library open?`",
+              "Not a command — `Close the door.`",
+              "Not an exclamation — `Wow, what a sunset!`"
+            ]
+          },
+          {
+            "type": "warning",
+            "title": "Open sentences trap",
+            "content": "A sentence with a free variable like `x + 2 = 7` or `y > 3` is an **open sentence**, not a proposition. Its truth value depends on what you plug in. Once x or y is fixed (or bound by a quantifier), it becomes a proposition."
+          },
+          {
+            "type": "table",
+            "title": "Proposition vs. not-a-proposition",
+            "table": {
+              "headers": [
+                "Sentence",
+                "Proposition?",
+                "Truth value",
+                "Why"
+              ],
+              "rows": [
+                [
+                  "Jeddah is on the Red Sea.",
+                  "Yes",
+                  "T",
+                  "Declarative, definite truth"
+                ],
+                [
+                  "KAU is located in Riyadh.",
+                  "Yes",
+                  "F",
+                  "Wrong, but still a proposition"
+                ],
+                [
+                  "10 > 5.",
+                  "Yes",
+                  "T",
+                  "Comparison of fixed numbers"
+                ],
+                [
+                  "x + 2 = 7.",
+                  "No",
+                  "—",
+                  "Free variable x"
+                ],
+                [
+                  "Please close the door.",
+                  "No",
+                  "—",
+                  "Command"
+                ],
+                [
+                  "What time is it?",
+                  "No",
+                  "—",
+                  "Question"
+                ],
+                [
+                  "Wow, the weather is nice!",
+                  "No",
+                  "—",
+                  "Exclamation, not declarative"
+                ]
+              ]
+            }
+          },
+          {
+            "type": "real_life_example",
+            "title": "Saudi-flavoured examples",
+            "items": [
+              "**Proposition (T):** 'King Abdulaziz University is located in Jeddah.'",
+              "**Proposition (F):** 'Tabuk is the capital of Saudi Arabia.'",
+              "**Not a proposition:** 'Open Absher and renew your iqama.' — that is a command.",
+              "**Not a proposition:** 'Did you pay your STC bill?' — that is a question.",
+              "**Not a proposition:** 'x is enrolled in CPCS 222.' — open sentence; once you fix x = 'Ahmed', it becomes a proposition."
+            ]
+          },
+          {
+            "type": "svg_idea",
+            "title": "Proposition decision diagram",
+            "content": "A two-question flow: **(1)** Is the sentence declarative? **(2)** Does it have a definite truth value? Only the **YES → YES** path lands on a green 'Proposition' badge; every other path lands on a red 'Not a proposition' badge with the reason printed below."
+          },
+          {
+            "type": "mermaid",
+            "title": "Classification flowchart",
+            "mermaid": "flowchart TD\n  A[Sentence] --> B{Declarative?}\n  B -- No --> X[Not a proposition]\n  B -- Yes --> C{Has a definite truth value?}\n  C -- No --> X\n  C -- Yes --> Y[Proposition]\n  Y --> T[Truth value: T or F]"
+          },
+          {
+            "type": "misconception",
+            "title": "Common student mistakes",
+            "items": [
+              "Thinking a **false** sentence cannot be a proposition. False propositions are still propositions.",
+              "Treating `x = 5` as a proposition. With x free, it is an open sentence.",
+              "Calling a paradox like 'This sentence is false' a proposition — it cannot consistently be either T or F, so it fails the definition."
+            ]
+          },
+          {
+            "type": "summary_box",
+            "title": "Memory hook",
+            "content": "**P-T-F**: a Proposition is a sentence with a definite Truth value, exactly one of T or F."
+          }
+        ],
+        "concept_blocks": [
+          {
+            "type": "step_list",
+            "title": "How to test any sentence",
+            "items": [
+              "1. Is it a complete sentence? If not, stop — not a proposition.",
+              "2. Is it declarative (a statement)? Commands, questions, and exclamations fail here.",
+              "3. Does it have a definite truth value right now (no free variables, no missing context)? If no, stop.",
+              "4. If both checks pass, it is a proposition. Assign it a letter: p, q, r, …"
+            ]
+          }
+        ],
+        "visual_blocks": [
+          {
+            "type": "svg_idea",
+            "description": "Two-question decision diagram (declarative? definite truth value?). Highlights why open sentences and commands fail."
+          },
+          {
+            "type": "table",
+            "description": "Side-by-side gallery of propositions (green check) and non-propositions (red cross), with the failure reason printed in red."
+          }
+        ],
+        "sections": [
+          {
+            "number": 1,
+            "heading": "The two-property test",
+            "explanation": "A sentence is a proposition iff it is **declarative** AND it has a **definite truth value**. Both checks must pass.",
+            "examples": [
+              "'Jeddah is on the Red Sea.' — declarative ✓, T ✓ → proposition.",
+              "'What time is it?' — not declarative → not a proposition.",
+              "'x > 0.' — declarative ✓ but no definite truth value (x is free) → not a proposition."
+            ],
+            "common_mistakes": [
+              "Skipping the second check when the sentence 'looks like' a fact."
+            ],
+            "visual_idea": {
+              "type": "diagram",
+              "description": "Two checkpoints in series: declarative check and definite-truth-value check. A sentence must clear both to be tagged 'proposition'.",
+              "interactive_hint": "Type a sentence and watch it traverse the two checkpoints."
+            }
+          },
+          {
+            "number": 2,
+            "heading": "Atomic propositions and naming",
+            "explanation": "Each simple proposition is **atomic** — it cannot be broken into smaller propositions. We name atomic propositions with letters p, q, r, s so we can talk about combinations symbolically.",
+            "examples": [
+              "Let p = 'It is raining in Jeddah' and q = 'I am at home'.",
+              "Now p ∧ q means 'It is raining in Jeddah and I am at home' — a compound proposition built from atoms."
+            ],
+            "common_mistakes": [
+              "Reusing the same letter for two different sentences. Pick a fresh letter for each new atom."
+            ],
+            "visual_idea": {
+              "type": "svg",
+              "description": "Stack of cards labelled p, q, r, s. Each card has a slot where the learner writes the bound English sentence.",
+              "interactive_hint": "Click a card to flip between letter and bound sentence."
+            }
+          },
+          {
+            "number": 3,
+            "heading": "Truth value, not truthfulness",
+            "explanation": "A proposition has exactly one truth value: T or F. We do not say 'partly true' or 'usually true' — vagueness breaks propositionhood. If a sentence feels vague, look for a hidden free variable or unstated context.",
+            "examples": [
+              "'Elephants are bigger than mice' — T.",
+              "'520 < 111' — F (still a proposition).",
+              "'y > 5' — depends on y, not a proposition."
+            ],
+            "common_mistakes": [
+              "Saying 'it depends' for a sentence that should be a proposition. If the truth value depends on something, the sentence is not yet a proposition."
+            ],
+            "visual_idea": {
+              "type": "truth-table",
+              "description": "Single-row table showing one proposition and its T/F value, emphasizing that every proposition lives in exactly one of two states.",
+              "interactive_hint": "Toggle the value to reinforce that there are exactly two states."
+            }
+          }
+        ],
+        "worked_examples": [
+          {
+            "problem": "Read the passage and list the **non-propositions**: 'Ahmed reached KAU before class began. The university opens its gates at 8:00 AM. Please close the library door behind you. 10 is greater than 5. He wrote x + 2 = 7 in his notebook. Wow, the weather is nice today! Finally, he concluded that 15 is divisible by 3.'",
+            "thinking_process": "Walk through each sentence and apply the two-property test. Anything that fails one of the checks is not a proposition.",
+            "step_by_step_solution": [
+              "'Ahmed reached KAU before class began.' — declarative + T/F → proposition.",
+              "'The university opens its gates at 8:00 AM.' — proposition.",
+              "'Please close the library door behind you.' — command → NOT a proposition.",
+              "'10 is greater than 5.' — proposition (T).",
+              "'x + 2 = 7' — open sentence (free x) → NOT a proposition.",
+              "'Wow, the weather is nice today!' — exclamation → NOT a proposition.",
+              "'15 is divisible by 3.' — proposition (T)."
+            ],
+            "final_answer": "Three non-propositions: the command, the open sentence x + 2 = 7, and the exclamation.",
+            "why_it_works": "Each rejected sentence fails one of the two property checks; the rest are clean declaratives with definite truth values.",
+            "common_mistake": "Marking 'x + 2 = 7' as a proposition because it 'looks mathematical'. Free variables disqualify it.",
+            "visual_hint": "Highlight non-proposition sentences in red as you tag them.",
+            "source_pattern": "Inspired by Spring 2026 midterm Q1 'identify five sentences that are not a proposition'."
+          },
+          {
+            "problem": "Decide if each is a proposition; if so, give the truth value. (a) 'Cairo is the capital of Egypt.' (b) '5 + 7 = 10.' (c) 'x + 2 = 11.' (d) 'Answer this question.'",
+            "thinking_process": "Two-property test on each.",
+            "step_by_step_solution": [
+              "(a) Declarative + definite. **Proposition, T.**",
+              "(b) Declarative + definite (false: 5 + 7 = 12). **Proposition, F.**",
+              "(c) Free variable x. **Not a proposition.**",
+              "(d) Imperative. **Not a proposition.**"
+            ],
+            "final_answer": "(a) T. (b) F. (c) Open sentence. (d) Command.",
+            "why_it_works": "Failing either property check (declarativeness or definite truth value) immediately disqualifies a sentence.",
+            "common_mistake": "Marking (c) a proposition because it has an equals sign. Equations with free variables are open sentences.",
+            "source_pattern": "Inspired by Lab 01 Q1 'Which of these sentences are propositions?'"
+          }
+        ],
+        "misconceptions": [
+          "**False ≠ not-a-proposition.** A wrong claim (e.g., 'KAU is in Riyadh') is still a proposition with truth value F.",
+          "**Open sentences are tempting.** Anything with a free variable cannot be a proposition until the variable is given a value or bound.",
+          "**Self-referential paradoxes are not propositions.** 'This sentence is false' cannot be consistently T or F.",
+          "**Imperatives in disguise.** 'You should study' looks declarative but functions as advice/imperative — context matters."
+        ],
+        "memory_hooks": [
+          "**Two-Question Test:** Declarative? Definite truth value? Both YES → proposition.",
+          "**'It depends'** is a red flag. Real propositions never 'depend'.",
+          "**Letters for atoms:** p, q, r, s — fresh letter per fresh sentence."
+        ],
+        "quick_checks": [
+          {
+            "type": "mcq",
+            "question": "Which of the following IS a proposition?",
+            "choices": [
+              "Open the door.",
+              "Is it raining?",
+              "7 is greater than 4.",
+              "x = 10."
+            ],
+            "answer": "7 is greater than 4.",
+            "explanation": "Declarative with a definite truth value (T)."
+          },
+          {
+            "type": "true_false",
+            "question": "A false sentence cannot be a proposition.",
+            "choices": [
+              "True",
+              "False"
+            ],
+            "answer": "False",
+            "explanation": "A proposition only needs a definite truth value; being false is allowed."
+          },
+          {
+            "type": "short_answer",
+            "question": "Why is 'y > 5' not a proposition?",
+            "choices": [],
+            "answer": "Because y is a free variable; the truth value depends on y. With no value for y, the sentence has no definite truth value.",
+            "explanation": "Open sentences become propositions only after their variables are assigned or bound."
+          }
+        ],
+        "summary": {
+          "key_takeaways": [
+            "A proposition is a declarative sentence with a definite truth value (T or F).",
+            "Questions, commands, exclamations, and open sentences are NOT propositions.",
+            "Every proposition has exactly one truth value.",
+            "Atomic propositions get letters (p, q, r) so we can manipulate them symbolically.",
+            "On exams, watch for: free-variable equations, imperatives, exclamations, and questions disguised as facts."
+          ],
+          "next": "Now we combine atomic propositions using **logical connectives** — the small symbols that act like the verbs of formal logic."
+        },
+        "lesson_summary": {
+          "type": "summary_box",
+          "title": "Lesson 1 in one screen",
+          "items": [
+            "**Definition:** declarative + definite T/F.",
+            "**Disqualifiers:** questions, commands, exclamations, free variables, paradoxes.",
+            "**Naming:** atomic propositions get fresh letters p, q, r, …",
+            "**Saudi flavour:** 'KAU is in Jeddah' (T) is a proposition; 'Open Absher!' is not.",
+            "**Exam trap:** the passage-style 'pick the non-propositions' question (Spring 2026 midterm Q1)."
+          ]
+        }
+      },
+      {
+        "lesson_id": "module1-lesson2",
+        "type": "tutorial",
+        "title": "Logical Connectives — The Verbs of Logic",
+        "slug": "logical-connectives-the-verbs-of-logic",
+        "hook": "**KAU registration rule:** 'You can register for CPCS 222 if you passed CPCS 203 **AND** your GPA is at least 2.0.' What if you have a 1.9 GPA but passed CPCS 203? Can you register? Logic gives one and only one answer — and you'll know how to compute it by the end of this lesson.",
+        "why_it_matters": "Every Boolean condition in code, every search filter, every circuit gate, and every university rule is just a chain of connectives applied to atomic propositions. Five symbols (¬, ∧, ∨, ⊕, with → and ↔ coming next lesson) cover them all.",
+        "welcome": "In Lesson 1 you learned to spot a proposition. Now you will learn to **combine** them using **logical connectives** — the small symbols that act like the verbs of formal logic. These are the same operators behind every if-statement and every SQL WHERE clause.",
+        "objectives": [
+          "Compute the truth value of compound propositions involving ¬, ∧, ∨, ⊕.",
+          "Translate English connectives ('and', 'but', 'or', 'either…or but not both') into the right symbol.",
+          "Distinguish **inclusive** ∨ from **exclusive** ⊕ in everyday English.",
+          "Build small compound propositions from two or three atoms.",
+          "Recognize lab/exam-style translation patterns (Lab 01 Q3, Lab 01 Q4)."
+        ],
+        "storytelling": [
+          {
+            "speaker": "Student",
+            "text": "Why do we need symbols like ∧ and ∨? English has 'and' and 'or'."
+          },
+          {
+            "speaker": "Professor",
+            "text": "Because English is ambiguous. Does 'or' mean 'one of them' or 'one or both'? Logic answers that with two distinct symbols, ∨ and ⊕, that have unambiguous truth tables."
+          },
+          {
+            "speaker": "Student",
+            "text": "And ¬ just flips a true to false?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "Exactly. Five connectives, five truth tables. Memorize them once and you can evaluate any compound proposition by hand."
+          }
+        ],
+        "rich_content_blocks": [
+          {
+            "type": "definition",
+            "title": "Negation (¬)",
+            "content": "**¬p** (read 'not p') flips p's truth value. If p is T then ¬p is F, and vice-versa.",
+            "latex": "\\neg p"
+          },
+          {
+            "type": "truth_table",
+            "title": "Negation truth table",
+            "table": {
+              "headers": [
+                "p",
+                "¬p"
+              ],
+              "rows": [
+                [
+                  "T",
+                  "F"
+                ],
+                [
+                  "F",
+                  "T"
+                ]
+              ]
+            }
+          },
+          {
+            "type": "definition",
+            "title": "Conjunction (∧)",
+            "content": "**p ∧ q** ('p AND q') is true exactly when **both** p and q are true. English 'but' translates the same way.",
+            "latex": "p \\land q"
+          },
+          {
+            "type": "truth_table",
+            "title": "Conjunction truth table",
+            "table": {
+              "headers": [
+                "p",
+                "q",
+                "p ∧ q"
+              ],
+              "rows": [
+                [
+                  "T",
+                  "T",
+                  "T"
+                ],
+                [
+                  "T",
+                  "F",
+                  "F"
+                ],
+                [
+                  "F",
+                  "T",
+                  "F"
+                ],
+                [
+                  "F",
+                  "F",
+                  "F"
+                ]
+              ]
+            }
+          },
+          {
+            "type": "definition",
+            "title": "Disjunction (∨) — INCLUSIVE 'or'",
+            "content": "**p ∨ q** ('p OR q') is true when **at least one** of p, q is true (including both). This is the inclusive 'or' of mathematics.",
+            "latex": "p \\lor q"
+          },
+          {
+            "type": "truth_table",
+            "title": "Disjunction truth table",
+            "table": {
+              "headers": [
+                "p",
+                "q",
+                "p ∨ q"
+              ],
+              "rows": [
+                [
+                  "T",
+                  "T",
+                  "T"
+                ],
+                [
+                  "T",
+                  "F",
+                  "T"
+                ],
+                [
+                  "F",
+                  "T",
+                  "T"
+                ],
+                [
+                  "F",
+                  "F",
+                  "F"
+                ]
+              ]
+            }
+          },
+          {
+            "type": "definition",
+            "title": "Exclusive or (⊕)",
+            "content": "**p ⊕ q** is true when **exactly one** of p, q is true (but not both). Use this for the everyday 'either…or…but not both' phrasing.",
+            "latex": "p \\oplus q"
+          },
+          {
+            "type": "truth_table",
+            "title": "Exclusive or truth table",
+            "table": {
+              "headers": [
+                "p",
+                "q",
+                "p ⊕ q"
+              ],
+              "rows": [
+                [
+                  "T",
+                  "T",
+                  "F"
+                ],
+                [
+                  "T",
+                  "F",
+                  "T"
+                ],
+                [
+                  "F",
+                  "T",
+                  "T"
+                ],
+                [
+                  "F",
+                  "F",
+                  "F"
+                ]
+              ]
+            }
+          },
+          {
+            "type": "callout",
+            "title": "∨ vs ⊕ — the only row that differs",
+            "content": "The truth tables for ∨ and ⊕ agree on three of the four rows. They disagree only when **both p and q are true**: ∨ says T, ⊕ says F. That single row is the entire difference."
+          },
+          {
+            "type": "real_life_example",
+            "title": "When does English mean ∨ vs ⊕?",
+            "items": [
+              "**Inclusive (∨):** 'Students who took CPCS 203 OR Math 110 may register.' Taking both is fine.",
+              "**Exclusive (⊕):** 'Soup OR salad comes with the entrée.' You don't get both.",
+              "**Inclusive (∨):** 'You may pay with mada OR Apple Pay.' Both methods are accepted.",
+              "**Exclusive (⊕):** 'Either you arrive on time OR you miss the exam — not both.'"
+            ]
+          },
+          {
+            "type": "warning",
+            "title": "English 'but' is just ∧",
+            "content": "**'It is below freezing BUT not snowing'** translates to `p ∧ ¬q` — the same as 'and'. The only difference is stylistic emphasis."
+          },
+          {
+            "type": "svg_idea",
+            "title": "Connectives as logic gates",
+            "content": "Render each connective as a circuit-style gate: NOT (a triangle with a bubble), AND (a D-shape), OR (a curved-back D-shape), XOR (OR with an extra curve). Inputs labelled p and q; output labelled with the resulting expression. Toggling p or q flips the output light."
+          },
+          {
+            "type": "mermaid",
+            "title": "Compound proposition data flow",
+            "mermaid": "flowchart LR\n  P([p: T])\n  Q([q: F])\n  P --> N[¬]\n  Q --> A[∧]\n  N --> A\n  A --> R([Result: F])"
+          },
+          {
+            "type": "misconception",
+            "title": "Three classic mistakes",
+            "items": [
+              "Translating 'but' as a different connective — it is just ∧.",
+              "Reading every English 'or' as exclusive — most are inclusive.",
+              "Negating only part of a compound: '¬(p ∧ q)' is NOT the same as '¬p ∧ q'."
+            ]
+          },
+          {
+            "type": "summary_box",
+            "title": "Memory hook",
+            "items": [
+              "**¬** flips the bit.",
+              "**∧** is true only when **both**.",
+              "**∨** is true when **at least one** (inclusive).",
+              "**⊕** is true when **exactly one** (exclusive)."
+            ]
+          }
+        ],
+        "concept_blocks": [
+          {
+            "type": "step_list",
+            "title": "Evaluating a compound proposition",
+            "items": [
+              "1. Identify the atomic variables and their truth values.",
+              "2. Compute innermost subexpressions first (negations, parenthesized parts).",
+              "3. Move outward connective by connective using each truth table.",
+              "4. The final value is the truth of the whole expression."
+            ]
+          }
+        ],
+        "visual_blocks": [
+          {
+            "type": "svg_idea",
+            "description": "Connective circuit diagram with switches for p and q; the output bulb toggles in real time."
+          },
+          {
+            "type": "truth_table",
+            "description": "Side-by-side ∨ vs ⊕ tables with the (T, T) row highlighted in yellow."
+          }
+        ],
+        "sections": [
+          {
+            "number": 1,
+            "heading": "Why we need connectives",
+            "explanation": "A single atomic proposition can only say one thing. Real reasoning involves combining many simple statements, so we need OPERATORS — small symbols that take one or two truth values and return a truth value.",
+            "examples": [
+              "'I am at home AND it is raining' — ∧.",
+              "'It is NOT raining' — ¬.",
+              "'Either soup OR salad — not both' — ⊕."
+            ],
+            "common_mistakes": [],
+            "visual_idea": {
+              "type": "diagram",
+              "description": "Two boxes labelled p and q feed into a connective box; the output box shows the result.",
+              "interactive_hint": "Toggle p and q; the output updates instantly."
+            }
+          },
+          {
+            "number": 2,
+            "heading": "The four connectives in detail",
+            "explanation": "The four connectives ¬, ∧, ∨, ⊕ have fixed, unambiguous truth tables. ¬ takes one input; the others take two. Memorize the four tables and you can evaluate any compound proposition mechanically.",
+            "examples": [
+              "¬T = F.",
+              "T ∧ F = F.",
+              "T ∨ F = T.",
+              "T ⊕ T = F (exclusive!)."
+            ],
+            "common_mistakes": [
+              "Treating ∨ and ⊕ as the same."
+            ],
+            "visual_idea": {
+              "type": "truth-table",
+              "description": "Stacked tables for the four connectives; each highlighted with a colour code.",
+              "interactive_hint": "Click any cell to see the English example that produces that row."
+            }
+          },
+          {
+            "number": 3,
+            "heading": "Translating English to symbols",
+            "explanation": "Almost every English connector maps to a single symbol. The only ambiguous case is 'or' — context decides whether you use ∨ or ⊕.",
+            "examples": [
+              "'It is below freezing AND snowing.' → p ∧ q.",
+              "'It is below freezing BUT not snowing.' → p ∧ ¬q.",
+              "'Either it is below freezing OR it is snowing (or both).' → p ∨ q.",
+              "'Either it is below freezing OR it is snowing — but not both.' → p ⊕ q."
+            ],
+            "common_mistakes": [
+              "Translating 'but' differently from 'and'.",
+              "Defaulting to ⊕ for every 'or'."
+            ],
+            "visual_idea": {
+              "type": "diagram",
+              "description": "Two columns: English phrase ↔ logical symbol. Hover any phrase to see a quick example.",
+              "interactive_hint": "Type a sentence and watch the corresponding symbol light up."
+            }
+          }
+        ],
+        "worked_examples": [
+          {
+            "problem": "Let p = 'It is below freezing' and q = 'It is snowing'. Translate: (a) 'It is below freezing and snowing.' (b) 'It is below freezing but not snowing.' (c) 'It is not below freezing and it is not snowing.' (d) 'Either it is snowing or below freezing (or both).'",
+            "thinking_process": "Map each English connector to a symbol; apply ¬ to whichever piece is being negated.",
+            "step_by_step_solution": [
+              "(a) 'and' → ∧. **p ∧ q.**",
+              "(b) 'but not' → ∧ with ¬ on q. **p ∧ ¬q.**",
+              "(c) 'not … and not …' → **¬p ∧ ¬q.**",
+              "(d) inclusive 'or' → **p ∨ q** (or equivalently q ∨ p)."
+            ],
+            "final_answer": "(a) p ∧ q. (b) p ∧ ¬q. (c) ¬p ∧ ¬q. (d) p ∨ q.",
+            "why_it_works": "Each English connector maps cleanly; negation modifies only the piece being negated.",
+            "common_mistake": "Negating both p and q in (b) instead of only q.",
+            "source_pattern": "Inspired by Lab 01 Q3 — translation with p, q (freezing / snowing)."
+          },
+          {
+            "problem": "Compute (p ∨ q) ∧ ¬(p ∧ q) when p = T, q = T.",
+            "thinking_process": "Evaluate inside-out using each connective's truth table.",
+            "step_by_step_solution": [
+              "p ∨ q = T ∨ T = T.",
+              "p ∧ q = T ∧ T = T, so ¬(p ∧ q) = F.",
+              "Combine: T ∧ F = **F**."
+            ],
+            "final_answer": "F.",
+            "why_it_works": "(p ∨ q) ∧ ¬(p ∧ q) is the textbook definition of exclusive or — F when both are T.",
+            "common_mistake": "Computing the outer ∧ before the inner pieces.",
+            "source_pattern": "Inspired by Lab 02 Q5–Q7 truth-table verification."
+          },
+          {
+            "problem": "Let p = 'Sharks have been spotted near the shore' and q = 'Swimming at the New Jersey shore is allowed'. Translate ¬p ∨ q to English.",
+            "thinking_process": "Translate connectives back into English carefully.",
+            "step_by_step_solution": [
+              "¬p = 'Sharks have not been spotted near the shore'.",
+              "¬p ∨ q = 'Either no sharks have been spotted near the shore, OR swimming is allowed (or both).'"
+            ],
+            "final_answer": "'Either no sharks have been spotted, or swimming is allowed (or both).'",
+            "why_it_works": "Direct application of the disjunction and negation definitions.",
+            "common_mistake": "Reading ∨ as exclusive in the English back-translation.",
+            "source_pattern": "Inspired by Lab 01 Q4 — symbolic-to-English translation."
+          }
+        ],
+        "misconceptions": [
+          "Treating 'but' as anything other than ∧.",
+          "Reading every 'or' as exclusive (⊕). Inclusive (∨) is the default.",
+          "Forgetting that ¬ binds tighter than ∧, ∨, and the others — `¬p ∨ q` is `(¬p) ∨ q`, not `¬(p ∨ q)`."
+        ],
+        "memory_hooks": [
+          "**∧ wants both T.**",
+          "**∨ wants at least one T.**",
+          "**⊕ wants exactly one T.**",
+          "**¬ flips one bit.**"
+        ],
+        "quick_checks": [
+          {
+            "type": "mcq",
+            "question": "If p is false and q is true, what is p ∧ q?",
+            "choices": [
+              "True",
+              "False",
+              "Unknown",
+              "Both"
+            ],
+            "answer": "False",
+            "explanation": "Conjunction is true ONLY when both operands are true."
+          },
+          {
+            "type": "mcq",
+            "question": "Which connective best matches 'either you turn left or you turn right (but not both)'?",
+            "choices": [
+              "∧",
+              "∨",
+              "⊕",
+              "¬"
+            ],
+            "answer": "⊕",
+            "explanation": "'Either…or…but not both' is the textbook phrasing of exclusive or."
+          },
+          {
+            "type": "true_false",
+            "question": "p ∨ q is true when both p and q are true.",
+            "choices": [
+              "True",
+              "False"
+            ],
+            "answer": "True",
+            "explanation": "Inclusive ∨ is true when at least one operand is true, including the both-true case."
+          }
+        ],
+        "summary": {
+          "key_takeaways": [
+            "Negation (¬) flips one truth value.",
+            "Conjunction (∧) is true only when both operands are true.",
+            "Disjunction (∨) is **inclusive** — true when at least one is true.",
+            "Exclusive or (⊕) is true when **exactly one** is true.",
+            "English 'and' / 'but' both translate to ∧; English 'or' is usually ∨ but sometimes ⊕ — context decides.",
+            "Evaluate compound propositions inside-out, table by table."
+          ],
+          "next": "Next: full **truth tables** and the trickiest connective of all — the **conditional** (→) and its cousin the **biconditional** (↔)."
+        },
+        "lesson_summary": {
+          "type": "summary_box",
+          "title": "Lesson 2 in one screen",
+          "items": [
+            "**Five symbols, four truth tables** (so far): ¬, ∧, ∨, ⊕.",
+            "**English mapping:** and/but → ∧; inclusive or → ∨; exclusive or → ⊕.",
+            "**Saudi flavour:** 'You may pay with mada OR Apple Pay' is ∨ (both fine); 'Either pay or face a fine — not both' is ⊕.",
+            "**Lab pattern:** Lab 01 Q3 (p = 'below freezing', q = 'snowing') — translation drills."
+          ]
+        }
+      },
+      {
+        "lesson_id": "module1-lesson3",
+        "type": "tutorial",
+        "title": "Truth Tables and Conditional Statements",
+        "slug": "truth-tables-and-conditional-statements",
+        "hook": "Read this KAU rule: **'If you submit your CPCS 222 assignment, then you receive a grade.'** Suppose you DON'T submit. Has the rule been broken? Most students say 'I don't know — what about the grade?' Logic has a single, definite answer: the rule is **still true**. The only way to break this kind of promise is to **submit** and **not receive a grade**. That single row is the entire mystery of the conditional.",
+        "why_it_matters": "Almost every theorem you will ever read is a conditional. Proofs of correctness, security policies, contracts, registration rules, and theorem statements all live inside p → q. Misreading an implication is the #1 source of everyday reasoning errors.",
+        "welcome": "Now that you can compose propositions with ¬, ∧, ∨, and ⊕, it is time to learn the most important connective of all: the **conditional** (p → q), read 'if p then q'. You will also learn the biconditional, the three implications related to any conditional (converse, contrapositive, inverse), and how to construct a complete truth table — the technique behind every truth-table question on the lab and the exam.",
+        "objectives": [
+          "Construct a complete truth table for any compound proposition with up to three propositional variables.",
+          "Define the implication p → q and explain why it is true when the hypothesis is false.",
+          "Translate the many English phrasings of 'if p then q' into → form.",
+          "Form the converse, contrapositive, and inverse of an implication and recognize which is logically equivalent to the original.",
+          "Define the biconditional p ↔ q and apply the standard precedence rules."
+        ],
+        "storytelling": [
+          {
+            "speaker": "Student",
+            "text": "Why is 'If 1 + 1 = 3, then I am a billionaire' considered TRUE?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "Logic only cares whether a promise is broken. The implication p → q says 'if p happens, q must happen'. The only way to break that promise is when p is true but q is false. If p never happens, the promise is never tested — vacuously true."
+          },
+          {
+            "speaker": "Student",
+            "text": "And the contrapositive — why does that matter?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "Because p → q and ¬q → ¬p are logically equivalent. Sometimes one direction is easier to prove than the other; the contrapositive is a free second route to the same destination."
+          }
+        ],
+        "rich_content_blocks": [
+          {
+            "type": "definition",
+            "title": "Implication (p → q)",
+            "content": "**p → q** is read 'if p, then q'. It is **FALSE only when p is T and q is F**; in every other row it is T. Think of p → q as a promise: only a kept promise that fails counts as broken.",
+            "latex": "p \\to q"
+          },
+          {
+            "type": "truth_table",
+            "title": "Implication truth table",
+            "table": {
+              "headers": [
+                "p",
+                "q",
+                "p → q",
+                "Reading"
+              ],
+              "rows": [
+                [
+                  "T",
+                  "T",
+                  "T",
+                  "Promise kept"
+                ],
+                [
+                  "T",
+                  "F",
+                  "F",
+                  "**Promise broken**"
+                ],
+                [
+                  "F",
+                  "T",
+                  "T",
+                  "Vacuously true"
+                ],
+                [
+                  "F",
+                  "F",
+                  "T",
+                  "Vacuously true"
+                ]
+              ]
+            }
+          },
+          {
+            "type": "real_life_example",
+            "title": "Implication as a real-world promise",
+            "items": [
+              "'**If** the politician is elected, **then** taxes will be lowered.' Broken only by elected + no tax cut.",
+              "'**If** you submit the assignment, **then** you receive a grade.' Broken only by submission + no grade.",
+              "'**If** you have a valid Iqama, **then** you can renew your driver's license on Absher.' Broken only by valid Iqama + cannot renew.",
+              "'**If** you scored 100 % on the final, **then** you get an A.' Broken only by 100 % + not-A."
+            ]
+          },
+          {
+            "type": "callout",
+            "title": "Many English phrases — same →",
+            "items": [
+              "'if p, then q'",
+              "'p implies q'",
+              "'p **only if** q'",
+              "'q if p'",
+              "'q whenever p'",
+              "'q follows from p'",
+              "'p is **sufficient** for q'",
+              "'q is **necessary** for p'",
+              "'a sufficient condition for q is p'",
+              "'a necessary condition for p is q'"
+            ]
+          },
+          {
+            "type": "warning",
+            "title": "'Only if' is one of the most-flipped phrases on exams",
+            "content": "**'p only if q'** translates to **p → q** (q is necessary for p), NOT q → p. Burn this in: the side that comes after 'only if' is the conclusion."
+          },
+          {
+            "type": "definition",
+            "title": "Converse, contrapositive, inverse",
+            "items": [
+              "**Converse:** q → p",
+              "**Contrapositive:** ¬q → ¬p — **logically equivalent** to p → q",
+              "**Inverse:** ¬p → ¬q — equivalent to the converse, NOT to the original"
+            ]
+          },
+          {
+            "type": "table",
+            "title": "Equivalence map",
+            "table": {
+              "headers": [
+                "Form",
+                "Symbolic",
+                "Equivalent to original?"
+              ],
+              "rows": [
+                [
+                  "Original",
+                  "p → q",
+                  "—"
+                ],
+                [
+                  "Converse",
+                  "q → p",
+                  "**No**"
+                ],
+                [
+                  "Contrapositive",
+                  "¬q → ¬p",
+                  "**Yes**"
+                ],
+                [
+                  "Inverse",
+                  "¬p → ¬q",
+                  "**No** (equiv. to converse)"
+                ]
+              ]
+            }
+          },
+          {
+            "type": "definition",
+            "title": "Biconditional (p ↔ q)",
+            "content": "**p ↔ q** ('p if and only if q', often shortened to **iff**) is true exactly when p and q have the same truth value. Equivalently, p ↔ q ≡ (p → q) ∧ (q → p).",
+            "latex": "p \\leftrightarrow q"
+          },
+          {
+            "type": "truth_table",
+            "title": "Biconditional truth table",
+            "table": {
+              "headers": [
+                "p",
+                "q",
+                "p ↔ q"
+              ],
+              "rows": [
+                [
+                  "T",
+                  "T",
+                  "T"
+                ],
+                [
+                  "T",
+                  "F",
+                  "F"
+                ],
+                [
+                  "F",
+                  "T",
+                  "F"
+                ],
+                [
+                  "F",
+                  "F",
+                  "T"
+                ]
+              ]
+            }
+          },
+          {
+            "type": "formula",
+            "title": "Useful equivalences",
+            "items": [
+              "p → q ≡ ¬p ∨ q",
+              "p ↔ q ≡ (p → q) ∧ (q → p)",
+              "p ↔ q ≡ (p ∧ q) ∨ (¬p ∧ ¬q)",
+              "¬(p → q) ≡ p ∧ ¬q"
+            ]
+          },
+          {
+            "type": "callout",
+            "title": "Operator precedence (high → low)",
+            "items": [
+              "1. **¬** (tightest)",
+              "2. **∧**",
+              "3. **∨**",
+              "4. **→**",
+              "5. **↔** (loosest)"
+            ]
+          },
+          {
+            "type": "mermaid",
+            "title": "Mapping the four related conditionals",
+            "mermaid": "flowchart LR\n  O[p → q\\nOriginal] -- equivalent --> CP[¬q → ¬p\\nContrapositive]\n  CV[q → p\\nConverse] -- equivalent --> IN[¬p → ¬q\\nInverse]\n  O -. NOT equivalent .- CV\n  O -. NOT equivalent .- IN"
+          },
+          {
+            "type": "svg_idea",
+            "title": "Implication as a contract",
+            "content": "Render the implication truth table as four mini scenes: T-T (handshake), T-F (broken contract — red 'X'), F-T (no trigger, but everything fine — green check), F-F (no trigger, no obligation — green check). Driving home that the conditional fails only on the broken-promise row."
+          },
+          {
+            "type": "step_list",
+            "title": "Building a truth table",
+            "items": [
+              "1. Count atomic variables n; you will need 2ⁿ rows.",
+              "2. Write a column per atom and fill all 2ⁿ truth-value combinations.",
+              "3. Add a column for each subexpression as it grows in complexity.",
+              "4. Compute each new column from the columns to its left.",
+              "5. Verify the final column is correct row-by-row."
+            ]
+          },
+          {
+            "type": "misconception",
+            "title": "Top mistakes on exams",
+            "items": [
+              "**Reversing 'only if'.** 'p only if q' is p → q, NOT q → p.",
+              "**Mixing converse with contrapositive.** Only the contrapositive is equivalent to the original.",
+              "**Forgetting that F → anything = T.** Both rows with hypothesis F are true.",
+              "**Skipping intermediate columns.** Without them, errors hide in row 6 of an 8-row table."
+            ]
+          },
+          {
+            "type": "summary_box",
+            "title": "Memory hook",
+            "content": "**T → F is the only F row.** Every other row of → is T. The contrapositive (¬q → ¬p) is your free equivalent."
+          }
+        ],
+        "concept_blocks": [
+          {
+            "type": "step_list",
+            "title": "Translating an English implication",
+            "items": [
+              "1. Spot the trigger phrase ('if', 'whenever', 'only if', 'sufficient', 'necessary').",
+              "2. Decide which atom is the **hypothesis** (sufficient side) and which is the **conclusion** (necessary side).",
+              "3. Write `p → q` with the hypothesis as p.",
+              "4. Sanity check: does T-hypothesis + F-conclusion break the rule? If yes, you have the right direction."
+            ]
+          }
+        ],
+        "visual_blocks": [
+          {
+            "type": "svg_idea",
+            "description": "Implication-as-contract panels with the only red 'X' on the T-F row."
+          },
+          {
+            "type": "mermaid",
+            "description": "Four-cell map of original ↔ contrapositive (equivalent) and converse ↔ inverse (equivalent), with a red dashed line between the two pairs to indicate they are NOT equivalent."
+          }
+        ],
+        "sections": [
+          {
+            "number": 1,
+            "heading": "Building a truth table — the procedure",
+            "explanation": "A truth table lists every combination of truth values for the atomic variables and computes the value of each subexpression and the final compound. With n atoms there are 2ⁿ rows. Build column by column, innermost first.",
+            "examples": [
+              "1 atom → 2 rows. 2 atoms → 4 rows. 3 atoms → 8 rows. 4 atoms → 16 rows."
+            ],
+            "common_mistakes": [
+              "Skipping intermediate columns; row-by-row arithmetic gets messy without them."
+            ],
+            "visual_idea": {
+              "type": "truth-table",
+              "description": "A growing table that adds one column per click; the new column is highlighted as it is filled.",
+              "interactive_hint": "An 'add column' button extends the table by one subexpression at a time."
+            }
+          },
+          {
+            "number": 2,
+            "heading": "The conditional (→) — the broken-promise rule",
+            "explanation": "p → q is FALSE in exactly one row (T, F). In every other row it is TRUE — including the two rows where p is F. Think of the implication as a promise; an untriggered promise cannot be broken.",
+            "examples": [
+              "F → T = T (vacuous).",
+              "F → F = T (vacuous).",
+              "T → T = T (kept).",
+              "T → F = F (**broken**)."
+            ],
+            "common_mistakes": [
+              "Calling F → anything 'undefined'. It is T."
+            ],
+            "visual_idea": {
+              "type": "truth-table",
+              "description": "Implication table with the single F row coloured red and labelled 'broken promise'.",
+              "interactive_hint": "Hover any row to see the English-sentence reading."
+            }
+          },
+          {
+            "number": 3,
+            "heading": "Converse, contrapositive, inverse",
+            "explanation": "From p → q we form three related conditionals. Only the contrapositive is logically equivalent to the original.",
+            "examples": [
+              "Original: 'If it rains, the home team wins' (p → q).",
+              "Converse: 'If the home team wins, it rained' (q → p).",
+              "Contrapositive: 'If the home team does NOT win, it did NOT rain' (¬q → ¬p).",
+              "Inverse: 'If it does NOT rain, the home team does NOT win' (¬p → ¬q)."
+            ],
+            "common_mistakes": [
+              "Treating the converse as if it followed from the original."
+            ],
+            "visual_idea": {
+              "type": "diagram",
+              "description": "Four-cell map; equivalent pairs connected by green arrows, non-equivalent by red dashed arrows.",
+              "interactive_hint": "Type your own implication; the diagram fills the four forms automatically."
+            }
+          },
+          {
+            "number": 4,
+            "heading": "Biconditional and precedence",
+            "explanation": "**p ↔ q** is true when p and q have the same truth value. Operator precedence (high → low) is **¬, ∧, ∨, →, ↔** — when in doubt, parenthesize.",
+            "examples": [
+              "p ∨ q ∧ r reads as p ∨ (q ∧ r).",
+              "¬p ∨ q reads as (¬p) ∨ q, NOT ¬(p ∨ q)."
+            ],
+            "common_mistakes": [
+              "Treating → as left-associative; chains of conditionals need parentheses."
+            ],
+            "visual_idea": {
+              "type": "table",
+              "description": "Precedence ladder with examples where omitting parentheses changes the meaning.",
+              "interactive_hint": "Type a parenthesis-free expression; the page auto-inserts parentheses."
+            }
+          }
+        ],
+        "worked_examples": [
+          {
+            "problem": "Construct a truth table for **(p ∨ ¬q) → q**.",
+            "thinking_process": "Two atoms ⇒ 4 rows. Add columns for ¬q, p ∨ ¬q, and the final implication.",
+            "step_by_step_solution": [
+              "Row 1 (p=T, q=T): ¬q=F, p∨¬q=T, T→T = **T**.",
+              "Row 2 (p=T, q=F): ¬q=T, p∨¬q=T, T→F = **F**.",
+              "Row 3 (p=F, q=T): ¬q=F, p∨¬q=F, F→T = **T**.",
+              "Row 4 (p=F, q=F): ¬q=T, p∨¬q=T, T→F = **F**."
+            ],
+            "final_answer": "Final column: T, F, T, F.",
+            "why_it_works": "Implication is false only on rows where p∨¬q is T but q is F.",
+            "common_mistake": "Skipping the intermediate ¬q column.",
+            "source_pattern": "Inspired by Lab 01 Q6 — truth-table construction for compound propositions."
+          },
+          {
+            "problem": "Translate to logic: 'You can access the system **only if** you are an administrator OR you are not a freshman.' Use a = access, d = administrator, f = freshman.",
+            "thinking_process": "'p only if q' means q is necessary for p, so it is p → q. Here p = a, q = d ∨ ¬f.",
+            "step_by_step_solution": [
+              "Identify hypothesis: a (access).",
+              "Identify conclusion: d ∨ ¬f.",
+              "Combine: **a → (d ∨ ¬f)**."
+            ],
+            "final_answer": "a → (d ∨ ¬f).",
+            "why_it_works": "Whenever access is granted, at least one of admin / not-freshman must hold.",
+            "common_mistake": "Reversing into (d ∨ ¬f) → a.",
+            "source_pattern": "Inspired by Spring 2026 midterm Q4 — translate sentences with system, user, encryption propositions."
+          },
+          {
+            "problem": "State the converse, contrapositive, and inverse of: 'If you submit the CPCS 222 assignment, then you receive a grade.'",
+            "thinking_process": "Let p = submit, q = receive grade. Apply the three transformations.",
+            "step_by_step_solution": [
+              "Original: p → q.",
+              "Converse (q → p): 'If you receive a grade, then you submitted the assignment.'",
+              "Contrapositive (¬q → ¬p): 'If you do not receive a grade, then you did not submit the assignment.'",
+              "Inverse (¬p → ¬q): 'If you do not submit the assignment, then you do not receive a grade.'"
+            ],
+            "final_answer": "Three transformed sentences as listed; only the contrapositive is equivalent to the original.",
+            "why_it_works": "Mechanical application of the three definitions.",
+            "common_mistake": "Believing the converse follows from the original — a grade might be received another way (e.g., late submission credit).",
+            "source_pattern": "Inspired by Assignment 1 Q3 and Spring 2026 midterm Q3 — converse/inverse/contrapositive in English."
+          },
+          {
+            "problem": "Show that **[p ∧ (p → q)] → q** is a tautology using equivalences.",
+            "thinking_process": "Eliminate → using p → q ≡ ¬p ∨ q, then simplify using identity laws.",
+            "step_by_step_solution": [
+              "≡ ¬[p ∧ (¬p ∨ q)] ∨ q     — eliminate outer →",
+              "≡ ¬[(p ∧ ¬p) ∨ (p ∧ q)] ∨ q  — distributive",
+              "≡ ¬[F ∨ (p ∧ q)] ∨ q     — negation law",
+              "≡ ¬(p ∧ q) ∨ q           — identity",
+              "≡ ¬p ∨ ¬q ∨ q            — De Morgan",
+              "≡ ¬p ∨ T                 — excluded middle",
+              "≡ T."
+            ],
+            "final_answer": "Tautology — every row is T. ∎",
+            "why_it_works": "[p ∧ (p → q)] → q is exactly the Modus Ponens schema you will meet in Module 3.",
+            "common_mistake": "Forgetting to apply De Morgan to ¬(p ∧ q).",
+            "source_pattern": "Inspired by Assignment 1 Q4 'Show that [p∧(p→q)]→q is a tautology' and Lab 03 Q3."
+          }
+        ],
+        "misconceptions": [
+          "**'Only if' is NOT 'if'.** 'p only if q' translates to p → q.",
+          "**Converse ≠ original.** Logical equivalence holds only with the contrapositive.",
+          "**F → anything = T.** Both rows with hypothesis F are true (vacuously).",
+          "**¬(p → q) is NOT p → ¬q.** It is p ∧ ¬q (the broken-promise row).",
+          "**↔ has the lowest precedence.** Wrap it last."
+        ],
+        "memory_hooks": [
+          "**Promise rule:** an implication is broken only when the trigger fires but the promise fails (T → F).",
+          "**CCI map:** Converse, Contrapositive, Inverse. Only the **C**ontrapositive is **C**ompletely equivalent.",
+          "**Iff = both arrows.** p ↔ q means p → q AND q → p."
+        ],
+        "quick_checks": [
+          {
+            "type": "mcq",
+            "question": "How many rows are in a truth table with 4 atomic variables?",
+            "choices": [
+              "8",
+              "12",
+              "16",
+              "32"
+            ],
+            "answer": "16",
+            "explanation": "2⁴ = 16."
+          },
+          {
+            "type": "mcq",
+            "question": "Which of the following is FALSE?",
+            "choices": [
+              "T → T",
+              "T → F",
+              "F → T",
+              "F → F"
+            ],
+            "answer": "T → F",
+            "explanation": "Implication is false ONLY when hypothesis is T and conclusion is F."
+          },
+          {
+            "type": "mcq",
+            "question": "The contrapositive of p → q is:",
+            "choices": [
+              "q → p",
+              "¬p → ¬q",
+              "¬q → ¬p",
+              "p ↔ q"
+            ],
+            "answer": "¬q → ¬p",
+            "explanation": "Flip and negate both parts; the result is logically equivalent to the original."
+          }
+        ],
+        "summary": {
+          "key_takeaways": [
+            "A truth table with n atomic variables has 2ⁿ rows.",
+            "p → q is false ONLY when p is T and q is F; otherwise T.",
+            "Many English phrases ('only if', 'whenever', 'sufficient', 'necessary') all translate to →.",
+            "p → q ≡ ¬q → ¬p (contrapositive); but p → q ≢ q → p (converse).",
+            "p ↔ q is true exactly when p and q have the same truth value.",
+            "Precedence (high → low): ¬, ∧, ∨, →, ↔ — parenthesize when in doubt.",
+            "Useful: ¬(p → q) ≡ p ∧ ¬q (broken-promise row)."
+          ],
+          "next": "You now have the full Module 1 toolkit. Move to the **Module 1 Exercises** to drill lab-style and exam-style questions."
+        },
+        "lesson_summary": {
+          "type": "summary_box",
+          "title": "Lesson 3 in one screen",
+          "items": [
+            "**Truth table:** 2ⁿ rows; build column by column.",
+            "**Implication:** false only on T→F.",
+            "**Contrapositive** (¬q → ¬p) is equivalent to the original; converse and inverse are not.",
+            "**Biconditional:** same truth values both sides.",
+            "**Saudi flavour:** 'You may enter the exam ONLY IF you have your student ID' (e → s).",
+            "**Lab/exam patterns:** Lab 01 Q6 (truth tables), Assignment 1 Q4 (tautology proof), Midterm Q3 (CCI in English)."
+          ]
+        }
+      }
+    ],
+    "exercises": {
+      "lesson_id": "module1-exercises",
+      "type": "exercises",
+      "title": "Module 1 Exercises — Propositional Logic",
+      "description": "Practice problems modeled on CPCS 222 Labs 01–03, Assignment 1, and the Spring 2026 midterm. Includes proposition classification, truth-table construction, English-to-logic translation, converse/inverse/contrapositive transformations, tautology proofs by rules, lab-inspired exam-style passages, and randomized drills.",
+      "question_sets": [
+        {
+          "type": "mcq",
+          "questions": [
+            {
+              "question": "Which of the following IS a proposition?",
+              "choices": [
+                "Close the window.",
+                "What is your name?",
+                "2 + 2 = 4.",
+                "x + 3 = 9."
+              ],
+              "answer": "2 + 2 = 4.",
+              "explanation": "Declarative + definite truth value (T).",
+              "source_pattern": "Inspired by Lab 01 Q1 — proposition classification."
+            },
+            {
+              "question": "If p is false and q is true, what is p ∨ q?",
+              "choices": [
+                "T",
+                "F",
+                "Undefined",
+                "Both"
+              ],
+              "answer": "T",
+              "explanation": "Inclusive ∨ is true when at least one operand is true."
+            },
+            {
+              "question": "If p is T and q is F, what is p → q?",
+              "choices": [
+                "T",
+                "F",
+                "Vacuously T",
+                "Undefined"
+              ],
+              "answer": "F",
+              "explanation": "Implication is false ONLY in this configuration.",
+              "source_pattern": "Inspired by Lab 02 / midterm truth-table patterns."
+            },
+            {
+              "question": "The contrapositive of 'If you study, then you pass' is:",
+              "choices": [
+                "If you pass, then you study.",
+                "If you do not pass, then you did not study.",
+                "If you do not study, then you do not pass.",
+                "You study and you pass."
+              ],
+              "answer": "If you do not pass, then you did not study.",
+              "explanation": "Contrapositive: ¬q → ¬p.",
+              "source_pattern": "Inspired by Spring 2026 midterm Q3 — CCI in English."
+            },
+            {
+              "question": "How many rows in a truth table with 5 atomic variables?",
+              "choices": [
+                "10",
+                "16",
+                "25",
+                "32"
+              ],
+              "answer": "32",
+              "explanation": "2⁵ = 32.",
+              "source_pattern": "Inspired by Lab 01 Q5 — count rows for compound propositions."
+            },
+            {
+              "question": "Which English phrase does NOT translate to p → q?",
+              "choices": [
+                "p only if q",
+                "q whenever p",
+                "q is sufficient for p",
+                "p is sufficient for q"
+              ],
+              "answer": "q is sufficient for p",
+              "explanation": "'q is sufficient for p' means q → p, not p → q."
+            },
+            {
+              "question": "p ↔ q is FALSE when:",
+              "choices": [
+                "Both p and q are T.",
+                "Both p and q are F.",
+                "p and q have different truth values.",
+                "Either p or q is T."
+              ],
+              "answer": "p and q have different truth values.",
+              "explanation": "Biconditional rewards 'sameness' of truth values."
+            },
+            {
+              "question": "Which connective is **inclusive** 'or'?",
+              "choices": [
+                "⊕",
+                "∨",
+                "∧",
+                "→"
+              ],
+              "answer": "∨",
+              "explanation": "∨ is inclusive — true when at least one is true. ⊕ is exclusive."
+            },
+            {
+              "question": "(p ⊕ q) ∧ (¬r ∨ p) when p = T, q = T, r = T:",
+              "choices": [
+                "T",
+                "F",
+                "Undefined",
+                "Depends"
+              ],
+              "answer": "F",
+              "explanation": "p ⊕ q = F (both T), so the whole ∧ is F.",
+              "source_pattern": "Inspired by Spring 2026 midterm Q2 truth-table values."
+            },
+            {
+              "question": "From the passage 'Open the gate. KAU is in Jeddah. x + 1 = 5.', how many sentences are propositions?",
+              "choices": [
+                "0",
+                "1",
+                "2",
+                "3"
+              ],
+              "answer": "1",
+              "explanation": "Only 'KAU is in Jeddah' is a proposition; the others are a command and an open sentence.",
+              "source_pattern": "Inspired by Spring 2026 midterm Q1 — passage-style 'pick the propositions'."
+            }
+          ]
+        },
+        {
+          "type": "true_false",
+          "questions": [
+            {
+              "question": "Every false sentence is a proposition.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "False",
+              "explanation": "Only declarative sentences with definite truth values qualify.",
+              "source_pattern": "Inspired by Lab 01 Q1 — distinguishing proposition vs not."
+            },
+            {
+              "question": "p → q is logically equivalent to ¬q → ¬p.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "True",
+              "explanation": "Contrapositive equivalence."
+            },
+            {
+              "question": "p → q is logically equivalent to q → p.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "False",
+              "explanation": "The converse is NOT equivalent to the original."
+            },
+            {
+              "question": "If p is F, then p → q is T regardless of q.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "True",
+              "explanation": "Vacuous truth."
+            },
+            {
+              "question": "p ⊕ q is T when both p and q are T.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "False",
+              "explanation": "Exclusive or is T when EXACTLY one is T."
+            },
+            {
+              "question": "The English word 'but' translates to ∧ in logic.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "True",
+              "explanation": "Stylistic difference only.",
+              "source_pattern": "Inspired by Lab 01 Q3 — 'below freezing but not snowing'."
+            },
+            {
+              "question": "¬(p → q) ≡ p ∧ ¬q.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "True",
+              "explanation": "Negation of an implication is the broken-promise row."
+            },
+            {
+              "question": "(p ∨ q) ∧ ¬(p ∧ q) is logically equivalent to p ⊕ q.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "True",
+              "explanation": "Standard expansion of exclusive or."
+            }
+          ]
+        },
+        {
+          "type": "short_answer",
+          "questions": [
+            {
+              "question": "Why is 'x > 5' not a proposition?",
+              "answer": "Because x is a free variable; without a specific value the sentence has no definite truth value.",
+              "explanation": "Open sentences become propositions only after their variables are bound or assigned.",
+              "source_pattern": "Inspired by Lab 01 Q1 — open-sentence trap."
+            },
+            {
+              "question": "Translate to logic: 'You can enter the exam only if you have your student ID.' (e = enter, s = have ID.)",
+              "answer": "e → s.",
+              "explanation": "'p only if q' means p → q; the ID is necessary for entry."
+            },
+            {
+              "question": "State converse, contrapositive, and inverse of 'If it is sunny, then we go to the park.'",
+              "answer": "Converse: 'If we go to the park, then it is sunny.' Contrapositive: 'If we do not go to the park, then it is not sunny.' Inverse: 'If it is not sunny, then we do not go to the park.'",
+              "explanation": "Original p → q. Converse q → p; contrapositive ¬q → ¬p; inverse ¬p → ¬q.",
+              "source_pattern": "Inspired by Spring 2026 midterm Q3 / Assignment 1 Q3."
+            },
+            {
+              "question": "Use De Morgan to negate: 'It is below freezing AND it is snowing.'",
+              "answer": "'It is not below freezing OR it is not snowing.'",
+              "explanation": "¬(p ∧ q) ≡ ¬p ∨ ¬q.",
+              "source_pattern": "Inspired by Lab 02 Q8 — De Morgan negation."
+            },
+            {
+              "question": "Why do we have separate symbols ∨ and ⊕ when English uses just one word, 'or'?",
+              "answer": "Because English 'or' is ambiguous between inclusive ('or both') and exclusive ('but not both'). Logic uses ∨ for inclusive and ⊕ for exclusive so that every formula has exactly one meaning.",
+              "explanation": "Ambiguity in natural language is resolved by using two distinct symbols."
+            },
+            {
+              "question": "Translate: 'If the bus AND Uber are parked at the bus station, then passengers can travel to Riyadh.' (b, u, t.)",
+              "answer": "(b ∧ u) → t.",
+              "explanation": "Conjunction inside the hypothesis; implication to the conclusion.",
+              "source_pattern": "Inspired by Assignment 1 Q2."
+            }
+          ]
+        },
+        {
+          "type": "step_by_step",
+          "questions": [
+            {
+              "question": "Construct a complete truth table for (p ∨ q) ∧ ¬p, with columns for each subexpression.",
+              "answer": "p | q | p∨q | ¬p | (p∨q)∧¬p\nT | T |  T  | F  |    F\nT | F |  T  | F  |    F\nF | T |  T  | T  |    T\nF | F |  F  | T  |    F\nThe compound is true only on (F, T).",
+              "explanation": "Build column by column; the final answer is the rightmost column.",
+              "source_pattern": "Inspired by Lab 01 Q6 — truth-table construction."
+            },
+            {
+              "question": "Construct a truth table for (a ⊕ ¬b) ↔ (¬a → c) with three variables.",
+              "answer": "a | b | c | ¬a | ¬b | a⊕¬b | ¬a→c | (a⊕¬b)↔(¬a→c)\nT | T | T |  F |  F |   T  |   T  |    T\nT | T | F |  F |  F |   T  |   T  |    T\nT | F | T |  F |  T |   F  |   T  |    F\nT | F | F |  F |  T |   F  |   T  |    F\nF | T | T |  T |  F |   F  |   T  |    F\nF | T | F |  T |  F |   F  |   F  |    T\nF | F | T |  T |  T |   T  |   T  |    T\nF | F | F |  T |  T |   T  |   F  |    F\nFinal column read top-to-bottom: T, T, F, F, F, T, T, F.",
+              "explanation": "Eight rows for three variables; intermediate columns make verification easy.",
+              "source_pattern": "Inspired by Assignment 1 Q1."
+            },
+            {
+              "question": "Show that (p → q) ∨ (p → ¬q) is a tautology using a truth table.",
+              "answer": "p | q | ¬q | p→q | p→¬q | (p→q)∨(p→¬q)\nT | T |  F |  T  |   F  |     T\nT | F |  T |  F  |   T  |     T\nF | T |  F |  T  |   T  |     T\nF | F |  T |  T  |   T  |     T\nEvery row is T → tautology.",
+              "explanation": "When p is F both implications are vacuously T; when p is T exactly one of q, ¬q is T."
+            },
+            {
+              "question": "Use rules of equivalence to show that ¬p → (q → r) ≡ q → (p ∨ r).",
+              "answer": "¬p → (q → r) ≡ ¬¬p ∨ (¬q ∨ r) [implication-to-disjunction twice] ≡ p ∨ ¬q ∨ r ≡ ¬q ∨ (p ∨ r) ≡ q → (p ∨ r). ∎",
+              "explanation": "Use p → q ≡ ¬p ∨ q twice; rearrange.",
+              "source_pattern": "Inspired by Lab 03 Q5."
+            },
+            {
+              "question": "Determine whether ¬(p ∨ (¬p ∧ q)) and (¬p ∧ ¬q) are equivalent using rules.",
+              "answer": "¬(p ∨ (¬p ∧ q)) ≡ ¬p ∧ ¬(¬p ∧ q) [De Morgan] ≡ ¬p ∧ (p ∨ ¬q) [De Morgan] ≡ (¬p ∧ p) ∨ (¬p ∧ ¬q) [distributive] ≡ F ∨ (¬p ∧ ¬q) [negation] ≡ ¬p ∧ ¬q [identity]. Equivalent. ∎",
+              "explanation": "Apply De Morgan, distributive, identity in sequence.",
+              "source_pattern": "Inspired by Lab 03 Q7."
+            },
+            {
+              "question": "Are these specifications consistent? S1: 'The diagnostic message is stored OR retransmitted.' S2: 'The message is NOT stored.' S3: 'If stored, then retransmitted.'",
+              "answer": "Let p = stored, q = retransmitted. Specs: p ∨ q, ¬p, p → q. Try p = F, q = T: p ∨ q = T, ¬p = T, p → q = T (vacuously). All true → CONSISTENT.",
+              "explanation": "Find one assignment satisfying every spec.",
+              "source_pattern": "Inspired by Lab 02 Q9 — consistency check."
+            }
+          ]
+        },
+        {
+          "type": "exam_style",
+          "questions": [
+            {
+              "question": "Read the passage and identify the **non-propositions**: 'Sara arrived at KAU before her CPCS 222 lecture. The library opens at 7:30 AM. Please silence your phone. 12 is divisible by 4. She wrote x + 5 = 11 in her notebook. Wow, the lecture hall is full today!'",
+              "answer": "Non-propositions: 'Please silence your phone' (command), 'x + 5 = 11' (open sentence with free x), 'Wow, the lecture hall is full today!' (exclamation).",
+              "explanation": "Each fails one of the two property checks (declarative + definite truth value).",
+              "source_pattern": "Inspired by Spring 2026 midterm Q1 — KAU/Ahmed passage."
+            },
+            {
+              "question": "For sentence: 'Having a valid student ID is necessary for entering the exam', state inverse, converse, contrapositive in English. (s = valid ID, e = enter the exam.)",
+              "answer": "Original: e → s. Converse (s → e): 'If you have a valid student ID, you can enter the exam.' Contrapositive (¬s → ¬e): 'If you do not have a valid student ID, you cannot enter the exam.' Inverse (¬e → ¬s): 'If you cannot enter the exam, you do not have a valid student ID.'",
+              "explanation": "Standard application of CCI definitions; remember 'necessary' marks the conclusion.",
+              "source_pattern": "Inspired by Spring 2026 midterm Q3 — CCI in English with KAU-style scenario."
+            },
+            {
+              "question": "Translate: 'Access is granted only if the user is authenticated AND the data is encrypted.' (s = access granted, q = authenticated, r = encrypted.)",
+              "answer": "s → (q ∧ r).",
+              "explanation": "'p only if q' means p → q; the right-hand side is the conjunction of the two necessary conditions.",
+              "source_pattern": "Inspired by Spring 2026 midterm Q4."
+            },
+            {
+              "question": "Translate: 'The system is secure if and only if either the data is encrypted or the user is authenticated, but not both.' (p, q, r as above.)",
+              "answer": "p ↔ (q ⊕ r).",
+              "explanation": "'If and only if' = ↔; 'either…or…but not both' = ⊕.",
+              "source_pattern": "Inspired by Spring 2026 midterm Q4 second sub-question."
+            },
+            {
+              "question": "Show that [p ∧ (p → q)] → q is a tautology using rules of equivalence (not a truth table).",
+              "answer": "[p ∧ (p → q)] → q ≡ ¬[p ∧ (¬p ∨ q)] ∨ q ≡ ¬[(p ∧ ¬p) ∨ (p ∧ q)] ∨ q ≡ ¬[F ∨ (p ∧ q)] ∨ q ≡ ¬(p ∧ q) ∨ q ≡ (¬p ∨ ¬q) ∨ q ≡ ¬p ∨ T ≡ T. ∎",
+              "explanation": "Eliminate →, distribute, simplify, conclude tautology.",
+              "source_pattern": "Inspired by Assignment 1 Q4."
+            }
+          ]
+        },
+        {
+          "type": "randomized",
+          "questions": [
+            {
+              "template": "Compute the truth value of {EXPR} given p = {P} and q = {Q}.",
+              "variables": {
+                "EXPR": [
+                  "p ∧ q",
+                  "p ∨ q",
+                  "p → q",
+                  "p ↔ q",
+                  "p ⊕ q",
+                  "¬p ∨ q",
+                  "p ∧ ¬q"
+                ],
+                "P": [
+                  "T",
+                  "F"
+                ],
+                "Q": [
+                  "T",
+                  "F"
+                ]
+              },
+              "instructions": "Pick one EXPR, one P, one Q at random; compute. Cycle through to drill all eight binary truth-table rows.",
+              "example_realization": "EXPR = p → q, P = T, Q = F → answer F.",
+              "explanation": "Random drill on small truth-table evaluations.",
+              "source_pattern": "Inspired by Lab 01 Q6 — repeated truth-table evaluation."
+            },
+            {
+              "template": "Construct the truth table for {EXPR}.",
+              "variables": {
+                "EXPR": [
+                  "(p ∨ q) → q",
+                  "p ↔ (¬p ∨ q)",
+                  "(p → q) ∧ (q → p)",
+                  "¬(p → q)",
+                  "(p ⊕ q) ∧ (p ∨ q)"
+                ]
+              },
+              "instructions": "Build 4 rows for two atoms; add intermediate columns for clarity.",
+              "example_realization": "EXPR = (p → q) ∧ (q → p) → final column equals p ↔ q.",
+              "explanation": "Random truth-table drill.",
+              "source_pattern": "Inspired by Lab 01 Q6 / Lab 02 Q5–Q7."
+            },
+            {
+              "template": "State the {RELATION} of: 'If {P_TEXT}, then {Q_TEXT}.'",
+              "variables": {
+                "RELATION": [
+                  "converse",
+                  "contrapositive",
+                  "inverse"
+                ],
+                "P_TEXT": [
+                  "it rains in Jeddah",
+                  "you submit your CPCS 222 assignment",
+                  "the network is up",
+                  "you have a valid student ID"
+                ],
+                "Q_TEXT": [
+                  "the road is wet",
+                  "you receive a grade",
+                  "the page loads",
+                  "you can enter the exam"
+                ]
+              },
+              "instructions": "Apply the chosen transformation. Converse swaps; contrapositive swaps and negates both; inverse negates both without swapping.",
+              "example_realization": "RELATION=contrapositive, P_TEXT='you have a valid student ID', Q_TEXT='you can enter the exam' → 'If you cannot enter the exam, then you do not have a valid student ID.'",
+              "explanation": "Drill on which transformation preserves equivalence (only contrapositive).",
+              "source_pattern": "Inspired by Spring 2026 midterm Q3."
+            },
+            {
+              "template": "Translate '{SENTENCE}' into propositional logic.",
+              "variables": {
+                "SENTENCE": [
+                  "p only if q",
+                  "p whenever q",
+                  "p unless q",
+                  "neither p nor q",
+                  "p but not q",
+                  "p is necessary for q",
+                  "p is sufficient for q",
+                  "p if and only if q"
+                ]
+              },
+              "instructions": "Apply standard mappings: 'only if' → →; 'whenever' → ←; 'unless' → ¬q → p; 'neither/nor' → ¬p ∧ ¬q; 'but' → ∧; 'necessary' marks conclusion; 'sufficient' marks hypothesis; 'iff' → ↔.",
+              "example_realization": "SENTENCE='p only if q' → answer 'p → q'.",
+              "explanation": "Random drill on translation phrases.",
+              "source_pattern": "Inspired by Lab 01 Q3 and Spring 2026 midterm Q4."
+            },
+            {
+              "template": "Identify the non-propositions in this passage: '{PASSAGE}'",
+              "variables": {
+                "PASSAGE": [
+                  "KAU is in Jeddah. Close the door. 7 + 5 = 12. What time is the lecture? x = 3. Wow, hot day!",
+                  "Saudi Arabia borders Jordan. Pay your STC bill. y > 0. 14 is even. Is the gate open?",
+                  "Riyadh is north of Jeddah. Please answer this. p + q = 5. Hello! 5 is prime."
+                ]
+              },
+              "instructions": "Mark commands, questions, exclamations, and free-variable equations as non-propositions.",
+              "example_realization": "Passage 1 → non-propositions: 'Close the door' (command), 'What time is the lecture?' (question), 'x = 3' (open), 'Wow, hot day!' (exclamation).",
+              "explanation": "Drill on the passage-style midterm pattern.",
+              "source_pattern": "Inspired by Spring 2026 midterm Q1."
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
