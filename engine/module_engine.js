@@ -458,12 +458,17 @@
     art.appendChild(hero);
 
     var setLabels = {
-      mcq:          '🔘 Multiple Choice',
-      true_false:   '✔️ True / False',
-      short_answer: '✏️ Short Answer',
-      step_by_step: '🔢 Step-by-Step',
-      exam_style:   '📋 Exam-Style',
-      randomized:   '🎲 Randomized Drill'
+      mcq:                    '🔘 Multiple Choice',
+      true_false:             '✔️ True / False',
+      short_answer:           '✏️ Short Answer',
+      step_by_step:           '🔢 Step-by-Step',
+      exam_style:             '📋 Exam-Style',
+      randomized:             '🎲 Randomized Drill',
+      short_answer_check:     '⌨️ Short Answer (Auto-checked)',
+      fill_blank:             '🔡 Fill in the Blank',
+      matching:               '🔗 Matching',
+      ordering:               '📑 Step Ordering',
+      truth_table_completion: '🔢 Complete the Truth Table'
     };
 
     exercises.question_sets.forEach(function (qset, si) {
@@ -562,8 +567,549 @@
           _renderPipeAnswer(q.answer) +
           (q.explanation ? '<em>' + esc(q.explanation) + '</em>' : '') +
         '</div>';
+
+    } else if (type === 'short_answer_check') {
+      _renderShortAnswerCheck(div, q, uid, srcTag);
+
+    } else if (type === 'fill_blank') {
+      _renderFillBlank(div, q, uid, srcTag);
+
+    } else if (type === 'matching') {
+      _renderMatching(div, q, uid, srcTag);
+
+    } else if (type === 'ordering') {
+      _renderOrdering(div, q, uid, srcTag);
+
+    } else if (type === 'truth_table_completion') {
+      _renderTruthTableCompletion(div, q, uid, srcTag);
     }
     return div;
+  }
+
+  /* ── INTERACTIVE EXERCISE HELPERS ────────────────────────── */
+
+  /* Normalize a logic answer for flexible matching */
+  function _normalizeLogic(s) {
+    if (s == null) return '';
+    var t = String(s).trim().toLowerCase();
+    /* unify symbol variants */
+    t = t.replace(/[¬~!]\s*/g, 'not ');
+    t = t.replace(/<->/g, '↔').replace(/<=>/g, '↔');
+    t = t.replace(/->/g, '→').replace(/=>/g, '→');
+    t = t.replace(/\s+iff\s+/g, ' ↔ ');
+    t = t.replace(/\bimplies\b/g, '→');
+    t = t.replace(/\b(and)\b/g, '∧');
+    t = t.replace(/\b(or)\b/g, '∨');
+    t = t.replace(/\b(xor)\b/g, '⊕');
+    t = t.replace(/\bnot\s+/g, '¬');
+    t = t.replace(/&&/g, '∧').replace(/\|\|/g, '∨');
+    t = t.replace(/\btrue\b/g, 't').replace(/\bfalse\b/g, 'f');
+    /* strip all whitespace and trailing punctuation */
+    t = t.replace(/\s+/g, '');
+    t = t.replace(/[.;]+$/g, '');
+    return t;
+  }
+
+  function _isLogicMatch(userInput, accepted) {
+    var u = _normalizeLogic(userInput);
+    if (!u) return false;
+    if (!Array.isArray(accepted)) accepted = [accepted];
+    for (var i = 0; i < accepted.length; i++) {
+      if (_normalizeLogic(accepted[i]) === u) return true;
+    }
+    return false;
+  }
+
+  function _scoreInc(uid, isCorrect) {
+    if (uid && uid.indexOf('ex-') === 0) {
+      _score.total++;
+      if (isCorrect) _score.correct++;
+      var ce = document.getElementById('ex-correct');
+      var te = document.getElementById('ex-total');
+      if (ce) ce.textContent = _score.correct;
+      if (te) te.textContent = _score.total;
+    }
+  }
+
+  /* Short Answer (auto-checked) */
+  function _renderShortAnswerCheck(div, q, uid, srcTag) {
+    div.innerHTML =
+      srcTag +
+      '<p class="m1-ex-q">' + esc(q.question) + '</p>' +
+      '<input type="text" class="m1-iex-input" placeholder="Type your answer…" />' +
+      '<div class="m1-iex-actions">' +
+        '<button class="m1-iex-submit">Submit</button>' +
+        '<button class="m1-iex-retry" style="display:none;">Try Again</button>' +
+        '<button class="m1-iex-show" style="display:none;">Show Answer</button>' +
+      '</div>' +
+      '<div class="m1-iex-feedback" id="' + uid + '-fb"></div>';
+
+    setTimeout(function () {
+      var input  = div.querySelector('.m1-iex-input');
+      var submit = div.querySelector('.m1-iex-submit');
+      var retry  = div.querySelector('.m1-iex-retry');
+      var show   = div.querySelector('.m1-iex-show');
+      var fb     = div.querySelector('.m1-iex-feedback');
+      var answered = false;
+
+      function expectedList() {
+        var arr = [q.answer];
+        if (Array.isArray(q.accept)) arr = arr.concat(q.accept);
+        return arr;
+      }
+
+      function doSubmit() {
+        if (answered) return;
+        var user = input.value;
+        if (!user || !user.trim()) {
+          fb.className = 'm1-iex-feedback show is-partial';
+          fb.innerHTML = 'Please type an answer before submitting.';
+          return;
+        }
+        var ok = _isLogicMatch(user, expectedList());
+        answered = true;
+        input.disabled = true;
+        input.classList.add(ok ? 'is-correct' : 'is-wrong');
+        submit.disabled = true;
+        retry.style.display = '';
+        show.style.display  = '';
+        fb.className = 'm1-iex-feedback show ' + (ok ? 'is-correct' : 'is-wrong');
+        fb.innerHTML = (ok
+          ? '<strong>✅ Correct.</strong> '
+          : '<strong>❌ Not quite.</strong> ') +
+          (q.explanation ? esc(q.explanation) : '');
+        _scoreInc(uid, ok);
+      }
+      function doRetry() {
+        answered = false;
+        input.value = '';
+        input.disabled = false;
+        input.classList.remove('is-correct', 'is-wrong');
+        submit.disabled = false;
+        retry.style.display = 'none';
+        show.style.display  = 'none';
+        fb.classList.remove('show', 'is-correct', 'is-wrong', 'is-partial');
+        fb.innerHTML = '';
+        input.focus();
+      }
+      function doShow() {
+        fb.className = 'm1-iex-feedback show is-partial';
+        fb.innerHTML = '<strong>Suggested answer:</strong> ' + esc(q.answer) +
+          (q.explanation ? '<br><em>' + esc(q.explanation) + '</em>' : '');
+      }
+
+      submit.addEventListener('click', doSubmit);
+      retry.addEventListener('click', doRetry);
+      show.addEventListener('click', doShow);
+      input.addEventListener('keydown', function (e) { if (e.key === 'Enter') doSubmit(); });
+    }, 0);
+  }
+
+  /* Fill in the Blank — supports multiple blanks via {{N}} markers */
+  function _renderFillBlank(div, q, uid, srcTag) {
+    /* Accept either "blanks" array or pull placeholders from question text */
+    var blanks = q.blanks || [];
+    /* Build question HTML by replacing each {{N}} (1-indexed) with input */
+    var qText = q.question || '';
+    var idx = 0;
+    var parts = qText.split(/\{\{(\d+)\}\}/g);
+    /* parts[0], blankIdx, parts[1], blankIdx, ... */
+    var html = '';
+    for (var i = 0; i < parts.length; i++) {
+      if (i % 2 === 0) {
+        html += esc(parts[i]);
+      } else {
+        var bIdx = parseInt(parts[i], 10) - 1;
+        html += '<input type="text" class="m1-iex-blank" data-bidx="' + bIdx + '" />';
+        idx = Math.max(idx, bIdx + 1);
+      }
+    }
+    /* If no markers, fallback to underscore placeholders */
+    if (idx === 0 && /_{2,}/.test(qText)) {
+      var n = 0;
+      html = esc(qText).replace(/_{2,}/g, function () {
+        var s = '<input type="text" class="m1-iex-blank" data-bidx="' + n + '" />';
+        n++; return s;
+      });
+      idx = n;
+    }
+
+    div.innerHTML =
+      srcTag +
+      '<p class="m1-ex-q">' + html + '</p>' +
+      '<div class="m1-iex-actions">' +
+        '<button class="m1-iex-submit">Submit</button>' +
+        '<button class="m1-iex-retry" style="display:none;">Try Again</button>' +
+        '<button class="m1-iex-show" style="display:none;">Show Answers</button>' +
+      '</div>' +
+      '<div class="m1-iex-feedback" id="' + uid + '-fb"></div>';
+
+    setTimeout(function () {
+      var inputs = div.querySelectorAll('.m1-iex-blank');
+      var submit = div.querySelector('.m1-iex-submit');
+      var retry  = div.querySelector('.m1-iex-retry');
+      var show   = div.querySelector('.m1-iex-show');
+      var fb     = div.querySelector('.m1-iex-feedback');
+      var answered = false;
+
+      function doSubmit() {
+        if (answered) return;
+        var allOk = true, anyEmpty = false;
+        inputs.forEach(function (inp) {
+          var i = parseInt(inp.getAttribute('data-bidx'), 10);
+          var spec = blanks[i] || {};
+          var accept = [spec.answer || ''].concat(spec.accept || []);
+          var v = inp.value;
+          if (!v || !v.trim()) anyEmpty = true;
+          var ok = _isLogicMatch(v, accept);
+          inp.classList.remove('is-correct', 'is-wrong');
+          inp.classList.add(ok ? 'is-correct' : 'is-wrong');
+          if (!ok) allOk = false;
+          inp.disabled = true;
+        });
+        if (anyEmpty && !inputs.length) return;
+        answered = true;
+        submit.disabled = true;
+        retry.style.display = '';
+        show.style.display  = '';
+        fb.className = 'm1-iex-feedback show ' + (allOk ? 'is-correct' : 'is-wrong');
+        fb.innerHTML = (allOk
+          ? '<strong>✅ All blanks correct.</strong> '
+          : '<strong>❌ Some blanks are wrong.</strong> ') +
+          (q.explanation ? esc(q.explanation) : '');
+        _scoreInc(uid, allOk);
+      }
+      function doRetry() {
+        answered = false;
+        inputs.forEach(function (inp) {
+          inp.value = '';
+          inp.disabled = false;
+          inp.classList.remove('is-correct', 'is-wrong');
+        });
+        submit.disabled = false;
+        retry.style.display = 'none';
+        show.style.display  = 'none';
+        fb.classList.remove('show', 'is-correct', 'is-wrong', 'is-partial');
+        fb.innerHTML = '';
+        if (inputs[0]) inputs[0].focus();
+      }
+      function doShow() {
+        var lines = blanks.map(function (b, i) {
+          return '<li>Blank ' + (i + 1) + ': <strong>' + esc(b.answer || '') + '</strong></li>';
+        }).join('');
+        fb.className = 'm1-iex-feedback show is-partial';
+        fb.innerHTML = '<strong>Suggested answers:</strong><ul style="margin:.4rem 0 0 1.25rem;">' + lines + '</ul>' +
+          (q.explanation ? '<em>' + esc(q.explanation) + '</em>' : '');
+      }
+
+      submit.addEventListener('click', doSubmit);
+      retry.addEventListener('click', doRetry);
+      show.addEventListener('click', doShow);
+    }, 0);
+  }
+
+  /* Matching — terms map to definitions via dropdowns (definitions shown in shuffled order) */
+  function _renderMatching(div, q, uid, srcTag) {
+    var pairs = q.pairs || [];
+    var n = pairs.length;
+    /* Build a deterministic but non-identity permutation of definition indices */
+    var perm = pairs.map(function (_, i) { return i; });
+    if (n >= 2) {
+      /* Reverse, then rotate by 1, ensuring no fixed point for n>=3 */
+      perm.reverse();
+      if (n >= 3) perm = perm.slice(1).concat(perm.slice(0, 1));
+    }
+    /* perm[i] = original definition index displayed at dropdown position i */
+    var optHtml = '<option value="">— pick a match —</option>' +
+      perm.map(function (origIdx) {
+        return '<option value="' + origIdx + '">' + esc(pairs[origIdx].definition) + '</option>';
+      }).join('');
+
+    var rowsHtml = pairs.map(function (p, i) {
+      return '<div class="m1-iex-match-row" data-correct="' + i + '">' +
+        '<span class="m1-iex-match-term">' + esc(p.term) + '</span>' +
+        '<select class="m1-iex-match-select">' + optHtml + '</select>' +
+      '</div>';
+    }).join('');
+
+    div.innerHTML =
+      srcTag +
+      '<p class="m1-ex-q">' + esc(q.question || 'Match each term with its definition:') + '</p>' +
+      rowsHtml +
+      '<div class="m1-iex-actions">' +
+        '<button class="m1-iex-submit">Check Matches</button>' +
+        '<button class="m1-iex-retry" style="display:none;">Try Again</button>' +
+      '</div>' +
+      '<div class="m1-iex-feedback" id="' + uid + '-fb"></div>';
+
+    setTimeout(function () {
+      var rows   = div.querySelectorAll('.m1-iex-match-row');
+      var submit = div.querySelector('.m1-iex-submit');
+      var retry  = div.querySelector('.m1-iex-retry');
+      var fb     = div.querySelector('.m1-iex-feedback');
+      var answered = false;
+
+      function doSubmit() {
+        if (answered) return;
+        var allOk = true;
+        rows.forEach(function (row) {
+          var sel = row.querySelector('.m1-iex-match-select');
+          var correctIdx = row.getAttribute('data-correct');
+          var ok = (sel.value === correctIdx);
+          row.classList.remove('is-correct', 'is-wrong');
+          row.classList.add(ok ? 'is-correct' : 'is-wrong');
+          sel.disabled = true;
+          if (!ok) allOk = false;
+        });
+        answered = true;
+        submit.disabled = true;
+        retry.style.display = '';
+        fb.className = 'm1-iex-feedback show ' + (allOk ? 'is-correct' : 'is-wrong');
+        fb.innerHTML = (allOk
+          ? '<strong>✅ All pairs correct.</strong> '
+          : '<strong>❌ Some pairs are wrong.</strong> ') +
+          (q.explanation ? esc(q.explanation) : '');
+        _scoreInc(uid, allOk);
+      }
+      function doRetry() {
+        answered = false;
+        rows.forEach(function (row) {
+          var sel = row.querySelector('.m1-iex-match-select');
+          sel.value = '';
+          sel.disabled = false;
+          row.classList.remove('is-correct', 'is-wrong');
+        });
+        submit.disabled = false;
+        retry.style.display = 'none';
+        fb.classList.remove('show', 'is-correct', 'is-wrong', 'is-partial');
+        fb.innerHTML = '';
+      }
+
+      submit.addEventListener('click', doSubmit);
+      retry.addEventListener('click', doRetry);
+    }, 0);
+  }
+
+  /* Ordering — arrange shuffled steps using up/down buttons */
+  function _renderOrdering(div, q, uid, srcTag) {
+    var steps = (q.steps || []).slice();
+    var n = steps.length;
+    /* Deterministic shuffle: rotate by 2 if n>=3 to ensure a different start order */
+    var shuffled = steps.slice();
+    if (n >= 3) shuffled = shuffled.slice(2).concat(shuffled.slice(0, 2));
+    if (n >= 4) shuffled = [shuffled[1], shuffled[3], shuffled[0], shuffled[2]].concat(shuffled.slice(4));
+
+    /* Map shuffled order to original indices */
+    var current = shuffled.map(function (s) { return steps.indexOf(s); });
+
+    function rebuildList() {
+      var html = current.map(function (origIdx, pos) {
+        return '<div class="m1-iex-order-item" data-pos="' + pos + '" data-orig="' + origIdx + '">' +
+          '<span class="m1-iex-order-pos">' + (pos + 1) + '.</span>' +
+          '<span class="m1-iex-order-text">' + esc(steps[origIdx]) + '</span>' +
+          '<span class="m1-iex-order-controls">' +
+            '<button class="m1-iex-order-btn m1-iex-up"' + (pos === 0 ? ' disabled' : '') + ' aria-label="Move up">↑</button>' +
+            '<button class="m1-iex-order-btn m1-iex-down"' + (pos === current.length - 1 ? ' disabled' : '') + ' aria-label="Move down">↓</button>' +
+          '</span>' +
+        '</div>';
+      }).join('');
+      list.innerHTML = html;
+      attachListHandlers();
+    }
+
+    function attachListHandlers() {
+      list.querySelectorAll('.m1-iex-up').forEach(function (b) {
+        b.addEventListener('click', function () {
+          var item = b.closest('.m1-iex-order-item');
+          var pos = parseInt(item.getAttribute('data-pos'), 10);
+          if (pos > 0) {
+            var tmp = current[pos - 1]; current[pos - 1] = current[pos]; current[pos] = tmp;
+            rebuildList();
+          }
+        });
+      });
+      list.querySelectorAll('.m1-iex-down').forEach(function (b) {
+        b.addEventListener('click', function () {
+          var item = b.closest('.m1-iex-order-item');
+          var pos = parseInt(item.getAttribute('data-pos'), 10);
+          if (pos < current.length - 1) {
+            var tmp = current[pos + 1]; current[pos + 1] = current[pos]; current[pos] = tmp;
+            rebuildList();
+          }
+        });
+      });
+    }
+
+    div.innerHTML =
+      srcTag +
+      '<p class="m1-ex-q">' + esc(q.question || 'Arrange the steps in correct order:') + '</p>' +
+      '<div class="m1-iex-order-list"></div>' +
+      '<div class="m1-iex-actions">' +
+        '<button class="m1-iex-submit">Check Order</button>' +
+        '<button class="m1-iex-retry" style="display:none;">Try Again</button>' +
+        '<button class="m1-iex-show" style="display:none;">Show Order</button>' +
+      '</div>' +
+      '<div class="m1-iex-feedback" id="' + uid + '-fb"></div>';
+
+    var list = div.querySelector('.m1-iex-order-list');
+
+    setTimeout(function () {
+      rebuildList();
+      var submit = div.querySelector('.m1-iex-submit');
+      var retry  = div.querySelector('.m1-iex-retry');
+      var show   = div.querySelector('.m1-iex-show');
+      var fb     = div.querySelector('.m1-iex-feedback');
+      var answered = false;
+
+      function doSubmit() {
+        if (answered) return;
+        var allOk = true;
+        var items = list.querySelectorAll('.m1-iex-order-item');
+        items.forEach(function (item, pos) {
+          var origIdx = parseInt(item.getAttribute('data-orig'), 10);
+          var ok = (origIdx === pos);
+          item.classList.remove('is-correct', 'is-wrong');
+          item.classList.add(ok ? 'is-correct' : 'is-wrong');
+          item.querySelectorAll('button').forEach(function (b) { b.disabled = true; });
+          if (!ok) allOk = false;
+        });
+        answered = true;
+        submit.disabled = true;
+        retry.style.display = '';
+        show.style.display  = '';
+        fb.className = 'm1-iex-feedback show ' + (allOk ? 'is-correct' : 'is-wrong');
+        fb.innerHTML = (allOk
+          ? '<strong>✅ Order is correct.</strong> '
+          : '<strong>❌ Order is not yet right.</strong> ') +
+          (q.explanation ? esc(q.explanation) : '');
+        _scoreInc(uid, allOk);
+      }
+      function doRetry() {
+        answered = false;
+        /* Reset to shuffled order */
+        if (n >= 3) current = steps.slice(2).concat(steps.slice(0, 2)).map(function (s) { return steps.indexOf(s); });
+        else current = steps.map(function (_, i) { return n - 1 - i; });
+        rebuildList();
+        submit.disabled = false;
+        retry.style.display = 'none';
+        show.style.display  = 'none';
+        fb.classList.remove('show', 'is-correct', 'is-wrong', 'is-partial');
+        fb.innerHTML = '';
+      }
+      function doShow() {
+        var lines = steps.map(function (s, i) {
+          return '<li>' + (i + 1) + '. ' + esc(s) + '</li>';
+        }).join('');
+        fb.className = 'm1-iex-feedback show is-partial';
+        fb.innerHTML = '<strong>Correct order:</strong><ol style="margin:.4rem 0 0 1.25rem;list-style:decimal;">' + lines + '</ol>' +
+          (q.explanation ? '<em>' + esc(q.explanation) + '</em>' : '');
+      }
+
+      submit.addEventListener('click', doSubmit);
+      retry.addEventListener('click',  doRetry);
+      show.addEventListener('click',   doShow);
+    }, 0);
+  }
+
+  /* Truth Table Completion — fill missing cells; mask string is "T,F,?,T,..." */
+  function _renderTruthTableCompletion(div, q, uid, srcTag) {
+    var headers = q.headers || [];
+    var rows    = q.rows    || [];
+    /* mask: 2D array same shape as rows; "?" means student must fill, otherwise show as fixed cell */
+    var mask    = q.mask    || rows.map(function (row) { return row.map(function () { return 'show'; }); });
+
+    var thead = '<thead><tr>' + headers.map(function (h) {
+      return '<th>' + esc(h) + '</th>';
+    }).join('') + '</tr></thead>';
+
+    var tbody = '<tbody>' + rows.map(function (row, ri) {
+      return '<tr>' + row.map(function (cell, ci) {
+        var m = (mask[ri] && mask[ri][ci]) || 'show';
+        if (m === 'fill') {
+          return '<td>' +
+            '<select class="m1-iex-ttc-cell-input" data-r="' + ri + '" data-c="' + ci + '">' +
+              '<option value="">?</option>' +
+              '<option value="T">T</option>' +
+              '<option value="F">F</option>' +
+            '</select>' +
+          '</td>';
+        }
+        var clsT = cell === 'T' ? ' is-T' : (cell === 'F' ? ' is-F' : '');
+        return '<td class="m1-iex-ttc-fixed' + clsT + '">' + esc(cell) + '</td>';
+      }).join('') + '</tr>';
+    }).join('') + '</tbody>';
+
+    div.innerHTML =
+      srcTag +
+      '<p class="m1-ex-q">' + esc(q.question || 'Complete the missing T/F cells:') + '</p>' +
+      '<div style="overflow-x:auto;"><table class="m1-iex-ttc-table">' + thead + tbody + '</table></div>' +
+      '<div class="m1-iex-actions">' +
+        '<button class="m1-iex-submit">Check Cells</button>' +
+        '<button class="m1-iex-retry" style="display:none;">Try Again</button>' +
+        '<button class="m1-iex-show" style="display:none;">Show Answers</button>' +
+      '</div>' +
+      '<div class="m1-iex-feedback" id="' + uid + '-fb"></div>';
+
+    setTimeout(function () {
+      var sels   = div.querySelectorAll('.m1-iex-ttc-cell-input');
+      var submit = div.querySelector('.m1-iex-submit');
+      var retry  = div.querySelector('.m1-iex-retry');
+      var show   = div.querySelector('.m1-iex-show');
+      var fb     = div.querySelector('.m1-iex-feedback');
+      var answered = false;
+
+      function doSubmit() {
+        if (answered) return;
+        var allOk = true;
+        sels.forEach(function (s) {
+          var r = parseInt(s.getAttribute('data-r'), 10);
+          var c = parseInt(s.getAttribute('data-c'), 10);
+          var expected = (rows[r] && rows[r][c]);
+          var ok = (s.value === expected);
+          s.classList.remove('is-correct', 'is-wrong');
+          s.classList.add(ok ? 'is-correct' : 'is-wrong');
+          s.disabled = true;
+          if (!ok) allOk = false;
+        });
+        answered = true;
+        submit.disabled = true;
+        retry.style.display = '';
+        show.style.display  = '';
+        fb.className = 'm1-iex-feedback show ' + (allOk ? 'is-correct' : 'is-wrong');
+        fb.innerHTML = (allOk
+          ? '<strong>✅ All cells correct.</strong> '
+          : '<strong>❌ Some cells are wrong.</strong> ') +
+          (q.explanation ? esc(q.explanation) : '');
+        _scoreInc(uid, allOk);
+      }
+      function doRetry() {
+        answered = false;
+        sels.forEach(function (s) {
+          s.value = '';
+          s.disabled = false;
+          s.classList.remove('is-correct', 'is-wrong');
+        });
+        submit.disabled = false;
+        retry.style.display = 'none';
+        show.style.display  = 'none';
+        fb.classList.remove('show', 'is-correct', 'is-wrong', 'is-partial');
+        fb.innerHTML = '';
+      }
+      function doShow() {
+        sels.forEach(function (s) {
+          var r = parseInt(s.getAttribute('data-r'), 10);
+          var c = parseInt(s.getAttribute('data-c'), 10);
+          s.value = rows[r][c];
+        });
+        fb.className = 'm1-iex-feedback show is-partial';
+        fb.innerHTML = '<strong>Filled in correct values.</strong>' +
+          (q.explanation ? '<br><em>' + esc(q.explanation) + '</em>' : '');
+      }
+
+      submit.addEventListener('click', doSubmit);
+      retry.addEventListener('click',  doRetry);
+      show.addEventListener('click',   doShow);
+    }, 0);
   }
 
   /* ── RANDOMIZED DRILL ───────────────────────────────────────── */
@@ -662,6 +1208,27 @@
         if (fb.classList.contains('m1-sa-answer')) fb.style.display = 'none';
       });
       card.querySelectorAll('.m1-sa-reveal').forEach(function (b) { b.style.display = ''; });
+
+      /* Reset new interactive exercise types */
+      card.querySelectorAll('.m1-iex-feedback').forEach(function (fb) {
+        fb.classList.remove('show', 'is-correct', 'is-wrong', 'is-partial');
+        fb.innerHTML = '';
+      });
+      card.querySelectorAll('.m1-iex-input, .m1-iex-blank, .m1-iex-ttc-cell-input').forEach(function (inp) {
+        inp.value = '';
+        inp.disabled = false;
+        inp.classList.remove('is-correct', 'is-wrong');
+      });
+      card.querySelectorAll('.m1-iex-match-select').forEach(function (sel) {
+        sel.value = '';
+        sel.disabled = false;
+      });
+      card.querySelectorAll('.m1-iex-match-row, .m1-iex-order-item').forEach(function (r) {
+        r.classList.remove('is-correct', 'is-wrong');
+        r.querySelectorAll('button').forEach(function (b) { b.disabled = false; });
+      });
+      card.querySelectorAll('.m1-iex-submit').forEach(function (b) { b.disabled = false; });
+      card.querySelectorAll('.m1-iex-retry, .m1-iex-show').forEach(function (b) { b.style.display = 'none'; });
     });
   }
 
@@ -748,10 +1315,329 @@
     if (type === 'memory_hook')       return _v3BlockMemoryHook(block);
     if (type === 'formula')           return _v3BlockFormula(block);
     if (type === 'example')           return _v3BlockExample(block);
+    if (type === 'simulator_proposition_classifier') return _v3SimPropClassifier(block);
+    if (type === 'simulator_truth_table_builder')    return _v3SimTruthTableBuilder(block);
+    if (type === 'simulator_conditional_promise')    return _v3SimConditionalPromise(block);
     var d = document.createElement('div');
     d.className = 'v2-block-generic';
     d.innerHTML = '<strong>' + esc(block.title || type) + '</strong>';
     return d;
+  }
+
+  /* ── V3 SIMULATORS ────────────────────────────────────────── */
+
+  function _v3SimShell(title, badge, disclaimer, bodyHtml) {
+    var div = document.createElement('div');
+    div.className = 'v3-sim';
+    div.innerHTML =
+      '<div class="v3-sim-header">' +
+        '<span class="v3-sim-badge">' + esc(badge) + '</span>' +
+        '<span class="v3-sim-title">' + esc(title) + '</span>' +
+      '</div>' +
+      (disclaimer ? '<div class="v3-sim-disclaimer">' + esc(disclaimer) + '</div>' : '') +
+      '<div class="v3-sim-body">' + bodyHtml + '</div>';
+    return div;
+  }
+
+  /* Proposition Classifier — rule-based heuristic */
+  function _v3ClassifyProp(raw) {
+    if (!raw) return null;
+    var s = String(raw).trim();
+    if (!s) return null;
+    var lower = s.toLowerCase();
+    var firstChar = s.charAt(0);
+    var lastChar  = s.charAt(s.length - 1);
+
+    /* Check for question */
+    if (lastChar === '?' || /^(is|are|was|were|do|does|did|can|could|will|would|should|has|have|had|may|might|what|where|why|when|who|how|which)\b/i.test(s)) {
+      return { kind: 'not', label: 'Question — NOT a proposition',
+               why: 'This sentence is interrogative (asks something). Questions have no truth value, so they are not propositions.' };
+    }
+
+    /* Check for exclamation */
+    if (lastChar === '!' || /^(wow|oh|ah|alas|hooray|ouch|yay|hey|bravo)\b/i.test(s)) {
+      return { kind: 'not', label: 'Exclamation — NOT a proposition',
+               why: 'Exclamations express emotion rather than make a declarative claim. They do not have a definite truth value.' };
+    }
+
+    /* Check for command (imperative): leading verb without subject */
+    var imperatives = /^(open|close|please|do|don't|stop|go|come|find|solve|calculate|compute|write|read|prove|show|give|take|list|name|state|describe|let|consider|assume|silence|submit|pay|renew|register|sign|click|press|enter|select|choose|pick|return|deliver|send|email|call|answer|complete)\b/i;
+    if (imperatives.test(s)) {
+      return { kind: 'not', label: 'Command — NOT a proposition',
+               why: 'This is an imperative (a command). It tells someone to do something rather than asserting a fact, so it has no truth value.' };
+    }
+
+    /* Check for free variable / open sentence */
+    /* Look for math expressions with single-letter variables that are NOT bound */
+    var hasFreeVar = /(^|[^a-z])([a-z])\s*([+\-*/=<>≤≥≠]|\bis\b|\bequals\b)/i.test(s) &&
+      !/(\bfor all\b|\bfor every\b|\bfor any\b|\bthere exists\b|\bsome\b|^(let|if)\b)/i.test(lower);
+    var openVarPattern = /(^|[^a-z])(x|y|z|n|m|k|i|j)\b/i;
+    if (hasFreeVar && openVarPattern.test(s)) {
+      return { kind: 'open', label: 'Open sentence — NOT a proposition (yet)',
+               why: 'This sentence contains a free variable. Until you assign a specific value to that variable (or quantify over it), the sentence has no fixed truth value — it is a template, not a proposition.' };
+    }
+
+    /* Otherwise: looks declarative */
+    if (lastChar === '.' || /^[A-Z]/.test(s)) {
+      return { kind: 'prop', label: 'Likely a proposition',
+               why: 'This appears to be a declarative sentence with a definite truth value. (Whether it is true or false, it qualifies as a proposition.)' };
+    }
+
+    return { kind: 'open', label: 'Unclear — likely not a proposition',
+             why: 'The sentence does not match a clear declarative pattern. Try rewriting it as a complete declarative statement.' };
+  }
+
+  function _v3SimPropClassifier(block) {
+    var examples = [
+      'Jeddah is on the Red Sea.',
+      'Open the door.',
+      'x + 2 = 7',
+      'Is 7 prime?',
+      '7 is prime.',
+      'Wow, the weather is nice!'
+    ];
+    var examplesHtml = examples.map(function (ex) {
+      return '<button class="v3-sim-btn-ghost" data-ex="' + esc(ex) + '">' + esc(ex) + '</button>';
+    }).join('');
+    var bodyHtml =
+      '<div class="v3-sim-row">' +
+        '<input type="text" class="v3-sim-input v3-pc-input" placeholder="Type a sentence (e.g., 7 is prime.)" />' +
+        '<button class="v3-sim-btn v3-pc-go">Classify</button>' +
+        '<button class="v3-sim-btn-ghost v3-pc-clear">Clear</button>' +
+      '</div>' +
+      '<div style="font-size:.78rem;color:var(--text-3);margin-bottom:.4rem;">Try an example:</div>' +
+      '<div class="v3-pc-examples">' + examplesHtml + '</div>' +
+      '<div class="v3-pc-result" role="status" aria-live="polite">' +
+        '<div class="v3-pc-verdict"></div>' +
+        '<div class="v3-pc-why"></div>' +
+      '</div>';
+
+    var shell = _v3SimShell(block.title || 'Proposition Classifier', '🧪 Simulator',
+      'This is a learning heuristic, not a perfect natural-language AI. It may misclassify edge cases — use the rules from the lesson to verify.',
+      bodyHtml);
+
+    setTimeout(function () {
+      var input  = shell.querySelector('.v3-pc-input');
+      var goBtn  = shell.querySelector('.v3-pc-go');
+      var clrBtn = shell.querySelector('.v3-pc-clear');
+      var result = shell.querySelector('.v3-pc-result');
+      var verdict= shell.querySelector('.v3-pc-verdict');
+      var why    = shell.querySelector('.v3-pc-why');
+
+      function classify() {
+        var r = _v3ClassifyProp(input.value);
+        if (!r) {
+          result.classList.remove('show', 'is-prop', 'is-not', 'is-open');
+          return;
+        }
+        result.classList.remove('is-prop', 'is-not', 'is-open');
+        verdict.classList.remove('is-prop', 'is-not', 'is-open');
+        var cls = r.kind === 'prop' ? 'is-prop' : (r.kind === 'open' ? 'is-open' : 'is-not');
+        result.classList.add('show', cls);
+        verdict.classList.add(cls);
+        verdict.textContent = r.label;
+        why.textContent = r.why;
+      }
+
+      if (goBtn)  goBtn.addEventListener('click', classify);
+      if (input) {
+        input.addEventListener('keydown', function (e) { if (e.key === 'Enter') classify(); });
+      }
+      if (clrBtn) clrBtn.addEventListener('click', function () {
+        input.value = '';
+        result.classList.remove('show', 'is-prop', 'is-not', 'is-open');
+        input.focus();
+      });
+      shell.querySelectorAll('[data-ex]').forEach(function (b) {
+        b.addEventListener('click', function () {
+          input.value = b.getAttribute('data-ex');
+          classify();
+        });
+      });
+    }, 0);
+
+    return shell;
+  }
+
+  /* Truth Table Builder — fixed list of expressions */
+  function _v3EvalExpr(exprId, p, q) {
+    /* Returns array of column values matching column header order */
+    /* Uses booleans p, q */
+    var nP = !p, nQ = !q;
+    var pAndQ = p && q, pOrQ = p || q, pXorQ = p !== q;
+    var pImpQ = (!p) || q, pIffQ = p === q;
+    function tf(b) { return b ? 'T' : 'F'; }
+    switch (exprId) {
+      case 'not_p':       return [tf(p), tf(nP)];
+      case 'p_and_q':     return [tf(p), tf(q), tf(pAndQ)];
+      case 'p_or_q':      return [tf(p), tf(q), tf(pOrQ)];
+      case 'p_xor_q':     return [tf(p), tf(q), tf(pXorQ)];
+      case 'p_imp_q':     return [tf(p), tf(q), tf(pImpQ)];
+      case 'p_iff_q':     return [tf(p), tf(q), tf(pIffQ)];
+      case 'p_or_nq_imp_q': {
+        var sub = p || nQ;
+        var res = (!sub) || q;
+        return [tf(p), tf(q), tf(nQ), tf(sub), tf(res)];
+      }
+    }
+    return [];
+  }
+
+  function _v3SimTruthTableBuilder(block) {
+    var EXPRS = [
+      { id: 'not_p',          label: '¬p',           headers: ['p', '¬p'] },
+      { id: 'p_and_q',        label: 'p ∧ q',        headers: ['p', 'q', 'p ∧ q'] },
+      { id: 'p_or_q',         label: 'p ∨ q',        headers: ['p', 'q', 'p ∨ q'] },
+      { id: 'p_xor_q',        label: 'p ⊕ q',        headers: ['p', 'q', 'p ⊕ q'] },
+      { id: 'p_imp_q',        label: 'p → q',        headers: ['p', 'q', 'p → q'] },
+      { id: 'p_iff_q',        label: 'p ↔ q',        headers: ['p', 'q', 'p ↔ q'] },
+      { id: 'p_or_nq_imp_q',  label: '(p ∨ ¬q) → q', headers: ['p', 'q', '¬q', 'p ∨ ¬q', '(p ∨ ¬q) → q'] }
+    ];
+
+    var EXPLAIN = {
+      not_p:       'Negation flips the bit: T becomes F, F becomes T.',
+      p_and_q:     'Conjunction is true ONLY when both operands are true.',
+      p_or_q:      'Inclusive disjunction is true when at least one operand is true.',
+      p_xor_q:     'Exclusive or is true when EXACTLY one operand is true (not both).',
+      p_imp_q:     'Implication is false ONLY when the hypothesis is true and the conclusion is false.',
+      p_iff_q:     'Biconditional is true when both operands have the same truth value.',
+      p_or_nq_imp_q: 'Compound: (p ∨ ¬q) → q. Build ¬q and p ∨ ¬q first, then apply →. False when (p ∨ ¬q) is T but q is F.'
+    };
+
+    var optsHtml = EXPRS.map(function (e) {
+      return '<option value="' + e.id + '">' + esc(e.label) + '</option>';
+    }).join('');
+    var bodyHtml =
+      '<div class="v3-ttb-controls">' +
+        '<label style="font-size:.85rem;font-weight:600;">Expression: </label>' +
+        '<select class="v3-ttb-select">' + optsHtml + '</select>' +
+      '</div>' +
+      '<div class="v3-ttb-table-wrap"></div>' +
+      '<div class="v3-ttb-explain"></div>';
+
+    var shell = _v3SimShell(block.title || 'Truth Table Builder', '🧪 Simulator',
+      'Pick an expression below to generate a real, dynamically-computed truth table.',
+      bodyHtml);
+
+    function renderTable(exprId) {
+      var exp = null;
+      for (var i = 0; i < EXPRS.length; i++) if (EXPRS[i].id === exprId) { exp = EXPRS[i]; break; }
+      if (!exp) return;
+      var headers = exp.headers;
+      var lastCol = headers.length - 1;
+      var oneVar = (exprId === 'not_p');
+      var combos = oneVar
+        ? [[true],[false]]
+        : [[true,true],[true,false],[false,true],[false,false]];
+
+      var thead = '<thead><tr>' + headers.map(function (h, i) {
+        return '<th' + (i === lastCol ? ' class="v2-th-result"' : '') + '>' + esc(h) + '</th>';
+      }).join('') + '</tr></thead>';
+
+      var tbody = '<tbody>' + combos.map(function (row) {
+        var p = row[0]; var q = oneVar ? false : row[1];
+        var cells = _v3EvalExpr(exprId, p, q);
+        return '<tr>' + cells.map(function (cell, ci) {
+          var classes = [];
+          if (cell === 'T') classes.push('v2-cell-T');
+          else if (cell === 'F') classes.push('v2-cell-F');
+          if (ci === lastCol) classes.push('v2-cell-result');
+          var ca = classes.length ? ' class="' + classes.join(' ') + '"' : '';
+          return '<td' + ca + '>' + esc(cell) + '</td>';
+        }).join('') + '</tr>';
+      }).join('') + '</tbody>';
+
+      var wrap = shell.querySelector('.v3-ttb-table-wrap');
+      wrap.innerHTML = '<table class="v2-table v2-truth-table">' + thead + tbody + '</table>';
+      var ex = shell.querySelector('.v3-ttb-explain');
+      ex.textContent = EXPLAIN[exprId] || '';
+    }
+
+    setTimeout(function () {
+      var sel = shell.querySelector('.v3-ttb-select');
+      sel.addEventListener('change', function () { renderTable(sel.value); });
+      renderTable(EXPRS[0].id);
+    }, 0);
+
+    return shell;
+  }
+
+  /* Conditional Promise Simulator */
+  function _v3SimConditionalPromise(block) {
+    var bodyHtml =
+      '<div class="v3-cp-toggles">' +
+        '<div class="v3-cp-toggle" data-var="p">' +
+          '<div class="v3-cp-toggle-label">p (hypothesis)</div>' +
+          '<div class="v3-cp-toggle-buttons">' +
+            '<button class="v3-cp-tbtn is-T" data-val="T">T</button>' +
+            '<button class="v3-cp-tbtn is-F" data-val="F">F</button>' +
+          '</div>' +
+        '</div>' +
+        '<div class="v3-cp-toggle" data-var="q">' +
+          '<div class="v3-cp-toggle-label">q (conclusion)</div>' +
+          '<div class="v3-cp-toggle-buttons">' +
+            '<button class="v3-cp-tbtn is-T" data-val="T">T</button>' +
+            '<button class="v3-cp-tbtn is-F" data-val="F">F</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="v3-cp-display">' +
+        '<span class="v3-cp-formula"><span class="v3-cp-p">T</span> <span class="v3-cp-arrow">→</span> <span class="v3-cp-q">T</span></span>' +
+        '<span class="v3-cp-equals">=</span>' +
+        '<span class="v3-cp-result is-T">T</span>' +
+      '</div>' +
+      '<div class="v3-cp-explain"></div>';
+
+    var shell = _v3SimShell(block.title || 'Conditional Promise Simulator', '🧪 Simulator',
+      'Toggle the truth values of p and q to see what p → q evaluates to, framed as a promise.',
+      bodyHtml);
+
+    var state = { p: true, q: true };
+
+    var EXPLAIN = {
+      'TT': { kind: 'T', text: '<strong>Promise kept.</strong> The hypothesis fired (p = T) and the obligation followed (q = T). The implication is true.' },
+      'TF': { kind: 'F', text: '<strong>Promise BROKEN.</strong> The hypothesis fired (p = T) but the conclusion failed (q = F). This is the only row where p → q is false.' },
+      'FT': { kind: 'T', text: '<strong>No promise triggered — vacuously true.</strong> The hypothesis never fired (p = F), so the contract was never tested. By convention, an unbroken promise is true.' },
+      'FF': { kind: 'T', text: '<strong>No promise triggered — vacuously true.</strong> The hypothesis never fired (p = F), so there is no way to break it. The implication is true by default.' }
+    };
+
+    function update() {
+      var key = (state.p ? 'T' : 'F') + (state.q ? 'T' : 'F');
+      var info = EXPLAIN[key];
+      var pSpan = shell.querySelector('.v3-cp-p');
+      var qSpan = shell.querySelector('.v3-cp-q');
+      var rSpan = shell.querySelector('.v3-cp-result');
+      var ex    = shell.querySelector('.v3-cp-explain');
+      pSpan.textContent = state.p ? 'T' : 'F';
+      qSpan.textContent = state.q ? 'T' : 'F';
+      rSpan.textContent = info.kind;
+      rSpan.classList.remove('is-T', 'is-F');
+      rSpan.classList.add(info.kind === 'T' ? 'is-T' : 'is-F');
+      ex.innerHTML = info.text;
+
+      shell.querySelectorAll('.v3-cp-toggle').forEach(function (t) {
+        var v = t.getAttribute('data-var');
+        var current = state[v] ? 'T' : 'F';
+        t.querySelectorAll('.v3-cp-tbtn').forEach(function (b) {
+          if (b.getAttribute('data-val') === current) b.classList.add('active');
+          else b.classList.remove('active');
+        });
+      });
+    }
+
+    setTimeout(function () {
+      shell.querySelectorAll('.v3-cp-tbtn').forEach(function (b) {
+        b.addEventListener('click', function () {
+          var v = b.parentElement.parentElement.getAttribute('data-var');
+          var val = b.getAttribute('data-val');
+          state[v] = (val === 'T');
+          update();
+        });
+      });
+      update();
+    }, 0);
+
+    return shell;
   }
 
   /* Definition — supports content OR items array, optional latex */
@@ -1419,8 +2305,24 @@
       s.id  = 'mermaid-cdn';
       s.src = 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js';
       s.onload = function () {
-        try { mermaid.initialize({ startOnLoad: false, theme: 'neutral' }); runMermaid(); }
-        catch (e) { nodes.forEach(function (n) { _mermaidFallback(n); }); }
+        try {
+          mermaid.initialize({
+            startOnLoad: false,
+            theme: 'neutral',
+            fontSize: 16,
+            securityLevel: 'loose',
+            flowchart: { useMaxWidth: true, htmlLabels: true, curve: 'basis', padding: 14 },
+            themeVariables: {
+              fontFamily: 'Inter, system-ui, sans-serif',
+              fontSize: '16px',
+              primaryColor: '#dbeafe',
+              primaryTextColor: '#1e293b',
+              primaryBorderColor: '#2563eb',
+              lineColor: '#475569'
+            }
+          });
+          runMermaid();
+        } catch (e) { nodes.forEach(function (n) { _mermaidFallback(n); }); }
       };
       s.onerror = function () { nodes.forEach(function (n) { _mermaidFallback(n); }); };
       document.head.appendChild(s);

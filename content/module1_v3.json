@@ -177,6 +177,10 @@
             "type": "memory_hook",
             "title": "Two-Question Test",
             "content": "Declarative? Definite truth value? Both YES → proposition. Anything else: not a proposition."
+          },
+          {
+            "type": "simulator_proposition_classifier",
+            "title": "Try It — Proposition Classifier"
           }
         ],
         "sections": [
@@ -575,6 +579,10 @@
               "**∨** is true when **at least one** is true (inclusive).",
               "**⊕** is true when **exactly one** is true (exclusive)."
             ]
+          },
+          {
+            "type": "simulator_truth_table_builder",
+            "title": "Try It — Truth Table Builder"
           }
         ],
         "sections": [
@@ -990,6 +998,10 @@
               "**CCI map:** **C**ontrapositive is **C**ompletely equivalent. Converse and Inverse are not.",
               "**Iff = both arrows:** p ↔ q ≡ (p → q) ∧ (q → p)."
             ]
+          },
+          {
+            "type": "simulator_conditional_promise",
+            "title": "Try It — The Promise Simulator"
           }
         ],
         "sections": [
@@ -1395,6 +1407,138 @@
               "answer": "≡ ¬[p ∧ (¬p ∨ q)] ∨ q ≡ ¬[(p ∧ ¬p) ∨ (p ∧ q)] ∨ q ≡ ¬[F ∨ (p ∧ q)] ∨ q ≡ ¬(p ∧ q) ∨ q ≡ (¬p ∨ ¬q) ∨ q ≡ ¬p ∨ T ≡ T. ∎",
               "explanation": "Eliminate →, simplify.",
               "source_pattern": "Inspired by Assignment 1 Q4."
+            }
+          ]
+        },
+        {
+          "type": "short_answer_check",
+          "questions": [
+            {
+              "question": "Translate to logic: 'You can enter the exam only if you have your student ID.' Use e for enter and s for ID.",
+              "answer": "e → s",
+              "accept": ["e -> s", "e=>s", "e implies s"],
+              "explanation": "'p only if q' means p → q. The ID is necessary; entering implies you have it.",
+              "source_pattern": "Inspired by Spring 2026 midterm Q4."
+            },
+            {
+              "question": "Translate to logic: 'It is below freezing AND it is snowing.' Use p for freezing and q for snowing.",
+              "answer": "p ∧ q",
+              "accept": ["p and q", "p && q", "p^q"],
+              "explanation": "'And' translates directly to ∧.",
+              "source_pattern": "Inspired by Lab 01 Q3."
+            },
+            {
+              "question": "Negate using De Morgan's: '¬(p ∧ q)' equals what (in terms of ¬p and ¬q)?",
+              "answer": "¬p ∨ ¬q",
+              "accept": ["not p or not q", "~p ∨ ~q", "¬p or ¬q", "!p || !q"],
+              "explanation": "De Morgan's law: the negation of a conjunction is the disjunction of negations."
+            },
+            {
+              "question": "Write the contrapositive of p → q.",
+              "answer": "¬q → ¬p",
+              "accept": ["not q -> not p", "~q → ~p", "¬q implies ¬p"],
+              "explanation": "Contrapositive: flip and negate both. ¬q → ¬p is logically equivalent to the original."
+            }
+          ]
+        },
+        {
+          "type": "fill_blank",
+          "questions": [
+            {
+              "question": "An implication p → q is FALSE only when p = {{1}} and q = {{2}}.",
+              "blanks": [
+                { "answer": "T", "accept": ["true"] },
+                { "answer": "F", "accept": ["false"] }
+              ],
+              "explanation": "The 'broken promise' row is the only one where p → q is false.",
+              "source_pattern": "Inspired by Lab 01 implication facts."
+            },
+            {
+              "question": "A truth table for a compound proposition with n atomic variables has {{1}} rows. With 4 atoms, that is {{2}} rows.",
+              "blanks": [
+                { "answer": "2^n", "accept": ["2ⁿ", "2**n", "2 to the n"] },
+                { "answer": "16" }
+              ],
+              "explanation": "Each atom doubles the row count: 2ⁿ rows total.",
+              "source_pattern": "Inspired by Lab 01 row-count drills."
+            },
+            {
+              "question": "The {{1}} of p → q is logically equivalent to the original. The {{2}} and the {{3}} are NOT equivalent to the original.",
+              "blanks": [
+                { "answer": "contrapositive" },
+                { "answer": "converse" },
+                { "answer": "inverse" }
+              ],
+              "explanation": "Only the contrapositive ¬q → ¬p preserves equivalence with p → q."
+            }
+          ]
+        },
+        {
+          "type": "matching",
+          "questions": [
+            {
+              "question": "Match each connective to the English phrase it best translates.",
+              "pairs": [
+                { "term": "∧",  "definition": "and / but" },
+                { "term": "∨",  "definition": "or (inclusive)" },
+                { "term": "⊕",  "definition": "either…or…but not both (exclusive)" },
+                { "term": "→",  "definition": "if … then …" },
+                { "term": "↔",  "definition": "if and only if" },
+                { "term": "¬",  "definition": "not" }
+              ],
+              "explanation": "Each connective has a unique English mapping. 'But' = ∧; 'iff' = ↔.",
+              "source_pattern": "Inspired by Lab 01 Q3 — connective translation."
+            },
+            {
+              "question": "Match each transformation of p → q to its symbolic form.",
+              "pairs": [
+                { "term": "Original",       "definition": "p → q" },
+                { "term": "Converse",       "definition": "q → p" },
+                { "term": "Contrapositive", "definition": "¬q → ¬p" },
+                { "term": "Inverse",        "definition": "¬p → ¬q" }
+              ],
+              "explanation": "Only the contrapositive is logically equivalent to the original.",
+              "source_pattern": "Inspired by Spring 2026 midterm Q3 / Assignment 1 Q3."
+            }
+          ]
+        },
+        {
+          "type": "ordering",
+          "questions": [
+            {
+              "question": "Arrange these steps in the correct order to build a truth table for a compound proposition with n atoms.",
+              "steps": [
+                "Count the n atomic variables and compute 2ⁿ rows needed.",
+                "Write a column for each atom and fill in all 2ⁿ truth-value combinations.",
+                "Add a column for each subexpression in order of increasing complexity.",
+                "Compute each new column from the columns to its left using the relevant truth table.",
+                "Verify the final column row by row."
+              ],
+              "explanation": "Truth tables are built left-to-right: atoms first, then subexpressions, then the final formula.",
+              "source_pattern": "Inspired by Lab 01 Q6 — truth-table construction procedure."
+            }
+          ]
+        },
+        {
+          "type": "truth_table_completion",
+          "questions": [
+            {
+              "question": "Complete the truth table for p → q. Fill in the missing T/F cells.",
+              "headers": ["p", "q", "p → q"],
+              "rows": [
+                ["T", "T", "T"],
+                ["T", "F", "F"],
+                ["F", "T", "T"],
+                ["F", "F", "T"]
+              ],
+              "mask": [
+                ["show", "show", "fill"],
+                ["show", "show", "fill"],
+                ["show", "show", "fill"],
+                ["show", "show", "fill"]
+              ],
+              "explanation": "Implication is false ONLY on the (T, F) row. All other rows are true.",
+              "source_pattern": "Inspired by Lab 01 Q6 — implication truth table."
             }
           ]
         },
