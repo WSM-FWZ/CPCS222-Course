@@ -2803,3 +2803,162 @@ body {
 /* ============================================================
    END V2 PILOT STYLES
    ============================================================ */
+
+/* ============================================================
+   V3 PILOT STYLES
+   ============================================================ */
+
+/* ── v3 prose ─────────────────────────────────────────────── */
+.v3-prose {
+  margin: 1.25rem 0;
+  line-height: 1.75;
+  color: var(--text-1);
+}
+.v3-prose-title {
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--text-1);
+  margin-bottom: .5rem;
+}
+.v3-prose p { margin-bottom: .75rem; }
+.v3-prose p:last-child { margin-bottom: 0; }
+.v3-blockquote {
+  border-left: 4px solid var(--primary);
+  background: var(--primary-light);
+  padding: .75rem 1rem;
+  border-radius: 0 .5rem .5rem 0;
+  margin: .5rem 0;
+  font-style: italic;
+  color: var(--text-2);
+}
+
+/* ── v3 inline dialogue (compact, no header) ──────────────── */
+.v3-inline-dialogue {
+  background: var(--surface-2);
+  border-radius: .75rem;
+  padding: .75rem 1rem;
+  margin: .75rem 0;
+}
+
+/* ── v3 truth table highlights ───────────────────────────── */
+.v3-tt-highlight-row td { background: rgba(239,68,68,.12); font-weight: 700; }
+.v3-th-highlight { background: rgba(37,99,235,.12) !important; font-weight: 700; }
+.v3-cell-highlight { background: rgba(37,99,235,.08); }
+
+/* ── v3 worked example ────────────────────────────────────── */
+.v3-worked-example {
+  border: 1px solid var(--border-1);
+  border-radius: 1rem;
+  overflow: hidden;
+  margin: 1.25rem 0;
+  background: var(--surface-1);
+}
+.v3-we-header {
+  background: linear-gradient(135deg, #1e3a8a, #7c3aed);
+  color: #fff;
+  padding: .85rem 1.25rem;
+  display: flex;
+  align-items: baseline;
+  gap: .75rem;
+  flex-wrap: wrap;
+}
+.v3-we-badge {
+  font-size: .72rem;
+  font-weight: 700;
+  background: rgba(255,255,255,.2);
+  border-radius: .35rem;
+  padding: .15rem .45rem;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+.v3-we-title { font-weight: 600; font-size: .95rem; }
+.v3-we-source {
+  font-size: .75rem;
+  color: var(--text-3);
+  padding: .4rem 1.25rem;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border-1);
+  font-style: italic;
+}
+.v3-we-row {
+  padding: .85rem 1.25rem;
+  border-bottom: 1px solid var(--border-1);
+  display: grid;
+  grid-template-columns: 8rem 1fr;
+  gap: .75rem;
+  align-items: start;
+}
+.v3-we-row:last-child { border-bottom: none; }
+.v3-we-label {
+  font-size: .72rem;
+  font-weight: 700;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  padding-top: .2rem;
+}
+.v3-we-body p { margin-bottom: .4rem; }
+.v3-we-body p:last-child { margin-bottom: 0; }
+.v3-we-steps { display: flex; flex-direction: column; gap: .5rem; }
+.v3-we-step { display: flex; align-items: baseline; gap: .6rem; }
+.v3-we-step-num {
+  background: var(--primary);
+  color: #fff;
+  border-radius: 50%;
+  min-width: 1.4rem;
+  height: 1.4rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .7rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  line-height: 1;
+}
+.v3-we-step-text p { margin: 0; display: inline; }
+.v3-we-answer { background: rgba(16,185,129,.08); }
+.v3-we-answer .v3-we-label { color: #059669; }
+.v3-we-mistake { background: rgba(239,68,68,.07); }
+.v3-we-mistake .v3-we-label { color: #dc2626; }
+@media (max-width: 540px) {
+  .v3-we-row { grid-template-columns: 1fr; }
+}
+
+/* ── v3 example card ──────────────────────────────────────── */
+.v3-example {
+  background: var(--surface-2);
+  border-left: 4px solid var(--green);
+  border-radius: 0 .75rem .75rem 0;
+  padding: .85rem 1.25rem;
+  margin: 1rem 0;
+}
+.v3-example-title {
+  font-weight: 700;
+  color: var(--green);
+  margin-bottom: .5rem;
+}
+.v3-example-body p { margin-bottom: .4rem; }
+.v3-example-body p:last-child { margin-bottom: 0; }
+
+/* ── v3 formula list ──────────────────────────────────────── */
+.v3-formula-list { display: flex; flex-direction: column; gap: .4rem; margin-top: .6rem; }
+.v3-formula-item {
+  background: var(--surface-2);
+  border-radius: .4rem;
+  padding: .5rem .85rem;
+}
+.v3-formula-code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .88rem;
+  color: var(--primary);
+  background: transparent;
+}
+
+/* ── v3 definition items list ─────────────────────────────── */
+.v3-def-items { list-style: disc; padding-left: 1.5rem; margin-top: .25rem; }
+.v3-def-items li { margin-bottom: .4rem; }
+.v3-def-items li p { margin: 0; display: inline; }
+
+/* ============================================================
+   END V3 PILOT STYLES
+   ============================================================ */

@@ -125,7 +125,9 @@
       }
       _updateMeta(lesson, idx, lessons.length);
       _buildSidebar(lessons, lessonId);
-      if (_isV2(data, lesson)) {
+      if (_isV3(data)) {
+        _buildLessonV3(lesson, idx, lessons, container);
+      } else if (_isV2(data, lesson)) {
         _buildLessonV2(lesson, idx, lessons, container);
       } else {
         _buildLesson(lesson, idx, lessons, container);
@@ -661,6 +663,330 @@
       });
       card.querySelectorAll('.m1-sa-reveal').forEach(function (b) { b.style.display = ''; });
     });
+  }
+
+  /* ── V3 PILOT RENDERER ──────────────────────────────────────── */
+
+  /* Detect v3 content */
+  function _isV3(data) {
+    return data && data.version === 'v3';
+  }
+
+  /* Markdown helper with blockquote support (used by v3 prose) */
+  function _mdProse(text) {
+    if (!text) return '';
+    var paras = text.split(/\n\n+/);
+    return paras.map(function (p) {
+      p = p.trim();
+      if (p.charAt(0) === '>') {
+        var inner = p.replace(/^>\s*/gm, '').trim();
+        var s = esc(inner);
+        s = s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+        s = s.replace(/_([^_\n]+?)_/g, '<em>$1</em>');
+        s = s.replace(/`([^`\n]+?)`/g, '<code class="v2-inline-code">$1</code>');
+        return '<blockquote class="v3-blockquote">' + s + '</blockquote>';
+      }
+      var s = esc(p);
+      s = s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+      s = s.replace(/_([^_\n]+?)_/g, '<em>$1</em>');
+      s = s.replace(/`([^`\n]+?)`/g, '<code class="v2-inline-code">$1</code>');
+      return '<p>' + s.replace(/\n/g, '<br>') + '</p>';
+    }).join('');
+  }
+
+  /* Main v3 lesson builder */
+  function _buildLessonV3(lesson, idx, allLessons, container) {
+    container.innerHTML = '';
+    var art = document.createElement('article');
+    art.className = 'me-lesson me-lesson-v3';
+
+    art.appendChild(_heroCard(lesson, idx, allLessons.length));
+    if (lesson.welcome) art.appendChild(_v2WelcomeCard(lesson.welcome));
+
+    /* Storytelling rendered once after welcome */
+    if (lesson.storytelling && lesson.storytelling.length) {
+      var st = _storyCard(lesson.storytelling);
+      art.appendChild(st);
+    }
+
+    /* Walk flow array */
+    (lesson.flow || []).forEach(function (block) {
+      var el = _v3RenderBlock(block);
+      if (el) {
+        el.classList.add('reveal');
+        art.appendChild(el);
+      }
+    });
+
+    if (lesson.quick_checks && lesson.quick_checks.length) {
+      art.appendChild(_quickChecksBlock(lesson.quick_checks));
+    }
+
+    if (lesson.summary) art.appendChild(_summaryCard(lesson.summary));
+    art.appendChild(_lessonBottomNav(idx, allLessons));
+    container.appendChild(art);
+    _initReveal(container);
+    _initMermaid(container);
+    if (global.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([container]);
+  }
+
+  /* Dispatcher for v3 flow block types */
+  function _v3RenderBlock(block) {
+    var type = block.type || '';
+    if (type === 'definition')        return _v3BlockDefinition(block);
+    if (type === 'prose')             return _v3BlockProse(block);
+    if (type === 'table')             return _v3BlockTable(block);
+    if (type === 'truth_table')       return _v3BlockTruthTable(block);
+    if (type === 'inline_dialogue')   return _v3BlockDialogue(block);
+    if (type === 'warning')           return _blockWarning(block);
+    if (type === 'real_life_example') return _blockRealLife(block);
+    if (type === 'mermaid')           return _blockMermaid(block);
+    if (type === 'callout')           return _blockCallout(block);
+    if (type === 'step_list')         return _v3BlockStepList(block);
+    if (type === 'worked_example')    return _v3BlockWorkedExample(block);
+    if (type === 'misconception_box') return _v3BlockMisconceptionBox(block);
+    if (type === 'memory_hook')       return _v3BlockMemoryHook(block);
+    if (type === 'formula')           return _v3BlockFormula(block);
+    if (type === 'example')           return _v3BlockExample(block);
+    var d = document.createElement('div');
+    d.className = 'v2-block-generic';
+    d.innerHTML = '<strong>' + esc(block.title || type) + '</strong>';
+    return d;
+  }
+
+  /* Definition — supports content OR items array, optional latex */
+  function _v3BlockDefinition(b) {
+    var div = document.createElement('div');
+    div.className = 'v2-definition';
+    var latexHtml = b.latex ? '<div class="v2-def-latex">\\[' + b.latex + '\\]</div>' : '';
+    var bodyHtml = '';
+    if (b.items && b.items.length) {
+      bodyHtml = '<ul class="v3-def-items">' +
+        b.items.map(function (item) { return '<li>' + _md(item) + '</li>'; }).join('') +
+        '</ul>';
+    } else {
+      bodyHtml = '<div class="v2-def-body">' + _md(b.content || '') + '</div>';
+    }
+    div.innerHTML =
+      '<div class="v2-def-label">📘 Definition</div>' +
+      '<div class="v2-def-title">' + esc(b.title || '') + '</div>' +
+      bodyHtml + latexHtml;
+    return div;
+  }
+
+  /* Prose — optional title, markdown content with blockquote support */
+  function _v3BlockProse(b) {
+    var div = document.createElement('div');
+    div.className = 'v3-prose';
+    div.innerHTML =
+      (b.title ? '<div class="v3-prose-title">' + esc(b.title) + '</div>' : '') +
+      _mdProse(b.content || '');
+    return div;
+  }
+
+  /* Table — flat structure (b.headers, b.rows directly on block) */
+  function _v3BlockTable(b) {
+    var div = document.createElement('div');
+    div.className = 'v2-table-wrap';
+    var headers = b.headers || [];
+    var rows = b.rows || [];
+    var thead = '<thead><tr>' +
+      headers.map(function (h) { return '<th>' + _md(h) + '</th>'; }).join('') +
+      '</tr></thead>';
+    var tbody = '<tbody>' +
+      rows.map(function (row) {
+        return '<tr>' +
+          row.map(function (cell) { return '<td>' + _md(String(cell)) + '</td>'; }).join('') +
+          '</tr>';
+      }).join('') +
+    '</tbody>';
+    div.innerHTML =
+      (b.title ? '<div class="v2-table-title">📋 ' + esc(b.title) + '</div>' : '') +
+      '<div class="v2-table-scroll"><table class="v2-table">' + thead + tbody + '</table></div>';
+    return div;
+  }
+
+  /* Truth table — flat + highlight_rows (row indices), highlight_columns (col names), notes */
+  function _v3BlockTruthTable(b) {
+    var div = document.createElement('div');
+    div.className = 'v2-table-wrap';
+    var headers = b.headers || [];
+    var rows = b.rows || [];
+    var hlRows = b.highlight_rows || [];
+    var hlCols = b.highlight_columns || [];
+    var lastCol = headers.length - 1;
+
+    var hlColSet = {};
+    hlCols.forEach(function (name) {
+      var i = headers.indexOf(name);
+      if (i !== -1) hlColSet[i] = true;
+    });
+
+    var thead = '<thead><tr>' +
+      headers.map(function (h, i) {
+        var cls = [];
+        if (i === lastCol) cls.push('v2-th-result');
+        if (hlColSet[i]) cls.push('v3-th-highlight');
+        var ca = cls.length ? ' class="' + cls.join(' ') + '"' : '';
+        return '<th' + ca + '>' + esc(h) + '</th>';
+      }).join('') +
+      '</tr></thead>';
+
+    var tbody = '<tbody>' +
+      rows.map(function (row, ri) {
+        var rowHl = hlRows.indexOf(ri) !== -1;
+        var trCls = rowHl ? ' class="v3-tt-highlight-row"' : '';
+        return '<tr' + trCls + '>' +
+          row.map(function (cell, ci) {
+            var classes = [];
+            if (cell === 'T') classes.push('v2-cell-T');
+            else if (cell === 'F') classes.push('v2-cell-F');
+            if (ci === lastCol) classes.push('v2-cell-result');
+            if (hlColSet[ci]) classes.push('v3-cell-highlight');
+            var ca = classes.length ? ' class="' + classes.join(' ') + '"' : '';
+            return '<td' + ca + '>' + esc(String(cell)) + '</td>';
+          }).join('') +
+        '</tr>';
+      }).join('') +
+    '</tbody>';
+
+    div.innerHTML =
+      (b.title ? '<div class="v2-table-title">🔢 ' + esc(b.title) + '</div>' : '') +
+      '<div class="v2-table-scroll"><table class="v2-table v2-truth-table">' + thead + tbody + '</table></div>' +
+      (b.notes ? '<p class="v2-tt-note">' + esc(b.notes) + '</p>' : '');
+    return div;
+  }
+
+  /* Inline dialogue — trigger field is suppressed; only exchange is rendered */
+  function _v3BlockDialogue(b) {
+    var div = document.createElement('div');
+    div.className = 'm1-story v3-inline-dialogue';
+    var exchange = b.exchange || [];
+    var rows = exchange.map(function (entry) {
+      var isProf = entry.speaker === 'Professor';
+      return '<div class="m1-chat-row ' + (isProf ? 'm1-chat-right' : 'm1-chat-left') + '">' +
+        '<div class="m1-chat-avatar ' + (isProf ? 'm1-avatar-prof' : 'm1-avatar-student') + '">' +
+          (isProf ? 'P' : 'S') +
+        '</div>' +
+        '<div class="m1-chat-bubble ' + (isProf ? 'm1-bubble-prof' : 'm1-bubble-student') + '">' +
+          '<div class="m1-chat-speaker">' + esc(entry.speaker) + '</div>' +
+          '<p>' + _md(entry.text) + '</p>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+    div.innerHTML = '<div class="m1-chat">' + rows + '</div>';
+    return div;
+  }
+
+  /* Step list — strips leading "N. " prefix then auto-numbers */
+  function _v3BlockStepList(b) {
+    var div = document.createElement('div');
+    div.className = 'v2-step-list';
+    var items = (b.items || []).map(function (item, i) {
+      var text = item.replace(/^\d+\.\s*/, '');
+      return '<div class="v2-step-item">' +
+        '<div class="v2-step-dot">' + (i + 1) + '</div>' +
+        '<div class="v2-step-text">' + _md(text) + '</div>' +
+      '</div>';
+    }).join('');
+    div.innerHTML =
+      (b.title ? '<div class="v2-step-header">' + esc(b.title) + '</div>' : '') +
+      '<div class="v2-steps">' + items + '</div>';
+    return div;
+  }
+
+  /* Worked example — inline (always visible, not collapsed) */
+  function _v3BlockWorkedExample(b) {
+    var div = document.createElement('div');
+    div.className = 'v3-worked-example';
+    var sourceHtml = b.source_pattern
+      ? '<div class="v3-we-source">' + esc(b.source_pattern) + '</div>'
+      : '';
+    var thinkHtml = b.thinking_process
+      ? '<div class="v3-we-row"><div class="v3-we-label">💭 Approach</div>' +
+        '<div class="v3-we-body">' + _md(b.thinking_process) + '</div></div>'
+      : '';
+    var stepsHtml = (b.step_by_step_solution || []).map(function (s, i) {
+      return '<div class="v3-we-step"><span class="v3-we-step-num">' + (i + 1) + '</span>' +
+        '<span class="v3-we-step-text">' + _md(s) + '</span></div>';
+    }).join('');
+    var mistakeHtml = b.common_mistake
+      ? '<div class="v3-we-row v3-we-mistake"><div class="v3-we-label">⚠️ Common Mistake</div>' +
+        '<div class="v3-we-body">' + _md(b.common_mistake) + '</div></div>'
+      : '';
+    div.innerHTML =
+      '<div class="v3-we-header">' +
+        '<span class="v3-we-badge">📝 Worked Example</span>' +
+        '<div class="v3-we-title">' + esc(b.title || '') + '</div>' +
+      '</div>' +
+      sourceHtml +
+      '<div class="v3-we-row"><div class="v3-we-label">❓ Problem</div>' +
+        '<div class="v3-we-body">' + _md(b.problem || '') + '</div></div>' +
+      thinkHtml +
+      (stepsHtml
+        ? '<div class="v3-we-row"><div class="v3-we-label">🔢 Steps</div>' +
+          '<div class="v3-we-steps">' + stepsHtml + '</div></div>'
+        : '') +
+      (b.final_answer
+        ? '<div class="v3-we-row v3-we-answer"><div class="v3-we-label">✅ Answer</div>' +
+          '<div class="v3-we-body">' + _md(b.final_answer) + '</div></div>'
+        : '') +
+      mistakeHtml;
+    return div;
+  }
+
+  /* Misconception box */
+  function _v3BlockMisconceptionBox(b) {
+    var div = document.createElement('div');
+    div.className = 'v2-misconceptions-block';
+    var items = (b.items || []).map(function (item) {
+      return '<li>' + _md(item) + '</li>';
+    }).join('');
+    div.innerHTML =
+      '<div class="v2-warn-hdr">❌ ' + esc(b.title || 'Common Misconceptions') + '</div>' +
+      '<ul class="v2-misconceptions-list">' + items + '</ul>';
+    return div;
+  }
+
+  /* Memory hook — content (string) or items (array) */
+  function _v3BlockMemoryHook(b) {
+    var div = document.createElement('div');
+    div.className = 'v2-memory-block';
+    var bodyHtml = '';
+    if (b.items && b.items.length) {
+      bodyHtml = '<ul class="v2-memory-list">' +
+        b.items.map(function (item) { return '<li>' + _md(item) + '</li>'; }).join('') +
+        '</ul>';
+    } else if (b.content) {
+      bodyHtml = '<div class="v2-memory-list"><p>' + _md(b.content) + '</p></div>';
+    }
+    div.innerHTML =
+      '<div class="v2-mem-hdr">🧠 ' + esc(b.title || 'Memory Hook') + '</div>' +
+      bodyHtml;
+    return div;
+  }
+
+  /* Formula — items array of plain equivalence strings */
+  function _v3BlockFormula(b) {
+    var div = document.createElement('div');
+    div.className = 'v2-formula';
+    var itemsHtml = (b.items || []).map(function (item) {
+      return '<div class="v3-formula-item"><code class="v3-formula-code">' + esc(item) + '</code></div>';
+    }).join('');
+    div.innerHTML =
+      (b.title ? '<div class="v2-form-header">📐 ' + esc(b.title) + '</div>' : '') +
+      (itemsHtml ? '<div class="v3-formula-list">' + itemsHtml + '</div>' : '');
+    return div;
+  }
+
+  /* Example — lightweight inline card */
+  function _v3BlockExample(b) {
+    var div = document.createElement('div');
+    div.className = 'v3-example';
+    div.innerHTML =
+      (b.title ? '<div class="v3-example-title">💡 ' + esc(b.title) + '</div>' : '') +
+      '<div class="v3-example-body">' + _md(b.content || '') + '</div>';
+    return div;
   }
 
   /* ── V2 PILOT RENDERER ──────────────────────────────────────── */
