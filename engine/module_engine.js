@@ -119,6 +119,15 @@
       for (var i = 0; i < lessons.length; i++) {
         if (lessons[i].lesson_id === lessonId) { lesson = lessons[i]; idx = i; break; }
       }
+      /* fallback: accept both module10-lesson1 and module10_lesson1 formats */
+      if (!lesson) {
+        var altId = lessonId.indexOf('-') !== -1
+          ? lessonId.replace(/-/g, '_')
+          : lessonId.replace(/_/g, '-');
+        for (var j = 0; j < lessons.length; j++) {
+          if (lessons[j].lesson_id === altId) { lesson = lessons[j]; idx = j; break; }
+        }
+      }
       if (!lesson) {
         container.innerHTML = '<p style="padding:2rem;color:var(--text-3)">Lesson not found: ' + esc(lessonId) + '</p>';
         return;
