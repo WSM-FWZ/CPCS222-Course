@@ -574,6 +574,9 @@
     } else if (type === 'fill_blank') {
       _renderFillBlank(div, q, uid, srcTag);
 
+    } else if (type === 'fill_in_blank') {
+      _renderFillInBlank(div, q, uid, srcTag);
+
     } else if (type === 'matching') {
       _renderMatching(div, q, uid, srcTag);
 
@@ -810,27 +813,41 @@
 
   /* Matching — terms map to definitions via dropdowns (definitions shown in shuffled order) */
   function _renderMatching(div, q, uid, srcTag) {
-    var pairs = q.pairs || [];
-    var n = pairs.length;
-    /* Build a deterministic but non-identity permutation of definition indices */
-    var perm = pairs.map(function (_, i) { return i; });
-    if (n >= 2) {
-      /* Reverse, then rotate by 1, ensuring no fixed point for n>=3 */
-      perm.reverse();
-      if (n >= 3) perm = perm.slice(1).concat(perm.slice(0, 1));
-    }
-    /* perm[i] = original definition index displayed at dropdown position i */
-    var optHtml = '<option value="">— pick a match —</option>' +
-      perm.map(function (origIdx) {
-        return '<option value="' + origIdx + '">' + esc(pairs[origIdx].definition) + '</option>';
-      }).join('');
+    /* Dual-format: M2+ uses q.left/q.right/q.pairs (index pairs); M1 uses q.pairs ({term,definition}) */
+    var isLRFormat = Array.isArray(q.left);
+    var rowsHtml, n, optHtml, perm, i;
 
-    var rowsHtml = pairs.map(function (p, i) {
-      return '<div class="m1-iex-match-row" data-correct="' + i + '">' +
-        '<span class="m1-iex-match-term">' + esc(p.term) + '</span>' +
-        '<select class="m1-iex-match-select">' + optHtml + '</select>' +
-      '</div>';
-    }).join('');
+    if (isLRFormat) {
+      var lefts  = q.left  || [];
+      var rights = q.right || [];
+      /* Build correct-right-index map for each left index */
+      var correctMap = {};
+      (q.pairs || []).forEach(function(p){ correctMap[p[0]] = p[1]; });
+      n = rights.length;
+      perm = rights.map(function(_, k){ return k; });
+      if (n >= 2) { perm.reverse(); if (n >= 3) perm = perm.slice(1).concat(perm.slice(0, 1)); }
+      optHtml = '<option value="">— pick a match —</option>' +
+        perm.map(function(ri){ return '<option value="' + ri + '">' + esc(rights[ri]) + '</option>'; }).join('');
+      rowsHtml = lefts.map(function(left, li){
+        return '<div class="m1-iex-match-row" data-correct="' + (correctMap[li] !== undefined ? correctMap[li] : li) + '">' +
+          '<span class="m1-iex-match-term">' + esc(left) + '</span>' +
+          '<select class="m1-iex-match-select">' + optHtml + '</select>' +
+        '</div>';
+      }).join('');
+    } else {
+      var pairs = q.pairs || [];
+      n = pairs.length;
+      perm = pairs.map(function(_, k){ return k; });
+      if (n >= 2) { perm.reverse(); if (n >= 3) perm = perm.slice(1).concat(perm.slice(0, 1)); }
+      optHtml = '<option value="">— pick a match —</option>' +
+        perm.map(function(origIdx){ return '<option value="' + origIdx + '">' + esc(pairs[origIdx].definition) + '</option>'; }).join('');
+      rowsHtml = pairs.map(function(p, k){
+        return '<div class="m1-iex-match-row" data-correct="' + k + '">' +
+          '<span class="m1-iex-match-term">' + esc(p.term) + '</span>' +
+          '<select class="m1-iex-match-select">' + optHtml + '</select>' +
+        '</div>';
+      }).join('');
+    }
 
     div.innerHTML =
       srcTag +
@@ -890,17 +907,28 @@
     }, 0);
   }
 
-  /* Ordering — arrange shuffled steps using up/down buttons */
+  /* Ordering — arrange shuffled steps using up/down buttons.
+     Dual-format: M2+ uses q.items + q.correct_order (index array);
+                  M1  uses q.steps (correct order is index order). */
   function _renderOrdering(div, q, uid, srcTag) {
-    var steps = (q.steps || []).slice();
+    var isNewFmt = Array.isArray(q.items) && Array.isArray(q.correct_order);
+    var steps        = isNewFmt ? (q.items || []).slice() : (q.steps || []).slice();
+    var correctOrder = isNewFmt ? q.correct_order.slice() : steps.map(function(_, i){ return i; });
     var n = steps.length;
-    /* Deterministic shuffle: rotate by 2 if n>=3 to ensure a different start order */
-    var shuffled = steps.slice();
-    if (n >= 3) shuffled = shuffled.slice(2).concat(shuffled.slice(0, 2));
-    if (n >= 4) shuffled = [shuffled[1], shuffled[3], shuffled[0], shuffled[2]].concat(shuffled.slice(4));
+    var current; /* current[k] = original step index at display position k */
 
-    /* Map shuffled order to original indices */
-    var current = shuffled.map(function (s) { return steps.indexOf(s); });
+    function initCurrent() {
+      if (isNewFmt) {
+        /* Start in index order (0,1,2,...), which differs from correctOrder */
+        current = steps.map(function(_, i){ return i; });
+      } else {
+        var shuffled = steps.slice();
+        if (n >= 3) shuffled = shuffled.slice(2).concat(shuffled.slice(0, 2));
+        if (n >= 4) shuffled = [shuffled[1], shuffled[3], shuffled[0], shuffled[2]].concat(shuffled.slice(4));
+        current = shuffled.map(function(s){ return steps.indexOf(s); });
+      }
+    }
+    initCurrent();
 
     function rebuildList() {
       var html = current.map(function (origIdx, pos) {
@@ -967,7 +995,7 @@
         var items = list.querySelectorAll('.m1-iex-order-item');
         items.forEach(function (item, pos) {
           var origIdx = parseInt(item.getAttribute('data-orig'), 10);
-          var ok = (origIdx === pos);
+          var ok = (origIdx === correctOrder[pos]);
           item.classList.remove('is-correct', 'is-wrong');
           item.classList.add(ok ? 'is-correct' : 'is-wrong');
           item.querySelectorAll('button').forEach(function (b) { b.disabled = true; });
@@ -986,9 +1014,7 @@
       }
       function doRetry() {
         answered = false;
-        /* Reset to shuffled order */
-        if (n >= 3) current = steps.slice(2).concat(steps.slice(0, 2)).map(function (s) { return steps.indexOf(s); });
-        else current = steps.map(function (_, i) { return n - 1 - i; });
+        initCurrent();
         rebuildList();
         submit.disabled = false;
         retry.style.display = 'none';
@@ -997,14 +1023,84 @@
         fb.innerHTML = '';
       }
       function doShow() {
-        var lines = steps.map(function (s, i) {
-          return '<li>' + (i + 1) + '. ' + esc(s) + '</li>';
+        var lines = correctOrder.map(function (origIdx, pos) {
+          return '<li>' + (pos + 1) + '. ' + esc(steps[origIdx]) + '</li>';
         }).join('');
         fb.className = 'm1-iex-feedback show is-partial';
         fb.innerHTML = '<strong>Correct order:</strong><ol style="margin:.4rem 0 0 1.25rem;list-style:decimal;">' + lines + '</ol>' +
           (q.explanation ? '<em>' + esc(q.explanation) + '</em>' : '');
       }
 
+      submit.addEventListener('click', doSubmit);
+      retry.addEventListener('click',  doRetry);
+      show.addEventListener('click',   doShow);
+    }, 0);
+  }
+
+  /* Fill-in-the-blank (single blank, M2-M10 format: question has "___", answer is a string) */
+  function _renderFillInBlank(div, q, uid, srcTag) {
+    var qText = q.question || '';
+    var answer = String(q.answer || '');
+    var parts = qText.split('___');
+    var before = parts[0] || '';
+    var after  = parts.slice(1).join('___');
+    div.innerHTML =
+      srcTag +
+      '<p class="m1-ex-q">' +
+        esc(before) +
+        '<input type="text" class="m1-iex-input m1-iex-fib" placeholder="…" />' +
+        esc(after) +
+      '</p>' +
+      '<div class="m1-iex-actions">' +
+        '<button class="m1-iex-submit">Check</button>' +
+        '<button class="m1-iex-retry" style="display:none;">Try Again</button>' +
+        '<button class="m1-iex-show" style="display:none;">Show Answer</button>' +
+      '</div>' +
+      '<div class="m1-iex-feedback" id="' + uid + '-fb"></div>';
+
+    setTimeout(function () {
+      var input  = div.querySelector('.m1-iex-fib');
+      var submit = div.querySelector('.m1-iex-submit');
+      var retry  = div.querySelector('.m1-iex-retry');
+      var show   = div.querySelector('.m1-iex-show');
+      var fb     = div.querySelector('.m1-iex-feedback');
+      var answered = false;
+
+      function doSubmit() {
+        if (answered) return;
+        var uv = (input.value || '').trim();
+        var accepted = [answer].concat(Array.isArray(q.accept) ? q.accept : []);
+        var ok = accepted.some(function(a){ return a.trim().toLowerCase() === uv.toLowerCase(); });
+        input.disabled = true;
+        input.classList.remove('is-correct', 'is-wrong');
+        input.classList.add(ok ? 'is-correct' : 'is-wrong');
+        answered = true;
+        submit.disabled = true;
+        retry.style.display = '';
+        show.style.display  = '';
+        fb.className = 'm1-iex-feedback show ' + (ok ? 'is-correct' : 'is-wrong');
+        fb.innerHTML = (ok ? '<strong>✅ Correct!</strong> ' : '<strong>❌ Not quite.</strong> ') +
+          (q.explanation ? esc(q.explanation) : '');
+        _scoreInc(uid, ok);
+      }
+      function doRetry() {
+        answered = false;
+        input.value = '';
+        input.disabled = false;
+        input.classList.remove('is-correct', 'is-wrong');
+        submit.disabled = false;
+        retry.style.display = 'none';
+        show.style.display  = 'none';
+        fb.classList.remove('show', 'is-correct', 'is-wrong');
+        fb.innerHTML = '';
+      }
+      function doShow() {
+        fb.className = 'm1-iex-feedback show is-partial';
+        fb.innerHTML = '<strong>Answer:</strong> ' + esc(answer) +
+          (q.explanation ? ' — ' + esc(q.explanation) : '');
+      }
+
+      input.addEventListener('keydown', function(e){ if (e.key === 'Enter') doSubmit(); });
       submit.addEventListener('click', doSubmit);
       retry.addEventListener('click',  doRetry);
       show.addEventListener('click',   doShow);
@@ -1318,6 +1414,17 @@
     if (type === 'simulator_proposition_classifier') return _v3SimPropClassifier(block);
     if (type === 'simulator_truth_table_builder')    return _v3SimTruthTableBuilder(block);
     if (type === 'simulator_conditional_promise')    return _v3SimConditionalPromise(block);
+    if (type === 'set_diagram')                      return _v3BlockSetDiagram(block);
+    if (type === 'mapping_diagram')                  return _v3BlockMappingDiagram(block);
+    if (type === 'simulator_quantifier_explorer')    return _v3SimQuantifierExplorer(block);
+    if (type === 'simulator_inference_checker')      return _v3SimInferenceChecker(block);
+    if (type === 'simulator_set_ops')                return _v3SimSetOps(block);
+    if (type === 'simulator_seq_gen')                return _v3SimSeqGen(block);
+    if (type === 'simulator_sigma_expand')           return _v3SimSigmaExpand(block);
+    if (type === 'simulator_func_props')             return _v3SimFuncProps(block);
+    if (type === 'simulator_relation_props')         return _v3SimRelationProps(block);
+    if (type === 'simulator_pc_calc')                return _v3SimPCCalc(block);
+    if (type === 'simulator_induction_check')        return _v3SimInductionCheck(block);
     var d = document.createElement('div');
     d.className = 'v2-block-generic';
     d.innerHTML = '<strong>' + esc(block.title || type) + '</strong>';
@@ -1638,6 +1745,426 @@
     }, 0);
 
     return shell;
+  }
+
+  /* ── V3 BLOCK: SET DIAGRAM ─────────────────────────────────── */
+  function _v3BlockSetDiagram(b) {
+    var sets    = b.sets    || ['A', 'B'];
+    var universe = b.universe || 'U';
+    var regions  = b.regions  || [];
+    var d = document.createElement('div');
+    d.className = 'v3-set-diagram';
+    var regHtml = regions.length
+      ? '<ul class="v3-sd-region-list">' + regions.map(function(r){ return '<li>' + esc(r) + '</li>'; }).join('') + '</ul>'
+      : '';
+    d.innerHTML =
+      (b.title ? '<div class="v3-sd-title">' + esc(b.title) + '</div>' : '') +
+      '<div class="v3-sd-venn">' +
+        '<div class="v3-sd-universe-label">' + esc(universe) + '</div>' +
+        '<div class="v3-sd-circles">' +
+          sets.map(function(s, i){ return '<div class="v3-sd-circle v3-sd-c' + i + '"><span class="v3-sd-clabel">' + esc(s) + '</span></div>'; }).join('') +
+        '</div>' +
+      '</div>' +
+      (regions.length ? '<div class="v3-sd-legend"><strong>Regions:</strong>' + regHtml + '</div>' : '');
+    return d;
+  }
+
+  /* ── V3 BLOCK: MAPPING DIAGRAM ──────────────────────────────── */
+  function _v3BlockMappingDiagram(b) {
+    var domain   = b.domain   || [];
+    var codomain = b.codomain || [];
+    var arrows   = b.arrows   || [];
+    var hitCod   = {};
+    arrows.forEach(function(a){ hitCod[a[1]] = true; });
+    var arrowsHtml = arrows.map(function(a){
+      return '<div class="v3-md-arrow-row"><span class="v3-md-from">' + esc(a[0]) + '</span>' +
+        '<span class="v3-md-to-arrow"> → </span>' +
+        '<span class="v3-md-to">' + esc(a[1]) + '</span></div>';
+    }).join('');
+    var d = document.createElement('div');
+    d.className = 'v3-mapping-diagram';
+    d.innerHTML =
+      (b.title ? '<div class="v3-md-title">' + esc(b.title) + '</div>' : '') +
+      '<div class="v3-md-layout">' +
+        '<div class="v3-md-col">' +
+          '<div class="v3-md-col-label">Domain A</div>' +
+          domain.map(function(el){ return '<div class="v3-md-el v3-md-dom">' + esc(el) + '</div>'; }).join('') +
+        '</div>' +
+        '<div class="v3-md-center"><div class="v3-md-arrows-label">f</div>' + arrowsHtml + '</div>' +
+        '<div class="v3-md-col">' +
+          '<div class="v3-md-col-label">Codomain B</div>' +
+          codomain.map(function(el){ return '<div class="v3-md-el v3-md-cod' + (hitCod[el] ? ' v3-md-hit' : '') + '">' + esc(el) + '</div>'; }).join('') +
+        '</div>' +
+      '</div>';
+    return d;
+  }
+
+  /* ── V3 SIMULATORS: MODULES 2-10 ────────────────────────────── */
+
+  function _v3SimQuantifierExplorer(block) {
+    var bodyHtml =
+      '<div class="v3-sim-row"><label class="v3-sim-lbl">Domain (integers, comma-separated):</label>' +
+      '<input class="v3-sim-input v3-qe-dom" value="1,2,3,4,5,6" /></div>' +
+      '<div class="v3-sim-row"><label class="v3-sim-lbl">Predicate P(x):</label>' +
+      '<select class="v3-sim-select v3-qe-pred">' +
+      '<option value="even">x is even</option>' +
+      '<option value="odd">x is odd</option>' +
+      '<option value="gt3">x &gt; 3</option>' +
+      '<option value="lt4">x &lt; 4</option>' +
+      '<option value="prime">x is prime</option>' +
+      '<option value="sq_gt9">x\xb2 &gt; 9</option>' +
+      '</select></div>' +
+      '<button class="v3-sim-btn">Evaluate ∀x / ∃x P(x)</button>' +
+      '<div class="v3-qe-out" style="display:none"></div>';
+    var div = _v3SimShell(block.title || 'Quantifier Explorer', '🔮', null, bodyHtml);
+    setTimeout(function () {
+      function isPrime(n) { if (n < 2) return false; for (var i = 2; i * i <= n; i++) if (n % i === 0) return false; return true; }
+      function evPred(x, p) {
+        if (p === 'even')  return x % 2 === 0;
+        if (p === 'odd')   return x % 2 !== 0;
+        if (p === 'gt3')   return x > 3;
+        if (p === 'lt4')   return x < 4;
+        if (p === 'prime')  return isPrime(x);
+        if (p === 'sq_gt9') return x * x > 9;
+        return false;
+      }
+      div.querySelector('.v3-sim-btn').addEventListener('click', function () {
+        var domain = div.querySelector('.v3-qe-dom').value.split(',')
+          .map(function(s){ return parseInt(s.trim(), 10); })
+          .filter(function(n){ return !isNaN(n); }).slice(0, 15);
+        if (!domain.length) { div.querySelector('.v3-qe-out').innerHTML = '<em>Enter at least one integer.</em>'; div.querySelector('.v3-qe-out').style.display = ''; return; }
+        var pred = div.querySelector('.v3-qe-pred').value;
+        var sat = domain.filter(function(x){ return evPred(x, pred); });
+        var forAll = sat.length === domain.length, exists = sat.length > 0;
+        div.querySelector('.v3-qe-out').innerHTML =
+          '<div class="v3-qe-info">Domain = {' + domain.join(', ') + '}</div>' +
+          '<div class="v3-qe-info">Satisfying P(x): {' + (sat.length ? sat.join(', ') : '∅') + '}</div>' +
+          '<div class="v3-verdict ' + (forAll ? 'is-true' : 'is-false') + '">∀x P(x) = <strong>' + (forAll ? 'TRUE' : 'FALSE') + '</strong>' +
+            (!forAll ? ' — counterexample: x = ' + domain.filter(function(x){ return !evPred(x, pred); })[0] : '') + '</div>' +
+          '<div class="v3-verdict ' + (exists ? 'is-true' : 'is-false') + '">∃x P(x) = <strong>' + (exists ? 'TRUE' : 'FALSE') + '</strong>' +
+            (exists ? ' — witness: x = ' + sat[0] : ' — no witness') + '</div>';
+        div.querySelector('.v3-qe-out').style.display = '';
+      });
+    }, 0);
+    return div;
+  }
+
+  function _v3SimInferenceChecker(block) {
+    var rules = [
+      { name: 'Modus Ponens (MP)',           p: 'P → Q',  q: 'P',       conc: 'Q'        },
+      { name: 'Modus Tollens (MT)',           p: 'P → Q',  q: '¬Q', conc: '¬P'  },
+      { name: 'Hypothetical Syllogism (HS)', p: 'P → Q',  q: 'Q → R', conc: 'P → R' },
+      { name: 'Disjunctive Syllogism (DS)',  p: 'P ∨ Q',  q: '¬P', conc: 'Q'        },
+      { name: 'Addition',                    p: 'P',           q: null,       conc: 'P ∨ Q' },
+      { name: 'Simplification',              p: 'P ∧ Q',  q: null,       conc: 'P'        },
+      { name: 'Conjunction',                 p: 'P',           q: 'Q',        conc: 'P ∧ Q' },
+      { name: 'Resolution',                  p: 'P ∨ Q',  q: '¬P ∨ R', conc: 'Q ∨ R' }
+    ];
+    var optsHtml = rules.map(function(r, i){ return '<option value="' + i + '">' + esc(r.name) + '</option>'; }).join('');
+    var bodyHtml =
+      '<div class="v3-sim-row"><label class="v3-sim-lbl">Inference Rule:</label>' +
+      '<select class="v3-sim-select v3-ic-rule">' + optsHtml + '</select></div>' +
+      '<div class="v3-ic-premises"></div>' +
+      '<button class="v3-sim-btn">Show Valid Inference</button>' +
+      '<div class="v3-ic-out" style="display:none"></div>';
+    var div = _v3SimShell(block.title || 'Inference Rule Checker', '🔬', null, bodyHtml);
+    setTimeout(function () {
+      var sel = div.querySelector('.v3-ic-rule');
+      var premDiv = div.querySelector('.v3-ic-premises');
+      var out = div.querySelector('.v3-ic-out');
+      function updatePremises() {
+        var r = rules[parseInt(sel.value, 10)];
+        premDiv.innerHTML =
+          '<div class="v3-ic-prem"><span class="v3-ic-step">Premise 1:</span> <span class="v3-ic-formula">' + esc(r.p) + '</span></div>' +
+          (r.q ? '<div class="v3-ic-prem"><span class="v3-ic-step">Premise 2:</span> <span class="v3-ic-formula">' + esc(r.q) + '</span></div>' : '');
+      }
+      sel.addEventListener('change', function(){ out.style.display = 'none'; updatePremises(); });
+      div.querySelector('.v3-sim-btn').addEventListener('click', function () {
+        var r = rules[parseInt(sel.value, 10)];
+        out.innerHTML =
+          '<div class="v3-ic-proof">' +
+          '<div class="v3-ic-prem"><span class="v3-ic-num">1.</span><span class="v3-ic-formula">' + esc(r.p) + '</span><span class="v3-ic-just">(premise)</span></div>' +
+          (r.q ? '<div class="v3-ic-prem"><span class="v3-ic-num">2.</span><span class="v3-ic-formula">' + esc(r.q) + '</span><span class="v3-ic-just">(premise)</span></div>' : '') +
+          '<div class="v3-ic-prem v3-ic-conc"><span class="v3-ic-num">∴</span><span class="v3-ic-formula v3-ic-result">' + esc(r.conc) + '</span><span class="v3-ic-just">(' + esc(r.name) + ')</span></div>' +
+          '</div>';
+        out.style.display = '';
+      });
+      updatePremises();
+    }, 0);
+    return div;
+  }
+
+  function _v3SimSetOps(block) {
+    var bodyHtml =
+      '<div class="v3-sim-row"><label class="v3-sim-lbl">Set A (integers, comma-separated):</label><input class="v3-sim-input v3-so-a" value="1,2,3,4" /></div>' +
+      '<div class="v3-sim-row"><label class="v3-sim-lbl">Set B (integers, comma-separated):</label><input class="v3-sim-input v3-so-b" value="3,4,5,6" /></div>' +
+      '<button class="v3-sim-btn">Compute All Operations</button>' +
+      '<div class="v3-so-out" style="display:none"></div>';
+    var div = _v3SimShell(block.title || 'Set Operations Calculator', '🔢', null, bodyHtml);
+    setTimeout(function () {
+      function parseSet(s) {
+        return s.split(',').map(function(x){ return parseInt(x.trim(), 10); })
+          .filter(function(n){ return !isNaN(n); })
+          .filter(function(x, i, a){ return a.indexOf(x) === i; })
+          .sort(function(a, b){ return a - b; });
+      }
+      function setStr(arr) { return arr.length ? '{' + arr.join(', ') + '}' : '∅'; }
+      div.querySelector('.v3-sim-btn').addEventListener('click', function () {
+        var A = parseSet(div.querySelector('.v3-so-a').value);
+        var B = parseSet(div.querySelector('.v3-so-b').value);
+        var union = A.concat(B).filter(function(x, i, a){ return a.indexOf(x) === i; }).sort(function(a, b){ return a - b; });
+        var inter = A.filter(function(x){ return B.indexOf(x) >= 0; });
+        var aMinB = A.filter(function(x){ return B.indexOf(x) < 0; });
+        var bMinA = B.filter(function(x){ return A.indexOf(x) < 0; });
+        var symD  = aMinB.concat(bMinA).sort(function(a, b){ return a - b; });
+        div.querySelector('.v3-so-out').innerHTML =
+          '<table class="v3-so-table"><tbody>' +
+          '<tr><td class="v3-so-op">A ∪ B</td><td class="v3-so-val">' + setStr(union) + '</td></tr>' +
+          '<tr><td class="v3-so-op">A ∩ B</td><td class="v3-so-val">' + setStr(inter) + '</td></tr>' +
+          '<tr><td class="v3-so-op">A − B</td><td class="v3-so-val">' + setStr(aMinB) + '</td></tr>' +
+          '<tr><td class="v3-so-op">B − A</td><td class="v3-so-val">' + setStr(bMinA) + '</td></tr>' +
+          '<tr><td class="v3-so-op">A ⊕ B (sym. diff.)</td><td class="v3-so-val">' + setStr(symD) + '</td></tr>' +
+          '<tr><td class="v3-so-op">|A|, |B|, |A∪B|, |A∩B|</td><td class="v3-so-val">' + A.length + ', ' + B.length + ', ' + union.length + ', ' + inter.length + '</td></tr>' +
+          '</tbody></table>';
+        div.querySelector('.v3-so-out').style.display = '';
+      });
+    }, 0);
+    return div;
+  }
+
+  function _v3SimSeqGen(block) {
+    var bodyHtml =
+      '<div class="v3-sim-row"><label class="v3-sim-lbl">Type:</label>' +
+      '<select class="v3-sim-select v3-sg-type">' +
+      '<option value="arith">Arithmetic: aₙ = a₁ + (n−1)d</option>' +
+      '<option value="geom">Geometric: aₙ = a₁ · rⁿ⁻¹</option>' +
+      '<option value="fib">Fibonacci: a₁, a₂, then sum of prev two</option>' +
+      '</select></div>' +
+      '<div class="v3-sim-row"><label class="v3-sim-lbl">First term (a₁):</label><input class="v3-sim-input v3-sg-a" value="1" /></div>' +
+      '<div class="v3-sg-dr v3-sim-row"><label class="v3-sim-lbl">Common difference/ratio:</label><input class="v3-sim-input v3-sg-d" value="2" /></div>' +
+      '<div class="v3-sim-row"><label class="v3-sim-lbl">Number of terms (max 20):</label><input class="v3-sim-input v3-sg-n" value="8" /></div>' +
+      '<button class="v3-sim-btn">Generate Sequence</button>' +
+      '<div class="v3-sg-out" style="display:none"></div>';
+    var div = _v3SimShell(block.title || 'Sequence Generator', '📊', null, bodyHtml);
+    setTimeout(function () {
+      var typeSel = div.querySelector('.v3-sg-type');
+      var dRow = div.querySelector('.v3-sg-dr');
+      typeSel.addEventListener('change', function(){ dRow.style.display = typeSel.value === 'fib' ? 'none' : ''; });
+      div.querySelector('.v3-sim-btn').addEventListener('click', function () {
+        var type = typeSel.value;
+        var a = parseFloat(div.querySelector('.v3-sg-a').value) || 1;
+        var d = parseFloat(div.querySelector('.v3-sg-d').value);
+        var n = Math.min(Math.max(parseInt(div.querySelector('.v3-sg-n').value, 10) || 8, 1), 20);
+        var terms = [], i, t, a1 = a, a2 = 1;
+        if (type === 'arith') {
+          for (i = 0; i < n; i++) terms.push(a + i * d);
+        } else if (type === 'geom') {
+          for (i = 0; i < n; i++) terms.push(a * Math.pow(d, i));
+        } else {
+          terms.push(a1); if (n > 1) terms.push(a2);
+          for (i = 2; i < n; i++) { t = a1 + a2; terms.push(t); a1 = a2; a2 = t; }
+        }
+        div.querySelector('.v3-sg-out').innerHTML =
+          '<div class="v3-sg-terms">' +
+          terms.map(function(tv, idx){
+            var disp = (Math.abs(tv) < 1e6 && tv === Math.floor(tv)) ? tv : tv.toPrecision(4);
+            return '<span class="v3-sg-term"><span class="v3-sg-idx">a' + (idx + 1) + '</span><span class="v3-sg-val">' + disp + '</span></span>';
+          }).join('') + '</div>';
+        div.querySelector('.v3-sg-out').style.display = '';
+      });
+    }, 0);
+    return div;
+  }
+
+  function _v3SimSigmaExpand(block) {
+    var fmls = [
+      { val: 'i',    label: 'Σᵢ₌₁ⁿ i  (sum of first n integers)',
+        fn: function(i){ return i; },       closed: function(n){ return 'n(n+1)/2 = ' + (n*(n+1)/2); }, s0: false },
+      { val: 'i2',   label: 'Σᵢ₌₁ⁿ i\xb2 (sum of squares)',
+        fn: function(i){ return i*i; },     closed: function(n){ return 'n(n+1)(2n+1)/6 = ' + (n*(n+1)*(2*n+1)/6); }, s0: false },
+      { val: 'i3',   label: 'Σᵢ₌₁ⁿ i\xb3 (sum of cubes)',
+        fn: function(i){ return i*i*i; },   closed: function(n){ return '[n(n+1)/2]\xb2 = ' + Math.pow(n*(n+1)/2,2); }, s0: false },
+      { val: '2i',   label: 'Σᵢ₌₁ⁿ 2i  (double each)',
+        fn: function(i){ return 2*i; },     closed: function(n){ return 'n(n+1) = ' + (n*(n+1)); }, s0: false },
+      { val: '2pow', label: 'Σᵢ₌₀ⁿ 2ⁱ (powers of 2)',
+        fn: function(i){ return Math.pow(2,i); }, closed: function(n){ return '2ⁿ⁺¹−1 = ' + (Math.pow(2,n+1)-1); }, s0: true }
+    ];
+    var optsHtml = fmls.map(function(f){ return '<option value="' + f.val + '">' + esc(f.label) + '</option>'; }).join('');
+    var bodyHtml =
+      '<div class="v3-sim-row"><label class="v3-sim-lbl">Formula:</label><select class="v3-sim-select v3-se-formula">' + optsHtml + '</select></div>' +
+      '<div class="v3-sim-row"><label class="v3-sim-lbl">Upper bound n (1–10):</label><input class="v3-sim-input v3-se-n" value="5" /></div>' +
+      '<button class="v3-sim-btn">Expand &amp; Evaluate</button>' +
+      '<div class="v3-se-out" style="display:none"></div>';
+    var div = _v3SimShell(block.title || 'Sigma Notation Expander', 'Σ', null, bodyHtml);
+    setTimeout(function () {
+      div.querySelector('.v3-sim-btn').addEventListener('click', function () {
+        var fv = div.querySelector('.v3-se-formula').value;
+        var fObj = fmls.filter(function(f){ return f.val === fv; })[0] || fmls[0];
+        var n = Math.min(Math.max(parseInt(div.querySelector('.v3-se-n').value, 10) || 5, 1), 10);
+        var start = fObj.s0 ? 0 : 1, terms = [], total = 0;
+        for (var i = start; i <= n; i++) { var tv = fObj.fn(i); terms.push(tv); total += tv; }
+        div.querySelector('.v3-se-out').innerHTML =
+          '<div class="v3-se-expansion">Expansion: ' + terms.join(' + ') + ' = <strong>' + total + '</strong></div>' +
+          '<div class="v3-se-closed">Closed form: <strong>' + esc(fObj.closed(n)) + '</strong></div>';
+        div.querySelector('.v3-se-out').style.display = '';
+      });
+    }, 0);
+    return div;
+  }
+
+  function _v3SimFuncProps(block) {
+    var bodyHtml =
+      '<div class="v3-sim-row"><label class="v3-sim-lbl">Domain A (comma-separated):</label><input class="v3-sim-input v3-fp-dom" value="a,b,c,d" /></div>' +
+      '<div class="v3-sim-row"><label class="v3-sim-lbl">Codomain B (comma-separated):</label><input class="v3-sim-input v3-fp-cod" value="1,2,3,4,5" /></div>' +
+      '<div class="v3-sim-row"><label class="v3-sim-lbl">Mapping (a→1, b→2, …):</label><input class="v3-sim-input v3-fp-map" value="a→1, b→2, c→3, d→1" /></div>' +
+      '<button class="v3-sim-btn">Check Inj / Surj / Bij</button>' +
+      '<div class="v3-fp-out" style="display:none"></div>';
+    var div = _v3SimShell(block.title || 'Function Property Checker', '📈', null, bodyHtml);
+    setTimeout(function () {
+      div.querySelector('.v3-sim-btn').addEventListener('click', function () {
+        var domIn = div.querySelector('.v3-fp-dom').value.split(',').map(function(s){ return s.trim(); }).filter(Boolean);
+        var codIn = div.querySelector('.v3-fp-cod').value.split(',').map(function(s){ return s.trim(); }).filter(Boolean);
+        var pairs = div.querySelector('.v3-fp-map').value.split(',').map(function(s){
+          var p = s.replace(/→/g, '->').split('->');
+          return p.length === 2 ? [p[0].trim(), p[1].trim()] : null;
+        }).filter(Boolean);
+        var mapped = {};
+        pairs.forEach(function(p){ mapped[p[0]] = (mapped[p[0]] || []).concat([p[1]]); });
+        var isValid = domIn.every(function(d){ return mapped[d] && mapped[d].length === 1; });
+        var out = div.querySelector('.v3-fp-out');
+        if (!isValid) {
+          out.innerHTML = '<div class="v3-fp-invalid">⚠️ Not a valid function — each domain element needs exactly one mapping.</div>';
+          out.style.display = ''; return;
+        }
+        var flatRange = pairs.map(function(p){ return p[1]; });
+        var uniqueRange = flatRange.filter(function(x, i, a){ return a.indexOf(x) === i; });
+        var isInj = flatRange.length === uniqueRange.length;
+        var isSurj = codIn.every(function(c){ return flatRange.indexOf(c) >= 0; });
+        var isBij = isInj && isSurj;
+        var notHit = codIn.filter(function(c){ return flatRange.indexOf(c) < 0; });
+        out.innerHTML =
+          '<div class="v3-fp-info">Range f(A) = {' + uniqueRange.join(', ') + '}</div>' +
+          '<div class="v3-verdict ' + (isInj ? 'is-true' : 'is-false') + '">Injective: <strong>' + (isInj ? 'YES' : 'NO') + '</strong>' +
+            (!isInj ? ' — some range value hit more than once' : '') + '</div>' +
+          '<div class="v3-verdict ' + (isSurj ? 'is-true' : 'is-false') + '">Surjective: <strong>' + (isSurj ? 'YES' : 'NO') + '</strong>' +
+            (!isSurj ? ' — not hit: {' + notHit.join(',') + '}' : '') + '</div>' +
+          '<div class="v3-verdict ' + (isBij ? 'is-true' : 'is-false') + '">Bijective: <strong>' + (isBij ? 'YES' : 'NO') + '</strong></div>';
+        out.style.display = '';
+      });
+    }, 0);
+    return div;
+  }
+
+  function _v3SimRelationProps(block) {
+    var bodyHtml =
+      '<div class="v3-sim-row"><label class="v3-sim-lbl">Domain (e.g. 1,2,3):</label><input class="v3-sim-input v3-rp-dom" value="1,2,3" /></div>' +
+      '<div class="v3-sim-row"><label class="v3-sim-lbl">Pairs (format: 1,1 | 1,2 | 2,1):</label><input class="v3-sim-input v3-rp-rel" value="1,1 | 2,2 | 3,3 | 1,2 | 2,1" /></div>' +
+      '<button class="v3-sim-btn">Check Properties</button>' +
+      '<div class="v3-rp-out" style="display:none"></div>';
+    var div = _v3SimShell(block.title || 'Relation Properties Checker', '🔗', null, bodyHtml);
+    setTimeout(function () {
+      div.querySelector('.v3-sim-btn').addEventListener('click', function () {
+        var domIn = div.querySelector('.v3-rp-dom').value.split(',').map(function(s){ return s.trim(); }).filter(Boolean);
+        var pairs = div.querySelector('.v3-rp-rel').value.split('|').map(function(s){
+          var p = s.trim().split(',').map(function(x){ return x.trim(); });
+          return p.length === 2 ? [p[0], p[1]] : null;
+        }).filter(Boolean);
+        function has(a, b){ return pairs.some(function(p){ return p[0] === a && p[1] === b; }); }
+        var isRef  = domIn.every(function(a){ return has(a, a); });
+        var isSym  = pairs.every(function(p){ return has(p[1], p[0]); });
+        var isAnti = pairs.every(function(p){ return p[0] === p[1] || !has(p[1], p[0]); });
+        var isTrans = true;
+        for (var i = 0; i < pairs.length && isTrans; i++)
+          for (var j = 0; j < pairs.length && isTrans; j++)
+            if (pairs[i][1] === pairs[j][0] && !has(pairs[i][0], pairs[j][1])) isTrans = false;
+        var isEquiv = isRef && isSym && isTrans;
+        var isPoset = isRef && isAnti && isTrans;
+        function verd(b, name, tip) {
+          return '<div class="v3-verdict ' + (b ? 'is-true' : 'is-false') + '">' + esc(name) + ': <strong>' + (b ? 'YES' : 'NO') + '</strong>' + (tip ? ' — ' + esc(tip) : '') + '</div>';
+        }
+        var out = div.querySelector('.v3-rp-out');
+        out.innerHTML =
+          '<div class="v3-fp-info">R = {' + pairs.map(function(p){ return '(' + p[0] + ',' + p[1] + ')'; }).join(', ') + '}</div>' +
+          verd(isRef,  'Reflexive',     isRef  ? null : 'Some a with (a,a)∉R') +
+          verd(isSym,  'Symmetric',     isSym  ? null : 'Some (a,b)∈R but (b,a)∉R') +
+          verd(isAnti, 'Antisymmetric', isAnti ? null : 'Some a≠b with (a,b) and (b,a) both in R') +
+          verd(isTrans,'Transitive',    isTrans? null : 'Some (a,b),(b,c)∈R but (a,c)∉R') +
+          verd(isEquiv,'Equivalence relation', isEquiv ? 'Refl + Sym + Trans' : null) +
+          verd(isPoset,'Partial order',        isPoset ? 'Refl + Anti + Trans' : null);
+        out.style.display = '';
+      });
+    }, 0);
+    return div;
+  }
+
+  function _v3SimPCCalc(block) {
+    var bodyHtml =
+      '<div class="v3-sim-row"><label class="v3-sim-lbl">n (total items):</label><input class="v3-sim-input v3-pc-n2" value="5" /></div>' +
+      '<div class="v3-sim-row"><label class="v3-sim-lbl">r (items chosen):</label><input class="v3-sim-input v3-pc-r2" value="2" /></div>' +
+      '<button class="v3-sim-btn">Compute P(n,r) and C(n,r)</button>' +
+      '<div class="v3-pc-out2" style="display:none"></div>';
+    var div = _v3SimShell(block.title || 'Permutation & Combination Calculator', '🎲', null, bodyHtml);
+    setTimeout(function () {
+      function fact(k) { if (k <= 1) return 1; var r = 1; for (var i = 2; i <= k; i++) r *= i; return r; }
+      div.querySelector('.v3-sim-btn').addEventListener('click', function () {
+        var n = parseInt(div.querySelector('.v3-pc-n2').value, 10);
+        var r = parseInt(div.querySelector('.v3-pc-r2').value, 10);
+        var out = div.querySelector('.v3-pc-out2');
+        if (isNaN(n)||isNaN(r)||n<0||r<0||r>n||n>20) {
+          out.innerHTML = '<div class="v3-fp-invalid">Enter 0 ≤ r ≤ n ≤ 20.</div>'; out.style.display = ''; return;
+        }
+        var P = fact(n) / fact(n - r);
+        var C = fact(n) / (fact(r) * fact(n - r));
+        out.innerHTML =
+          '<div class="v3-se-expansion"><strong>P(' + n + ',' + r + ')</strong> = ' + n + '! / ' + (n-r) + '! = ' + fact(n) + ' / ' + fact(n-r) + ' = <strong>' + P + '</strong></div>' +
+          '<div class="v3-se-expansion"><strong>C(' + n + ',' + r + ')</strong> = ' + n + '! / (' + r + '! \xd7 ' + (n-r) + '!) = <strong>' + C + '</strong></div>' +
+          '<div class="v3-se-closed">P = ordered (permutations); C = unordered (combinations = P \xf7 r!).</div>';
+        out.style.display = '';
+      });
+    }, 0);
+    return div;
+  }
+
+  function _v3SimInductionCheck(block) {
+    var fmls = [
+      { val: 'sum_n',  label: '1+2+…+n = n(n+1)/2',
+        lhs: function(k){ var s=0; for(var i=1;i<=k;i++) s+=i; return s; },
+        rhs: function(k){ return k*(k+1)/2; } },
+      { val: 'sum_sq', label: '1\xb2+2\xb2+…+n\xb2 = n(n+1)(2n+1)/6',
+        lhs: function(k){ var s=0; for(var i=1;i<=k;i++) s+=i*i; return s; },
+        rhs: function(k){ return k*(k+1)*(2*k+1)/6; } },
+      { val: 'sum_pow',label: '2⁰+2\xb9+…+2ⁿ⁻\xb9 = 2ⁿ−1',
+        lhs: function(k){ var s=0; for(var i=0;i<k;i++) s+=Math.pow(2,i); return s; },
+        rhs: function(k){ return Math.pow(2,k)-1; } },
+      { val: 'div3',   label: 'n\xb3+2n is divisible by 3 (for all n≥1)',
+        lhs: function(k){ return k*k*k+2*k; },
+        rhs: function(k){ return (k*k*k+2*k)%3===0 ? 'HOLDS' : 'FAILS'; } }
+    ];
+    var optsHtml = fmls.map(function(f){ return '<option value="' + f.val + '">' + esc(f.label) + '</option>'; }).join('');
+    var bodyHtml =
+      '<div class="v3-sim-row"><label class="v3-sim-lbl">Formula to verify:</label><select class="v3-sim-select v3-ind-formula">' + optsHtml + '</select></div>' +
+      '<div class="v3-sim-row"><label class="v3-sim-lbl">Verify for n = 1 through:</label><input class="v3-sim-input v3-ind-n" value="5" /></div>' +
+      '<button class="v3-sim-btn">Show Verification Table</button>' +
+      '<div class="v3-ind-out" style="display:none"></div>';
+    var div = _v3SimShell(block.title || 'Induction Verifier', '🏗️', null, bodyHtml);
+    setTimeout(function () {
+      div.querySelector('.v3-sim-btn').addEventListener('click', function () {
+        var fv   = div.querySelector('.v3-ind-formula').value;
+        var fObj = fmls.filter(function(f){ return f.val === fv; })[0] || fmls[0];
+        var n = Math.min(Math.max(parseInt(div.querySelector('.v3-ind-n').value, 10) || 5, 1), 12);
+        var rows = '';
+        for (var k = 1; k <= n; k++) {
+          var lv = fObj.lhs(k), rv = fObj.rhs(k);
+          var ok = (typeof rv === 'string') ? rv === 'HOLDS' : lv === rv;
+          rows += '<tr><td>' + k + '</td><td>' + lv + '</td><td>' + rv + '</td><td>' + (ok ? '✅' : '❌') + '</td></tr>';
+        }
+        div.querySelector('.v3-ind-out').innerHTML =
+          '<table class="v3-so-table"><thead><tr><th>n</th><th>LHS</th><th>RHS / Check</th><th>OK?</th></tr></thead><tbody>' + rows + '</tbody></table>' +
+          '<div class="v3-se-closed">Base case (n=1) and the inductive step together prove the formula for all n ≥ 1 by mathematical induction.</div>';
+        div.querySelector('.v3-ind-out').style.display = '';
+      });
+    }, 0);
+    return div;
   }
 
   /* Definition — supports content OR items array, optional latex */

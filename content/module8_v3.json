@@ -1,0 +1,939 @@
+{
+  "course": "CPCS 222 — Discrete Mathematics",
+  "version": "v3",
+  "module": {
+    "module_id": 8,
+    "title": "Relations",
+    "description": "Binary relations on a set; the four core properties (reflexive, symmetric, antisymmetric, transitive); equivalence relations and their classes; partial and total orders; Hasse diagrams.",
+    "source_files": [
+      "CPCS222_08_Relations.pdf",
+      "CPCS 222 - Lab 10 - Relations.pdf"
+    ],
+    "lessons": [
+      {
+        "lesson_id": "module8-lesson1",
+        "type": "tutorial",
+        "title": "Relations and Their Properties",
+        "slug": "relations-and-their-properties",
+        "welcome": "A RELATION is just a set of ordered pairs — but with that simple definition we can express prerequisite chains, friendship graphs, and database joins. Three properties (reflexive, symmetric, transitive) classify almost all the relations you'll meet.",
+        "objectives": [
+          "Define a binary relation as a subset of A × B.",
+          "Recognize when a relation is reflexive, symmetric, antisymmetric, or transitive.",
+          "Use a directed graph or matrix to represent a relation.",
+          "Decide whether a given relation has each property."
+        ],
+        "storytelling": [
+          {
+            "speaker": "Student",
+            "text": "What's the difference between a function and a relation?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "Every function IS a relation, but not vice versa. A function requires every input to have exactly ONE output. A relation imposes no such restriction — it can pair an input with multiple outputs, or with none."
+          }
+        ],
+        "flow": [
+          {
+            "type": "definition",
+            "title": "Binary relation",
+            "content": "A **binary relation** R from A to B is a subset of A × B. We write `a R b` for `(a, b) ∈ R`. A **relation on A** is a subset of A × A."
+          },
+          {
+            "type": "real_life_example",
+            "title": "Relations around campus",
+            "items": [
+              "**Prerequisite relation** at KAU: (CPCS 203, CPCS 222) ∈ R if CPCS 203 is a prerequisite of CPCS 222.",
+              "**Enrollment relation:** (student, course) ∈ R if the student is enrolled.",
+              "**Friendship on social media:** symmetric (if A is friends with B, then B is friends with A).",
+              "**Following on X/Twitter:** NOT symmetric (you can follow without being followed back).",
+              "**'Same Saudi region as':** reflexive, symmetric, transitive — an equivalence relation."
+            ]
+          },
+          {
+            "type": "definition",
+            "title": "Four core properties (relation R on A)",
+            "items": [
+              "**Reflexive:** ∀a ∈ A, (a, a) ∈ R. Every element relates to itself.",
+              "**Symmetric:** ∀a, b ∈ A, (a, b) ∈ R → (b, a) ∈ R.",
+              "**Antisymmetric:** ∀a, b ∈ A, ((a, b) ∈ R ∧ (b, a) ∈ R) → a = b.",
+              "**Transitive:** ∀a, b, c ∈ A, ((a, b) ∈ R ∧ (b, c) ∈ R) → (a, c) ∈ R."
+            ]
+          },
+          {
+            "type": "warning",
+            "title": "Symmetric vs antisymmetric — NOT opposites",
+            "content": "A relation can be both symmetric AND antisymmetric (only the diagonal {(a, a)} satisfies both at once). Or neither (e.g., a relation with (1, 2) ∈ R, (2, 1) ∈ R, but 1 ≠ 2 fails antisymmetric, and missing some self-pairs fails symmetric)."
+          },
+          {
+            "type": "table",
+            "title": "Property check on standard relations on ℤ",
+            "headers": [
+              "Relation",
+              "Reflexive",
+              "Symmetric",
+              "Antisymmetric",
+              "Transitive"
+            ],
+            "rows": [
+              [
+                "a = b",
+                "✓",
+                "✓",
+                "✓",
+                "✓"
+              ],
+              [
+                "a < b",
+                "✗",
+                "✗",
+                "✓ (vacuously)",
+                "✓"
+              ],
+              [
+                "a ≤ b",
+                "✓",
+                "✗",
+                "✓",
+                "✓"
+              ],
+              [
+                "a | b (divides)",
+                "✓ (a | a)",
+                "✗",
+                "✓ (on ℤ⁺)",
+                "✓"
+              ],
+              [
+                "a ≡ b (mod 5)",
+                "✓",
+                "✓",
+                "✗",
+                "✓"
+              ]
+            ]
+          },
+          {
+            "type": "definition",
+            "title": "Representing a relation",
+            "items": [
+              "**Directed graph:** vertices = elements of A; draw an arrow from a to b if (a, b) ∈ R.",
+              "**Matrix:** M_{ij} = 1 if (aᵢ, aⱼ) ∈ R, 0 otherwise.",
+              "**Set of pairs:** {(a, b) | …} listed explicitly."
+            ]
+          },
+          {
+            "type": "table",
+            "title": "Reading the matrix for properties",
+            "headers": [
+              "Property",
+              "Matrix check"
+            ],
+            "rows": [
+              [
+                "Reflexive",
+                "Diagonal is all 1s"
+              ],
+              [
+                "Symmetric",
+                "M = Mᵀ (matrix equals its transpose)"
+              ],
+              [
+                "Antisymmetric",
+                "Off-diagonal: at most one of M_{ij}, M_{ji} is 1"
+              ],
+              [
+                "Transitive",
+                "If M_{ij} = 1 and M_{jk} = 1, then M_{ik} = 1 (close under composition)"
+              ]
+            ]
+          },
+          {
+            "type": "inline_dialogue",
+            "trigger": "After the property checks — students confuse antisymmetric with 'not symmetric'.",
+            "exchange": [
+              {
+                "speaker": "Student",
+                "text": "If a relation is antisymmetric, does that mean it can't be symmetric?"
+              },
+              {
+                "speaker": "Professor",
+                "text": "It can — but only on the diagonal. The relation R = {(a, a) | a ∈ A} is BOTH symmetric AND antisymmetric. Antisymmetric means: whenever both (a, b) and (b, a) hold, then a = b. If only diagonal pairs exist, this is automatic."
+              }
+            ]
+          },
+          {
+            "type": "worked_example",
+            "title": "Property check on a small relation",
+            "source_pattern": "Inspired by Lab 10 Q1.",
+            "problem": "A = {1, 2, 3}. R = {(1, 1), (1, 2), (2, 1), (2, 2), (3, 3)}. Determine which of the four properties R has.",
+            "thinking_process": "Check each property mechanically.",
+            "step_by_step_solution": [
+              "Reflexive: need (1,1), (2,2), (3,3) all in R. ✓",
+              "Symmetric: (1,2) ∈ R needs (2,1) ∈ R ✓. No other off-diagonal pairs. ✓",
+              "Antisymmetric: (1,2) and (2,1) both in R but 1 ≠ 2. ✗",
+              "Transitive: (1,2) and (2,1) ⇒ need (1,1) ✓. (2,1) and (1,2) ⇒ need (2,2) ✓. (1,2) and (2,2) ⇒ need (1,2) ✓. ✓"
+            ],
+            "final_answer": "Reflexive ✓, symmetric ✓, antisymmetric ✗, transitive ✓.",
+            "common_mistake": "Forgetting to check (a,a) → (a,a) → (a,a) for transitivity (these are automatic but appear in formal verification)."
+          },
+          {
+            "type": "worked_example",
+            "title": "Property check on '<' over ℤ",
+            "source_pattern": "Inspired by Lab 10 Q2.",
+            "problem": "Determine which of the four properties the strict less-than relation '<' has on ℤ.",
+            "thinking_process": "Check each property.",
+            "step_by_step_solution": [
+              "Reflexive: a < a never. ✗",
+              "Symmetric: 1 < 2 but not 2 < 1. ✗",
+              "Antisymmetric: vacuously true — there are no pairs (a, b) with both a < b and b < a. ✓",
+              "Transitive: a < b and b < c ⇒ a < c. ✓"
+            ],
+            "final_answer": "Reflexive ✗, symmetric ✗, antisymmetric ✓ (vacuously), transitive ✓.",
+            "common_mistake": "Saying < is not antisymmetric because it lacks pairs — antisymmetry is vacuously satisfied when there are no qualifying pairs."
+          },
+          {
+            "type": "misconception_box",
+            "title": "Common student mistakes",
+            "items": [
+              "Thinking antisymmetric is the negation of symmetric — they're independent.",
+              "Treating relations as if they must be functions.",
+              "Forgetting that antisymmetry can be VACUOUSLY true.",
+              "Confusing the directed graph (arrow per pair) with an undirected graph."
+            ]
+          },
+          {
+            "type": "memory_hook",
+            "title": "Property mnemonics",
+            "items": [
+              "**Reflexive:** every element loves itself.",
+              "**Symmetric:** if A loves B, then B loves A.",
+              "**Antisymmetric:** mutual love only for self.",
+              "**Transitive:** love is contagious through friends."
+            ]
+          },
+          {
+            "type": "simulator_relation_props",
+            "title": "Try It — Relation Properties Checker"
+          }
+        ],
+        "sections": [
+          {
+            "number": 1,
+            "heading": "Relations vs functions",
+            "explanation": "Relations are subsets of A × B; functions are special total single-valued relations."
+          },
+          {
+            "number": 2,
+            "heading": "Four core properties",
+            "explanation": "Reflexive, symmetric, antisymmetric, transitive."
+          },
+          {
+            "number": 3,
+            "heading": "Representations",
+            "explanation": "Directed graph, matrix, set of pairs."
+          }
+        ],
+        "worked_examples": [
+          {
+            "problem": "Is '≤' on ℤ reflexive?",
+            "step_by_step_solution": [
+              "a ≤ a holds for every integer ✓."
+            ],
+            "final_answer": "Yes.",
+            "why_it_works": "Definition.",
+            "common_mistake": "Confusing ≤ with <."
+          }
+        ],
+        "quick_checks": [
+          {
+            "type": "mcq",
+            "question": "Which property does '=' fail on ℤ?",
+            "choices": [
+              "None — = has all four",
+              "Antisymmetric",
+              "Symmetric",
+              "Reflexive"
+            ],
+            "answer": "None — = has all four",
+            "explanation": "Equality has reflexive, symmetric, antisymmetric, transitive."
+          },
+          {
+            "type": "mcq",
+            "question": "Friendship on a social network is typically:",
+            "choices": [
+              "Reflexive only",
+              "Symmetric only",
+              "Reflexive and symmetric",
+              "Antisymmetric only"
+            ],
+            "answer": "Symmetric only",
+            "explanation": "Friendship is mutual but not self-friending typically."
+          },
+          {
+            "type": "true_false",
+            "question": "Antisymmetric is the opposite of symmetric.",
+            "choices": [
+              "True",
+              "False"
+            ],
+            "answer": "False",
+            "explanation": "Independent properties; can be both."
+          }
+        ],
+        "summary": {
+          "key_takeaways": [
+            "A relation on A is a subset of A × A.",
+            "Four core properties: reflexive, symmetric, antisymmetric, transitive.",
+            "= has all four; < has only antisymmetric (vacuously) and transitive.",
+            "Antisymmetric and symmetric are not opposites."
+          ],
+          "next": "Next: equivalence relations and partial orders — special combinations of these properties."
+        }
+      },
+      {
+        "lesson_id": "module8-lesson2",
+        "type": "tutorial",
+        "title": "Equivalence Relations and Partial Orders",
+        "slug": "equivalence-relations-and-partial-orders",
+        "welcome": "Two specific combinations of properties give us the most useful kinds of relations: EQUIVALENCE RELATIONS (which partition a set) and PARTIAL ORDERS (which generalize ≤).",
+        "objectives": [
+          "Define an equivalence relation: reflexive + symmetric + transitive.",
+          "Identify equivalence classes and explain how they partition a set.",
+          "Define a partial order: reflexive + antisymmetric + transitive.",
+          "Distinguish partial orders from total (linear) orders.",
+          "Recognize Hasse diagrams for partial orders."
+        ],
+        "storytelling": [
+          {
+            "speaker": "Student",
+            "text": "Why are equivalence relations and partitions essentially the same?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "Every equivalence relation on A partitions A into classes — sets of elements that are all equivalent to each other. Conversely, every partition defines an equivalence relation. The two views are interchangeable, and this is one of the most useful structural results in discrete math."
+          }
+        ],
+        "flow": [
+          {
+            "type": "definition",
+            "title": "Equivalence relation",
+            "content": "A relation R on A is an **equivalence relation** iff R is **reflexive, symmetric, AND transitive**. Examples: equality (=), congruence mod n, 'same KAU department as', 'same age as'."
+          },
+          {
+            "type": "definition",
+            "title": "Equivalence class",
+            "content": "For a ∈ A, the **equivalence class** of a (under R) is `[a] = {x ∈ A | x R a}`. Two equivalence classes are either disjoint or identical. The collection of all equivalence classes **partitions** A."
+          },
+          {
+            "type": "table",
+            "title": "Equivalence relations and their classes",
+            "headers": [
+              "Relation on A",
+              "Equivalence class",
+              "Partition"
+            ],
+            "rows": [
+              [
+                "a = b on ℤ",
+                "[a] = {a}",
+                "Each integer is its own class"
+              ],
+              [
+                "a ≡ b (mod 5) on ℤ",
+                "[a] = a + 5ℤ",
+                "5 classes (residues 0..4)"
+              ],
+              [
+                "'Same KAU section as' on students",
+                "[s] = s's classmates",
+                "All students in section X form one class"
+              ],
+              [
+                "'Same gender as' on a class",
+                "[s] = s's gender group",
+                "Two classes"
+              ]
+            ]
+          },
+          {
+            "type": "real_life_example",
+            "title": "Equivalence around campus",
+            "items": [
+              "**'Same Saudi region as'** on Saudi citizens: equivalence relation. Classes = the 13 regions.",
+              "**'Same CPCS 222 lab section as'**: equivalence on enrolled students. Classes = the lab sections.",
+              "**'Same area code as'** on STC numbers: equivalence relation."
+            ]
+          },
+          {
+            "type": "definition",
+            "title": "Partial order",
+            "content": "A relation R on A is a **partial order** iff R is **reflexive, antisymmetric, AND transitive**. The pair (A, R) is called a **partially ordered set** (poset). Standard example: ≤ on ℤ."
+          },
+          {
+            "type": "definition",
+            "title": "Total (linear) order",
+            "content": "A partial order is a **total order** iff every pair of elements is **comparable**: ∀a, b ∈ A (a R b ∨ b R a). Examples: ≤ on ℝ. Non-example: subset (⊆) on P({1, 2}) — {1} and {2} are incomparable."
+          },
+          {
+            "type": "table",
+            "title": "Partial orders we know",
+            "headers": [
+              "Poset",
+              "Comparable everywhere?",
+              "Total order?"
+            ],
+            "rows": [
+              [
+                "(ℤ, ≤)",
+                "Yes",
+                "Yes"
+              ],
+              [
+                "(ℝ, ≤)",
+                "Yes",
+                "Yes"
+              ],
+              [
+                "(ℤ⁺, |) — divides",
+                "{2, 3} not comparable (neither divides the other)",
+                "No (only partial)"
+              ],
+              [
+                "(P(S), ⊆)",
+                "{1, 2}, {2, 3} incomparable",
+                "No (only partial)"
+              ]
+            ]
+          },
+          {
+            "type": "inline_dialogue",
+            "trigger": "After total orders — students often miss the comparability requirement.",
+            "exchange": [
+              {
+                "speaker": "Student",
+                "text": "Why isn't (ℤ⁺, |) a total order? It seems to relate everything."
+              },
+              {
+                "speaker": "Professor",
+                "text": "Because some pairs are incomparable. Take 2 and 3: neither divides the other. In a total order, EVERY pair must be related in one direction or the other. The divides relation is partial: it orders chains like 2 | 4 | 8 but leaves cousins like 2 and 3 unordered."
+              }
+            ]
+          },
+          {
+            "type": "definition",
+            "title": "Hasse diagram",
+            "content": "A **Hasse diagram** draws a finite poset compactly: it shows only the COVER relation (`a covers b` if a > b and there is no c strictly between). Reflexive loops and transitive shortcuts are omitted; the rest can be deduced. Lower elements are drawn below higher ones."
+          },
+          {
+            "type": "mermaid",
+            "title": "Hasse diagram for ({1, 2, 3, 4, 6, 12}, |)",
+            "mermaid": "flowchart TD\n  A[1] --> B[2]\n  A --> C[3]\n  B --> D[4]\n  B --> E[6]\n  C --> E\n  D --> F[12]\n  E --> F"
+          },
+          {
+            "type": "worked_example",
+            "title": "Equivalence relation modulo 3",
+            "source_pattern": "Inspired by Lab 10 Q3.",
+            "problem": "Show that 'a ≡ b (mod 3)' is an equivalence relation on ℤ and list the equivalence classes.",
+            "thinking_process": "Check the three properties; identify the residue classes.",
+            "step_by_step_solution": [
+              "Reflexive: a - a = 0 = 3·0, so a ≡ a (mod 3). ✓",
+              "Symmetric: if a - b = 3k, then b - a = -3k = 3(-k). ✓",
+              "Transitive: a - b = 3k, b - c = 3m → a - c = 3(k + m). ✓",
+              "Equivalence classes: [0] = {…, -3, 0, 3, 6, …}, [1] = {…, -2, 1, 4, 7, …}, [2] = {…, -1, 2, 5, 8, …}.",
+              "Three classes — the residues mod 3."
+            ],
+            "final_answer": "Equivalence relation; classes [0], [1], [2].",
+            "common_mistake": "Forgetting symmetry verification or listing wrong residues."
+          },
+          {
+            "type": "worked_example",
+            "title": "Partial order check",
+            "source_pattern": "Inspired by Lab 10 Q4.",
+            "problem": "Show that ⊆ on P({a, b, c}) is a partial order.",
+            "thinking_process": "Check three partial-order properties.",
+            "step_by_step_solution": [
+              "Reflexive: every set X ⊆ X. ✓",
+              "Antisymmetric: X ⊆ Y and Y ⊆ X ⇒ X = Y (set equality). ✓",
+              "Transitive: X ⊆ Y and Y ⊆ Z ⇒ X ⊆ Z. ✓",
+              "Hence (P({a, b, c}), ⊆) is a poset."
+            ],
+            "final_answer": "Partial order. Not a total order (e.g., {a} and {b} are incomparable).",
+            "common_mistake": "Calling it a total order — totality requires that every pair be comparable."
+          },
+          {
+            "type": "worked_example",
+            "title": "Building a partition",
+            "source_pattern": "Sec 9.5 partition example.",
+            "problem": "On A = {1, 2, 3, 4, 5}, define R by 'same parity'. Find the partition.",
+            "thinking_process": "Equivalence classes are sets of elements with the same parity.",
+            "step_by_step_solution": [
+              "Reflexive, symmetric, transitive on parity. ✓",
+              "[1] = [3] = [5] = {1, 3, 5}.",
+              "[2] = [4] = {2, 4}.",
+              "Partition: {{1, 3, 5}, {2, 4}}."
+            ],
+            "final_answer": "Two-block partition: odds and evens.",
+            "common_mistake": "Treating each element as its own class — they collapse into shared classes."
+          },
+          {
+            "type": "misconception_box",
+            "title": "Common student mistakes",
+            "items": [
+              "Calling a poset a total order without checking comparability.",
+              "Listing the same equivalence class twice — classes are sets, not labelled by the element.",
+              "Drawing reflexive loops and transitive shortcuts in a Hasse diagram (they should be omitted).",
+              "Confusing 'partial order' with 'partition'."
+            ]
+          },
+          {
+            "type": "memory_hook",
+            "title": "Quick rules",
+            "items": [
+              "**Equivalence relation = R + S + T.** Partitions the set.",
+              "**Partial order = R + AS + T.** Hasse diagrams.",
+              "**Total order = partial order + every pair comparable.**"
+            ]
+          }
+        ],
+        "sections": [
+          {
+            "number": 1,
+            "heading": "Equivalence relations",
+            "explanation": "Reflexive + symmetric + transitive; classes partition the set."
+          },
+          {
+            "number": 2,
+            "heading": "Partial orders",
+            "explanation": "Reflexive + antisymmetric + transitive; may have incomparable pairs."
+          },
+          {
+            "number": 3,
+            "heading": "Total orders and Hasse diagrams",
+            "explanation": "Total = every pair comparable; Hasse diagrams compress partial orders visually."
+          }
+        ],
+        "worked_examples": [
+          {
+            "problem": "Is 'same age as' an equivalence relation?",
+            "step_by_step_solution": [
+              "Reflexive ✓, symmetric ✓, transitive ✓. Yes."
+            ],
+            "final_answer": "Yes, equivalence relation.",
+            "why_it_works": "All three properties hold.",
+            "common_mistake": "Confusing same-age with same-birth-year (equivalent on a given day, but loose over time)."
+          }
+        ],
+        "quick_checks": [
+          {
+            "type": "mcq",
+            "question": "Which is an equivalence relation on ℤ?",
+            "choices": [
+              "a < b",
+              "a | b",
+              "a ≡ b (mod 5)",
+              "a ≤ b"
+            ],
+            "answer": "a ≡ b (mod 5)",
+            "explanation": "Reflexive + symmetric + transitive."
+          },
+          {
+            "type": "mcq",
+            "question": "Partial order needs:",
+            "choices": [
+              "R + S + T",
+              "R + AS + T",
+              "S + T only",
+              "R + S only"
+            ],
+            "answer": "R + AS + T",
+            "explanation": "Reflexive, antisymmetric, transitive."
+          },
+          {
+            "type": "true_false",
+            "question": "Every equivalence relation gives a partition.",
+            "choices": [
+              "True",
+              "False"
+            ],
+            "answer": "True",
+            "explanation": "Equivalence classes form a partition."
+          }
+        ],
+        "summary": {
+          "key_takeaways": [
+            "Equivalence = reflexive + symmetric + transitive; classes partition the set.",
+            "Partial order = reflexive + antisymmetric + transitive.",
+            "Total order requires every pair to be comparable.",
+            "Hasse diagrams represent partial orders compactly."
+          ],
+          "next": "Module 8 toolkit complete. Move to Module 8 Exercises."
+        }
+      }
+    ],
+    "exercises": {
+      "lesson_id": "module8-exercises",
+      "type": "exercises",
+      "title": "Module 8 Exercises — Relations",
+      "description": "Practice covering relations, the four core properties, equivalence relations and their classes, partial and total orders, and Hasse diagrams. Modeled on Lab 10.",
+      "question_sets": [
+        {
+          "type": "mcq",
+          "questions": [
+            {
+              "question": "A = {1, 2, 3}. R = {(1,1), (2,2), (3,3)}. R is:",
+              "choices": [
+                "Reflexive, symmetric, antisymmetric, transitive",
+                "Reflexive only",
+                "Antisymmetric only",
+                "Symmetric only"
+              ],
+              "answer": "Reflexive, symmetric, antisymmetric, transitive",
+              "explanation": "Identity relation has all four.",
+              "source_pattern": "Inspired by Lab 10 Q1."
+            },
+            {
+              "question": "On ℤ, '<' is:",
+              "choices": [
+                "Reflexive",
+                "Symmetric",
+                "Antisymmetric and transitive",
+                "An equivalence relation"
+              ],
+              "answer": "Antisymmetric and transitive",
+              "explanation": "< is antisymmetric vacuously and transitive."
+            },
+            {
+              "question": "An equivalence relation requires:",
+              "choices": [
+                "R + AS + T",
+                "R + S + T",
+                "S + AS + T",
+                "R + S only"
+              ],
+              "answer": "R + S + T",
+              "explanation": "Reflexive, symmetric, transitive."
+            },
+            {
+              "question": "On P({a, b}), ⊆ is:",
+              "choices": [
+                "Total order",
+                "Partial order, not total",
+                "Equivalence relation",
+                "Neither"
+              ],
+              "answer": "Partial order, not total",
+              "explanation": "{a} and {b} incomparable."
+            },
+            {
+              "question": "Number of equivalence classes of mod-5 on ℤ:",
+              "choices": [
+                "1",
+                "2",
+                "5",
+                "Infinite"
+              ],
+              "answer": "5",
+              "explanation": "Residues 0, 1, 2, 3, 4."
+            },
+            {
+              "question": "'Same area code as' on STC numbers is:",
+              "choices": [
+                "Reflexive only",
+                "Equivalence relation",
+                "Partial order",
+                "Total order"
+              ],
+              "answer": "Equivalence relation",
+              "explanation": "Same X → same area code is reflexive, symmetric, transitive."
+            },
+            {
+              "question": "Which is a total order?",
+              "choices": [
+                "(ℤ, ≤)",
+                "(ℤ⁺, |)",
+                "(P(S), ⊆)",
+                "(People, friendship)"
+              ],
+              "answer": "(ℤ, ≤)",
+              "explanation": "Every pair comparable."
+            },
+            {
+              "question": "If R has the property a R b ⇒ b R a, R is:",
+              "choices": [
+                "Reflexive",
+                "Symmetric",
+                "Antisymmetric",
+                "Transitive"
+              ],
+              "answer": "Symmetric",
+              "explanation": "Definition."
+            }
+          ]
+        },
+        {
+          "type": "true_false",
+          "questions": [
+            {
+              "question": "Every equivalence relation gives a partition.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "True",
+              "explanation": "Standard result."
+            },
+            {
+              "question": "Antisymmetric and symmetric are opposites.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "False",
+              "explanation": "Identity relation is both."
+            },
+            {
+              "question": "= on ℤ is an equivalence relation.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "True",
+              "explanation": "All three properties."
+            },
+            {
+              "question": "Hasse diagrams show reflexive loops.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "False",
+              "explanation": "Reflexive loops are omitted."
+            },
+            {
+              "question": "Every partial order is a total order.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "False",
+              "explanation": "Total requires comparability of every pair."
+            },
+            {
+              "question": "Friendship on social media is typically transitive.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "False",
+              "explanation": "A friend of a friend is not necessarily your friend."
+            },
+            {
+              "question": "Following on X is symmetric.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "False",
+              "explanation": "Asymmetric in general."
+            }
+          ]
+        },
+        {
+          "type": "short_answer",
+          "questions": [
+            {
+              "question": "Define equivalence relation.",
+              "answer": "A relation that is reflexive, symmetric, and transitive.",
+              "explanation": "Three properties."
+            },
+            {
+              "question": "List the equivalence classes of ≡ (mod 4) on ℤ.",
+              "answer": "[0], [1], [2], [3] — i.e., {…,-4,0,4,…}, {…,-3,1,5,…}, {…,-2,2,6,…}, {…,-1,3,7,…}.",
+              "explanation": "Four residues."
+            },
+            {
+              "question": "Why is divides (|) on ℤ⁺ a partial order but not total?",
+              "answer": "Reflexive (a | a), antisymmetric (a | b and b | a ⇒ a = b on ℤ⁺), transitive (a | b and b | c ⇒ a | c). Not total: 2 ∤ 3 and 3 ∤ 2.",
+              "explanation": "Comparability fails for some pairs."
+            },
+            {
+              "question": "How does a Hasse diagram differ from a directed graph of a partial order?",
+              "answer": "Omits reflexive loops and transitive shortcuts; orients top-to-bottom.",
+              "explanation": "Compresses redundant info."
+            },
+            {
+              "question": "Why do equivalence classes partition a set?",
+              "answer": "Two classes are either equal or disjoint (by symmetry+transitivity); every element is in some class (by reflexivity). Together: partition.",
+              "explanation": "Standard proof."
+            }
+          ]
+        },
+        {
+          "type": "fill_in_blank",
+          "questions": [
+            {
+              "question": "Equivalence = R + ___ + T.",
+              "answer": "S",
+              "explanation": "Symmetric."
+            },
+            {
+              "question": "Partial order = ___ + AS + T.",
+              "answer": "R",
+              "explanation": "Reflexive."
+            },
+            {
+              "question": "Total order adds: every pair is ___.",
+              "answer": "comparable",
+              "explanation": "Definition."
+            },
+            {
+              "question": "Equivalence class of a: [a] = {x | x R ___}.",
+              "answer": "a",
+              "explanation": "Definition."
+            },
+            {
+              "question": "On ℤ, mod-n has ___ equivalence classes.",
+              "answer": "n",
+              "explanation": "Residues 0..n-1."
+            }
+          ]
+        },
+        {
+          "type": "matching",
+          "questions": [
+            {
+              "question": "Match relation to type.",
+              "left": [
+                "= on ℤ",
+                "< on ℤ",
+                "≤ on ℤ",
+                "≡ (mod 5) on ℤ"
+              ],
+              "right": [
+                "Equivalence (R+S+T)",
+                "Antisymmetric and transitive only",
+                "Total order (R+AS+T)",
+                "Equivalence with 5 classes"
+              ],
+              "pairs": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  1
+                ],
+                [
+                  2,
+                  2
+                ],
+                [
+                  3,
+                  3
+                ]
+              ],
+              "explanation": "Standard examples."
+            }
+          ]
+        },
+        {
+          "type": "step_by_step",
+          "questions": [
+            {
+              "question": "On A = {1, 2, 3, 4}, R = {(1,1), (1,2), (2,1), (2,2), (3,3), (4,4)}. Check the four properties.",
+              "answer": "Reflexive: (1,1), (2,2), (3,3), (4,4) ∈ R ✓.\nSymmetric: (1,2), (2,1) both in R ✓.\nAntisymmetric: (1,2) and (2,1) both in R but 1 ≠ 2 ✗.\nTransitive: (1,2)·(2,1)→(1,1) ✓; (2,1)·(1,2)→(2,2) ✓ ✓.\nReflexive ✓, Symmetric ✓, Antisymmetric ✗, Transitive ✓.",
+              "explanation": "Mechanical property check.",
+              "source_pattern": "Inspired by Lab 10 Q1."
+            },
+            {
+              "question": "Show ≡ (mod 4) on ℤ is an equivalence relation.",
+              "answer": "Reflexive: 4 | 0 = a - a. ✓\nSymmetric: 4 | (a-b) ⇒ 4 | -(a-b) = b - a. ✓\nTransitive: 4 | (a-b) and 4 | (b-c) ⇒ 4 | (a-c). ✓\nEquivalence classes: [0], [1], [2], [3] (four residues).",
+              "explanation": "Three properties + classes."
+            },
+            {
+              "question": "Decide if (ℤ⁺, |) is a partial order.",
+              "answer": "Reflexive: a | a (any a divides itself). ✓\nAntisymmetric: a | b and b | a on ℤ⁺ ⇒ a = b. ✓\nTransitive: a | b and b | c ⇒ a | c. ✓\nPartial order. Not total (2 and 3 incomparable).",
+              "explanation": "Verify three properties; check totality."
+            }
+          ]
+        },
+        {
+          "type": "exam_style",
+          "questions": [
+            {
+              "question": "Define R on people: a R b iff a and b have the same student ID. Is R an equivalence relation? Describe the classes.",
+              "answer": "Reflexive (every person has their own ID and shares it with themselves), symmetric, transitive. Equivalence relation. Classes: each person forms their own class (assuming unique IDs).",
+              "explanation": "Each person is unique — singleton classes."
+            },
+            {
+              "question": "Show that the cover-relation '⋖' (a ⋖ b iff a < b and no c between) need NOT be transitive in (ℤ⁺, ≤).",
+              "answer": "1 ⋖ 2 (no integer strictly between). 2 ⋖ 3. But 1 ⋖ 3 fails because 2 lies between. So 1 ⋖ 2 and 2 ⋖ 3, yet ¬(1 ⋖ 3).",
+              "explanation": "Cover is not transitive — that's why Hasse diagrams use cover edges only."
+            },
+            {
+              "question": "If R and S are both equivalence relations on A, is R ∩ S an equivalence relation?",
+              "answer": "Yes. Reflexive: (a, a) ∈ R, (a, a) ∈ S → (a, a) ∈ R ∩ S. Symmetric/transitive checks similar via intersection. ∎",
+              "explanation": "Intersection preserves all three properties."
+            },
+            {
+              "question": "On a class, define 'sits in same row as'. Equivalence relation? What are the classes?",
+              "answer": "Reflexive ✓, symmetric ✓, transitive ✓. Yes. Classes = the rows of the classroom.",
+              "explanation": "Real-world equivalence example."
+            }
+          ]
+        },
+        {
+          "type": "randomized",
+          "questions": [
+            {
+              "template": "Decide if {REL} is reflexive, symmetric, antisymmetric, transitive.",
+              "variables": {
+                "REL": [
+                  "a = b on ℤ",
+                  "a < b on ℤ",
+                  "a ≤ b on ℤ",
+                  "a | b on ℤ⁺",
+                  "a ≡ b mod 7 on ℤ",
+                  "X ⊆ Y on P(S)"
+                ]
+              },
+              "instructions": "Apply each property's definition.",
+              "example_realization": "a < b on ℤ → R ✗, S ✗, AS ✓ (vacuous), T ✓.",
+              "explanation": "Property-check drill.",
+              "source_pattern": "Inspired by Lab 10 Q2."
+            },
+            {
+              "template": "List the equivalence classes of {REL}.",
+              "variables": {
+                "REL": [
+                  "≡ mod 3 on ℤ",
+                  "≡ mod 5 on ℤ",
+                  "'same parity as' on {1..10}",
+                  "= on {a, b, c}"
+                ]
+              },
+              "instructions": "Group elements by their equivalence.",
+              "example_realization": "≡ mod 3 → [0], [1], [2].",
+              "explanation": "Equivalence-class drill."
+            },
+            {
+              "template": "Is {POSET} a total order?",
+              "variables": {
+                "POSET": [
+                  "(ℤ, ≤)",
+                  "(ℤ⁺, |)",
+                  "(P({1, 2, 3}), ⊆)",
+                  "(ℝ, ≤)"
+                ]
+              },
+              "instructions": "Total iff every pair is comparable.",
+              "example_realization": "(ℤ⁺, |) → No (2 and 3 incomparable).",
+              "explanation": "Totality drill."
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

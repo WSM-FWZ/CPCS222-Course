@@ -1,0 +1,970 @@
+{
+  "course": "CPCS 222 — Discrete Mathematics",
+  "version": "v3",
+  "module": {
+    "module_id": 7,
+    "title": "Functions",
+    "description": "Functions: domain, codomain, range; injective, surjective, bijective; inverses; composition; floor and ceiling.",
+    "source_files": [
+      "CPCS222_07_Functions.pdf",
+      "CPCS 222 - Lab 09 - Functions.pdf"
+    ],
+    "lessons": [
+      {
+        "lesson_id": "module7-lesson1",
+        "type": "tutorial",
+        "title": "Functions — Domain, Codomain, Range",
+        "slug": "functions-domain-codomain-range",
+        "welcome": "A FUNCTION is the most fundamental machine in mathematics: feed it an input, get exactly one output. Functions structure programming, model real-world maps, and underpin every later topic.",
+        "objectives": [
+          "Define a function as an assignment from a domain to a codomain.",
+          "Identify domain, codomain, and range; distinguish the last two.",
+          "Decide whether a given relation is a function.",
+          "Recognize special functions (identity, constant, floor, ceiling).",
+          "Use function notation correctly: f: A → B, f(a), f(A')."
+        ],
+        "storytelling": [
+          {
+            "speaker": "Student",
+            "text": "What's the difference between codomain and range?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "The codomain is what you DECLARE — the set of possible outputs. The range is what you ACTUALLY HIT — the subset of the codomain that the function reaches. They're equal only when the function is surjective. Always range ⊆ codomain."
+          }
+        ],
+        "flow": [
+          {
+            "type": "definition",
+            "title": "Function",
+            "content": "A **function** f from a set A to a set B, written f: A → B, assigns to **each** element of A exactly **one** element of B. A is the **domain**; B is the **codomain**. The element assigned to a is f(a) (the **image** of a under f)."
+          },
+          {
+            "type": "definition",
+            "title": "Range (image)",
+            "content": "The **range** of f is the set of all output values f actually produces: range(f) = {f(a) | a ∈ A}. Always range(f) ⊆ codomain(f), but the two are not always equal."
+          },
+          {
+            "type": "table",
+            "title": "Function vs not-a-function (the rules)",
+            "headers": [
+              "Rule",
+              "Says",
+              "Failing it means"
+            ],
+            "rows": [
+              [
+                "Total",
+                "Every element of A has an image",
+                "Some a ∈ A has no f(a)"
+              ],
+              [
+                "Single-valued",
+                "Every element of A has only ONE image",
+                "Some a maps to two different outputs"
+              ]
+            ],
+            "notes": "If either rule fails, the assignment is a relation, not a function."
+          },
+          {
+            "type": "real_life_example",
+            "title": "Functions around campus and on Absher",
+            "items": [
+              "**Student → Student ID** at KAU: every student is assigned exactly one ID. Function ✓.",
+              "**Course → Instructor** for a given semester: each course has one instructor. Function ✓ (range may be smaller than the set of all KAU faculty).",
+              "**Iqama → Vehicles registered**: an iqama can have several cars on Absher → NOT a function (multiple outputs per input). It's a relation.",
+              "**Phone number → Owner** on STC: each number maps to one subscriber. Function ✓."
+            ]
+          },
+          {
+            "type": "mapping_diagram",
+            "title": "Mapping diagram",
+            "domain": [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            "codomain": [
+              "1",
+              "2",
+              "3",
+              "4",
+              "5"
+            ],
+            "arrows": [
+              [
+                "a",
+                "2"
+              ],
+              [
+                "b",
+                "1"
+              ],
+              [
+                "c",
+                "3"
+              ],
+              [
+                "d",
+                "1"
+              ]
+            ]
+          },
+          {
+            "type": "definition",
+            "title": "Image of a subset",
+            "content": "For S ⊆ A, the **image** of S under f is f(S) = {f(s) | s ∈ S}. The range is just f(A) — the image of the entire domain."
+          },
+          {
+            "type": "table",
+            "title": "Special functions",
+            "headers": [
+              "Name",
+              "Definition",
+              "Example"
+            ],
+            "rows": [
+              [
+                "Identity",
+                "id(x) = x",
+                "id(7) = 7"
+              ],
+              [
+                "Constant",
+                "f(x) = c (fixed)",
+                "f(x) = 5"
+              ],
+              [
+                "Floor ⌊x⌋",
+                "Greatest integer ≤ x",
+                "⌊3.7⌋ = 3, ⌊-2.3⌋ = -3"
+              ],
+              [
+                "Ceiling ⌈x⌉",
+                "Smallest integer ≥ x",
+                "⌈3.2⌉ = 4, ⌈-2.7⌉ = -2"
+              ]
+            ]
+          },
+          {
+            "type": "warning",
+            "title": "Floor on negative numbers",
+            "content": "**⌊-2.3⌋ = -3, NOT -2.** Floor goes DOWN; for negatives, that means more negative. Check on a number line if unsure."
+          },
+          {
+            "type": "worked_example",
+            "title": "Is it a function?",
+            "source_pattern": "Inspired by Lab 09 Q1.",
+            "problem": "A = {1, 2, 3, 4}. Decide if each is a function from A to ℤ: (a) f(x) = x². (b) g(x) = ±√x. (c) h with h(1) = 5 only. (d) k(x) = ⌊x/2⌋.",
+            "thinking_process": "Check totality (every input has an output) and single-valued (one output per input).",
+            "step_by_step_solution": [
+              "(a) Each x has unique x². Function ✓.",
+              "(b) g(4) could be 2 or -2 — two outputs. NOT a function.",
+              "(c) h(2), h(3), h(4) undefined. NOT a function (not total).",
+              "(d) k(1)=0, k(2)=1, k(3)=1, k(4)=2. Each input one output. Function ✓."
+            ],
+            "final_answer": "(a) Yes. (b) No. (c) No. (d) Yes.",
+            "common_mistake": "Calling g a function — multi-valued assignments are relations, not functions."
+          },
+          {
+            "type": "worked_example",
+            "title": "Domain, codomain, range",
+            "source_pattern": "Inspired by Lab 09 Q2.",
+            "problem": "Let f: ℤ → ℤ, f(x) = x². Identify domain, codomain, range.",
+            "thinking_process": "Domain and codomain are declared; range is computed.",
+            "step_by_step_solution": [
+              "Domain: ℤ.",
+              "Codomain: ℤ (declared).",
+              "Range: {0, 1, 4, 9, 16, …} = squares of integers ⊆ ℤ. Range ≠ codomain."
+            ],
+            "final_answer": "Domain ℤ, codomain ℤ, range = {n² : n ∈ ℤ}.",
+            "common_mistake": "Confusing range with codomain — only equal when f is surjective."
+          },
+          {
+            "type": "worked_example",
+            "title": "Floor and ceiling",
+            "source_pattern": "Sec 2.3 floor/ceiling.",
+            "problem": "Compute ⌊3.7⌋, ⌈3.7⌉, ⌊-3.7⌋, ⌈-3.7⌉, ⌊5⌋.",
+            "thinking_process": "Floor goes down; ceiling goes up. Integers are unchanged.",
+            "step_by_step_solution": [
+              "⌊3.7⌋ = 3 (greatest integer ≤ 3.7).",
+              "⌈3.7⌉ = 4 (smallest integer ≥ 3.7).",
+              "⌊-3.7⌋ = -4 (more negative).",
+              "⌈-3.7⌉ = -3 (less negative).",
+              "⌊5⌋ = 5."
+            ],
+            "final_answer": "3, 4, -4, -3, 5.",
+            "common_mistake": "Thinking ⌊-3.7⌋ = -3. Floor goes DOWN, which on negatives means more negative."
+          },
+          {
+            "type": "misconception_box",
+            "title": "Common student mistakes",
+            "items": [
+              "Equating range with codomain.",
+              "Calling a multi-valued assignment a function.",
+              "Forgetting that functions must be TOTAL (every domain element has an image).",
+              "Floor of a negative going the wrong way."
+            ]
+          },
+          {
+            "type": "memory_hook",
+            "title": "Quick checks",
+            "items": [
+              "**Total + single-valued = function.**",
+              "**Range ⊆ codomain.**",
+              "**Floor goes DOWN, ceiling goes UP.**",
+              "**(Negatives flip the direction of 'down'.)**"
+            ]
+          },
+          {
+            "type": "simulator_func_props",
+            "title": "Try It — Function Properties Checker"
+          }
+        ],
+        "sections": [
+          {
+            "number": 1,
+            "heading": "What is a function",
+            "explanation": "Total + single-valued assignment from domain to codomain."
+          },
+          {
+            "number": 2,
+            "heading": "Domain, codomain, range",
+            "explanation": "Declared vs computed; range ⊆ codomain."
+          },
+          {
+            "number": 3,
+            "heading": "Special functions",
+            "explanation": "Identity, constant, floor, ceiling."
+          }
+        ],
+        "worked_examples": [
+          {
+            "problem": "Is g(x) = ±√x a function?",
+            "step_by_step_solution": [
+              "g(4) = ±2 — two outputs. NOT a function."
+            ],
+            "final_answer": "Not a function (multi-valued).",
+            "why_it_works": "Single-valued rule fails.",
+            "common_mistake": "Calling multi-valued maps functions."
+          }
+        ],
+        "quick_checks": [
+          {
+            "type": "mcq",
+            "question": "f: ℤ → ℤ, f(x) = x². Range:",
+            "choices": [
+              "ℤ",
+              "ℤ⁺",
+              "Squares of integers",
+              "{0, 1}"
+            ],
+            "answer": "Squares of integers",
+            "explanation": "Range is what's actually produced."
+          },
+          {
+            "type": "mcq",
+            "question": "⌊-2.3⌋ =",
+            "choices": [
+              "-2",
+              "-3",
+              "2",
+              "3"
+            ],
+            "answer": "-3",
+            "explanation": "Floor goes more negative for negatives."
+          },
+          {
+            "type": "true_false",
+            "question": "Range always equals codomain.",
+            "choices": [
+              "True",
+              "False"
+            ],
+            "answer": "False",
+            "explanation": "Equal only when f is surjective."
+          }
+        ],
+        "summary": {
+          "key_takeaways": [
+            "Function = total + single-valued assignment from domain to codomain.",
+            "Range ⊆ codomain; equality only when surjective.",
+            "Identity, constant, floor, ceiling are key special functions.",
+            "On negatives: floor goes more negative; ceiling less negative."
+          ],
+          "next": "Next: classifying functions as INJECTIVE, SURJECTIVE, BIJECTIVE — and inverses, composition."
+        }
+      },
+      {
+        "lesson_id": "module7-lesson2",
+        "type": "tutorial",
+        "title": "Injective, Surjective, Bijective — and Composition",
+        "slug": "injective-surjective-bijective-composition",
+        "welcome": "Functions can be classified by how they relate inputs to outputs. Three labels (injective, surjective, bijective) describe everything you need to know about invertibility and composition.",
+        "objectives": [
+          "Define injective (one-to-one), surjective (onto), and bijective.",
+          "Decide which label applies to a given function.",
+          "Define and compute the inverse of a bijection.",
+          "Compute the composition of two functions.",
+          "Recognize that a function is invertible iff it is bijective."
+        ],
+        "storytelling": [
+          {
+            "speaker": "Student",
+            "text": "How do I check injectivity from a formula?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "Show that f(a) = f(b) forces a = b. Algebraically: assume f(a) = f(b), then derive a = b. If you cannot, look for two different inputs producing the same output — that's a counterexample."
+          }
+        ],
+        "flow": [
+          {
+            "type": "definition",
+            "title": "Injective (one-to-one)",
+            "content": "f is **injective** iff different inputs always give different outputs: `∀a, b ∈ A (a ≠ b → f(a) ≠ f(b))`. Equivalently: `f(a) = f(b) → a = b`."
+          },
+          {
+            "type": "definition",
+            "title": "Surjective (onto)",
+            "content": "f: A → B is **surjective** iff every element of B has a pre-image: `∀b ∈ B ∃a ∈ A (f(a) = b)`. Equivalently: range(f) = B."
+          },
+          {
+            "type": "definition",
+            "title": "Bijective (one-to-one correspondence)",
+            "content": "f is **bijective** iff it is BOTH injective AND surjective. Bijections pair up A and B element-by-element."
+          },
+          {
+            "type": "table",
+            "title": "Quick decision",
+            "headers": [
+              "Label",
+              "True when",
+              "Quick check"
+            ],
+            "rows": [
+              [
+                "Injective",
+                "f(a) = f(b) ⇒ a = b",
+                "Are any two domain elements sent to the same output? If no → injective"
+              ],
+              [
+                "Surjective",
+                "Every codomain element is hit",
+                "Is range = codomain? If yes → surjective"
+              ],
+              [
+                "Bijective",
+                "Both injective and surjective",
+                "Both checks pass"
+              ]
+            ]
+          },
+          {
+            "type": "mapping_diagram",
+            "title": "Three example functions on small sets",
+            "domain": [
+              "1",
+              "2",
+              "3"
+            ],
+            "codomain": [
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            "arrows": [
+              [
+                "1",
+                "a"
+              ],
+              [
+                "2",
+                "b"
+              ],
+              [
+                "3",
+                "c"
+              ]
+            ]
+          },
+          {
+            "type": "real_life_example",
+            "title": "Saudi-flavoured examples",
+            "items": [
+              "**Student → Student ID** at KAU: injective (no two students share an ID) but not surjective onto all 9-digit numbers (only the IDs actually issued).",
+              "**Saudi car plate → Owner**: injective (one plate, one owner). Not surjective onto everyone in Saudi Arabia (most people don't own a car).",
+              "**Day of the year → Day-of-week (Sun..Sat)**: surjective (every weekday is hit) but not injective (multiple days share the same weekday).",
+              "**Iqama → Resident** (one-to-one valid mapping): bijective when domain is set of all current residents and codomain is set of issued iqamas."
+            ]
+          },
+          {
+            "type": "definition",
+            "title": "Inverse function",
+            "content": "If f: A → B is **bijective**, the inverse f⁻¹: B → A is defined by f⁻¹(b) = the unique a with f(a) = b. Only bijections have inverses. f⁻¹ is also bijective and (f⁻¹)⁻¹ = f."
+          },
+          {
+            "type": "inline_dialogue",
+            "trigger": "After inverses — students often think every function has an inverse.",
+            "exchange": [
+              {
+                "speaker": "Student",
+                "text": "Why doesn't f(x) = x² over ℝ have an inverse?"
+              },
+              {
+                "speaker": "Professor",
+                "text": "It is not bijective on ℝ. It fails injectivity (since f(2) = f(-2) = 4) AND surjectivity onto ℝ (since negatives have no real square root). Restrict to ℝ⁺ → ℝ⁺ and now x² IS bijective; its inverse is √x."
+              }
+            ]
+          },
+          {
+            "type": "definition",
+            "title": "Composition",
+            "content": "Given f: A → B and g: B → C, the **composition** g ∘ f: A → C is defined by `(g ∘ f)(a) = g(f(a))`. Read right-to-left: f first, then g. Composition is **associative** but NOT commutative in general."
+          },
+          {
+            "type": "table",
+            "title": "Properties under composition",
+            "headers": [
+              "If f and g are both …",
+              "Then g ∘ f is …"
+            ],
+            "rows": [
+              [
+                "Injective",
+                "Injective"
+              ],
+              [
+                "Surjective",
+                "Surjective"
+              ],
+              [
+                "Bijective",
+                "Bijective"
+              ]
+            ]
+          },
+          {
+            "type": "worked_example",
+            "title": "Decide the label",
+            "source_pattern": "Inspired by Lab 09 Q3.",
+            "problem": "f: ℤ → ℤ, f(n) = 2n + 3. Is f injective? Surjective? Bijective?",
+            "thinking_process": "Check both rules.",
+            "step_by_step_solution": [
+              "Injective: Assume f(a) = f(b). Then 2a + 3 = 2b + 3 ⇒ 2a = 2b ⇒ a = b. ✓",
+              "Surjective onto ℤ: Need m ∈ ℤ such that 2n + 3 = m, i.e., n = (m - 3)/2. For odd m this is not an integer. Counterexample m = 4: n = 1/2 ∉ ℤ. ✗",
+              "Bijective: No (not surjective onto ℤ)."
+            ],
+            "final_answer": "Injective, NOT surjective onto ℤ, hence NOT bijective.",
+            "common_mistake": "Forgetting that surjectivity depends on the codomain — onto ℝ, f WOULD be surjective."
+          },
+          {
+            "type": "worked_example",
+            "title": "Find an inverse",
+            "source_pattern": "Inspired by Lab 09 Q4.",
+            "problem": "f: ℝ → ℝ, f(x) = 3x - 7. Verify f is bijective and find f⁻¹.",
+            "thinking_process": "Solve y = 3x - 7 for x in terms of y.",
+            "step_by_step_solution": [
+              "Injective: 3a - 7 = 3b - 7 ⇒ a = b. ✓",
+              "Surjective: for any y ∈ ℝ, x = (y + 7)/3 ∈ ℝ. ✓",
+              "Bijective ✓. Inverse: f⁻¹(y) = (y + 7)/3."
+            ],
+            "final_answer": "f⁻¹(y) = (y + 7)/3.",
+            "common_mistake": "Solving but not verifying bijection first."
+          },
+          {
+            "type": "worked_example",
+            "title": "Composition",
+            "source_pattern": "Sec 2.3 composition.",
+            "problem": "Let f(x) = 2x + 1 and g(x) = x². Find (g ∘ f)(x) and (f ∘ g)(x).",
+            "thinking_process": "g ∘ f means f first; substitute f(x) into g.",
+            "step_by_step_solution": [
+              "(g ∘ f)(x) = g(f(x)) = g(2x + 1) = (2x + 1)² = 4x² + 4x + 1.",
+              "(f ∘ g)(x) = f(g(x)) = f(x²) = 2x² + 1."
+            ],
+            "final_answer": "(g ∘ f)(x) = 4x² + 4x + 1; (f ∘ g)(x) = 2x² + 1.",
+            "common_mistake": "Reading composition left-to-right. Always: g ∘ f means f first, then g."
+          },
+          {
+            "type": "misconception_box",
+            "title": "Common student mistakes",
+            "items": [
+              "Saying every function has an inverse — only bijections do.",
+              "Reading composition left-to-right.",
+              "Confusing 'one-to-one' (injective) with 'one output per input' (the function definition itself).",
+              "Forgetting surjectivity depends on the codomain."
+            ]
+          },
+          {
+            "type": "memory_hook",
+            "title": "Three labels",
+            "items": [
+              "**Injective:** distinct in → distinct out.",
+              "**Surjective:** every codomain element is hit.",
+              "**Bijective:** both — invertible.",
+              "**g ∘ f means f first.**"
+            ]
+          }
+        ],
+        "sections": [
+          {
+            "number": 1,
+            "heading": "Three labels",
+            "explanation": "Injective, surjective, bijective."
+          },
+          {
+            "number": 2,
+            "heading": "Inverses",
+            "explanation": "Only bijections have inverses; (f⁻¹)⁻¹ = f."
+          },
+          {
+            "number": 3,
+            "heading": "Composition",
+            "explanation": "(g ∘ f)(x) = g(f(x)); right-to-left."
+          }
+        ],
+        "worked_examples": [
+          {
+            "problem": "Is f: ℝ → ℝ, f(x) = x³ bijective?",
+            "step_by_step_solution": [
+              "Injective: a³ = b³ ⇒ a = b ✓. Surjective: every real has a cube root ✓. Bijective."
+            ],
+            "final_answer": "Yes, bijective.",
+            "why_it_works": "Both checks pass.",
+            "common_mistake": "Confusing x³ with x²."
+          }
+        ],
+        "quick_checks": [
+          {
+            "type": "mcq",
+            "question": "f: ℤ → ℤ, f(n) = 2n. This is:",
+            "choices": [
+              "Injective only",
+              "Surjective only",
+              "Bijective",
+              "Neither"
+            ],
+            "answer": "Injective only",
+            "explanation": "Even outputs only — not surjective onto ℤ."
+          },
+          {
+            "type": "mcq",
+            "question": "(g ∘ f)(x) means:",
+            "choices": [
+              "g(x) then f",
+              "f(x) then g",
+              "g(x) · f(x)",
+              "g(x) + f(x)"
+            ],
+            "answer": "f(x) then g",
+            "explanation": "Right-to-left reading."
+          },
+          {
+            "type": "true_false",
+            "question": "Every function has an inverse.",
+            "choices": [
+              "True",
+              "False"
+            ],
+            "answer": "False",
+            "explanation": "Only bijections."
+          }
+        ],
+        "summary": {
+          "key_takeaways": [
+            "Injective: f(a) = f(b) ⇒ a = b.",
+            "Surjective: range = codomain.",
+            "Bijective: both — invertible.",
+            "Composition (g ∘ f)(x) = g(f(x)); not commutative.",
+            "Bijection ⇔ has inverse."
+          ],
+          "next": "Module 7 toolkit complete. Move to Module 7 Exercises."
+        }
+      }
+    ],
+    "exercises": {
+      "lesson_id": "module7-exercises",
+      "type": "exercises",
+      "title": "Module 7 Exercises — Functions",
+      "description": "Practice covering domain/codomain/range, injective/surjective/bijective classification, inverses, composition, and floor/ceiling. Modeled on Lab 09.",
+      "question_sets": [
+        {
+          "type": "mcq",
+          "questions": [
+            {
+              "question": "f: ℤ → ℤ, f(x) = 2x. Is f injective?",
+              "choices": [
+                "Yes",
+                "No",
+                "Only on ℤ⁺",
+                "Cannot tell"
+              ],
+              "answer": "Yes",
+              "explanation": "2a = 2b ⇒ a = b.",
+              "source_pattern": "Inspired by Lab 09 Q3."
+            },
+            {
+              "question": "Same f. Is it surjective onto ℤ?",
+              "choices": [
+                "Yes",
+                "No",
+                "Only on even integers",
+                "Cannot tell"
+              ],
+              "answer": "No",
+              "explanation": "Image is even integers; odd not hit."
+            },
+            {
+              "question": "⌊-2.3⌋ + ⌈2.3⌉ =",
+              "choices": [
+                "0",
+                "-1",
+                "1",
+                "5"
+              ],
+              "answer": "0",
+              "explanation": "-3 + 3 = 0."
+            },
+            {
+              "question": "f: ℝ → ℝ, f(x) = x². Bijective?",
+              "choices": [
+                "Yes",
+                "No, not injective",
+                "No, not surjective",
+                "No, neither"
+              ],
+              "answer": "No, neither",
+              "explanation": "f(2) = f(-2); negatives never reached."
+            },
+            {
+              "question": "(g ∘ f)(x) = ?",
+              "choices": [
+                "g(x) · f(x)",
+                "g(f(x))",
+                "f(g(x))",
+                "g(x) + f(x)"
+              ],
+              "answer": "g(f(x))",
+              "explanation": "Right-to-left composition."
+            },
+            {
+              "question": "Bijection ⇔",
+              "choices": [
+                "Has inverse",
+                "Total",
+                "Single-valued",
+                "Surjective only"
+              ],
+              "answer": "Has inverse",
+              "explanation": "Iff bijective."
+            },
+            {
+              "question": "Range vs codomain:",
+              "choices": [
+                "Always equal",
+                "Range ⊆ codomain",
+                "Codomain ⊆ range",
+                "Independent"
+              ],
+              "answer": "Range ⊆ codomain",
+              "explanation": "Range is what's hit; codomain is declared."
+            },
+            {
+              "question": "Identity function id(x) is:",
+              "choices": [
+                "Injective only",
+                "Surjective only",
+                "Bijective",
+                "Neither"
+              ],
+              "answer": "Bijective",
+              "explanation": "Always."
+            }
+          ]
+        },
+        {
+          "type": "true_false",
+          "questions": [
+            {
+              "question": "A function must be total (every input has an output).",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "True",
+              "explanation": "Definition."
+            },
+            {
+              "question": "A multi-valued assignment is a function.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "False",
+              "explanation": "Functions are single-valued."
+            },
+            {
+              "question": "Every injective function from a finite set to itself is bijective.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "True",
+              "explanation": "Pigeonhole on finite sets."
+            },
+            {
+              "question": "Composition is commutative.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "False",
+              "explanation": "Generally not."
+            },
+            {
+              "question": "Inverse exists iff bijective.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "True",
+              "explanation": "Standard equivalence."
+            },
+            {
+              "question": "⌊x⌋ ≤ x ≤ ⌈x⌉ for all real x.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "True",
+              "explanation": "Definition."
+            },
+            {
+              "question": "If f is injective and g is injective, then g ∘ f is injective.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "True",
+              "explanation": "Standard property."
+            }
+          ]
+        },
+        {
+          "type": "short_answer",
+          "questions": [
+            {
+              "question": "Why isn't ±√x a function?",
+              "answer": "Multi-valued: for x = 4 it gives 2 AND -2.",
+              "explanation": "Single-valued rule fails."
+            },
+            {
+              "question": "Define injective in your own words.",
+              "answer": "Distinct inputs produce distinct outputs. Equivalently, f(a) = f(b) forces a = b.",
+              "explanation": "One-to-one."
+            },
+            {
+              "question": "Find f⁻¹ for f(x) = 5x - 2 (ℝ → ℝ).",
+              "answer": "f⁻¹(y) = (y + 2)/5.",
+              "explanation": "Solve for x in y = 5x - 2.",
+              "source_pattern": "Inspired by Lab 09 Q4."
+            },
+            {
+              "question": "Compute (g ∘ f)(2) and (f ∘ g)(2) for f(x) = x + 1, g(x) = 3x.",
+              "answer": "(g ∘ f)(2) = g(3) = 9; (f ∘ g)(2) = f(6) = 7.",
+              "explanation": "Right-to-left."
+            },
+            {
+              "question": "Why does floor of a negative go MORE negative?",
+              "answer": "Floor returns the greatest integer ≤ x. For x = -2.3, the integers ≤ -2.3 are …, -4, -3 — greatest is -3 (more negative than -2.3).",
+              "explanation": "Number-line intuition."
+            }
+          ]
+        },
+        {
+          "type": "fill_in_blank",
+          "questions": [
+            {
+              "question": "f is one-to-one iff f(a) = f(b) ⇒ ___.",
+              "answer": "a = b",
+              "explanation": "Injective definition."
+            },
+            {
+              "question": "f is onto iff range = ___.",
+              "answer": "codomain",
+              "explanation": "Surjective definition."
+            },
+            {
+              "question": "f bijective iff f is ___ AND ___.",
+              "answer": "injective AND surjective",
+              "explanation": "Standard."
+            },
+            {
+              "question": "(g ∘ f)(a) = g(___).",
+              "answer": "f(a)",
+              "explanation": "Apply f first."
+            },
+            {
+              "question": "⌊3.7⌋ = ___; ⌈3.7⌉ = ___.",
+              "answer": "3; 4",
+              "explanation": "Floor down, ceiling up."
+            }
+          ]
+        },
+        {
+          "type": "matching",
+          "questions": [
+            {
+              "question": "Match function to label.",
+              "left": [
+                "f: ℤ → ℤ, f(x) = 2x",
+                "f: ℝ → ℝ, f(x) = x³",
+                "f: ℝ → ℝ, f(x) = x²",
+                "f: {1, 2} → {a, b}, f(1) = a, f(2) = a"
+              ],
+              "right": [
+                "Injective only",
+                "Bijective",
+                "Neither",
+                "Neither (not injective)"
+              ],
+              "pairs": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  1
+                ],
+                [
+                  2,
+                  2
+                ],
+                [
+                  3,
+                  3
+                ]
+              ],
+              "explanation": "Standard examples."
+            }
+          ]
+        },
+        {
+          "type": "step_by_step",
+          "questions": [
+            {
+              "question": "Show f: ℝ → ℝ, f(x) = (x - 3)/2 is bijective and find f⁻¹.",
+              "answer": "Injective: (a-3)/2 = (b-3)/2 ⇒ a = b. ✓\nSurjective: for y ∈ ℝ, x = 2y + 3 satisfies f(x) = y. ✓\nBijective. f⁻¹(y) = 2y + 3.",
+              "explanation": "Both checks plus inversion.",
+              "source_pattern": "Inspired by Lab 09."
+            },
+            {
+              "question": "Compute (f ∘ g ∘ h)(x) for f(x) = x + 1, g(x) = 2x, h(x) = x².",
+              "answer": "h(x) = x²; g(x²) = 2x²; f(2x²) = 2x² + 1.",
+              "explanation": "Right-to-left: h, g, f."
+            },
+            {
+              "question": "Decide if f: ℤ → ℤ⁺, f(n) = n² + 1 is injective and/or surjective.",
+              "answer": "Injective: f(2) = 5, f(-2) = 5 — same output, different inputs. NOT injective.\nSurjective onto ℤ⁺: range = {1, 2, 5, 10, …} = squares + 1; not all positive integers (e.g., 3 not hit). NOT surjective.\nNeither.",
+              "explanation": "Both checks fail."
+            }
+          ]
+        },
+        {
+          "type": "exam_style",
+          "questions": [
+            {
+              "question": "f: ℤ × ℤ → ℤ, f(m, n) = m + n. Is f surjective? Injective?",
+              "answer": "Surjective: for any k ∈ ℤ, take (k, 0): f = k. ✓\nInjective: f(1, 2) = 3 = f(0, 3). NOT injective.",
+              "explanation": "Pair-input function."
+            },
+            {
+              "question": "Show that if g ∘ f is injective, then f is injective.",
+              "answer": "Suppose f(a) = f(b). Apply g: g(f(a)) = g(f(b)), i.e., (g ∘ f)(a) = (g ∘ f)(b). By injectivity of g ∘ f, a = b. So f is injective. ∎",
+              "explanation": "Standard composition argument."
+            },
+            {
+              "question": "Find f⁻¹ for f: ℝ⁺ → ℝ⁺, f(x) = √x.",
+              "answer": "f(x) = √x bijective on positive reals. y = √x ⇒ x = y². So f⁻¹(y) = y².",
+              "explanation": "Restrict domain to make it bijective."
+            }
+          ]
+        },
+        {
+          "type": "randomized",
+          "questions": [
+            {
+              "template": "Decide if {FUNC} is injective, surjective, bijective, or neither.",
+              "variables": {
+                "FUNC": [
+                  "f: ℤ → ℤ, f(x) = x + 5",
+                  "f: ℝ → ℝ, f(x) = x²",
+                  "f: ℤ → ℤ, f(x) = 2x + 1",
+                  "f: ℤ → ℤ, f(x) = x³"
+                ]
+              },
+              "instructions": "Apply the two-rule check.",
+              "example_realization": "x + 5 → bijective on ℤ.",
+              "explanation": "Classification drill."
+            },
+            {
+              "template": "Compute ⌊{X}⌋ and ⌈{X}⌉.",
+              "variables": {
+                "X": [
+                  "3.7",
+                  "-3.7",
+                  "5",
+                  "-2.5",
+                  "0.999"
+                ]
+              },
+              "instructions": "Floor down, ceiling up.",
+              "example_realization": "-2.5 → ⌊⌋ = -3, ⌈⌉ = -2.",
+              "explanation": "Floor/ceiling drill."
+            },
+            {
+              "template": "Find (g ∘ f)({X}) for f(x) = {F} and g(x) = {G}.",
+              "variables": {
+                "F": [
+                  "x + 2",
+                  "2x",
+                  "x²"
+                ],
+                "G": [
+                  "3x",
+                  "x - 1",
+                  "x²"
+                ],
+                "X": [
+                  "1",
+                  "3",
+                  "-2"
+                ]
+              },
+              "instructions": "Compute f(X) first, then apply g.",
+              "example_realization": "f = x + 2, g = 3x, X = 1 → g(3) = 9.",
+              "explanation": "Composition drill."
+            },
+            {
+              "template": "Find inverse of f(x) = {EXPR} on ℝ.",
+              "variables": {
+                "EXPR": [
+                  "2x + 3",
+                  "5x - 7",
+                  "x/4 + 1",
+                  "-x + 2"
+                ]
+              },
+              "instructions": "Solve y = f(x) for x.",
+              "example_realization": "f(x) = 2x + 3 → f⁻¹(y) = (y - 3)/2.",
+              "explanation": "Inverse drill."
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

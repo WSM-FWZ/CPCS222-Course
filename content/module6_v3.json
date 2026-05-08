@@ -1,0 +1,869 @@
+{
+  "course": "CPCS 222 — Discrete Mathematics",
+  "version": "v3",
+  "module": {
+    "module_id": 6,
+    "title": "Summations",
+    "description": "∑ notation, summation rules (constant factor, sum-of-constant, linearity, splitting), the four standard closed-form formulas, and the finite geometric series.",
+    "source_files": [
+      "CPCS222_06_Summations.pdf",
+      "CPCS 222 - Lab 08 - Sequences and Summations.pdf"
+    ],
+    "lessons": [
+      {
+        "lesson_id": "module6-lesson1",
+        "type": "tutorial",
+        "title": "Summation Notation and Basic Rules",
+        "slug": "summation-notation-and-basic-rules",
+        "welcome": "Adding up the terms of a sequence is so common that mathematicians invented a compact notation: the BIG SIGMA ∑.",
+        "objectives": [
+          "Read and write a summation in ∑ notation, identifying index, bounds, and summand.",
+          "Apply the constant-factor rule (pull constants out).",
+          "Apply the sum-of-a-constant rule: ∑ k = k · (count of terms).",
+          "Apply linearity to split sums.",
+          "Apply the splitting rule to change bounds."
+        ],
+        "storytelling": [
+          {
+            "speaker": "Student",
+            "text": "What does ∑_{i=1}^{5} i² mean exactly?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "It is shorthand for 1² + 2² + 3² + 4² + 5². The `i` is the INDEX, 1 is the LOWER bound, 5 is the UPPER bound, and i² is the SUMMAND. Read it as a for-loop."
+          }
+        ],
+        "flow": [
+          {
+            "type": "definition",
+            "title": "Summation",
+            "content": "**∑_{i=m}^{n} f(i)** = f(m) + f(m+1) + … + f(n). Four ingredients: index `i`, lower bound `m`, upper bound `n`, summand `f(i)`. If n < m, the sum is empty (= 0)."
+          },
+          {
+            "type": "table",
+            "title": "Quick examples",
+            "headers": [
+              "Expression",
+              "Expansion",
+              "Value"
+            ],
+            "rows": [
+              [
+                "∑_{i=1}^{4} i",
+                "1 + 2 + 3 + 4",
+                "10"
+              ],
+              [
+                "∑_{k=0}^{3} 2ᵏ",
+                "1 + 2 + 4 + 8",
+                "15"
+              ],
+              [
+                "∑_{j=1}^{n} 1",
+                "1 + 1 + … + 1 (n terms)",
+                "n"
+              ],
+              [
+                "∑_{i=5}^{4} f(i)",
+                "(empty)",
+                "0"
+              ]
+            ]
+          },
+          {
+            "type": "definition",
+            "title": "Constant-factor rule",
+            "content": "If `c` does NOT depend on the index, pull it out: `∑_{i=m}^{n} c · f(i) = c · ∑_{i=m}^{n} f(i)`. Only constants can leave the ∑."
+          },
+          {
+            "type": "warning",
+            "title": "Don't pull the index out",
+            "content": "You can pull `5` out of `∑ 5·i`, but you CANNOT pull `i` out of `∑ i · f(i)` because `i` changes each step."
+          },
+          {
+            "type": "definition",
+            "title": "Sum of a constant",
+            "content": "**∑_{i=m}^{n} k = k · (n - m + 1)**. Special case: ∑_{i=1}^{n} 1 = n; ∑_{i=1}^{n} k = kn."
+          },
+          {
+            "type": "definition",
+            "title": "Linearity (sum of a sum)",
+            "content": "**∑ (f(i) + g(i)) = ∑ f(i) + ∑ g(i)**, and similarly for subtraction. Combined with the constant-factor rule, this gives full linearity: `∑ (a · f(i) + b · g(i)) = a · ∑ f(i) + b · ∑ g(i)`."
+          },
+          {
+            "type": "definition",
+            "title": "Splitting rule (changing the lower bound)",
+            "content": "**∑_{i=m}^{n} f(i) = ∑_{i=1}^{n} f(i) - ∑_{i=1}^{m-1} f(i)**. Useful when standard formulas (Lesson 2) require lower bound 1."
+          },
+          {
+            "type": "real_life_example",
+            "title": "Sigma in real life",
+            "items": [
+              "**Total CPCS 222 attendance** = ∑_{i=1}^{n} aᵢ where aᵢ = 1 if present on day i.",
+              "**Total monthly STC bill** for a year = ∑_{i=1}^{12} bᵢ.",
+              "**Total study hours** in a semester = ∑_{i=1}^{14} hᵢ.",
+              "**Total parking-fee installments**: 12 monthly payments at SAR 200 each = ∑_{i=1}^{12} 200 = 2400."
+            ]
+          },
+          {
+            "type": "worked_example",
+            "title": "Use the rules without closed forms",
+            "source_pattern": "Inspired by Lab 08.",
+            "problem": "Use linearity and the constant rule to simplify ∑_{i=1}^{n} (3 + 2i) without yet using closed forms.",
+            "thinking_process": "Linearity, then sum-of-constant, then constant-factor.",
+            "step_by_step_solution": [
+              "Linearity: ∑(3 + 2i) = ∑3 + ∑2i.",
+              "Sum of constant: ∑3 = 3n.",
+              "Constant factor: ∑2i = 2 · ∑i."
+            ],
+            "final_answer": "3n + 2 · ∑_{i=1}^{n} i.",
+            "common_mistake": "Forgetting that ∑_{i=1}^{n} 3 = 3n (not just 3)."
+          },
+          {
+            "type": "worked_example",
+            "title": "Splitting the bound",
+            "source_pattern": "Sec 2.4 splitting.",
+            "problem": "Rewrite ∑_{i=4}^{12} f(i) using bounds starting at 1.",
+            "thinking_process": "Apply splitting rule.",
+            "step_by_step_solution": [
+              "∑_{i=4}^{12} f(i) = ∑_{i=1}^{12} f(i) - ∑_{i=1}^{3} f(i)."
+            ],
+            "final_answer": "∑_{i=1}^{12} f(i) - ∑_{i=1}^{3} f(i).",
+            "common_mistake": "Subtracting ∑_{i=1}^{4} instead of ∑_{i=1}^{3}."
+          },
+          {
+            "type": "misconception_box",
+            "title": "Common student mistakes",
+            "items": [
+              "Pulling out the index variable. Only constants leave ∑.",
+              "∑ k = k (one occurrence) instead of k · (count).",
+              "Off-by-one in (n - m + 1) count.",
+              "Trying to use linearity over multiplication. ∑(f · g) ≠ ∑f · ∑g."
+            ]
+          },
+          {
+            "type": "memory_hook",
+            "title": "Three quick rules",
+            "items": [
+              "**Pull constants out** (no index dependence).",
+              "**Sum of a constant** = constant × count.",
+              "**Linearity** splits ∑(f + g) into ∑f + ∑g."
+            ]
+          },
+          {
+            "type": "simulator_sigma_expand",
+            "title": "Try It — Summation Expander"
+          }
+        ],
+        "sections": [
+          {
+            "number": 1,
+            "heading": "Summation notation",
+            "explanation": "∑ binds an index to traverse a range; sums the summand."
+          },
+          {
+            "number": 2,
+            "heading": "Basic rules",
+            "explanation": "Constant factor, sum-of-constant, linearity."
+          },
+          {
+            "number": 3,
+            "heading": "Splitting bounds",
+            "explanation": "∑_{m}^{n} = ∑_{1}^{n} − ∑_{1}^{m-1}."
+          }
+        ],
+        "worked_examples": [
+          {
+            "problem": "∑_{i=1}^{n} 5.",
+            "step_by_step_solution": [
+              "k · n = 5n."
+            ],
+            "final_answer": "5n.",
+            "why_it_works": "Sum of a constant.",
+            "common_mistake": "Writing 5 instead of 5n."
+          }
+        ],
+        "quick_checks": [
+          {
+            "type": "mcq",
+            "question": "How many terms in ∑_{i=2}^{10} f(i)?",
+            "choices": [
+              "8",
+              "9",
+              "10",
+              "11"
+            ],
+            "answer": "9",
+            "explanation": "10 - 2 + 1."
+          },
+          {
+            "type": "mcq",
+            "question": "∑_{i=1}^{n} 4 =",
+            "choices": [
+              "4",
+              "n",
+              "4n",
+              "n²"
+            ],
+            "answer": "4n",
+            "explanation": "Sum of n copies of 4."
+          },
+          {
+            "type": "true_false",
+            "question": "You can pull index i out of ∑ i · f(i).",
+            "choices": [
+              "True",
+              "False"
+            ],
+            "answer": "False",
+            "explanation": "Index changes; only constants leave."
+          }
+        ],
+        "summary": {
+          "key_takeaways": [
+            "∑_{i=m}^{n} f(i) = f(m) + f(m+1) + … + f(n).",
+            "Constants leave the ∑; the index does not.",
+            "∑_{i=m}^{n} k = k · (n - m + 1).",
+            "Linearity: ∑(af + bg) = a∑f + b∑g.",
+            "Splitting: ∑_{m}^{n} = ∑_{1}^{n} − ∑_{1}^{m-1}."
+          ],
+          "next": "Next: the four CLOSED-FORM formulas + the geometric series — your fastest route from a long sum to a single number."
+        }
+      },
+      {
+        "lesson_id": "module6-lesson2",
+        "type": "tutorial",
+        "title": "Closed-Form Formulas and the Geometric Series",
+        "slug": "closed-form-formulas-and-the-geometric-series",
+        "welcome": "Five formulas turn long sums into instant answers. Memorize them and combine with the basic rules from Lesson 1.",
+        "objectives": [
+          "State and apply ∑1, ∑i, ∑i², ∑i³ closed forms.",
+          "State and apply the finite geometric series formula.",
+          "Combine basic rules with closed forms to evaluate compound sums.",
+          "Recognize when r = 1 forces a special-case treatment."
+        ],
+        "storytelling": [
+          {
+            "speaker": "Student",
+            "text": "Is there a faster way than computing each term in ∑_{i=1}^{100} i?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "Yes — Gauss's formula: n(n+1)/2. With n = 100 that gives 5050. One line. Memorize four formulas of this kind and you can collapse any standard sum into a single algebraic expression."
+          }
+        ],
+        "flow": [
+          {
+            "type": "table",
+            "title": "Four closed-form formulas to memorize",
+            "headers": [
+              "Formula",
+              "Closed form",
+              "Mnemonic"
+            ],
+            "rows": [
+              [
+                "∑_{i=1}^{n} 1",
+                "n",
+                "Just n copies"
+              ],
+              [
+                "∑_{i=1}^{n} i",
+                "n(n+1)/2",
+                "Gauss's pair-up trick"
+              ],
+              [
+                "∑_{i=1}^{n} i²",
+                "n(n+1)(2n+1)/6",
+                "Sum of squares"
+              ],
+              [
+                "∑_{i=1}^{n} i³",
+                "(n(n+1)/2)² = (∑i)²",
+                "Cubes = square of sum"
+              ]
+            ]
+          },
+          {
+            "type": "table",
+            "title": "Sample values for n = 10",
+            "headers": [
+              "Formula",
+              "Value"
+            ],
+            "rows": [
+              [
+                "∑_{i=1}^{10} 1",
+                "10"
+              ],
+              [
+                "∑_{i=1}^{10} i",
+                "55"
+              ],
+              [
+                "∑_{i=1}^{10} i²",
+                "385"
+              ],
+              [
+                "∑_{i=1}^{10} i³",
+                "3025 = 55²"
+              ]
+            ]
+          },
+          {
+            "type": "definition",
+            "title": "Finite geometric series",
+            "content": "**∑_{i=0}^{n} a · rⁱ = a · (rⁿ⁺¹ - 1) / (r - 1)** for r ≠ 1. When r = 1 every term is `a`, so the sum is `(n + 1) · a` (handle separately to avoid division by zero)."
+          },
+          {
+            "type": "definition",
+            "title": "Infinite geometric series",
+            "content": "If |r| < 1, then `∑_{i=0}^{∞} a · rⁱ = a / (1 - r)`. Diverges otherwise."
+          },
+          {
+            "type": "real_life_example",
+            "title": "Where geometric series appear",
+            "items": [
+              "**Compound interest:** future value = ∑ payments × (1 + r)ⁿ⁻ⁱ.",
+              "**Mortgage / installments:** present value of fixed payments uses a geometric series.",
+              "**Algorithm analysis:** the cost of a divide-and-conquer algorithm is often a geometric series.",
+              "**Saudi STC's tiered data plans:** half-off each successive month for 4 months → geometric sum."
+            ]
+          },
+          {
+            "type": "step_list",
+            "title": "Strategy for any sum",
+            "items": [
+              "1. Pull out constants.",
+              "2. Split using linearity if the summand has multiple parts.",
+              "3. Adjust bounds with the splitting rule if needed.",
+              "4. Apply the right closed-form formula.",
+              "5. Simplify the resulting algebra."
+            ]
+          },
+          {
+            "type": "worked_example",
+            "title": "Direct application",
+            "source_pattern": "Inspired by Lab 08 / Sec 2.4.",
+            "problem": "Evaluate ∑_{i=1}^{50} i.",
+            "thinking_process": "Apply Gauss formula directly.",
+            "step_by_step_solution": [
+              "50 · 51 / 2 = 1275."
+            ],
+            "final_answer": "1275.",
+            "common_mistake": "Arithmetic mistake on 50 · 51."
+          },
+          {
+            "type": "worked_example",
+            "title": "Linearity + closed forms",
+            "source_pattern": "Inspired by Sec 2.4.",
+            "problem": "Evaluate ∑_{i=1}^{n} (4i + 7).",
+            "thinking_process": "Linearity, then ∑i and ∑1 closed forms.",
+            "step_by_step_solution": [
+              "= 4∑i + 7∑1.",
+              "= 4 · n(n+1)/2 + 7n.",
+              "= 2n(n+1) + 7n = 2n² + 9n."
+            ],
+            "final_answer": "2n² + 9n.",
+            "common_mistake": "Forgetting ∑_{i=1}^{n} 7 = 7n (not 7)."
+          },
+          {
+            "type": "worked_example",
+            "title": "Geometric series",
+            "source_pattern": "Inspired by Sec 2.4.",
+            "problem": "Evaluate ∑_{i=0}^{6} 5 · 3ⁱ.",
+            "thinking_process": "a = 5, r = 3, n = 6.",
+            "step_by_step_solution": [
+              "= 5 · (3⁷ - 1)/(3 - 1).",
+              "3⁷ = 2187, so (2187 - 1)/2 = 1093.",
+              "= 5 · 1093 = 5465."
+            ],
+            "final_answer": "5465.",
+            "common_mistake": "Using rⁿ instead of rⁿ⁺¹ in the formula."
+          },
+          {
+            "type": "worked_example",
+            "title": "Splitting the bounds",
+            "source_pattern": "Sec 2.4.",
+            "problem": "Evaluate ∑_{i=3}^{10} i².",
+            "thinking_process": "Splitting rule + ∑i² closed form.",
+            "step_by_step_solution": [
+              "= ∑_{i=1}^{10} i² - ∑_{i=1}^{2} i².",
+              "∑_{i=1}^{10} i² = 10 · 11 · 21 / 6 = 385.",
+              "∑_{i=1}^{2} i² = 1 + 4 = 5.",
+              "= 385 - 5 = 380."
+            ],
+            "final_answer": "380.",
+            "common_mistake": "Subtracting ∑_{i=1}^{3} instead of ∑_{i=1}^{2}."
+          },
+          {
+            "type": "misconception_box",
+            "title": "Common student mistakes",
+            "items": [
+              "Confusing ∑i and ∑i² formulas.",
+              "Using the geometric formula with r = 1 (division by zero).",
+              "Off-by-one in rⁿ⁺¹.",
+              "Forgetting that ∑_{i=1}^{n} c = cn."
+            ]
+          },
+          {
+            "type": "memory_hook",
+            "title": "Five formulas",
+            "items": [
+              "**∑1 = n.**",
+              "**∑i = n(n+1)/2.**",
+              "**∑i² = n(n+1)(2n+1)/6.**",
+              "**∑i³ = (n(n+1)/2)².**",
+              "**∑arⁱ = a(rⁿ⁺¹ - 1)/(r - 1) for r ≠ 1.**"
+            ]
+          }
+        ],
+        "sections": [
+          {
+            "number": 1,
+            "heading": "Closed forms",
+            "explanation": "Four standard sums."
+          },
+          {
+            "number": 2,
+            "heading": "Geometric series",
+            "explanation": "Finite and infinite forms."
+          },
+          {
+            "number": 3,
+            "heading": "Strategy",
+            "explanation": "Pull constants, split, shift, apply, simplify."
+          }
+        ],
+        "worked_examples": [
+          {
+            "problem": "∑_{i=1}^{n} (i² - 1).",
+            "step_by_step_solution": [
+              "= ∑i² - ∑1 = n(n+1)(2n+1)/6 - n."
+            ],
+            "final_answer": "n(n+1)(2n+1)/6 - n.",
+            "why_it_works": "Linearity + closed forms.",
+            "common_mistake": "Off-by-one in count of constant."
+          }
+        ],
+        "quick_checks": [
+          {
+            "type": "mcq",
+            "question": "∑_{i=1}^{100} i =",
+            "choices": [
+              "100",
+              "5050",
+              "10100",
+              "100²"
+            ],
+            "answer": "5050",
+            "explanation": "100·101/2."
+          },
+          {
+            "type": "mcq",
+            "question": "Geometric formula valid for r = 1?",
+            "choices": [
+              "Yes",
+              "No — division by zero",
+              "Only for n ≥ 0",
+              "Only when a > 0"
+            ],
+            "answer": "No — division by zero",
+            "explanation": "When r = 1 use (n+1)·a directly."
+          },
+          {
+            "type": "true_false",
+            "question": "∑i³ = (∑i)².",
+            "choices": [
+              "True",
+              "False"
+            ],
+            "answer": "True",
+            "explanation": "Standard identity."
+          }
+        ],
+        "summary": {
+          "key_takeaways": [
+            "Four closed forms: ∑1, ∑i, ∑i², ∑i³.",
+            "Geometric: ∑arⁱ = a(rⁿ⁺¹ - 1)/(r - 1) for r ≠ 1.",
+            "When r = 1, geometric becomes (n+1)·a.",
+            "Strategy: pull constants → split → shift → apply → simplify."
+          ],
+          "next": "Module 6 toolkit complete. Move to Module 6 Exercises."
+        }
+      }
+    ],
+    "exercises": {
+      "lesson_id": "module6-exercises",
+      "type": "exercises",
+      "title": "Module 6 Exercises — Summations",
+      "description": "Practice covering ∑ notation, summation rules, the four closed-form formulas, and the geometric series. Modeled on Lab 08 and Sec 2.4.",
+      "question_sets": [
+        {
+          "type": "mcq",
+          "questions": [
+            {
+              "question": "Terms in ∑_{i=3}^{10} f(i):",
+              "choices": [
+                "7",
+                "8",
+                "9",
+                "10"
+              ],
+              "answer": "8",
+              "explanation": "10-3+1."
+            },
+            {
+              "question": "∑_{i=1}^{50} i =",
+              "choices": [
+                "50",
+                "1275",
+                "2550",
+                "5050"
+              ],
+              "answer": "1275",
+              "explanation": "50·51/2."
+            },
+            {
+              "question": "∑_{i=1}^{n} 5 =",
+              "choices": [
+                "5",
+                "5n",
+                "5n(n+1)/2",
+                "5+n"
+              ],
+              "answer": "5n",
+              "explanation": "Sum of constant."
+            },
+            {
+              "question": "∑_{i=1}^{n} (2i-1) =",
+              "choices": [
+                "n",
+                "n²",
+                "n(n+1)/2",
+                "n(n+1)"
+              ],
+              "answer": "n²",
+              "explanation": "Sum of odd numbers."
+            },
+            {
+              "question": "∑_{i=0}^{4} 2ⁱ =",
+              "choices": [
+                "15",
+                "16",
+                "31",
+                "32"
+              ],
+              "answer": "31",
+              "explanation": "(2⁵-1)/(2-1)."
+            },
+            {
+              "question": "∑_{i=1}^{10} i² =",
+              "choices": [
+                "55",
+                "100",
+                "385",
+                "3025"
+              ],
+              "answer": "385",
+              "explanation": "10·11·21/6."
+            },
+            {
+              "question": "∑_{i=1}^{4} i³ =",
+              "choices": [
+                "10",
+                "30",
+                "100",
+                "1000"
+              ],
+              "answer": "100",
+              "explanation": "= (∑i)² = 10² = 100."
+            },
+            {
+              "question": "Pull out: ∑_{i=1}^{n} 7 · i² =",
+              "choices": [
+                "7·∑i²",
+                "(7n)·∑i²",
+                "∑7i²/n",
+                "Cannot"
+              ],
+              "answer": "7·∑i²",
+              "explanation": "Constant factor."
+            }
+          ]
+        },
+        {
+          "type": "true_false",
+          "questions": [
+            {
+              "question": "∑_{i=1}^{n} c = cn.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "True",
+              "explanation": "Sum-of-constant rule."
+            },
+            {
+              "question": "∑(f·g) = (∑f)(∑g).",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "False",
+              "explanation": "Linearity does not distribute over multiplication."
+            },
+            {
+              "question": "∑i³ = (n(n+1)/2)².",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "True",
+              "explanation": "Standard identity."
+            },
+            {
+              "question": "Geometric formula valid for r = 1.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "False",
+              "explanation": "Division by zero."
+            },
+            {
+              "question": "Index can be pulled out of ∑ i·f(i).",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "False",
+              "explanation": "Only constants leave."
+            },
+            {
+              "question": "∑_{i=m}^{n} f(i) has (n-m+1) terms.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "True",
+              "explanation": "Both endpoints inclusive."
+            },
+            {
+              "question": "∑_{i=1}^{0} f(i) = 0.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "True",
+              "explanation": "Empty sum convention."
+            }
+          ]
+        },
+        {
+          "type": "short_answer",
+          "questions": [
+            {
+              "question": "Why is the geometric formula invalid at r = 1?",
+              "answer": "Denominator (r - 1) = 0. Use (n+1)·a instead.",
+              "explanation": "Special case."
+            },
+            {
+              "question": "Splitting: rewrite ∑_{i=5}^{20} i².",
+              "answer": "= ∑_{i=1}^{20} i² - ∑_{i=1}^{4} i² = 2870 - 30 = 2840.",
+              "explanation": "Splitting + closed form."
+            },
+            {
+              "question": "Compute ∑_{i=1}^{n} (5 - 2i).",
+              "answer": "= 5n - n(n+1) = 5n - n² - n = 4n - n².",
+              "explanation": "Linearity + closed forms."
+            },
+            {
+              "question": "Cardinality interpretation of ∑_{i=1}^{n} 1?",
+              "answer": "Counts the n terms; |{1,…,n}| = n.",
+              "explanation": "Connection to counting."
+            },
+            {
+              "question": "Why does linearity NOT distribute over multiplication?",
+              "answer": "∑(f·g) sums products; (∑f)(∑g) multiplies totals. Counterexample: f(i) = g(i) = 1, n = 2: ∑(f·g) = 2; (∑f)(∑g) = 4.",
+              "explanation": "Failure mode."
+            }
+          ]
+        },
+        {
+          "type": "fill_in_blank",
+          "questions": [
+            {
+              "question": "∑_{i=1}^{n} i = n(n+1)/___.",
+              "answer": "2",
+              "explanation": "Gauss formula."
+            },
+            {
+              "question": "∑_{i=1}^{n} i² = n(n+1)(2n+1)/___.",
+              "answer": "6",
+              "explanation": "Sum of squares."
+            },
+            {
+              "question": "∑_{i=0}^{n} a·rⁱ = a(rⁿ⁺¹ - 1)/(r - ___) for r ≠ 1.",
+              "answer": "1",
+              "explanation": "Geometric series."
+            },
+            {
+              "question": "∑_{i=1}^{n} c = c · ___.",
+              "answer": "n",
+              "explanation": "Sum of constant."
+            },
+            {
+              "question": "∑_{i=1}^{n} (af + bg) = a∑f + ___ ∑g.",
+              "answer": "b",
+              "explanation": "Linearity."
+            }
+          ]
+        },
+        {
+          "type": "step_by_step",
+          "questions": [
+            {
+              "question": "∑_{i=1}^{n} (3i² - 2i + 5).",
+              "answer": "= 3∑i² - 2∑i + 5∑1 = 3·n(n+1)(2n+1)/6 - 2·n(n+1)/2 + 5n = n(n+1)(2n+1)/2 - n(n+1) + 5n.",
+              "explanation": "Linearity + three closed forms."
+            },
+            {
+              "question": "∑_{i=0}^{8} 4·(1/2)ⁱ.",
+              "answer": "a = 4, r = 1/2, n = 8. = 4·((1/2)⁹ - 1)/(1/2 - 1) = 4·(-511/512)·(-2) = 4088/512 = 511/64.",
+              "explanation": "Geometric with r = 1/2."
+            },
+            {
+              "question": "∑_{i=1}^{20} (i² + 3i + 2).",
+              "answer": "= ∑i² + 3∑i + 2n = 2870 + 630 + 40 = 3540.",
+              "explanation": "Three closed forms."
+            },
+            {
+              "question": "∑_{i=4}^{12} i.",
+              "answer": "= ∑_{i=1}^{12} i - ∑_{i=1}^{3} i = 78 - 6 = 72.",
+              "explanation": "Splitting."
+            }
+          ]
+        },
+        {
+          "type": "exam_style",
+          "questions": [
+            {
+              "question": "Show ∑_{i=1}^{n} (4i³ - i) = n²(n+1)² - n(n+1)/2.",
+              "answer": "= 4·(n(n+1)/2)² - n(n+1)/2 = n²(n+1)² - n(n+1)/2. ∎",
+              "explanation": "∑i³ + ∑i closed forms."
+            },
+            {
+              "question": "∑_{k=1}^{n} (2k - 1)². Verify with n = 4.",
+              "answer": "(2k-1)² = 4k² - 4k + 1. Sum: 4∑k² - 4∑k + n = 2n(n+1)(2n+1)/3 - 2n(n+1) + n. n=4: 2·4·5·9/3 - 2·4·5 + 4 = 120 - 40 + 4 = 84. Direct: 1+9+25+49 = 84. ✓",
+              "explanation": "Algebraic + numerical check."
+            },
+            {
+              "question": "∑_{i=2}^{n} 3·2ⁱ.",
+              "answer": "= ∑_{i=0}^{n} 3·2ⁱ - ∑_{i=0}^{1} 3·2ⁱ = 3(2ⁿ⁺¹ - 1) - 3·3 = 3·2ⁿ⁺¹ - 12.",
+              "explanation": "Splitting + geometric."
+            },
+            {
+              "question": "∑_{i=1}^{n} i(i+1).",
+              "answer": "= ∑(i² + i) = n(n+1)(2n+1)/6 + n(n+1)/2 = n(n+1)(n+2)/3. ∎",
+              "explanation": "Expand + closed forms."
+            }
+          ]
+        },
+        {
+          "type": "randomized",
+          "questions": [
+            {
+              "template": "Evaluate {SUM} using closed forms.",
+              "variables": {
+                "SUM": [
+                  "∑_{i=1}^{20} i",
+                  "∑_{i=1}^{15} i²",
+                  "∑_{i=1}^{10} (3i + 4)",
+                  "∑_{i=0}^{8} 2ⁱ",
+                  "∑_{i=1}^{5} i³",
+                  "∑_{i=1}^{n} 5"
+                ]
+              },
+              "instructions": "Apply linearity + closed forms.",
+              "example_realization": "∑_{i=1}^{20} i → 210.",
+              "explanation": "Closed-form drill."
+            },
+            {
+              "template": "Compute ∑_{i=0}^{N} a · rⁱ with a = {A}, r = {R}, N = {N}.",
+              "variables": {
+                "A": [
+                  "1",
+                  "2",
+                  "3",
+                  "5"
+                ],
+                "R": [
+                  "2",
+                  "3",
+                  "1/2",
+                  "-1"
+                ],
+                "N": [
+                  "4",
+                  "5",
+                  "6",
+                  "8"
+                ]
+              },
+              "instructions": "Apply geometric formula.",
+              "example_realization": "a=2, r=3, N=4 → 242.",
+              "explanation": "Geometric drill."
+            },
+            {
+              "template": "Compute ∑_{i={M}}^{{N}} i² using splitting.",
+              "variables": {
+                "M": [
+                  "3",
+                  "4",
+                  "5",
+                  "10"
+                ],
+                "N": [
+                  "10",
+                  "12",
+                  "15",
+                  "20"
+                ]
+              },
+              "instructions": "∑ from M to N = ∑ from 1 to N − ∑ from 1 to M-1.",
+              "example_realization": "M=4, N=10 → 385 - 14 = 371.",
+              "explanation": "Splitting drill."
+            },
+            {
+              "template": "Linearity: ∑_{i=1}^{N} ({A}·i + {B}).",
+              "variables": {
+                "A": [
+                  "2",
+                  "3",
+                  "5",
+                  "-1"
+                ],
+                "B": [
+                  "1",
+                  "-2",
+                  "4",
+                  "10"
+                ],
+                "N": [
+                  "10",
+                  "20",
+                  "n",
+                  "100"
+                ]
+              },
+              "instructions": "= A·n(n+1)/2 + Bn.",
+              "example_realization": "A=3, B=4, N=10 → 165 + 40 = 205.",
+              "explanation": "Linearity + closed-form drill."
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
