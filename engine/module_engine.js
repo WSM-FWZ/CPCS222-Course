@@ -125,9 +125,13 @@
       }
       _updateMeta(lesson, idx, lessons.length);
       _buildSidebar(lessons, lessonId);
-      _buildLesson(lesson, idx, lessons, container);
-      _initReveal(container);
-      if (global.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([container]);
+      if (_isV2(data, lesson)) {
+        _buildLessonV2(lesson, idx, lessons, container);
+      } else {
+        _buildLesson(lesson, idx, lessons, container);
+        _initReveal(container);
+        if (global.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([container]);
+      }
     });
   }
 
@@ -499,7 +503,7 @@
   function _formatAnswer(text) {
     if (!text) return '';
     if (text.indexOf('|') !== -1 && text.indexOf('\n') !== -1) {
-      return '<pre class="m1-pre">' + esc(text) + '</pre>';
+      return _renderPipeAnswer(text);
     }
     if (_LABEL_TEST.test(text)) {
       var parts = text.split(_LABEL_SPLIT).filter(function (p) { return p.trim(); });
@@ -518,6 +522,11 @@
     div.className = 'm1-ex-card';
     div.id = uid;
 
+    /* source_pattern badge (v2 exercises) */
+    var srcTag = q.source_pattern
+      ? '<span class="v2-source-tag">🏷️ ' + esc(q.source_pattern) + '</span>'
+      : '';
+
     if (type === 'mcq' || type === 'true_false') {
       var choicesHtml = (q.choices || []).map(function (c, j) {
         return '<button class="m1-choice" data-qid="' + uid + '" data-val="' + esc(c) + '" ' +
@@ -527,12 +536,14 @@
           '<span>' + esc(c) + '</span></button>';
       }).join('');
       div.innerHTML =
+        srcTag +
         '<p class="m1-ex-q">' + esc(q.question) + '</p>' +
         '<div class="m1-choices">' + choicesHtml + '</div>' +
         '<div class="m1-qc-feedback" id="' + uid + '-fb">' + esc(q.explanation || '') + '</div>';
 
     } else if (type === 'short_answer' || type === 'exam_style') {
       div.innerHTML =
+        srcTag +
         '<p class="m1-ex-q">' + esc(q.question) + '</p>' +
         '<button class="m1-sa-reveal" onclick="(function(b){b.style.display=\'none\';document.getElementById(\'' + uid + '-fb\').style.display=\'block\'})(this)">Show Answer</button>' +
         '<div class="m1-qc-feedback m1-sa-answer" id="' + uid + '-fb">' +
@@ -542,10 +553,11 @@
 
     } else if (type === 'step_by_step') {
       div.innerHTML =
+        srcTag +
         '<p class="m1-ex-q">' + esc(q.question) + '</p>' +
         '<button class="m1-sa-reveal" onclick="(function(b){b.style.display=\'none\';document.getElementById(\'' + uid + '-fb\').style.display=\'block\'})(this)">Show Full Solution</button>' +
         '<div class="m1-qc-feedback m1-sa-answer" id="' + uid + '-fb">' +
-          '<pre class="m1-pre">' + esc(q.answer) + '</pre>' +
+          _renderPipeAnswer(q.answer) +
           (q.explanation ? '<em>' + esc(q.explanation) + '</em>' : '') +
         '</div>';
     }
@@ -649,6 +661,449 @@
       });
       card.querySelectorAll('.m1-sa-reveal').forEach(function (b) { b.style.display = ''; });
     });
+  }
+
+  /* ── V2 PILOT RENDERER ──────────────────────────────────────── */
+
+  /* Detect v2 content */
+  function _isV2(data, lesson) {
+    return (data && data.version === 'v2-pilot') ||
+      (lesson && lesson.rich_content_blocks && lesson.rich_content_blocks.length > 0);
+  }
+
+  /* Safe inline markdown: **bold**, _italic_, `code` */
+  function _md(text) {
+    if (!text) return '';
+    var s = esc(text);
+    s = s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    s = s.replace(/_([^_\n]+?)_/g, '<em>$1</em>');
+    s = s.replace(/`([^`\n]+?)`/g, '<code class="v2-inline-code">$1</code>');
+    var paras = s.split(/\n\n+/);
+    return paras.map(function (p) {
+      return '<p>' + p.replace(/\n/g, '<br>') + '</p>';
+    }).join('');
+  }
+
+  /* Parse pipe-table answer text → styled HTML truth table */
+  function _renderPipeAnswer(text) {
+    if (!text) return '';
+    var lines = text.split('\n');
+    var tableLines = [];
+    var trailingText = [];
+    var seenTable = false;
+    for (var i = 0; i < lines.length; i++) {
+      if (lines[i].indexOf('|') !== -1) {
+        seenTable = true;
+        tableLines.push(lines[i]);
+      } else if (seenTable && lines[i].trim()) {
+        trailingText.push(lines[i]);
+      }
+    }
+    if (tableLines.length < 2) {
+      return '<pre class="m1-pre">' + esc(text) + '</pre>';
+    }
+    /* Parse header row */
+    var rawHdr = tableLines[0].split('|').map(function (h) { return h.trim(); });
+    if (rawHdr[0] === '') rawHdr.shift();
+    if (rawHdr[rawHdr.length - 1] === '') rawHdr.pop();
+    var headers = rawHdr;
+    var lastCol = headers.length - 1;
+
+    var html = '<div class="v2-table-wrap"><table class="v2-table v2-truth-table"><thead><tr>';
+    headers.forEach(function (h, i) {
+      var cls = (i === lastCol) ? ' class="v2-th-result"' : '';
+      html += '<th' + cls + '>' + esc(h) + '</th>';
+    });
+    html += '</tr></thead><tbody>';
+    for (var r = 1; r < tableLines.length; r++) {
+      var line = tableLines[r];
+      if (/^[\s\-\+\|=]+$/.test(line)) continue; /* skip separator lines */
+      var cells = line.split('|').map(function (c) { return c.trim(); });
+      if (cells[0] === '') cells.shift();
+      if (cells[cells.length - 1] === '') cells.pop();
+      if (!cells.length) continue;
+      html += '<tr>';
+      cells.forEach(function (c, ci) {
+        var classes = [];
+        if (c === 'T') classes.push('v2-cell-T');
+        else if (c === 'F') classes.push('v2-cell-F');
+        if (ci === lastCol) classes.push('v2-cell-result');
+        var ca = classes.length ? ' class="' + classes.join(' ') + '"' : '';
+        html += '<td' + ca + '>' + esc(c) + '</td>';
+      });
+      html += '</tr>';
+    }
+    html += '</tbody></table></div>';
+    if (trailingText.length) {
+      html += '<p class="v2-tt-note">' + esc(trailingText.join(' ')) + '</p>';
+    }
+    return html;
+  }
+
+  /* Main v2 lesson builder */
+  function _buildLessonV2(lesson, idx, allLessons, container) {
+    container.innerHTML = '';
+    var art = document.createElement('article');
+    art.className = 'me-lesson me-lesson-v2';
+
+    art.appendChild(_heroCard(lesson, idx, allLessons.length));
+    if (lesson.hook)          art.appendChild(_v2HookCard(lesson.hook));
+    if (lesson.welcome)       art.appendChild(_v2WelcomeCard(lesson.welcome));
+    if (lesson.why_it_matters) art.appendChild(_v2WhyCard(lesson.why_it_matters));
+    if (lesson.storytelling && lesson.storytelling.length) {
+      art.appendChild(_storyCard(lesson.storytelling));
+    }
+    if (lesson.rich_content_blocks && lesson.rich_content_blocks.length) {
+      art.appendChild(_v2RichBlocksSection(lesson.rich_content_blocks, 'Core Concepts'));
+    }
+    if (lesson.concept_blocks && lesson.concept_blocks.length) {
+      art.appendChild(_v2RichBlocksSection(lesson.concept_blocks, 'Step-by-Step Guides'));
+    }
+    (lesson.sections || []).forEach(function (sec) {
+      art.appendChild(_sectionCard(sec));
+    });
+    if (lesson.worked_examples && lesson.worked_examples.length) {
+      art.appendChild(_workedExamplesBlock(lesson.worked_examples));
+    }
+    if (lesson.misconceptions && lesson.misconceptions.length) {
+      art.appendChild(_v2MisconceptionsCard(lesson.misconceptions));
+    }
+    if (lesson.memory_hooks && lesson.memory_hooks.length) {
+      art.appendChild(_v2MemoryHooksCard(lesson.memory_hooks));
+    }
+    if (lesson.quick_checks && lesson.quick_checks.length) {
+      art.appendChild(_quickChecksBlock(lesson.quick_checks));
+    }
+    if (lesson.summary)        art.appendChild(_summaryCard(lesson.summary));
+    if (lesson.lesson_summary) art.appendChild(_v2LessonSummaryCard(lesson.lesson_summary));
+    art.appendChild(_lessonBottomNav(idx, allLessons));
+    container.appendChild(art);
+    _initReveal(container);
+    _initMermaid(container);
+    if (global.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([container]);
+  }
+
+  /* Hook card */
+  function _v2HookCard(text) {
+    var div = document.createElement('div');
+    div.className = 'v2-hook reveal';
+    div.innerHTML = '<div class="v2-hook-header">🪝 Hook</div>' +
+      '<div class="v2-hook-body">' + _md(text) + '</div>';
+    return div;
+  }
+
+  /* Why it matters card */
+  function _v2WhyCard(text) {
+    var div = document.createElement('div');
+    div.className = 'v2-why reveal';
+    div.innerHTML = '<div class="v2-why-header">🎯 Why it matters</div>' +
+      '<div class="v2-why-body">' + _md(text) + '</div>';
+    return div;
+  }
+
+  /* Welcome card (v2 — markdown-aware) */
+  function _v2WelcomeCard(text) {
+    var div = document.createElement('div');
+    div.className = 'm1-welcome reveal';
+    div.innerHTML =
+      '<div class="m1-welcome-inner">' +
+        '<div class="m1-welcome-icon">💡</div>' +
+        '<div class="m1-welcome-text">' + _md(text) + '</div>' +
+      '</div>';
+    return div;
+  }
+
+  /* Wrapper for a section of rich blocks */
+  function _v2RichBlocksSection(blocks, title) {
+    var div = document.createElement('div');
+    div.className = 'v2-rich-section reveal';
+    if (title) {
+      div.innerHTML = '<div class="v2-rich-section-label">' + esc(title) + '</div>';
+    }
+    blocks.forEach(function (block) {
+      div.appendChild(_renderRichBlock(block));
+    });
+    return div;
+  }
+
+  /* Dispatcher for block types */
+  function _renderRichBlock(block) {
+    var type = block.type || '';
+    if (type === 'definition')        return _blockDefinition(block);
+    if (type === 'callout')           return _blockCallout(block);
+    if (type === 'warning')           return _blockWarning(block);
+    if (type === 'misconception')     return _blockMisconception(block);
+    if (type === 'real_life_example') return _blockRealLife(block);
+    if (type === 'table')             return _blockTable(block);
+    if (type === 'truth_table')       return _blockTruthTable(block);
+    if (type === 'formula')           return _blockFormula(block);
+    if (type === 'mermaid')           return _blockMermaid(block);
+    if (type === 'svg_idea')          return _blockSvgIdea(block);
+    if (type === 'step_list')         return _blockStepList(block);
+    if (type === 'summary_box')       return _blockSummaryBox(block);
+    var d = document.createElement('div');
+    d.className = 'v2-block-generic';
+    d.innerHTML = '<strong>' + esc(block.title || type) + '</strong>';
+    return d;
+  }
+
+  /* Definition block */
+  function _blockDefinition(b) {
+    var div = document.createElement('div');
+    div.className = 'v2-definition';
+    var latexHtml = b.latex ? '<div class="v2-def-latex">\\[' + b.latex + '\\]</div>' : '';
+    div.innerHTML =
+      '<div class="v2-def-label">📘 Definition</div>' +
+      '<div class="v2-def-title">' + esc(b.title || '') + '</div>' +
+      '<div class="v2-def-body">' + _md(b.content || '') + '</div>' +
+      latexHtml;
+    return div;
+  }
+
+  /* Callout block */
+  function _blockCallout(b) {
+    var div = document.createElement('div');
+    div.className = 'v2-callout';
+    var items = (b.items || []).map(function (item) {
+      return '<li>' + _md(item) + '</li>';
+    }).join('');
+    div.innerHTML =
+      '<div class="v2-callout-header">💬 ' + esc(b.title || '') + '</div>' +
+      '<ul>' + items + '</ul>';
+    return div;
+  }
+
+  /* Warning block */
+  function _blockWarning(b) {
+    var div = document.createElement('div');
+    div.className = 'v2-warning';
+    div.innerHTML =
+      '<div class="v2-warning-header">⚠️ ' + esc(b.title || '') + '</div>' +
+      _md(b.content || '');
+    return div;
+  }
+
+  /* Misconception block (inside rich_content_blocks) */
+  function _blockMisconception(b) {
+    var div = document.createElement('div');
+    div.className = 'v2-warning v2-misconception';
+    var items = (b.items || []).map(function (item) {
+      return '<li>' + _md(item) + '</li>';
+    }).join('');
+    div.innerHTML =
+      '<div class="v2-warning-header">❌ ' + esc(b.title || '') + '</div>' +
+      '<ul>' + items + '</ul>';
+    return div;
+  }
+
+  /* Real-life example block */
+  function _blockRealLife(b) {
+    var div = document.createElement('div');
+    div.className = 'v2-reallife';
+    var items = (b.items || []).map(function (item) {
+      return '<li>' + _md(item) + '</li>';
+    }).join('');
+    div.innerHTML =
+      '<div class="v2-rl-header">🌍 ' + esc(b.title || '') + '</div>' +
+      '<ul class="v2-rl-list">' + items + '</ul>';
+    return div;
+  }
+
+  /* Generic table block */
+  function _blockTable(b) {
+    var div = document.createElement('div');
+    div.className = 'v2-table-wrap';
+    var t = b.table || {};
+    var headers = t.headers || [];
+    var rows = t.rows || [];
+    var thead = '<thead><tr>' +
+      headers.map(function (h) { return '<th>' + esc(h) + '</th>'; }).join('') +
+      '</tr></thead>';
+    var tbody = '<tbody>' +
+      rows.map(function (row) {
+        return '<tr>' +
+          row.map(function (cell) { return '<td>' + esc(cell) + '</td>'; }).join('') +
+          '</tr>';
+      }).join('') +
+    '</tbody>';
+    div.innerHTML =
+      (b.title ? '<div class="v2-table-title">📋 ' + esc(b.title) + '</div>' : '') +
+      '<div class="v2-table-scroll"><table class="v2-table">' + thead + tbody + '</table></div>';
+    return div;
+  }
+
+  /* Truth table block (colored T/F + result column) */
+  function _blockTruthTable(b) {
+    var div = document.createElement('div');
+    div.className = 'v2-table-wrap';
+    var t = b.table || {};
+    var headers = t.headers || [];
+    var rows = t.rows || [];
+    var lastCol = headers.length - 1;
+    var thead = '<thead><tr>' +
+      headers.map(function (h, i) {
+        var cls = (i === lastCol) ? ' class="v2-th-result"' : '';
+        return '<th' + cls + '>' + esc(h) + '</th>';
+      }).join('') +
+      '</tr></thead>';
+    var tbody = '<tbody>' +
+      rows.map(function (row) {
+        return '<tr>' +
+          row.map(function (cell, ci) {
+            var classes = [];
+            if (cell === 'T') classes.push('v2-cell-T');
+            else if (cell === 'F') classes.push('v2-cell-F');
+            if (ci === lastCol) classes.push('v2-cell-result');
+            var ca = classes.length ? ' class="' + classes.join(' ') + '"' : '';
+            return '<td' + ca + '>' + esc(cell) + '</td>';
+          }).join('') +
+        '</tr>';
+      }).join('') +
+    '</tbody>';
+    div.innerHTML =
+      (b.title ? '<div class="v2-table-title">🔢 ' + esc(b.title) + '</div>' : '') +
+      '<div class="v2-table-scroll"><table class="v2-table v2-truth-table">' + thead + tbody + '</table></div>';
+    return div;
+  }
+
+  /* Formula block */
+  function _blockFormula(b) {
+    var div = document.createElement('div');
+    div.className = 'v2-formula';
+    div.innerHTML =
+      (b.title   ? '<div class="v2-form-header">📐 ' + esc(b.title) + '</div>' : '') +
+      (b.latex   ? '<div class="v2-def-latex">\\[' + b.latex + '\\]</div>' : '') +
+      (b.content ? '<p class="v2-form-note">' + _md(b.content) + '</p>' : '');
+    return div;
+  }
+
+  /* Mermaid diagram block */
+  function _blockMermaid(b) {
+    var div = document.createElement('div');
+    div.className = 'v2-mermaid';
+    div.innerHTML =
+      (b.title ? '<div class="v2-mermaid-title">📊 ' + esc(b.title) + '</div>' : '') +
+      '<div class="v2-mermaid-wrap"><div class="mermaid">' + esc(b.mermaid || '') + '</div></div>';
+    return div;
+  }
+
+  /* SVG idea block — description-only, no SVG rendered */
+  function _blockSvgIdea(b) {
+    var div = document.createElement('div');
+    div.className = 'v2-svg-idea';
+    div.innerHTML =
+      '<div class="v2-svg-header">🖼️ ' + esc(b.title || 'Visual') + '</div>' +
+      '<div class="v2-svg-placeholder">' +
+        '<div class="v2-svg-icon">📐</div>' +
+        '<div class="v2-svg-desc">' + _md(b.content || b.description || '') + '</div>' +
+      '</div>';
+    return div;
+  }
+
+  /* Step list block */
+  function _blockStepList(b) {
+    var div = document.createElement('div');
+    div.className = 'v2-step-list';
+    var items = (b.items || []).map(function (item, i) {
+      return '<div class="v2-step-item">' +
+        '<div class="v2-step-dot">' + (i + 1) + '</div>' +
+        '<div class="v2-step-text">' + _md(item) + '</div>' +
+      '</div>';
+    }).join('');
+    div.innerHTML =
+      (b.title ? '<div class="v2-step-header">' + esc(b.title) + '</div>' : '') +
+      '<div class="v2-steps">' + items + '</div>';
+    return div;
+  }
+
+  /* Summary box block */
+  function _blockSummaryBox(b) {
+    var div = document.createElement('div');
+    div.className = 'v2-summary-box';
+    var bodyHtml = '';
+    if (b.content) {
+      bodyHtml = '<div class="v2-sumbox-body">' + _md(b.content) + '</div>';
+    } else if (b.items) {
+      bodyHtml = '<ul class="v2-sumbox-list">' +
+        b.items.map(function (item) { return '<li>' + _md(item) + '</li>'; }).join('') +
+      '</ul>';
+    }
+    div.innerHTML =
+      (b.title ? '<div class="v2-sumbox-header">⭐ ' + esc(b.title) + '</div>' : '') +
+      bodyHtml;
+    return div;
+  }
+
+  /* Misconceptions section card (top-level array of markdown strings) */
+  function _v2MisconceptionsCard(items) {
+    var div = document.createElement('div');
+    div.className = 'v2-misconceptions-block reveal';
+    var listHtml = items.map(function (item) {
+      return '<li>' + _md(item) + '</li>';
+    }).join('');
+    div.innerHTML =
+      '<div class="v2-warn-hdr">❌ Common Misconceptions</div>' +
+      '<ul class="v2-misconceptions-list">' + listHtml + '</ul>';
+    return div;
+  }
+
+  /* Memory hooks card */
+  function _v2MemoryHooksCard(items) {
+    var div = document.createElement('div');
+    div.className = 'v2-memory-block reveal';
+    var listHtml = items.map(function (item) {
+      return '<li>' + _md(item) + '</li>';
+    }).join('');
+    div.innerHTML =
+      '<div class="v2-mem-hdr">🧠 Memory Hooks</div>' +
+      '<ul class="v2-memory-list">' + listHtml + '</ul>';
+    return div;
+  }
+
+  /* Lesson summary card — wraps a summary_box block */
+  function _v2LessonSummaryCard(summ) {
+    var div = document.createElement('div');
+    div.className = 'v2-lesson-summary reveal';
+    div.appendChild(_blockSummaryBox(summ));
+    return div;
+  }
+
+  /* Initialize mermaid via lazy CDN injection */
+  function _initMermaid(container) {
+    var nodes = container.querySelectorAll('.mermaid');
+    if (!nodes.length) return;
+    function runMermaid() {
+      if (global.mermaid) {
+        try {
+          if (mermaid.run) {
+            mermaid.run({ nodes: Array.prototype.slice.call(nodes) });
+          } else {
+            mermaid.init(undefined, nodes);
+          }
+        } catch (e) {
+          nodes.forEach(function (n) { _mermaidFallback(n); });
+        }
+      } else {
+        nodes.forEach(function (n) { _mermaidFallback(n); });
+      }
+    }
+    if (global.mermaid) { runMermaid(); return; }
+    if (!document.getElementById('mermaid-cdn')) {
+      var s = document.createElement('script');
+      s.id  = 'mermaid-cdn';
+      s.src = 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js';
+      s.onload = function () {
+        try { mermaid.initialize({ startOnLoad: false, theme: 'neutral' }); runMermaid(); }
+        catch (e) { nodes.forEach(function (n) { _mermaidFallback(n); }); }
+      };
+      s.onerror = function () { nodes.forEach(function (n) { _mermaidFallback(n); }); };
+      document.head.appendChild(s);
+    }
+  }
+
+  function _mermaidFallback(el) {
+    var src = el.textContent || '';
+    el.innerHTML = '<pre class="v2-mmd-fallback">' + esc(src) + '</pre>';
   }
 
   /* ── HELPERS ────────────────────────────────────────────────── */
