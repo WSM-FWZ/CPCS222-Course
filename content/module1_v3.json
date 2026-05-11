@@ -40,11 +40,11 @@
           {
             "type": "definition",
             "title": "Proposition",
-            "content": "A **proposition** is a declarative sentence that is either **true (T)** or **false (F)**, but never both."
+            "content": "A ==proposition== is a declarative sentence that is either **true (T)** or **false (F)**, but never both."
           },
           {
             "type": "prose",
-            "content": "Two checks are needed for a sentence to be a proposition:\n\n1. It must be **declarative** (a statement, not a question or a command).\n2. It must have a **definite truth value** right now — no free variables, no missing context.\n\nBoth checks must pass. Failing either one disqualifies the sentence."
+            "content": "Two checks are needed for a sentence to be a ==proposition==:\n\n1. It must be ==declarative== (a statement, not a question or a command).\n2. It must have a ==definite truth value== right now — no free variables, no missing context.\n\nBoth checks must pass. Failing either one disqualifies the sentence."
           },
           {
             "type": "table",
@@ -176,11 +176,11 @@
           {
             "type": "memory_hook",
             "title": "Two-Question Test",
-            "content": "Declarative? Definite truth value? Both YES → proposition. Anything else: not a proposition."
+            "content": "==Declarative?== ==Definite truth value?== Both YES → **proposition**. Anything else: **not a proposition**."
           },
           {
             "type": "simulator_proposition_classifier",
-            "title": "Try It — Proposition Classifier"
+            "title": "Try It — Proposition or Not? Gallery"
           }
         ],
         "sections": [
@@ -286,7 +286,7 @@
           {
             "type": "definition",
             "title": "Negation (¬)",
-            "content": "**¬p** (read 'not p') flips p's truth value. If p is T, ¬p is F. If p is F, ¬p is T.",
+            "content": "**¬p** (read 'not p') ==flips== p's truth value. If p is T, ¬p is F. If p is F, ¬p is T.",
             "latex": "\\neg p"
           },
           {
@@ -314,7 +314,7 @@
           {
             "type": "definition",
             "title": "Conjunction (∧)",
-            "content": "**p ∧ q** ('p AND q') is true exactly when **both** p and q are true. English 'but' is logically the same as 'and' — only the tone differs.",
+            "content": "**p ∧ q** ('p AND q') is true exactly when ==both== p and q are true. English 'but' is logically the same as 'and' — only the tone differs.",
             "latex": "p \\land q"
           },
           {
@@ -712,7 +712,7 @@
           {
             "type": "definition",
             "title": "Implication (p → q)",
-            "content": "**p → q** ('if p, then q') is **FALSE only when p is T and q is F**. In every other row it is T. Think of p → q as a promise: only a kept promise that fails counts as broken.",
+            "content": "**p → q** ('if p, then q') is ==FALSE only when p is T and q is F==. In every other row it is T. Think of p → q as a promise: only a kept promise that fails counts as broken.",
             "latex": "p \\to q"
           },
           {
@@ -815,9 +815,9 @@
             "type": "definition",
             "title": "Converse, contrapositive, inverse",
             "items": [
-              "**Converse:** q → p",
-              "**Contrapositive:** ¬q → ¬p — **logically equivalent** to p → q",
-              "**Inverse:** ¬p → ¬q — equivalent to the converse, NOT to the original"
+              "==Converse:== **q → p** (swap hypothesis and conclusion)",
+              "==Contrapositive:== **¬q → ¬p** — logically **equivalent** to p → q",
+              "==Inverse:== **¬p → ¬q** — equivalent to the converse, **NOT** to the original"
             ]
           },
           {
@@ -859,7 +859,7 @@
           {
             "type": "definition",
             "title": "Biconditional (p ↔ q)",
-            "content": "**p ↔ q** ('p if and only if q', often shortened to **iff**) is true exactly when p and q have the same truth value. Equivalently `p ↔ q ≡ (p → q) ∧ (q → p)`.",
+            "content": "**p ↔ q** ('p if and only if q', often shortened to ==iff==) is true exactly when ==p and q have the same truth value==. Equivalently `p ↔ q ≡ (p → q) ∧ (q → p)`.",
             "latex": "p \\leftrightarrow q"
           },
           {
@@ -1369,8 +1369,8 @@
             },
             {
               "question": "Are these specifications consistent? S1: 'The diagnostic message is stored OR retransmitted.' S2: 'The message is NOT stored.' S3: 'If stored, then retransmitted.'",
-              "answer": "Let p = stored, q = retransmitted. Specs: p ∨ q, ¬p, p → q. Try p = F, q = T: p ∨ q = T, ¬p = T, p → q = T (vacuously). All true → CONSISTENT.",
-              "explanation": "Find one assignment satisfying every spec.",
+              "answer": "Let: p = stored, q = retransmitted.\nSpecs: p ∨ q (S1), ¬p (S2), p → q (S3).\nTry: p = F, q = T → p ∨ q = T, ¬p = T, p → q = T (vacuously).\nConclusion: All three specs are satisfied → CONSISTENT.",
+              "explanation": "Find one truth assignment satisfying every spec. Here p = F, q = T works.",
               "source_pattern": "Inspired by Lab 02 Q9 — consistency check."
             }
           ]
@@ -1379,9 +1379,57 @@
           "type": "exam_style",
           "questions": [
             {
-              "question": "Read the passage and identify the **non-propositions**: 'Sara arrived at KAU before her CPCS 222 lecture. The library opens at 7:30 AM. Please silence your phone. 12 is divisible by 4. She wrote x + 5 = 11 in her notebook. Wow, the lecture hall is full today!'",
-              "answer": "Non-propositions: 'Please silence your phone' (command), 'x + 5 = 11' (open sentence), 'Wow, the lecture hall is full today!' (exclamation).",
-              "explanation": "Each fails one of the two property checks.",
+              "format": "passage_analysis",
+              "question": "Read the passage and classify each sentence using the two-question test.",
+              "passage": "Sara arrived at KAU before her CPCS 222 lecture. The library opens at 7:30 AM. Please silence your phone. 12 is divisible by 4. She wrote x + 5 = 11 in her notebook. Wow, the lecture hall is full today!",
+              "sentences": [
+                {
+                  "text": "Sara arrived at KAU before her CPCS 222 lecture.",
+                  "declarative": true,
+                  "truth_value": true,
+                  "result": "prop",
+                  "analysis": "Declarative statement — it either happened or it did not, giving it a definite truth value."
+                },
+                {
+                  "text": "The library opens at 7:30 AM.",
+                  "declarative": true,
+                  "truth_value": true,
+                  "result": "prop",
+                  "analysis": "A factual claim about the library schedule — verifiably true or false."
+                },
+                {
+                  "text": "Please silence your phone.",
+                  "declarative": false,
+                  "truth_value": false,
+                  "result": "not",
+                  "reason": "Command",
+                  "analysis": "Imperative sentence — it directs an action rather than asserting a fact. No truth value."
+                },
+                {
+                  "text": "12 is divisible by 4.",
+                  "declarative": true,
+                  "truth_value": true,
+                  "result": "prop",
+                  "analysis": "Mathematical claim with a definite truth value: 12 ÷ 4 = 3, so this is True."
+                },
+                {
+                  "text": "x + 5 = 11",
+                  "declarative": true,
+                  "truth_value": false,
+                  "result": "not",
+                  "reason": "Open sentence",
+                  "analysis": "Contains a free variable x — the truth value depends on x. Not a proposition until x is specified or quantified."
+                },
+                {
+                  "text": "Wow, the lecture hall is full today!",
+                  "declarative": false,
+                  "truth_value": false,
+                  "result": "not",
+                  "reason": "Exclamation",
+                  "analysis": "Exclamatory sentence expressing surprise — not a factual claim with a definite truth value."
+                }
+              ],
+              "explanation": "Apply the two-question test to each: Is it declarative? Does it have a definite truth value? Only if both are YES is it a proposition.",
               "source_pattern": "Inspired by Spring 2026 midterm Q1 — KAU/Ahmed passage."
             },
             {

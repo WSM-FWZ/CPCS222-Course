@@ -1,0 +1,1566 @@
+{
+  "course": "CPCS 222 — Discrete Mathematics",
+  "version": "v4",
+  "module": {
+    "module_id": 3,
+    "title": "Proofs",
+    "description": "The machinery of formal proof: eight standard rules of inference plus four quantifier rules, the four cornerstone proof methods (direct, contrapositive, contradiction, trivial/vacuous), biconditional proofs, and advanced strategies. v4 adds structured law_step_solution worked examples that cite every inference rule by name, multi-line answers, and exact CPCS222 rule citations.",
+    "source_files": [
+      "CPCS222_03n_LogicProofs.pdf",
+      "CPCS 222 - Lab 05 - Inference Rules.pdf",
+      "CPCS 222 - Lab 06 - Logic and Proofs.pdf",
+      "Assignment_1_Spring 2026_.pdf"
+    ],
+    "lessons": [
+      {
+        "lesson_id": "module3-lesson1",
+        "type": "tutorial",
+        "title": "Rules of Inference",
+        "slug": "rules-of-inference",
+        "welcome": "In Modules 1 and 2 you built precise statements. Now it is time to BUILD ARGUMENTS that go from given premises to a justified conclusion. The atoms of mechanical reasoning are RULES OF INFERENCE — small, named patterns that every formal proof relies on.",
+        "objectives": [
+          "Define a valid argument and explain why valid arguments correspond to tautologies.",
+          "Apply the eight standard inference rules: MP, MT, HS, DS, Addition, Simplification, Conjunction, Resolution.",
+          "Use the four quantifier rules: UI, UG, EI, EG.",
+          "Chain inference rules into multi-step formal proofs.",
+          "Recognize the two classic fallacies: affirming the consequent and denying the antecedent."
+        ],
+        "storytelling": [
+          {
+            "speaker": "Student",
+            "text": "Why can't I just check arguments with a truth table?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "You can — for tiny cases. But truth tables grow exponentially: ten variables means 1024 rows. Inference rules let you build a proof in a number of steps that scales with the argument's complexity, not with the number of variables."
+          }
+        ],
+        "flow": [
+          {
+            "type": "definition",
+            "title": "Valid argument",
+            "content": "An argument with premises p₁, …, pₙ and conclusion q is **valid** iff the implication `(p₁ ∧ p₂ ∧ … ∧ pₙ) → q` is a tautology. Equivalently: whenever every premise is true, the conclusion is true."
+          },
+          {
+            "type": "warning",
+            "title": "Validity ≠ soundness",
+            "content": "A **valid** argument has a correct shape — the conclusion follows from the premises whether or not the premises are actually true. A **sound** argument is valid AND has all true premises. Validity is about FORM."
+          },
+          {
+            "type": "table",
+            "title": "The eight standard inference rules",
+            "headers": [
+              "Rule",
+              "Premises",
+              "Conclusion",
+              "Notes"
+            ],
+            "rows": [
+              [
+                "Modus Ponens (MP)",
+                "p, p → q",
+                "q",
+                "Most-used rule"
+              ],
+              [
+                "Modus Tollens (MT)",
+                "¬q, p → q",
+                "¬p",
+                "Reject the antecedent when consequent fails"
+              ],
+              [
+                "Hypothetical Syllogism",
+                "p → q, q → r",
+                "p → r",
+                "Chain implications"
+              ],
+              [
+                "Disjunctive Syllogism",
+                "p ∨ q, ¬p",
+                "q",
+                "Eliminate one disjunct"
+              ],
+              [
+                "Addition",
+                "p",
+                "p ∨ q",
+                "Weaken to a disjunction"
+              ],
+              [
+                "Simplification",
+                "p ∧ q",
+                "p",
+                "Pick a conjunct"
+              ],
+              [
+                "Conjunction",
+                "p, q",
+                "p ∧ q",
+                "Build a conjunction"
+              ],
+              [
+                "Resolution",
+                "p ∨ q, ¬p ∨ r",
+                "q ∨ r",
+                "Engine of automated theorem provers"
+              ]
+            ],
+            "notes": "Each rule is a tiny tautology. Chain them to build any formal proof."
+          },
+          {
+            "type": "real_life_example",
+            "title": "Inference around campus",
+            "items": [
+              "**MP at KAU:** _'If you submit your CPCS 222 assignment, you receive a grade.'_ + _'You submitted it.'_ ⇒ _'You receive a grade.'_",
+              "**MT at Absher:** _'If your iqama is expired, you cannot renew your license.'_ + _'You renewed your license.'_ ⇒ _'Your iqama is not expired.'_",
+              "**HS in registration rules:** _'If GPA ≥ 2.0, you may register.'_ + _'If you may register, you receive a schedule.'_ ⇒ _'If GPA ≥ 2.0, you receive a schedule.'_",
+              "**DS in exam logistics:** _'You took the morning OR afternoon section.'_ + _'You did not take the morning section.'_ ⇒ _'You took the afternoon section.'_"
+            ]
+          },
+          {
+            "type": "definition",
+            "title": "Quantifier inference rules",
+            "items": [
+              "**Universal Instantiation (UI):** ∀x P(x) ⊢ P(c) for any specific c in the domain.",
+              "**Universal Generalization (UG):** P(c) for an ARBITRARY c ⊢ ∀x P(x).",
+              "**Existential Instantiation (EI):** ∃x P(x) ⊢ P(c) for SOME FRESH c not used elsewhere.",
+              "**Existential Generalization (EG):** P(c) ⊢ ∃x P(x)."
+            ]
+          },
+          {
+            "type": "warning",
+            "title": "Two classic fallacies — NOT inference rules",
+            "items": [
+              "**Affirming the Consequent — INVALID:** from p → q and q, conclude p. _'It rained → the road is wet. The road is wet. Therefore it rained.'_ — but a sprinkler also wets the road.",
+              "**Denying the Antecedent — INVALID:** from p → q and ¬p, conclude ¬q. _'It rained → the road is wet. It did not rain. Therefore the road is not wet.'_ — sprinkler again."
+            ]
+          },
+          {
+            "type": "inline_dialogue",
+            "trigger": "After the fallacies — the most common student confusion.",
+            "exchange": [
+              {
+                "speaker": "Student",
+                "text": "Affirming the consequent looks just like Modus Ponens. How do I tell them apart?"
+              },
+              {
+                "speaker": "Professor",
+                "text": "Direction. MP applies when you have the implication AND the antecedent (`p` is given). The fallacy applies when you have the implication AND the CONSEQUENT (`q` is given). Always ask: is the given fact the LEFT side of the arrow (p) or the RIGHT side (q)? Only the left side gives you MP."
+              }
+            ]
+          },
+          {
+            "type": "mermaid",
+            "title": "Anatomy of a formal proof",
+            "mermaid": "flowchart TD\n  P1[Premise 1] --> S1[Step]\n  P2[Premise 2] --> S1\n  S1 -->|rule + line numbers| S2[Step]\n  P3[Premise 3] --> S2\n  S2 --> S3[Step]\n  S3 --> C[Conclusion]",
+            "display": {
+              "preferred_size": "medium",
+              "max_height": 260,
+              "fit": "contain",
+              "layout": "LR"
+            }
+          },
+          {
+            "type": "step_list",
+            "title": "How to build a proof",
+            "items": [
+              "1. Number every line.",
+              "2. List the premises first (each labelled 'premise').",
+              "3. Each new line cites a RULE NAME and the LINE NUMBERS it depends on.",
+              "4. Continue until you reach the conclusion.",
+              "5. Mark the end with ∎ or QED."
+            ]
+          },
+          {
+            "type": "worked_example",
+            "format": "law_step_solution",
+            "title": "Sailing race — chain rules of inference",
+            "source_pattern": "Inspired by Lab 05 Q1 — chain inference rules.",
+            "problem": "Premises:\n(1) `(¬r ∨ ¬f) → (s ∧ d)` — if it does not rain or it is not foggy, the race is held and the demo continues.\n(2) `s → t` — if the race is held, the trophy is awarded.\n(3) `¬t` — the trophy was not awarded.\n\nProve: it rained (i.e., **r**).",
+            "approach": "Walk the inference rules: MT on (2, 3) gives ¬s, Addition + De Morgan turns it into ¬(s ∧ d), MT on (1) yields ¬(¬r ∨ ¬f), then De Morgan + Double Negation give r ∧ f, and Simplification finishes.",
+            "starting_expression": "premises 1, 2, 3",
+            "steps": [
+              {
+                "step": 1,
+                "expression": "(¬r ∨ ¬f) → (s ∧ d)",
+                "law_name": "Premise",
+                "explanation": "Given premise 1."
+              },
+              {
+                "step": 2,
+                "expression": "s → t",
+                "law_name": "Premise",
+                "explanation": "Given premise 2."
+              },
+              {
+                "step": 3,
+                "expression": "¬t",
+                "law_name": "Premise",
+                "explanation": "Given premise 3."
+              },
+              {
+                "step": 4,
+                "expression": "¬s",
+                "law_name": "Modus Tollens (2, 3)",
+                "explanation": "From s → t and ¬t conclude ¬s."
+              },
+              {
+                "step": 5,
+                "expression": "¬s ∨ ¬d",
+                "law_name": "Addition (4)",
+                "explanation": "Weaken ¬s to a disjunction with any new literal ¬d."
+              },
+              {
+                "step": 6,
+                "expression": "¬(s ∧ d)",
+                "law_name": "De Morgan's Law (5)",
+                "explanation": "¬s ∨ ¬d ≡ ¬(s ∧ d)."
+              },
+              {
+                "step": 7,
+                "expression": "¬(¬r ∨ ¬f)",
+                "law_name": "Modus Tollens (1, 6)",
+                "explanation": "From (¬r ∨ ¬f) → (s ∧ d) and ¬(s ∧ d) conclude ¬(¬r ∨ ¬f)."
+              },
+              {
+                "step": 8,
+                "expression": "¬¬r ∧ ¬¬f",
+                "law_name": "De Morgan's Law (7)",
+                "explanation": "¬(¬r ∨ ¬f) ≡ ¬¬r ∧ ¬¬f."
+              },
+              {
+                "step": 9,
+                "expression": "r ∧ f",
+                "law_name": "Double Negation Law (8)",
+                "explanation": "Cancel both double negations."
+              },
+              {
+                "step": 10,
+                "expression": "r",
+                "law_name": "Simplification (9)",
+                "explanation": "From r ∧ f conclude r."
+              }
+            ],
+            "conclusion": "It rained — **r**. ∎",
+            "thinking_process": "Reach ¬(s ∧ d) by combining MT, Addition, and De Morgan, then run MT on premise 1 to get back to r ∧ f.",
+            "step_by_step_solution": [
+              "Premise 1: (¬r ∨ ¬f) → (s ∧ d).",
+              "Premise 2: s → t.",
+              "Premise 3: ¬t.",
+              "Step 4 — Modus Tollens (2, 3): ¬s.",
+              "Step 5 — Addition (4): ¬s ∨ ¬d.",
+              "Step 6 — De Morgan's Law (5): ¬(s ∧ d).",
+              "Step 7 — Modus Tollens (1, 6): ¬(¬r ∨ ¬f).",
+              "Step 8 — De Morgan's Law (7): ¬¬r ∧ ¬¬f.",
+              "Step 9 — Double Negation Law (8): r ∧ f.",
+              "Step 10 — Simplification (9): r."
+            ],
+            "final_answer": "r — it rained. ∎",
+            "why_it_works": "Each numbered step cites the rule and the lines it depends on; chaining MT through the contrapositive form lets us back-propagate from ¬t to r.",
+            "common_mistake": "Trying to apply MT directly to premise 1 without first deriving ¬(s ∧ d) on line 6."
+          },
+          {
+            "type": "worked_example",
+            "title": "Quantifier proof — Lab 05 Q2",
+            "source_pattern": "Inspired by Lab 05 Q2 — UI/UG with propositional rules.",
+            "problem": "Show that ∀x (P(x) → (Q(x) ∧ S(x))) and ∀x (P(x) ∧ R(x)) imply ∀x (R(x) ∧ S(x)).",
+            "thinking_process": "Take an arbitrary c, instantiate both premises, combine via MP and Simplification, then UG.",
+            "step_by_step_solution": [
+              "Let c be arbitrary.",
+              "1. P(c) ∧ R(c)              UI on second premise",
+              "2. P(c)                     Simplification (1)",
+              "3. R(c)                     Simplification (1)",
+              "4. P(c) → Q(c) ∧ S(c)       UI on first premise",
+              "5. Q(c) ∧ S(c)              MP (2, 4)",
+              "6. S(c)                     Simplification (5)",
+              "7. R(c) ∧ S(c)              Conjunction (3, 6)",
+              "8. ∀x (R(x) ∧ S(x))         UG (7)"
+            ],
+            "final_answer": "∀x (R(x) ∧ S(x)). ∎",
+            "common_mistake": "Forgetting to mark c as ARBITRARY at the start — UG at line 8 would be invalid otherwise."
+          },
+          {
+            "type": "worked_example",
+            "title": "Identify the rule",
+            "source_pattern": "Inspired by Lab 04 Q12 / Lab 05 Q4 — name the rule.",
+            "problem": "Identify the rule used: 'If it snows, the school closes. The school is open. Therefore it did not snow.'",
+            "thinking_process": "Premises: p → q, ¬q. Conclusion: ¬p. Match the pattern.",
+            "step_by_step_solution": [
+              "Let p = 'it snows', q = 'the school closes'.",
+              "Premise 1: p → q. Premise 2: ¬q. Conclusion: ¬p.",
+              "Pattern: ¬q, p → q ⊢ ¬p."
+            ],
+            "final_answer": "Modus Tollens.",
+            "common_mistake": "Calling this denying the antecedent. The given fact is ¬q (consequent denied), so MT applies."
+          },
+          {
+            "type": "misconception_box",
+            "title": "Common student mistakes",
+            "items": [
+              "Affirming the consequent and denying the antecedent — they look like MP/MT but are NOT valid.",
+              "Reusing an existing name in EI. The witness must be a NEW constant.",
+              "Applying UG to a specifically-named element. UG requires ARBITRARY c.",
+              "Skipping rule citations on intermediate lines."
+            ]
+          },
+          {
+            "type": "memory_hook",
+            "title": "Six-rule shortlist",
+            "items": [
+              "**MP:** trigger fires (p is given) ⇒ obligation fires (q).",
+              "**MT:** obligation fails (¬q) ⇒ trigger never fired (¬p).",
+              "**DS:** one disjunct down ⇒ the other holds.",
+              "**HS:** chain two implications.",
+              "**Resolution:** cancel a literal across disjunctions.",
+              "**UI/EI:** instantiate. **UG/EG:** generalize."
+            ]
+          },
+          {
+            "type": "simulator_inference_checker",
+            "title": "Try It — Inference Rule Checker"
+          }
+        ],
+        "sections": [
+          {
+            "number": 1,
+            "heading": "Valid arguments",
+            "explanation": "An argument is valid iff (premises → conclusion) is a tautology."
+          },
+          {
+            "number": 2,
+            "heading": "Eight propositional rules",
+            "explanation": "MP, MT, HS, DS, Addition, Simplification, Conjunction, Resolution."
+          },
+          {
+            "number": 3,
+            "heading": "Quantifier rules",
+            "explanation": "UI/UG instantiate/generalize universals; EI/EG handle existentials with fresh witnesses."
+          }
+        ],
+        "worked_examples": [
+          {
+            "problem": "From (p → q), p infer q. Name the rule.",
+            "step_by_step_solution": [
+              "Pattern matches MP."
+            ],
+            "final_answer": "Modus Ponens.",
+            "why_it_works": "Trigger fires; obligation fires.",
+            "common_mistake": "Mixing up MP with affirming the consequent."
+          }
+        ],
+        "quick_checks": [
+          {
+            "type": "mcq",
+            "question": "From p → q and ¬q, conclude:",
+            "choices": [
+              "p",
+              "¬p",
+              "q",
+              "Cannot conclude"
+            ],
+            "answer": "¬p",
+            "explanation": "Modus Tollens."
+          },
+          {
+            "type": "mcq",
+            "question": "From p ∨ q and ¬p ∨ r, Resolution yields:",
+            "choices": [
+              "p ∨ r",
+              "q ∨ r",
+              "p ∧ r",
+              "¬p ∨ q"
+            ],
+            "answer": "q ∨ r",
+            "explanation": "Cancel p with ¬p."
+          },
+          {
+            "type": "true_false",
+            "question": "From p → q and q, you can conclude p.",
+            "choices": [
+              "True",
+              "False"
+            ],
+            "answer": "False",
+            "explanation": "Affirming the consequent — fallacy."
+          }
+        ],
+        "summary": {
+          "key_takeaways": [
+            "Validity is about argument shape; soundness adds true premises.",
+            "Eight propositional rules: MP, MT, HS, DS, Addition, Simplification, Conjunction, Resolution.",
+            "Quantifier rules: UI, UG, EI, EG. EI requires a fresh constant; UG requires arbitrary c.",
+            "Affirming the consequent and denying the antecedent are invalid — common exam traps.",
+            "A formal proof = numbered, justified sequence ending at the conclusion."
+          ],
+          "next": "Next: from individual inference steps to PROOF METHODS — direct, contrapositive, contradiction, vacuous, trivial."
+        }
+      },
+      {
+        "lesson_id": "module3-lesson2",
+        "type": "tutorial",
+        "title": "Introduction to Proofs",
+        "slug": "introduction-to-proofs",
+        "welcome": "Inference rules are the alphabet; PROOFS are the literature. A proof transforms a CONJECTURE into a THEOREM — and once proved, it stays proved forever. This lesson covers the four cornerstone proof methods: direct, contrapositive, contradiction, and the special-case trivial/vacuous proofs.",
+        "objectives": [
+          "Distinguish theorem, axiom, lemma, corollary, conjecture, and proof.",
+          "Produce a direct proof of an implication p → q.",
+          "Produce a proof by contraposition (¬q → ¬p).",
+          "Produce a proof by contradiction by assuming ¬claim.",
+          "Recognize trivial and vacuous proofs and prove biconditional statements."
+        ],
+        "storytelling": [
+          {
+            "speaker": "Student",
+            "text": "When is contraposition better than direct proof?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "When the hypothesis is hard to manipulate but its negation is easy. Try proving 'if n² is odd, then n is odd' directly — you'd have to factor an odd square. Contraposition flips it: 'assume n is even, show n² is even', which is one line of algebra."
+          }
+        ],
+        "flow": [
+          {
+            "type": "table",
+            "title": "Vocabulary of mathematical writing",
+            "headers": [
+              "Term",
+              "Meaning"
+            ],
+            "rows": [
+              [
+                "Theorem",
+                "A claim that has been proven true"
+              ],
+              [
+                "Axiom (postulate)",
+                "A foundational truth taken without proof"
+              ],
+              [
+                "Lemma",
+                "A 'helper' theorem used inside a larger proof"
+              ],
+              [
+                "Corollary",
+                "An immediate consequence of a theorem"
+              ],
+              [
+                "Conjecture",
+                "A statement believed true but unproven"
+              ],
+              [
+                "Proof",
+                "A finite, justified sequence of statements ending at the claim"
+              ]
+            ]
+          },
+          {
+            "type": "callout",
+            "title": "Definitions you'll use throughout Module 3",
+            "items": [
+              "**n is even** iff there exists an integer k with `n = 2k`.",
+              "**n is odd** iff there exists an integer k with `n = 2k + 1`.",
+              "**r is rational** iff there exist integers p, q (q ≠ 0) with `r = p/q`. Otherwise r is **irrational**."
+            ]
+          },
+          {
+            "type": "definition",
+            "title": "Direct proof",
+            "content": "To prove `p → q` directly, **assume p**, then use definitions, axioms, and previously proven theorems to **derive q**. Skeleton: `Assume p. … Therefore q. ∎`."
+          },
+          {
+            "type": "worked_example",
+            "title": "Direct proof — sum of two evens is even",
+            "source_pattern": "Inspired by Lab 05 Q7 / Assignment 1 Q6 — direct proof template.",
+            "problem": "Show that the sum of two even integers is even.",
+            "thinking_process": "Assume both even, write each as 2k, factor out the 2.",
+            "step_by_step_solution": [
+              "Let m and n be even. By definition, m = 2a and n = 2b for some integers a, b.",
+              "m + n = 2a + 2b = 2(a + b).",
+              "Since a + b is an integer, m + n has the form 2k, so m + n is even."
+            ],
+            "final_answer": "m + n is even. ∎",
+            "common_mistake": "Writing m = 2a and n = 2a (same letter) — the two integers may differ; use different multipliers."
+          },
+          {
+            "type": "definition",
+            "title": "Proof by contraposition",
+            "content": "To prove `p → q`, prove the **logically equivalent** `¬q → ¬p`. Skeleton: `Assume ¬q. … Therefore ¬p. By contraposition, p → q. ∎`."
+          },
+          {
+            "type": "worked_example",
+            "format": "law_step_solution",
+            "title": "Contrapositive proof — if n² is odd, then n is odd",
+            "source_pattern": "Inspired by Lab 06 — contrapositive proof.",
+            "problem": "For any integer n, prove that **if n² is odd, then n is odd**.",
+            "approach": "Use Proof by Contraposition: prove ¬q → ¬p, i.e., 'if n is even, then n² is even'. The contrapositive is logically equivalent to the original by the Contrapositive Law.",
+            "starting_expression": "Goal: n² is odd → n is odd",
+            "steps": [
+              {
+                "step": 1,
+                "expression": "Prove instead: n is even → n² is even",
+                "law_name": "Contrapositive Law",
+                "explanation": "p → q ≡ ¬q → ¬p. The contrapositive of the original."
+              },
+              {
+                "step": 2,
+                "expression": "Assume n is even",
+                "law_name": "Definition of Even",
+                "explanation": "n = 2k for some integer k."
+              },
+              {
+                "step": 3,
+                "expression": "n² = (2k)² = 4k² = 2(2k²)",
+                "law_name": "Algebra",
+                "explanation": "Square both sides; factor out 2."
+              },
+              {
+                "step": 4,
+                "expression": "n² has the form 2m where m = 2k² ∈ ℤ",
+                "law_name": "Definition of Even",
+                "explanation": "Match the definition: divisible by 2 with integer quotient."
+              },
+              {
+                "step": 5,
+                "expression": "Therefore n² is even",
+                "law_name": "Definition of Even",
+                "explanation": "Conclusion of the contrapositive direction."
+              },
+              {
+                "step": 6,
+                "expression": "By Contrapositive Law, n² odd → n odd",
+                "law_name": "Contrapositive Law",
+                "explanation": "Equivalence between p → q and ¬q → ¬p."
+              }
+            ],
+            "conclusion": "Therefore, for any integer n, if n² is odd, then n is odd. ∎",
+            "thinking_process": "Direct proof would require factoring an odd square. The contrapositive is cleaner because 'n is even' has a tidy algebraic form.",
+            "step_by_step_solution": [
+              "**Step 1** — Contrapositive Law: prove 'n even → n² even' instead.",
+              "**Step 2** — Definition of Even: n = 2k for some integer k.",
+              "**Step 3** — Algebra: n² = 4k² = 2(2k²).",
+              "**Step 4** — Definition of Even: n² has the form 2m with m = 2k² an integer.",
+              "**Step 5** — Conclude: n² is even.",
+              "**Step 6** — Contrapositive Law gives back the original implication."
+            ],
+            "final_answer": "n² odd ⇒ n odd. ∎",
+            "why_it_works": "Each step cites a specific definition or law (Contrapositive Law, Definition of Even). The contrapositive turns 'n is odd' (a non-divisibility claim) into 'n is even' (a divisibility claim), which is easier to manipulate algebraically.",
+            "common_mistake": "Forgetting the closing 'by Contrapositive Law' — without it, the reader sees only the contrapositive proved, not the original claim."
+          },
+          {
+            "type": "definition",
+            "title": "Proof by contradiction (reductio ad absurdum)",
+            "content": "To prove a claim `p`, assume `¬p` and derive a CONTRADICTION (something of the form `r ∧ ¬r`). Since ¬p leads to absurdity, ¬p must be false, so p is true. For an implication `p → q`, assume `p ∧ ¬q` and derive any contradiction."
+          },
+          {
+            "type": "inline_dialogue",
+            "trigger": "After contradiction is introduced — the canonical √2 question.",
+            "exchange": [
+              {
+                "speaker": "Student",
+                "text": "Why does the √2 proof always start with 'in lowest terms'?"
+              },
+              {
+                "speaker": "Professor",
+                "text": "Because the contradiction lives there. We derive that both `a` and `b` are even, which means the fraction `a/b` was NOT in lowest terms after all. Without the 'lowest terms' assumption, the both-even conclusion is harmless. The contradiction is between 'lowest terms' and 'both even'."
+              }
+            ]
+          },
+          {
+            "type": "worked_example",
+            "title": "Contradiction — √2 is irrational",
+            "source_pattern": "Classical proof, used in Module 3 lecture (Sec 1.7).",
+            "problem": "Show that √2 is irrational.",
+            "thinking_process": "Suppose √2 = a/b in lowest terms. Show a and b are both even — contradicting lowest terms.",
+            "step_by_step_solution": [
+              "Suppose for contradiction that √2 is rational, so √2 = a/b in lowest terms (gcd(a, b) = 1).",
+              "Square: 2 = a²/b², so a² = 2b². Hence a² is even, which (by the previous theorem) implies a is even. Write a = 2c.",
+              "Substitute: (2c)² = 2b², so 4c² = 2b², so b² = 2c². Hence b² is even, so b is even.",
+              "Now both a and b are even, sharing the factor 2 — contradicting gcd(a, b) = 1.",
+              "The assumption is impossible, so √2 is irrational. ∎"
+            ],
+            "final_answer": "√2 is irrational. ∎",
+            "common_mistake": "Forgetting 'in lowest terms' — without it the both-even conclusion is not a contradiction."
+          },
+          {
+            "type": "table",
+            "title": "Trivial vs vacuous proofs",
+            "headers": [
+              "Method",
+              "When",
+              "Example"
+            ],
+            "rows": [
+              [
+                "Trivial",
+                "q is always true",
+                "'If it rains, the empty set is a subset of every set.' (Conclusion is always T.)"
+              ],
+              [
+                "Vacuous",
+                "p is always false",
+                "'If 1 + 1 = 3, then your grandma wears combat boots.' (Hypothesis is always F.)"
+              ]
+            ],
+            "notes": "Both are valid implications even though they sound silly. Trivial and vacuous proofs are common BASE CASES inside induction (Module 10)."
+          },
+          {
+            "type": "definition",
+            "title": "Biconditional proofs",
+            "content": "To prove `p ↔ q`, prove BOTH directions: (⇒) `p → q` and (⇐) `q → p`. Each direction may use a different method (direct, contrapositive, contradiction)."
+          },
+          {
+            "type": "worked_example",
+            "title": "Biconditional — n is odd iff n² is odd",
+            "source_pattern": "Classical biconditional from Sec 1.7.",
+            "problem": "Prove: for integer n, n is odd ⇔ n² is odd.",
+            "thinking_process": "(⇒) direct from 'n odd ⇒ n² odd'. (⇐) reuse the contrapositive proof above.",
+            "step_by_step_solution": [
+              "(⇒) Assume n is odd: n = 2k + 1. Then n² = (2k + 1)² = 4k² + 4k + 1 = 2(2k² + 2k) + 1, which is odd.",
+              "(⇐) From the previous worked example: n² odd ⇒ n odd by contraposition.",
+              "Both directions hold."
+            ],
+            "final_answer": "n odd ⇔ n² odd. ∎",
+            "common_mistake": "Proving only one direction. Both are needed."
+          },
+          {
+            "type": "misconception_box",
+            "title": "Common student mistakes",
+            "items": [
+              "Assuming the conclusion in a direct proof — q is what you must DERIVE, not start with.",
+              "Confusing contrapositive with converse. Only the contrapositive is logically equivalent.",
+              "Missing the contradiction in a 'proof by contradiction'. The contradiction must be of form `r ∧ ¬r`.",
+              "Proving only one direction of a biconditional."
+            ]
+          },
+          {
+            "type": "memory_hook",
+            "title": "Method shortlist",
+            "items": [
+              "**Direct:** assume p, derive q.",
+              "**Contrapositive:** assume ¬q, derive ¬p.",
+              "**Contradiction:** assume ¬claim, derive r ∧ ¬r.",
+              "**Trivial:** q is always T. **Vacuous:** p is always F.",
+              "**Biconditional:** prove both directions."
+            ]
+          }
+        ],
+        "sections": [
+          {
+            "number": 1,
+            "heading": "Vocabulary",
+            "explanation": "Theorem, axiom, lemma, corollary, conjecture, proof."
+          },
+          {
+            "number": 2,
+            "heading": "Direct and contrapositive",
+            "explanation": "Direct: assume p, derive q. Contrapositive: assume ¬q, derive ¬p — equivalent."
+          },
+          {
+            "number": 3,
+            "heading": "Contradiction, trivial, vacuous, biconditional",
+            "explanation": "Each method targets a different proof shape."
+          }
+        ],
+        "worked_examples": [
+          {
+            "problem": "Show: sum of two odd integers is even.",
+            "step_by_step_solution": [
+              "Let m = 2a + 1, n = 2b + 1.",
+              "m + n = 2a + 1 + 2b + 1 = 2(a + b + 1).",
+              "Since a + b + 1 is an integer, the sum is even."
+            ],
+            "final_answer": "Sum of two odd integers is even. ∎",
+            "why_it_works": "Pair the +1 terms; the result is divisible by 2.",
+            "common_mistake": "Using same letter for both: m = 2a + 1, n = 2a + 1 (forces them to be equal)."
+          }
+        ],
+        "quick_checks": [
+          {
+            "type": "mcq",
+            "question": "Best method for 'if n² is odd then n is odd':",
+            "choices": [
+              "Direct",
+              "Contrapositive",
+              "Contradiction",
+              "Trivial"
+            ],
+            "answer": "Contrapositive",
+            "explanation": "Direct would require factoring an odd square."
+          },
+          {
+            "type": "mcq",
+            "question": "A proof of p ↔ q requires:",
+            "choices": [
+              "One direction",
+              "Two directions",
+              "A truth table",
+              "A counterexample"
+            ],
+            "answer": "Two directions",
+            "explanation": "p ↔ q ≡ (p → q) ∧ (q → p)."
+          },
+          {
+            "type": "true_false",
+            "question": "Vacuous proof shows q is always true.",
+            "choices": [
+              "True",
+              "False"
+            ],
+            "answer": "False",
+            "explanation": "Vacuous shows p is always FALSE; trivial shows q is always TRUE."
+          }
+        ],
+        "summary": {
+          "key_takeaways": [
+            "Theorem (proven), axiom (accepted), lemma (helper), corollary (immediate consequence), conjecture (unproven), proof (justified chain).",
+            "Direct: assume p, derive q.",
+            "Contrapositive: prove ¬q → ¬p (logically equivalent to p → q).",
+            "Contradiction: assume ¬claim, derive r ∧ ¬r.",
+            "Trivial: q always T. Vacuous: p always F.",
+            "Biconditional: prove both directions."
+          ],
+          "next": "Next: ADVANCED proof strategies — cases, WLOG, existence and uniqueness, counterexamples, forward vs backward reasoning."
+        }
+      },
+      {
+        "lesson_id": "module3-lesson3",
+        "type": "tutorial",
+        "title": "Proof Methods and Strategy",
+        "slug": "proof-methods-and-strategy",
+        "welcome": "By now you have direct, contrapositive, and contradiction proofs. Real theorems often require more: splitting an argument into CASES, exploiting symmetry with WLOG, demonstrating WITNESSES for existence claims, proving UNIQUENESS, and choosing forward or backward reasoning.",
+        "objectives": [
+          "Construct proofs by cases and verify exhaustiveness.",
+          "Use 'without loss of generality' (WLOG) correctly when cases are symmetric.",
+          "Distinguish constructive from nonconstructive existence proofs.",
+          "Disprove a universal claim with a single counterexample.",
+          "Prove uniqueness (∃!x) by combining existence with 'any two are equal'.",
+          "Choose between forward and backward reasoning for a given goal."
+        ],
+        "storytelling": [
+          {
+            "speaker": "Student",
+            "text": "What's the difference between constructive and nonconstructive existence proofs?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "Constructive gives you the witness explicitly. 'There exists a sum of two cubes equal to a number in two different ways' — yes, 1729 = 1³ + 12³ = 9³ + 10³. Nonconstructive proves a witness MUST exist without telling you which. They are equally rigorous; constructive is more informative when available."
+          }
+        ],
+        "flow": [
+          {
+            "type": "definition",
+            "title": "Proof by cases",
+            "content": "When the hypothesis splits into a finite, EXHAUSTIVE set of subcases p₁ ∨ p₂ ∨ … ∨ pₙ, prove the conclusion in each case separately. Cases must cover every possibility — missing one invalidates the proof."
+          },
+          {
+            "type": "worked_example",
+            "title": "Cases — n² ≥ n for every integer",
+            "source_pattern": "Classical case-split.",
+            "problem": "Prove: for every integer n, n² ≥ n.",
+            "thinking_process": "Split by sign: n ≥ 1, n = 0, n ≤ -1.",
+            "step_by_step_solution": [
+              "Case 1: n ≥ 1. Then n² = n · n ≥ n · 1 = n.",
+              "Case 2: n = 0. Then n² = 0 = n.",
+              "Case 3: n ≤ -1. Then n² ≥ 1 > 0 > n.",
+              "Cases exhaust ℤ."
+            ],
+            "final_answer": "n² ≥ n for every integer. ∎",
+            "common_mistake": "Skipping n = 0. Boundary cases are easy to miss."
+          },
+          {
+            "type": "definition",
+            "title": "Without loss of generality (WLOG)",
+            "content": "When two or more cases are STRUCTURALLY IDENTICAL except for relabeling, prove one and assert the other 'without loss of generality'. The phrase signals: 'this argument works for the symmetric case verbatim'. Use only when cases are TRULY symmetric."
+          },
+          {
+            "type": "worked_example",
+            "title": "WLOG — even product/sum",
+            "source_pattern": "Sec 1.8 worked example.",
+            "problem": "If both x · y and x + y are even, then both x and y are even.",
+            "thinking_process": "Contrapositive: assume not both even. WLOG x is odd. Then split on y's parity.",
+            "step_by_step_solution": [
+              "Contrapositive: assume not both even.",
+              "WLOG x is odd. Write x = 2m + 1.",
+              "Case A: y even, y = 2n. x + y = 2(m + n) + 1 is odd.",
+              "Case B: y odd, y = 2n + 1. x · y = (2m + 1)(2n + 1) = 2(2mn + m + n) + 1 is odd.",
+              "In either case, one of x · y, x + y is odd."
+            ],
+            "final_answer": "Both x and y must be even. ∎",
+            "common_mistake": "Using WLOG when cases are not actually symmetric."
+          },
+          {
+            "type": "definition",
+            "title": "Existence proofs — constructive vs nonconstructive",
+            "items": [
+              "**Constructive:** explicitly produce a witness c with P(c).",
+              "**Nonconstructive:** prove a witness must exist without producing it (often via case analysis or contradiction)."
+            ]
+          },
+          {
+            "type": "worked_example",
+            "title": "Constructive existence — Hardy-Ramanujan",
+            "source_pattern": "Sec 1.8.",
+            "problem": "Show there is a positive integer expressible as a sum of two cubes in two different ways.",
+            "thinking_process": "Try the famous 1729.",
+            "step_by_step_solution": [
+              "1³ + 12³ = 1 + 1728 = 1729.",
+              "9³ + 10³ = 729 + 1000 = 1729.",
+              "Two distinct representations."
+            ],
+            "final_answer": "1729 — the Hardy-Ramanujan number. ∎",
+            "common_mistake": "Listing the witness without verifying both representations equal."
+          },
+          {
+            "type": "worked_example",
+            "title": "Counterexample — every prime is odd",
+            "source_pattern": "Sec 1.8.",
+            "problem": "Disprove: 'every prime is odd'.",
+            "thinking_process": "Find one prime that is even.",
+            "step_by_step_solution": [
+              "2 is prime (its only positive divisors are 1 and 2).",
+              "2 is even.",
+              "So 2 is a counterexample."
+            ],
+            "final_answer": "2 is a counterexample. The claim is false. ∎",
+            "common_mistake": "Pretending more cases are needed. ONE counterexample is enough."
+          },
+          {
+            "type": "definition",
+            "title": "Uniqueness proofs",
+            "content": "To prove `∃!x P(x)` (there is a unique x with P(x)), do TWO things:\n- **Existence:** produce some x with P(x).\n- **Uniqueness:** assume P(x) and P(y), then derive x = y."
+          },
+          {
+            "type": "worked_example",
+            "title": "Uniqueness — linear equation",
+            "source_pattern": "Sec 1.8.",
+            "problem": "For real a ≠ 0, b, show ax + b = 0 has a unique real solution.",
+            "thinking_process": "Existence: x = -b/a. Uniqueness: any two solutions are equal.",
+            "step_by_step_solution": [
+              "Existence: x = -b/a satisfies a(-b/a) + b = -b + b = 0.",
+              "Uniqueness: suppose s also satisfies as + b = 0. Then a(-b/a) = as. Divide by a ≠ 0: s = -b/a.",
+              "So any solution equals -b/a."
+            ],
+            "final_answer": "x = -b/a is the unique solution. ∎",
+            "common_mistake": "Forgetting the uniqueness step."
+          },
+          {
+            "type": "table",
+            "title": "Strategy ladder — pick a method",
+            "headers": [
+              "Goal shape",
+              "First try",
+              "If that fails"
+            ],
+            "rows": [
+              [
+                "p → q",
+                "Direct",
+                "Contrapositive, then contradiction"
+              ],
+              [
+                "¬p",
+                "Contradiction",
+                "Direct via cases"
+              ],
+              [
+                "∀x P(x)",
+                "Pick arbitrary c, prove P(c), apply UG",
+                "Cases on x's structure"
+              ],
+              [
+                "¬∀x P(x)",
+                "Find one counterexample",
+                "—"
+              ],
+              [
+                "∃x P(x)",
+                "Constructive (give a witness)",
+                "Nonconstructive via contradiction"
+              ],
+              [
+                "∃!x P(x)",
+                "Existence + uniqueness halves",
+                "—"
+              ],
+              [
+                "p ↔ q",
+                "Both directions; possibly different methods",
+                "—"
+              ]
+            ]
+          },
+          {
+            "type": "inline_dialogue",
+            "trigger": "After the strategy ladder — the practical question that always comes up.",
+            "exchange": [
+              {
+                "speaker": "Student",
+                "text": "When should I use forward vs backward reasoning?"
+              },
+              {
+                "speaker": "Professor",
+                "text": "Forward when the hypothesis is rich and the path forward is clear: chain consequences. Backward when the conclusion suggests sufficient conditions you know how to prove: keep asking 'what would suffice?' until you reach something you already have. Most real proofs combine both, meeting in the middle."
+              }
+            ]
+          },
+          {
+            "type": "table",
+            "title": "Quick decision — which proof method?",
+            "headers": [
+              "Goal",
+              "First method to try",
+              "If hypothesis side is messy",
+              "If goal is non-existence / universal denial"
+            ],
+            "rows": [
+              [
+                "p → q",
+                "Direct",
+                "Contraposition",
+                "Contradiction"
+              ],
+              [
+                "∀x P(x)",
+                "Pick arbitrary c, prove P(c), then UG",
+                "Cases on structure of x",
+                "Contradiction"
+              ],
+              [
+                "¬∀x P(x)",
+                "Counterexample",
+                "—",
+                "—"
+              ],
+              [
+                "∃x P(x)",
+                "Constructive witness",
+                "Nonconstructive (case split or contradiction)",
+                "—"
+              ],
+              [
+                "∃!x P(x)",
+                "Existence + uniqueness halves",
+                "—",
+                "—"
+              ],
+              [
+                "p ↔ q",
+                "Two directions, possibly different methods",
+                "—",
+                "—"
+              ]
+            ],
+            "notes": "Different goals call for different methods. When stuck on one, try the next column."
+          },
+          {
+            "type": "misconception_box",
+            "title": "Common student mistakes",
+            "items": [
+              "Cases that are not exhaustive (missing zero or boundary).",
+              "Using WLOG when cases are merely similar, not truly symmetric.",
+              "Skipping the uniqueness step.",
+              "Trying to disprove ∀ by 'mostly fails'. ONE counterexample is required.",
+              "Building proofs only forward when backward reasoning would shortcut."
+            ]
+          },
+          {
+            "type": "memory_hook",
+            "title": "Method picker (5 seconds)",
+            "items": [
+              "**∀ goal:** pick arbitrary c, prove P(c), UG.",
+              "**¬∀ goal:** hunt for one counterexample.",
+              "**∃ goal:** produce a witness (or nonconstructive case-split).",
+              "**∃! goal:** existence + uniqueness.",
+              "**p ↔ q goal:** both directions."
+            ]
+          }
+        ],
+        "sections": [
+          {
+            "number": 1,
+            "heading": "Cases and WLOG",
+            "explanation": "Split into exhaustive cases; WLOG only when cases are symmetric."
+          },
+          {
+            "number": 2,
+            "heading": "Existence and uniqueness",
+            "explanation": "Constructive vs nonconstructive existence; uniqueness needs two halves."
+          },
+          {
+            "number": 3,
+            "heading": "Counterexamples and strategy",
+            "explanation": "ONE counterexample disproves ∀. Strategy ladder + forward/backward reasoning."
+          }
+        ],
+        "worked_examples": [
+          {
+            "problem": "Disprove: every positive integer is the sum of three squares.",
+            "step_by_step_solution": [
+              "7 cannot be written as a² + b² + c² for non-negative integers a, b, c (max with a, b, c ≤ 2 is 4 + 4 + 4 = 12; check all combinations sum to 0..12 but not 7)."
+            ],
+            "final_answer": "7 is a counterexample. ∎",
+            "why_it_works": "Single counterexample suffices.",
+            "common_mistake": "Trying to enumerate all combinations exhaustively in writing — one is enough."
+          }
+        ],
+        "quick_checks": [
+          {
+            "type": "mcq",
+            "question": "Cleanest way to disprove 'every prime is odd':",
+            "choices": [
+              "Direct proof of negation",
+              "Counterexample (2)",
+              "Contradiction",
+              "Cases"
+            ],
+            "answer": "Counterexample (2)",
+            "explanation": "ONE counterexample disproves ∀."
+          },
+          {
+            "type": "mcq",
+            "question": "Nonconstructive existence:",
+            "choices": [
+              "Produces explicit witness",
+              "Proves existence without naming witness",
+              "Uses induction",
+              "Always uses contradiction"
+            ],
+            "answer": "Proves existence without naming witness",
+            "explanation": "Distinguishing feature."
+          },
+          {
+            "type": "true_false",
+            "question": "WLOG can be used whenever two cases look similar.",
+            "choices": [
+              "True",
+              "False"
+            ],
+            "answer": "False",
+            "explanation": "Requires true structural symmetry."
+          }
+        ],
+        "summary": {
+          "key_takeaways": [
+            "Cases must be exhaustive.",
+            "WLOG only when cases are structurally symmetric.",
+            "Constructive existence: produce a witness. Nonconstructive: prove one must exist.",
+            "ONE counterexample disproves ∀.",
+            "Uniqueness: existence + 'any two are equal'.",
+            "Strategy: direct → contrapositive → contradiction → cases → constructive ∃ → nonconstructive ∃ → counterexample for ¬∀.",
+            "Forward grows from hypothesis; backward grows from conclusion — combine."
+          ],
+          "next": "Module 3 toolkit complete. Move to Module 3 Exercises for lab/exam-style practice."
+        }
+      }
+    ],
+    "exercises": {
+      "lesson_id": "module3-exercises",
+      "type": "exercises",
+      "title": "Module 3 Exercises — Proofs",
+      "description": "Practice covering rules of inference, formal proofs, the four cornerstone proof methods, and advanced strategies (cases, WLOG, existence, uniqueness, counterexamples, forward/backward). Modeled on Labs 05-06, Assignment 1 Q4/Q6/Q7, and Spring 2026 midterm.",
+      "question_sets": [
+        {
+          "type": "mcq",
+          "questions": [
+            {
+              "question": "From 'If it rains the grass is wet' and 'It is raining', conclude:",
+              "choices": [
+                "It is not raining.",
+                "The grass is wet.",
+                "The grass is not wet.",
+                "Cannot conclude."
+              ],
+              "answer": "The grass is wet.",
+              "explanation": "Modus Ponens.",
+              "source_pattern": "Inspired by Lab 05 Q4."
+            },
+            {
+              "question": "From 'If she studies, she passes' and 'She did not pass', conclude:",
+              "choices": [
+                "She studied.",
+                "She did not study.",
+                "She will study.",
+                "Cannot conclude."
+              ],
+              "answer": "She did not study.",
+              "explanation": "Modus Tollens.",
+              "source_pattern": "Inspired by Lab 05 Q4."
+            },
+            {
+              "question": "Which is INVALID?",
+              "choices": [
+                "MP",
+                "MT",
+                "Affirming the Consequent",
+                "HS"
+              ],
+              "answer": "Affirming the Consequent",
+              "explanation": "From p → q and q, you cannot conclude p."
+            },
+            {
+              "question": "EI introduces a constant that:",
+              "choices": [
+                "Equals a named element",
+                "Reuses a previous name",
+                "Must be a NEW name",
+                "Need not exist"
+              ],
+              "answer": "Must be a NEW name",
+              "explanation": "Witness from ∃ is unknown."
+            },
+            {
+              "question": "Best method for 'if n² is even, then n is even':",
+              "choices": [
+                "Direct",
+                "Contrapositive",
+                "Contradiction",
+                "Trivial"
+              ],
+              "answer": "Contrapositive",
+              "explanation": "Cleaner than direct.",
+              "source_pattern": "Inspired by Lab 06."
+            },
+            {
+              "question": "Proof by contradiction of p:",
+              "choices": [
+                "Assume p, derive contradiction",
+                "Assume ¬p, derive contradiction",
+                "Build counterexample",
+                "Use cases"
+              ],
+              "answer": "Assume ¬p, derive contradiction",
+              "explanation": "Standard reductio."
+            },
+            {
+              "question": "Which requires both existence and uniqueness?",
+              "choices": [
+                "∀x P(x)",
+                "∃x P(x)",
+                "∃!x P(x)",
+                "¬∃x P(x)"
+              ],
+              "answer": "∃!x P(x)",
+              "explanation": "'Unique' adds uniqueness."
+            },
+            {
+              "question": "WLOG is valid when:",
+              "choices": [
+                "Case is similar by symmetry",
+                "You forgot the case",
+                "Case is too long",
+                "Case is unimportant"
+              ],
+              "answer": "Case is similar by symmetry",
+              "explanation": "Symmetry shortcut."
+            }
+          ]
+        },
+        {
+          "type": "true_false",
+          "questions": [
+            {
+              "question": "Sound argument = valid + true premises.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "True",
+              "explanation": "Standard definitions."
+            },
+            {
+              "question": "Resolution: [p ∨ q, ¬p ∨ r] ⊢ q ∨ r.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "True",
+              "explanation": "Cancels p with ¬p."
+            },
+            {
+              "question": "p → q ≡ ¬q → ¬p.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "True",
+              "explanation": "Contrapositive equivalence."
+            },
+            {
+              "question": "UG can be applied to any named element.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "False",
+              "explanation": "Requires arbitrary c."
+            },
+            {
+              "question": "Trivial proof shows p is always false.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "False",
+              "explanation": "Vacuous shows p false; trivial shows q true."
+            },
+            {
+              "question": "Two counterexamples needed to disprove ∀.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "False",
+              "explanation": "One suffices."
+            },
+            {
+              "question": "Uniqueness needs both existence and 'any two equal'.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "True",
+              "explanation": "Both halves."
+            }
+          ]
+        },
+        {
+          "type": "short_answer",
+          "questions": [
+            {
+              "question": "Define 'valid argument' formally.",
+              "answer": "An argument is valid iff (p₁ ∧ … ∧ pₙ) → q is a tautology — every truth assignment making all premises true also makes q true.",
+              "explanation": "Form, not content."
+            },
+            {
+              "question": "Why does EI require a fresh constant?",
+              "answer": "Because the witness from ∃x P(x) is unknown. Reusing an existing name would assert facts about a specific known element, not a new witness.",
+              "explanation": "Prevents illegal cross-references."
+            },
+            {
+              "question": "Direct proof: square of any odd integer is odd.",
+              "answer": "n = 2k + 1 → n² = 4k² + 4k + 1 = 2(2k² + 2k) + 1, odd. ∎",
+              "explanation": "Definitions + algebra."
+            },
+            {
+              "question": "Why is 'direct first' a sensible default?",
+              "answer": "Direct proofs are usually the most informative; contraposition rephrases the goal but doesn't add power; contradiction often hides why a result is true. Try the cleanest path first.",
+              "explanation": "Easy-and-informative-first heuristic."
+            },
+            {
+              "question": "Difference between exhaustive and disjoint cases?",
+              "answer": "Exhaustive = every possibility falls into at least one case (REQUIRED). Disjoint = cases don't overlap (NOT required, just stylistic).",
+              "explanation": "Coverage matters; uniqueness of case is optional."
+            }
+          ]
+        },
+        {
+          "type": "fill_in_blank",
+          "questions": [
+            {
+              "question": "MP: from p → q and ___, conclude q.",
+              "answer": "p",
+              "explanation": "Trigger fires."
+            },
+            {
+              "question": "MT: from p → q and ___, conclude ¬p.",
+              "answer": "¬q",
+              "explanation": "Obligation fails."
+            },
+            {
+              "question": "Resolution: from p ∨ q and ¬p ∨ r, conclude ___.",
+              "answer": "q ∨ r",
+              "explanation": "Cancel p with ¬p."
+            },
+            {
+              "question": "Direct proof of p → q: assume ___, derive q.",
+              "answer": "p",
+              "explanation": "Standard skeleton."
+            },
+            {
+              "question": "Contrapositive of p → q: prove ___ → ___.",
+              "answer": "¬q → ¬p",
+              "explanation": "Flip and negate."
+            },
+            {
+              "question": "Modus Tollens: from p → q and ___, conclude ___.",
+              "answer": "¬q; ¬p",
+              "explanation": "Standard rule pattern."
+            },
+            {
+              "question": "Modus Ponens: from ___ → q and p, conclude ___.",
+              "answer": "p; q",
+              "explanation": "Standard rule pattern."
+            },
+            {
+              "question": "Resolution: from p ∨ q and ___ ∨ r, conclude ___ ∨ r.",
+              "answer": "¬p; q",
+              "explanation": "Cancel p and ¬p across disjunctions."
+            },
+            {
+              "question": "Hypothetical Syllogism: from p → q and q → r, conclude p → ___.",
+              "answer": "r",
+              "explanation": "Chain two implications."
+            }
+          ]
+        },
+        {
+          "type": "ordering",
+          "questions": [
+            {
+              "question": "Reorder these proof lines to show that from {¬r ∨ ¬f → s ∧ d, s → t, ¬t}, conclude r.",
+              "items": [
+                "¬s ∨ ¬d  (Addition from ¬s)",
+                "(¬r ∨ ¬f) → (s ∧ d)  (premise)",
+                "s → t  (premise)",
+                "¬t  (premise)",
+                "¬s  (MT from s → t and ¬t)",
+                "¬(s ∧ d)  (De Morgan)",
+                "¬(¬r ∨ ¬f)  (MT)",
+                "r ∧ f  (De Morgan + double negation)",
+                "r  (Simplification)"
+              ],
+              "correct_order": [
+                1,
+                2,
+                3,
+                4,
+                0,
+                5,
+                6,
+                7,
+                8
+              ],
+              "explanation": "Premises first, then derived steps in dependency order.",
+              "source_pattern": "Inspired by Lab 05 Q1."
+            }
+          ]
+        },
+        {
+          "type": "step_by_step",
+          "questions": [
+            {
+              "question": "Use rules to show: from premises 'If you send me an email, I finish the program', 'If you do not send me an email, I go to bed early', and 'If I go to bed early, I wake up refreshed', conclude 'If I do not finish the program, I wake up refreshed'.",
+              "answer": "**Let:**\ne = 'you send me an email'\np = 'I will finish the program'\nb = 'I will go to bed early'\nw = 'I will wake up feeling refreshed'\n\n**Step 1** (Premise): e → p.\n**Step 2** (Premise): ¬e → b.\n**Step 3** (Premise): b → w.\n**Step 4** (Contrapositive Law on Step 1): ¬p → ¬e.\n**Step 5** (Hypothetical Syllogism on Steps 2, 3): ¬e → w.\n**Step 6** (Hypothetical Syllogism on Steps 4, 5): ¬p → w.\n\n**Conclusion:** 'If I do not finish the program, I will wake up feeling refreshed.' ∎",
+              "explanation": "Two HS applications via the contrapositive of the first premise.",
+              "source_pattern": "Inspired by Lab 05 Q5.",
+              "format": "law_step_solution",
+              "starting_expression": "premises 1, 2, 3",
+              "steps": [
+                {
+                  "step": 1,
+                  "expression": "e → p",
+                  "law_name": "Premise",
+                  "explanation": "Premise 1."
+                },
+                {
+                  "step": 2,
+                  "expression": "¬e → b",
+                  "law_name": "Premise",
+                  "explanation": "Premise 2."
+                },
+                {
+                  "step": 3,
+                  "expression": "b → w",
+                  "law_name": "Premise",
+                  "explanation": "Premise 3."
+                },
+                {
+                  "step": 4,
+                  "expression": "¬p → ¬e",
+                  "law_name": "Contrapositive Law (1)",
+                  "explanation": "Contrapositive of e → p."
+                },
+                {
+                  "step": 5,
+                  "expression": "¬e → w",
+                  "law_name": "Hypothetical Syllogism (2, 3)",
+                  "explanation": "Chain ¬e → b and b → w."
+                },
+                {
+                  "step": 6,
+                  "expression": "¬p → w",
+                  "law_name": "Hypothetical Syllogism (4, 5)",
+                  "explanation": "Chain ¬p → ¬e and ¬e → w."
+                }
+              ],
+              "conclusion": "If I do not finish the program, I will wake up feeling refreshed. ∎"
+            },
+            {
+              "question": "Direct proof: product of two rationals is rational.",
+              "answer": "Let r, s rationals. r = p/q, s = t/u with q, u ≠ 0 integers. r·s = pt/qu. Since pt is an integer and qu ≠ 0 is an integer, r·s is rational. ∎",
+              "explanation": "Definitions of rational + integer arithmetic."
+            },
+            {
+              "question": "Contrapositive: if x + y ≥ 2 (real x, y), then x ≥ 1 or y ≥ 1.",
+              "answer": "Contrapositive: if x < 1 AND y < 1, then x + y < 2. Direct: x < 1 and y < 1 ⇒ x + y < 1 + 1 = 2. ∎",
+              "explanation": "Disjunctive conclusion → conjunctive hypothesis under contraposition.",
+              "source_pattern": "Inspired by Lab 05 Q10."
+            },
+            {
+              "question": "Cases: for every integer n, n² + n is even.",
+              "answer": "Case n even, n = 2k: n² + n = 4k² + 2k = 2(2k² + k), even.\nCase n odd, n = 2k + 1: n² + n = 4k² + 4k + 1 + 2k + 1 = 4k² + 6k + 2 = 2(2k² + 3k + 1), even.\nCases exhaust ℤ. ∎",
+              "explanation": "Parity case-split."
+            }
+          ]
+        },
+        {
+          "type": "exam_style",
+          "questions": [
+            {
+              "question": "Identify the rule used: (a) 'If snow, school closes. School open. Therefore no snow.' (b) 'If swim, sunburn. Swam. Therefore sunburned.' (c) 'Rain or sunny. Not raining. Therefore sunny.' (d) 'A → B. B → C. Therefore A → C.'",
+              "answer": "(a) MT. (b) MP. (c) DS. (d) HS.",
+              "explanation": "Direct pattern matching.",
+              "source_pattern": "Inspired by Lab 05 Q4."
+            },
+            {
+              "question": "Show: from ∀x (P(x) ∨ Q(x)), ∀x (¬Q(x) ∨ S(x)), ∀x (R(x) → ¬S(x)), and ∃x ¬P(x), conclude ∃x ¬R(x).",
+              "answer": "**Step 1** (Premise 4): ∃x ¬P(x).\n**Step 2** (Existential Instantiation): ¬P(c) for a fresh c.\n**Step 3** (UI on Premise 1): P(c) ∨ Q(c).\n**Step 4** (Disjunctive Syllogism on 2, 3): Q(c).\n**Step 5** (UI on Premise 2): ¬Q(c) ∨ S(c).\n**Step 6** (Disjunctive Syllogism on 4, 5): S(c).\n**Step 7** (UI on Premise 3): R(c) → ¬S(c).\n**Step 8** (Modus Tollens on 6, 7): ¬R(c).\n**Step 9** (Existential Generalization): ∃x ¬R(x). ∎",
+              "explanation": "EI for fresh witness; UI for universals; DS, MT, EG.",
+              "source_pattern": "Inspired by Lab 05 Q3.",
+              "format": "law_step_solution",
+              "starting_expression": "premises",
+              "steps": [
+                {
+                  "step": 1,
+                  "expression": "∃x ¬P(x)",
+                  "law_name": "Premise",
+                  "explanation": "Premise 4."
+                },
+                {
+                  "step": 2,
+                  "expression": "¬P(c)",
+                  "law_name": "Existential Instantiation (EI)",
+                  "explanation": "Introduce a fresh constant c witnessing the existential."
+                },
+                {
+                  "step": 3,
+                  "expression": "P(c) ∨ Q(c)",
+                  "law_name": "Universal Instantiation (UI) on premise 1",
+                  "explanation": "Instantiate ∀x (P(x) ∨ Q(x)) at c."
+                },
+                {
+                  "step": 4,
+                  "expression": "Q(c)",
+                  "law_name": "Disjunctive Syllogism (2, 3)",
+                  "explanation": "From ¬P(c) and P(c) ∨ Q(c) conclude Q(c)."
+                },
+                {
+                  "step": 5,
+                  "expression": "¬Q(c) ∨ S(c)",
+                  "law_name": "UI on premise 2",
+                  "explanation": "Instantiate ∀x (¬Q(x) ∨ S(x)) at c."
+                },
+                {
+                  "step": 6,
+                  "expression": "S(c)",
+                  "law_name": "Disjunctive Syllogism (4, 5)",
+                  "explanation": "From Q(c) (equivalently ¬¬Q(c)) and ¬Q(c) ∨ S(c) conclude S(c)."
+                },
+                {
+                  "step": 7,
+                  "expression": "R(c) → ¬S(c)",
+                  "law_name": "UI on premise 3",
+                  "explanation": "Instantiate ∀x (R(x) → ¬S(x)) at c."
+                },
+                {
+                  "step": 8,
+                  "expression": "¬R(c)",
+                  "law_name": "Modus Tollens (6, 7)",
+                  "explanation": "From S(c) (i.e., ¬¬S(c)) and R(c) → ¬S(c) conclude ¬R(c)."
+                },
+                {
+                  "step": 9,
+                  "expression": "∃x ¬R(x)",
+                  "law_name": "Existential Generalization (EG)",
+                  "explanation": "Generalize ¬R(c) to ∃x ¬R(x)."
+                }
+              ],
+              "conclusion": "∃x ¬R(x) follows from the four premises. ∎"
+            },
+            {
+              "question": "Show [p ∧ (p → q)] → q is a tautology using equivalences (no truth table).",
+              "answer": "≡ ¬[p ∧ (¬p ∨ q)] ∨ q ≡ ¬[(p ∧ ¬p) ∨ (p ∧ q)] ∨ q ≡ ¬[F ∨ (p ∧ q)] ∨ q ≡ ¬(p ∧ q) ∨ q ≡ (¬p ∨ ¬q) ∨ q ≡ ¬p ∨ T ≡ T. ∎",
+              "explanation": "Eliminate →; distribute; simplify.",
+              "source_pattern": "Inspired by Assignment 1 Q4."
+            },
+            {
+              "question": "Use proof by contradiction to show there is no largest prime.",
+              "answer": "Suppose largest prime is p. Form r = 2 · 3 · 5 · ⋯ · p + 1. Each pᵢ leaves remainder 1 when dividing r, so no pᵢ divides r. So r is prime or has a prime factor not in our list — contradicting 'p was largest'. ∎",
+              "explanation": "Classical Euclid argument."
+            },
+            {
+              "question": "Use rule of inference: 'There is an employee in the factory who must attend training' from premises 'Some employee violated a policy' and 'Every employee who violated a policy must attend training'.",
+              "answer": "1. ∃x (E(x) ∧ V(x))   premise\n2. E(c) ∧ V(c)   EI (1), c fresh\n3. E(c)   Simplification (2)\n4. V(c)   Simplification (2)\n5. ∀x ((E(x) ∧ V(x)) → T(x))   premise (rephrased)\n6. (E(c) ∧ V(c)) → T(c)   UI (5)\n7. T(c)   MP (2, 6)\n8. ∃x (E(x) ∧ T(x))   EG with E(c) ∧ T(c). ∎",
+              "explanation": "EI for existential; UI for universal; MP; EG.",
+              "source_pattern": "Inspired by Assignment 1 Q7."
+            }
+          ]
+        },
+        {
+          "type": "randomized",
+          "questions": [
+            {
+              "template": "From premises {PREMISE1} and {PREMISE2}, what conclusion follows by {RULE}?",
+              "variables": {
+                "PREMISE1": [
+                  "p → q",
+                  "p ∨ q",
+                  "p ∧ q",
+                  "¬q"
+                ],
+                "PREMISE2": [
+                  "p",
+                  "¬p",
+                  "q → r",
+                  "¬p ∨ r"
+                ],
+                "RULE": [
+                  "MP",
+                  "MT",
+                  "HS",
+                  "DS",
+                  "Resolution",
+                  "Simplification"
+                ]
+              },
+              "instructions": "Pick (PREMISE1, PREMISE2, RULE) where the rule actually applies; identify the conclusion.",
+              "example_realization": "p → q, p, MP → q.",
+              "explanation": "Drill on rule application.",
+              "source_pattern": "Inspired by Lab 05 Q4."
+            },
+            {
+              "template": "Best proof method for: '{CLAIM}'.",
+              "variables": {
+                "CLAIM": [
+                  "If n² is even, then n is even.",
+                  "There exist irrationals x, y with x^y rational.",
+                  "√2 is irrational.",
+                  "For every integer n, n² + n is even.",
+                  "Every prime greater than 2 is odd.",
+                  "There is no largest prime."
+                ]
+              },
+              "instructions": "Match claim to method (direct, contrapositive, contradiction, cases, constructive ∃, nonconstructive ∃).",
+              "example_realization": "'If n² is even, then n is even' → contrapositive.",
+              "explanation": "Method selection drill."
+            },
+            {
+              "template": "Identify VALID or FALLACY: '{ARGUMENT}'.",
+              "variables": {
+                "ARGUMENT": [
+                  "If it rains the road is wet. The road is wet. Therefore it is raining.",
+                  "If it rains the road is wet. It is raining. Therefore the road is wet.",
+                  "If it rains the road is wet. The road is not wet. Therefore it is not raining.",
+                  "Either you study or you fail. You did not study. Therefore you failed."
+                ]
+              },
+              "instructions": "MP/MT/DS valid; affirming the consequent and denying the antecedent are fallacies.",
+              "example_realization": "'Road is wet → therefore raining' = affirming the consequent — FALLACY.",
+              "explanation": "Drill on the two main fallacies."
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

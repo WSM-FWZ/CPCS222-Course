@@ -1,0 +1,1325 @@
+{
+  "course": "CPCS 222 — Discrete Mathematics",
+  "version": "v4",
+  "module": {
+    "module_id": 2,
+    "title": "Predicate Logic",
+    "description": "Predicate logic (first-order logic): predicates, the universal and existential quantifiers, the domain of discourse, English-to-logic translation patterns, De Morgan's Laws for Quantifiers, and the rules for nested quantifiers. v4 adds structured worked examples (law_step_solution for quantifier-negation chains and translation transformations), exact law names, multi-line answers, and renderable matrix data for finite-domain evaluation.",
+    "source_files": [
+      "CPCS222_02n_LogicProofs.pdf",
+      "CPCS 222 - Lab 04 - Predicate and Quantifier.pdf",
+      "Assignment_1_Spring 2026_.pdf",
+      "CPCS222-MidTerm-Spring2026 - Solution v02.pdf"
+    ],
+    "lessons": [
+      {
+        "lesson_id": "module2-lesson1",
+        "type": "tutorial",
+        "title": "Predicates and Quantifiers",
+        "slug": "predicates-and-quantifiers",
+        "welcome": "Propositional logic from Module 1 was good for fixed sentences, but it cannot say things like *'every integer has a successor'* or *'some KAU student passed CPCS 222'*. To talk about objects in a domain and the properties they share, we need PREDICATE LOGIC.",
+        "objectives": [
+          "Define a predicate (propositional function) and explain how it differs from a proposition.",
+          "Identify the domain (universe of discourse) and evaluate a predicate on specific values.",
+          "Use the universal (∀) and existential (∃) quantifiers correctly.",
+          "Determine the truth value of a quantified statement on small finite domains."
+        ],
+        "storytelling": [
+          {
+            "speaker": "Student",
+            "text": "Why isn't propositional logic enough?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "Try saying 'every integer has an inverse' as a single propositional letter — you can't. Propositional logic treats whole sentences as atoms; predicate logic looks INSIDE a sentence and reasons about objects, properties, and quantities."
+          }
+        ],
+        "flow": [
+          {
+            "type": "prose",
+            "content": "Consider the classic argument:\n\n> _'All men are mortal. Socrates is a man. Therefore, Socrates is mortal.'_\n\nIn propositional logic these are three unrelated atoms p, q, r — there is no way to express the shared structure. We need a language that talks about **objects** (Socrates, men), **properties** (mortal, man), and **quantities** ('all', 'some')."
+          },
+          {
+            "type": "definition",
+            "title": "Predicate (propositional function)",
+            "content": "A **predicate** is a sentence with one or more free variables, written like `P(x)` or `R(x, y, z)`. It has no truth value on its own; it becomes a **proposition** as soon as every free variable is replaced by an element from the domain."
+          },
+          {
+            "type": "table",
+            "title": "Predicates produce propositions when filled in",
+            "headers": [
+              "Predicate",
+              "Filled in",
+              "Proposition",
+              "Truth value"
+            ],
+            "rows": [
+              [
+                "P(x): x > 0",
+                "x = 3",
+                "3 > 0",
+                "T"
+              ],
+              [
+                "P(x): x > 0",
+                "x = -1",
+                "-1 > 0",
+                "F"
+              ],
+              [
+                "R(x, y, z): x + y = z",
+                "(2, 3, 5)",
+                "2 + 3 = 5",
+                "T"
+              ],
+              [
+                "R(x, y, z): x + y = z",
+                "(2, 3, 6)",
+                "2 + 3 = 6",
+                "F"
+              ],
+              [
+                "S(x): x is enrolled in CPCS 222",
+                "x = 'Sara'",
+                "Sara is enrolled in CPCS 222",
+                "depends on Sara"
+              ]
+            ]
+          },
+          {
+            "type": "definition",
+            "title": "Domain (universe of discourse)",
+            "content": "The **domain** U is the set the variables range over. The truth value of a quantified statement depends critically on the domain — always state it. For example, `P(x): x² ≥ 0` is true for every x in ℝ, but if the domain includes the imaginary unit i, then `P(i)` becomes `i² = -1 ≥ 0` which is false."
+          },
+          {
+            "type": "definition",
+            "title": "Universal quantifier ∀",
+            "content": "**∀x P(x)** ('for all x, P(x)') is **TRUE** when P holds for **every** element of the domain. **FALSE** when at least one element makes P false (a **counterexample**). On a finite domain {a₁, …, aₙ}, ∀x P(x) ≡ P(a₁) ∧ P(a₂) ∧ … ∧ P(aₙ)."
+          },
+          {
+            "type": "definition",
+            "title": "Existential quantifier ∃",
+            "content": "**∃x P(x)** ('there exists x such that P(x)') is **TRUE** when at least one element of the domain satisfies P. **FALSE** when no element does. On a finite domain {a₁, …, aₙ}, ∃x P(x) ≡ P(a₁) ∨ P(a₂) ∨ … ∨ P(aₙ)."
+          },
+          {
+            "type": "inline_dialogue",
+            "trigger": "After both quantifiers are defined — students often think ∀ is just shorthand for an enumeration.",
+            "exchange": [
+              {
+                "speaker": "Student",
+                "text": "If ∀x P(x) is just P(a₁) ∧ P(a₂) ∧ … why do we need a new symbol?"
+              },
+              {
+                "speaker": "Professor",
+                "text": "On a finite domain, you're right — it's just a long conjunction. But the integers, the reals, or 'all KAU students past, present, and future' have no fixed list. ∀ lets us talk about infinite or unspecified domains in one stroke."
+              }
+            ]
+          },
+          {
+            "type": "real_life_example",
+            "title": "Quantifiers around campus",
+            "items": [
+              "**∀ at KAU:** _'Every student has a unique student ID.'_ → ∀x (Student(x) → ∃!id. ID(x, id)).",
+              "**∃ at KAU:** _'Some student in CPCS 222 has visited Riyadh.'_ → ∃x (CPCS222(x) ∧ Visited(x, Riyadh)).",
+              "**Counterexample disproves ∀:** _'Every prime is odd'_ — counterexample: 2.",
+              "**Empty domain:** ∀x P(x) is **vacuously true**, ∃x P(x) is **false**."
+            ]
+          },
+          {
+            "type": "warning",
+            "title": "One witness ≠ a universal claim",
+            "content": "Finding one student who passes CPCS 222 only proves `∃x (passes(x))`. It says **nothing** about `∀x (passes(x))`. Conversely, a single counterexample is enough to **disprove** a ∀ claim."
+          },
+          {
+            "type": "table",
+            "title": "Quantifier truth-value summary",
+            "headers": [
+              "Statement",
+              "TRUE when",
+              "FALSE when"
+            ],
+            "rows": [
+              [
+                "∀x P(x)",
+                "P(x) holds for **every** x in the domain",
+                "Some x makes P(x) false (counterexample)"
+              ],
+              [
+                "∃x P(x)",
+                "**At least one** x in the domain makes P(x) true",
+                "No x in the domain satisfies P(x)"
+              ]
+            ]
+          },
+          {
+            "type": "worked_example",
+            "title": "Truth values over the integers",
+            "source_pattern": "Inspired by Lab 04 Q4 — quantifier truth-value drill over ℝ/ℤ.",
+            "problem": "Domain = ℤ. Find the truth value of (a) ∀n (n² ≥ 0), (b) ∃n (n² = 2), (c) ∀n (2n > n), (d) ∃n (n² < 0).",
+            "thinking_process": "For ∀, search for a counterexample. For ∃, search for a witness.",
+            "step_by_step_solution": [
+              "(a) Pick any n. n² is a square ⇒ ≥ 0. No counterexample. **TRUE.**",
+              "(b) Need an integer whose square is 2. ±1 → 1, ±2 → 4. No witness. **FALSE.**",
+              "(c) Try n = 0: 2·0 = 0, not > 0. Counterexample. **FALSE.**",
+              "(d) Squares of integers are ≥ 0; no negative square. **FALSE.**"
+            ],
+            "final_answer": "(a) T. (b) F. (c) F. (d) F.",
+            "common_mistake": "Answering (c) TRUE because the inequality holds for positive n — always check 0 and negatives."
+          },
+          {
+            "type": "worked_example",
+            "title": "Predicate vs proposition",
+            "source_pattern": "Inspired by Lab 04 Q1 — quantifier translation pattern.",
+            "problem": "Let R(x, y, z): 'x + y = z' over the integers. Determine the status of R(2, -1, 1), R(3, 4, 7), R(x, 3, z).",
+            "thinking_process": "A predicate becomes a proposition once every variable is bound or assigned.",
+            "step_by_step_solution": [
+              "R(2, -1, 1) → '2 + (-1) = 1' → **proposition, T.**",
+              "R(3, 4, 7) → '3 + 4 = 7' → **proposition, T.**",
+              "R(x, 3, z) still has free x, z → **NOT a proposition.**"
+            ],
+            "final_answer": "First two are propositions (T). Third is still a predicate.",
+            "common_mistake": "Calling R(x, 3, z) a proposition because part of it is filled in — every variable must be bound or assigned."
+          },
+          {
+            "type": "misconception_box",
+            "title": "Common student mistakes",
+            "items": [
+              "Treating a predicate as a proposition before its variables are bound.",
+              "Believing one example proves a ∀ claim. (It does not.)",
+              "Believing one counterexample is not enough to disprove ∀. (It is.)",
+              "Forgetting that the **empty domain** makes ∀ vacuously true and ∃ false."
+            ]
+          },
+          {
+            "type": "memory_hook",
+            "title": "Two quick checks",
+            "items": [
+              "**∀ = AND across the domain** (one F kills it).",
+              "**∃ = OR across the domain** (one T saves it)."
+            ]
+          },
+          {
+            "type": "simulator_quantifier_explorer",
+            "title": "Try It — Quantifier Explorer"
+          }
+        ],
+        "sections": [
+          {
+            "number": 1,
+            "heading": "Predicates",
+            "explanation": "A predicate has free variables and becomes a proposition once they are bound or assigned."
+          },
+          {
+            "number": 2,
+            "heading": "Domain of discourse",
+            "explanation": "Always state the set the variables range over; truth values depend on it."
+          },
+          {
+            "number": 3,
+            "heading": "The two quantifiers",
+            "explanation": "∀ requires P for every element; ∃ requires P for at least one element."
+          }
+        ],
+        "worked_examples": [
+          {
+            "problem": "Domain = ℤ. Truth values of ∀n (n² ≥ 0), ∃n (n² = 2), ∀n (2n > n), ∃n (n² < 0).",
+            "step_by_step_solution": [
+              "(a) T. (b) F. (c) F (n=0). (d) F."
+            ],
+            "final_answer": "T, F, F, F.",
+            "why_it_works": "∀ needs no counterexample; ∃ needs one witness.",
+            "common_mistake": "Forgetting to test n = 0 and negatives in (c)."
+          }
+        ],
+        "quick_checks": [
+          {
+            "type": "mcq",
+            "question": "P(x): x is even, domain = ℤ⁺. P(7) is:",
+            "choices": [
+              "T",
+              "F",
+              "Not a proposition",
+              "Cannot tell"
+            ],
+            "answer": "F",
+            "explanation": "7 is odd."
+          },
+          {
+            "type": "true_false",
+            "question": "On the empty domain, ∀x P(x) is true.",
+            "choices": [
+              "True",
+              "False"
+            ],
+            "answer": "True",
+            "explanation": "Vacuous truth."
+          },
+          {
+            "type": "mcq",
+            "question": "Which of the following is FALSE over ℝ?",
+            "choices": [
+              "∀x (x² ≥ 0)",
+              "∃x (x² = 4)",
+              "∀x (2x > x)",
+              "∃x (x = 0)"
+            ],
+            "answer": "∀x (2x > x)",
+            "explanation": "Counterexample x = 0."
+          }
+        ],
+        "summary": {
+          "key_takeaways": [
+            "A predicate is a sentence with free variables — not a proposition until all variables are bound or assigned.",
+            "Always state the domain; the truth value of a quantified statement depends on it.",
+            "∀x P(x) is true iff every element satisfies P. One counterexample disproves it.",
+            "∃x P(x) is true iff at least one element satisfies P. No witness disproves it.",
+            "Empty domain: ∀ is vacuously true, ∃ is false."
+          ],
+          "next": "Next: how to TRANSLATE everyday statements into predicate logic — and how to NEGATE quantifiers cleanly."
+        }
+      },
+      {
+        "lesson_id": "module2-lesson2",
+        "type": "tutorial",
+        "title": "Translating and Negating Quantified Statements",
+        "slug": "translating-and-negating-quantified-statements",
+        "welcome": "Knowing the symbols ∀ and ∃ is half the skill. The other half is FLUENT TRANSLATION between English and predicate logic. Two patterns cover almost every quantified sentence you'll meet — and one rule (De Morgan for quantifiers) lets you negate any of them.",
+        "objectives": [
+          "Translate 'All A are B' as ∀x (A(x) → B(x)) and 'Some A is B' as ∃x (A(x) ∧ B(x)).",
+          "Choose between a restricted and an unrestricted domain.",
+          "Apply De Morgan for quantifiers: ¬∀ ↔ ∃¬ and ¬∃ ↔ ∀¬.",
+          "Push negations inward until they touch only atomic predicates."
+        ],
+        "storytelling": [
+          {
+            "speaker": "Student",
+            "text": "Why does 'all A are B' use →, but 'some A is B' use ∧?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "Different jobs. ∀x (A(x) ∧ B(x)) would force EVERY object in the domain to be both an A and a B — including the chairs and the math professors. The implication form filters: 'IF x is an A, THEN x is a B'. For ∃, we want a real witness that's both A and B, so conjunction is right."
+          }
+        ],
+        "flow": [
+          {
+            "type": "definition",
+            "title": "The two standard translation patterns",
+            "items": [
+              "**'All A are B'** ⇒ `∀x (A(x) → B(x))`",
+              "**'Some A is B'** ⇒ `∃x (A(x) ∧ B(x))`"
+            ]
+          },
+          {
+            "type": "table",
+            "title": "Why → for ∀ and ∧ for ∃",
+            "headers": [
+              "Form",
+              "Says",
+              "Why"
+            ],
+            "rows": [
+              [
+                "∀x (A(x) → B(x))",
+                "Whenever something is an A, it is also a B",
+                "Implication is vacuous on non-As, so non-As don't break the claim."
+              ],
+              [
+                "∀x (A(x) ∧ B(x)) ✗",
+                "Every domain element is BOTH A and B",
+                "Almost always wrong — wrongly forces non-As to be A."
+              ],
+              [
+                "∃x (A(x) ∧ B(x))",
+                "There is a witness that is BOTH A and B",
+                "Conjunction demands both properties on the witness."
+              ],
+              [
+                "∃x (A(x) → B(x)) ✗",
+                "Some object satisfies A → B",
+                "Trivially true if any non-A exists — almost never the intended meaning."
+              ]
+            ]
+          },
+          {
+            "type": "real_life_example",
+            "title": "KAU translations",
+            "items": [
+              "_'All CPCS 222 students have a student ID.'_ → ∀x (CPCS222(x) → HasID(x)).",
+              "_'Some CPCS 222 student has visited Madinah.'_ → ∃x (CPCS222(x) ∧ Visited(x, Madinah)).",
+              "_'No KAU student is enrolled in CPCS 100 and CPCS 222 in the same semester.'_ → ¬∃x (Enrolled(x, CPCS100) ∧ Enrolled(x, CPCS222)) ≡ ∀x (Enrolled(x, CPCS100) → ¬Enrolled(x, CPCS222))."
+            ]
+          },
+          {
+            "type": "definition",
+            "title": "Choosing a domain",
+            "content": "Two equivalent choices:\n- **Restricted domain** — make the domain itself the set of interest (e.g., U = students of your class). The translation is shorter because the filter predicate disappears.\n- **Unrestricted domain** — make the domain large (e.g., U = all people). You need an extra predicate (e.g., Student(x)) to filter."
+          },
+          {
+            "type": "table",
+            "title": "Same sentence, two domains",
+            "headers": [
+              "Sentence",
+              "Domain",
+              "Translation"
+            ],
+            "rows": [
+              [
+                "Some student in your class is friendly",
+                "students in your class",
+                "∃x F(x)"
+              ],
+              [
+                "Some student in your class is friendly",
+                "all people",
+                "∃x (S(x) ∧ F(x))"
+              ],
+              [
+                "Every student in your class can speak Hindi",
+                "students in your class",
+                "∀x H(x)"
+              ],
+              [
+                "Every student in your class can speak Hindi",
+                "all people",
+                "∀x (S(x) → H(x))"
+              ]
+            ]
+          },
+          {
+            "type": "definition",
+            "title": "De Morgan's laws for quantifiers",
+            "items": [
+              "`¬∀x P(x) ≡ ∃x ¬P(x)` — _'not every x has P'_ = _'some x doesn't'_",
+              "`¬∃x P(x) ≡ ∀x ¬P(x)` — _'no x has P'_ = _'every x lacks P'_"
+            ]
+          },
+          {
+            "type": "mermaid",
+            "title": "Pushing ¬ past quantifiers",
+            "mermaid": "flowchart LR\n  A[\"¬∀x P(x)\"] --> B[\"∃x ¬P(x)\"]\n  C[\"¬∃x P(x)\"] --> D[\"∀x ¬P(x)\"]\n  E[\"¬(P → Q)\"] --> F[\"P ∧ ¬Q\"]\n  G[\"¬(P ∧ Q)\"] --> H[\"¬P ∨ ¬Q\"]\n  I[\"¬(P ∨ Q)\"] --> J[\"¬P ∧ ¬Q\"]",
+            "display": {
+              "preferred_size": "medium",
+              "max_height": 240,
+              "fit": "contain",
+              "layout": "LR"
+            }
+          },
+          {
+            "type": "warning",
+            "title": "¬(P → Q) is NOT P → ¬Q",
+            "content": "The standard pitfall when negating implication-shaped predicates. The correct form is `P ∧ ¬Q`. So ¬∀x (A(x) → B(x)) ≡ ∃x (A(x) ∧ ¬B(x)) — `'some A is NOT a B'`, not `'some A → ¬B'`."
+          },
+          {
+            "type": "worked_example",
+            "title": "Translate 'No student has taken logic programming' two ways",
+            "source_pattern": "Inspired by Lab 04 Q3 — multi-domain quantifier translation.",
+            "problem": "Translate _'No student in your class has taken a course in logic programming.'_ Use S(x) = 'x is a student in your class', L(x) = 'x has taken logic programming'.",
+            "thinking_process": "'No A is B' negates an existential. Choose a domain and apply the standard pattern.",
+            "step_by_step_solution": [
+              "(i) Domain = students in your class: ∀x ¬L(x) (or equivalently ¬∃x L(x)).",
+              "(ii) Domain = all people: ¬∃x (S(x) ∧ L(x)) ≡ ∀x ¬(S(x) ∧ L(x)) ≡ ∀x (S(x) → ¬L(x))."
+            ],
+            "final_answer": "(i) ∀x ¬L(x). (ii) ∀x (S(x) → ¬L(x)).",
+            "common_mistake": "Writing ∀x (S(x) ∧ ¬L(x)) for the unrestricted form — that wrongly claims everyone is a student."
+          },
+          {
+            "type": "worked_example",
+            "format": "law_step_solution",
+            "title": "Negate 'Some drivers do not obey the speed limit' — step by step",
+            "source_pattern": "Inspired by Lab 04 Q9 — negation of quantifiers.",
+            "problem": "Express the negation of 'Some drivers do not obey the speed limit' so ¬ touches only predicates.",
+            "approach": "Push ¬ past the quantifier (De Morgan's Law for Quantifiers), then apply De Morgan inside the predicate, then rewrite as an implication.",
+            "starting_expression": "¬∃x (D(x) ∧ ¬O(x))",
+            "steps": [
+              {
+                "step": 1,
+                "expression": "∀x ¬(D(x) ∧ ¬O(x))",
+                "law_name": "De Morgan's Law for Quantifiers",
+                "explanation": "¬∃x P(x) ≡ ∀x ¬P(x). Flip the quantifier."
+              },
+              {
+                "step": 2,
+                "expression": "∀x (¬D(x) ∨ ¬(¬O(x)))",
+                "law_name": "De Morgan's Law",
+                "explanation": "¬(A ∧ B) ≡ ¬A ∨ ¬B."
+              },
+              {
+                "step": 3,
+                "expression": "∀x (¬D(x) ∨ O(x))",
+                "law_name": "Double Negation Law",
+                "explanation": "¬(¬O(x)) ≡ O(x)."
+              },
+              {
+                "step": 4,
+                "expression": "∀x (D(x) → O(x))",
+                "law_name": "Implication Law",
+                "explanation": "¬A ∨ B ≡ A → B."
+              }
+            ],
+            "conclusion": "The negation, with ¬ only on atomic predicates, is **∀x (D(x) → O(x))** — i.e., 'every driver obeys the speed limit'.",
+            "thinking_process": "Quantifier-De Morgan first, then propositional De Morgan, then clean up with Double Negation and Implication Law.",
+            "step_by_step_solution": [
+              "**Original (with outer ¬):** ¬∃x (D(x) ∧ ¬O(x)).",
+              "**Step 1** — De Morgan's Law for Quantifiers: ∀x ¬(D(x) ∧ ¬O(x)).",
+              "**Step 2** — De Morgan's Law: ∀x (¬D(x) ∨ ¬(¬O(x))).",
+              "**Step 3** — Double Negation Law: ∀x (¬D(x) ∨ O(x)).",
+              "**Step 4** — Implication Law: ∀x (D(x) → O(x))."
+            ],
+            "final_answer": "∀x (D(x) → O(x)) — 'every driver obeys the speed limit'.",
+            "why_it_works": "Each rewrite cites a named equivalence; the chain pushes ¬ all the way inward until it touches a single atomic predicate.",
+            "common_mistake": "Stopping after Step 1 without pushing the negation into the predicate, or rewriting ¬(P → Q) as P → ¬Q (the correct form is P ∧ ¬Q)."
+          },
+          {
+            "type": "worked_example",
+            "title": "Express a specific KAU statement",
+            "source_pattern": "Inspired by Lab 04 Q6 — multi-predicate translation.",
+            "problem": "Use S(x) = 'x is a student', F(x) = 'x is a faculty member', A(x, y) = 'x has asked y a question'. Domain = all people. Translate: 'Some student has not asked any faculty member a question.'",
+            "thinking_process": "Outer ∃ over students; inner ∀ over faculty with negated relation.",
+            "step_by_step_solution": [
+              "'Some student' → ∃x (S(x) ∧ …)",
+              "'Has not asked any faculty member a question' → for every faculty y, ¬A(x, y)",
+              "'Any faculty member' under negation becomes ∀y (F(y) → ¬A(x, y)).",
+              "Combine: ∃x (S(x) ∧ ∀y (F(y) → ¬A(x, y)))."
+            ],
+            "final_answer": "∃x (S(x) ∧ ∀y (F(y) → ¬A(x, y))).",
+            "common_mistake": "Translating 'any' as ∃. After negation, 'any' usually becomes ∀."
+          },
+          {
+            "type": "misconception_box",
+            "title": "Common student mistakes",
+            "items": [
+              "Using ∧ inside ∀: ∀x (A(x) ∧ B(x)) wrongly forces every domain element to be A.",
+              "Using → inside ∃: ∃x (A(x) → B(x)) is satisfied by any non-A — almost never the intended meaning.",
+              "Negating ¬(P → Q) as P → ¬Q. Correct: P ∧ ¬Q.",
+              "Mixing restricted and unrestricted domains in one formula."
+            ]
+          },
+          {
+            "type": "memory_hook",
+            "title": "Quick rules",
+            "items": [
+              "**'All A are B' uses →. 'Some A is B' uses ∧.**",
+              "**Negate by flipping the quantifier and negating the predicate.**",
+              "**Push ¬ all the way inward.**"
+            ]
+          }
+        ],
+        "sections": [
+          {
+            "number": 1,
+            "heading": "Two patterns",
+            "explanation": "All A are B → ∀x (A(x) → B(x)). Some A is B → ∃x (A(x) ∧ B(x))."
+          },
+          {
+            "number": 2,
+            "heading": "Choosing a domain",
+            "explanation": "Restricted domains drop the filter; unrestricted domains require it."
+          },
+          {
+            "number": 3,
+            "heading": "Negating quantifiers",
+            "explanation": "¬∀x P(x) ≡ ∃x ¬P(x); ¬∃x P(x) ≡ ∀x ¬P(x)."
+          }
+        ],
+        "worked_examples": [
+          {
+            "problem": "Translate 'No driver disobeys the speed limit' and negate the result.",
+            "step_by_step_solution": [
+              "'No A is B' = ¬∃x (D(x) ∧ ¬O(x)) ≡ ∀x (D(x) → O(x)).",
+              "Negation: ∃x (D(x) ∧ ¬O(x)) — 'some driver disobeys'."
+            ],
+            "final_answer": "Original ≡ ∀x (D(x) → O(x)); negation = ∃x (D(x) ∧ ¬O(x)).",
+            "why_it_works": "De Morgan flips quantifier and pushes ¬ inward.",
+            "common_mistake": "Forgetting to use ¬(P → Q) ≡ P ∧ ¬Q."
+          }
+        ],
+        "quick_checks": [
+          {
+            "type": "mcq",
+            "question": "'Every cat purrs' translates to:",
+            "choices": [
+              "∀x (C(x) ∧ P(x))",
+              "∀x (C(x) → P(x))",
+              "∃x (C(x) ∧ P(x))",
+              "∃x (C(x) → P(x))"
+            ],
+            "answer": "∀x (C(x) → P(x))",
+            "explanation": "'All A are B' uses → inside ∀."
+          },
+          {
+            "type": "mcq",
+            "question": "Negate ∀x ∃y P(x, y) so ¬ touches only the predicate:",
+            "choices": [
+              "∀x ∀y ¬P(x, y)",
+              "∃x ∀y ¬P(x, y)",
+              "∃x ∃y ¬P(x, y)",
+              "∀x ∃y ¬P(x, y)"
+            ],
+            "answer": "∃x ∀y ¬P(x, y)",
+            "explanation": "Flip each quantifier and negate the predicate."
+          },
+          {
+            "type": "true_false",
+            "question": "'No A is B' is equivalent to ∀x (A(x) → ¬B(x)).",
+            "choices": [
+              "True",
+              "False"
+            ],
+            "answer": "True",
+            "explanation": "¬∃x (A(x) ∧ B(x)) ≡ ∀x (A(x) → ¬B(x))."
+          }
+        ],
+        "summary": {
+          "key_takeaways": [
+            "All A are B ⇒ ∀x (A(x) → B(x)). Some A is B ⇒ ∃x (A(x) ∧ B(x)).",
+            "Restricted domain shortens the formula by dropping the filter predicate.",
+            "De Morgan: ¬∀ ↔ ∃¬ and ¬∃ ↔ ∀¬.",
+            "Push negations inward; ¬(P → Q) becomes P ∧ ¬Q (not P → ¬Q)."
+          ],
+          "next": "Next: NESTED quantifiers — where the order of ∀ and ∃ can completely change the meaning."
+        }
+      },
+      {
+        "lesson_id": "module2-lesson3",
+        "type": "tutorial",
+        "title": "Nested Quantifiers and Why Order Matters",
+        "slug": "nested-quantifiers-and-why-order-matters",
+        "welcome": "Most interesting mathematical statements use TWO OR MORE quantifiers stacked. The single rule to remember: **ORDER MATTERS**. Swapping ∀ and ∃ can turn a true statement into a false one.",
+        "objectives": [
+          "Read ∀x ∀y, ∀x ∃y, ∃x ∀y, and ∃x ∃y as nested loops over the domain.",
+          "Distinguish ∀x ∃y from ∃y ∀x and explain why the second is strictly stronger.",
+          "Translate complex mathematical statements into nested-quantifier form.",
+          "Negate any nested-quantifier expression mechanically."
+        ],
+        "storytelling": [
+          {
+            "speaker": "Student",
+            "text": "Are ∀x ∃y P(x, y) and ∃y ∀x P(x, y) really different?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "Almost always. Take P(x, y) = 'x + y = 0' over the reals. ∀x ∃y P(x, y) says: for every x, some y zeros it out — TRUE, take y = -x. ∃y ∀x P(x, y) says: there is ONE y that zeros every x — FALSE. The first lets y depend on x; the second demands a single uniform witness."
+          }
+        ],
+        "flow": [
+          {
+            "type": "prose",
+            "content": "A NESTED quantifier is one quantifier in the scope of another. The expression `∀x ∃y P(x, y)` is parsed left-to-right: outer ∀x binds x first; inner ∃y binds y; finally P(x, y) is evaluated. You can read it as nested loops:\n\n```\nfor each x in U:\n    confirm some y in U makes P(x, y) true\n```"
+          },
+          {
+            "type": "table",
+            "title": "Reading the four 2-variable patterns",
+            "headers": [
+              "Statement",
+              "Plain English",
+              "Loop reading"
+            ],
+            "rows": [
+              [
+                "∀x ∀y P(x, y)",
+                "P holds for every pair (x, y)",
+                "for every x, for every y, assert P"
+              ],
+              [
+                "∀x ∃y P(x, y)",
+                "For every x, some y makes P(x, y) true (y can depend on x)",
+                "for every x, find some y"
+              ],
+              [
+                "∃x ∀y P(x, y)",
+                "Some single x makes P(x, y) true for every y",
+                "find one x that works for all y"
+              ],
+              [
+                "∃x ∃y P(x, y)",
+                "Some pair (x, y) satisfies P",
+                "find any pair"
+              ]
+            ]
+          },
+          {
+            "type": "definition",
+            "title": "When quantifiers commute (and when they don't)",
+            "items": [
+              "**Same type — always commute:** `∀x ∀y P ≡ ∀y ∀x P`; `∃x ∃y P ≡ ∃y ∃x P`.",
+              "**Different type — strict implication only:** `∃y ∀x P(x, y) ⇒ ∀x ∃y P(x, y)`. The reverse fails.",
+              "Intuition: ∃y ∀x demands a SINGLE uniform witness; ∀x ∃y allows the witness to depend on x."
+            ]
+          },
+          {
+            "type": "inline_dialogue",
+            "trigger": "After the asymmetry is stated — students always want a concrete numeric example.",
+            "exchange": [
+              {
+                "speaker": "Student",
+                "text": "Give me one example over numbers where ∀∃ is true but ∃∀ is false."
+              },
+              {
+                "speaker": "Professor",
+                "text": "Domain = ℝ, P(x, y) = 'y > x'. ∀x ∃y (y > x) is true: take y = x + 1. But ∃y ∀x (y > x) demands a single y greater than every real — no such number exists. So one is true and one is false even though only the order changed."
+              }
+            ]
+          },
+          {
+            "type": "table",
+            "title": "Negating nested quantifiers",
+            "headers": [
+              "Original",
+              "Step 1",
+              "Step 2",
+              "Final"
+            ],
+            "rows": [
+              [
+                "¬∀x ∃y P(x, y)",
+                "∃x ¬∃y P(x, y)",
+                "∃x ∀y ¬P(x, y)",
+                "∃x ∀y ¬P(x, y)"
+              ],
+              [
+                "¬∃x ∀y P(x, y)",
+                "∀x ¬∀y P(x, y)",
+                "∀x ∃y ¬P(x, y)",
+                "∀x ∃y ¬P(x, y)"
+              ]
+            ],
+            "notes": "Mechanical procedure: flip each quantifier as ¬ passes through it; negate the innermost predicate."
+          },
+          {
+            "type": "real_life_example",
+            "title": "Nested quantifiers around campus",
+            "items": [
+              "_'Every CPCS 222 student has at least one prerequisite course.'_ → ∀x (CPCS222(x) → ∃y (Prereq(y, CPCS222) ∧ Took(x, y))).",
+              "_'There is a course that every CPCS major takes.'_ → ∃y (Course(y) ∧ ∀x (CSMajor(x) → Took(x, y))).",
+              "_'For every student, there is some classmate who lives in Jeddah.'_ → ∀x ∃y (Classmate(x, y) ∧ LivesIn(y, Jeddah)). The y can vary by x."
+            ]
+          },
+          {
+            "type": "relation_matrix",
+            "title": "Truth values of P(x, y) on U = {1, 2, 3}",
+            "elements": [
+              "1",
+              "2",
+              "3"
+            ],
+            "matrix": [
+              [
+                "F",
+                "F",
+                "T"
+              ],
+              [
+                "T",
+                "T",
+                "F"
+              ],
+              [
+                "T",
+                "T",
+                "T"
+              ]
+            ],
+            "properties": [],
+            "notes": "Row labels are x; column labels are y. A cell is T iff (x, y) makes P(x, y) true. Used to evaluate ∀x ∃y, ∀y ∃x, etc."
+          },
+          {
+            "type": "worked_example",
+            "title": "Truth values over the reals",
+            "source_pattern": "Inspired by Lab 04 Q10 / Spring 2026 midterm Q5 area — nested-quantifier evaluation.",
+            "problem": "Domain = ℝ. Determine: (a) ∀x ∀y (x + y = y + x). (b) ∀x ∃y (x + y = 0). (c) ∃y ∀x (x + y = 0).",
+            "thinking_process": "Apply each pattern's rule: ∀ requires every element; ∃ requires a witness; ∃y∀x demands a uniform witness.",
+            "step_by_step_solution": [
+              "(a) Addition is commutative on ℝ → **TRUE** for every pair.",
+              "(b) For each x, take y = -x → witness exists per x → **TRUE**.",
+              "(c) Need ONE y that zeros every x. y = 0 fails for x = 1 (1 + 0 = 1 ≠ 0). No uniform y → **FALSE**."
+            ],
+            "final_answer": "(a) T. (b) T. (c) F.",
+            "common_mistake": "Mistakenly answering (c) TRUE because (b) is true — ∃∀ is strictly stronger than ∀∃."
+          },
+          {
+            "type": "worked_example",
+            "title": "Translate a multi-quantifier statement",
+            "source_pattern": "Inspired by Lab 04 Q10 — translating math English into nested form.",
+            "problem": "Translate: 'Every student in your school has taken a chemistry course.' Use S(x) = 'x is a student', C(y) = 'y is a chemistry course', T(x, y) = 'x has taken y'.",
+            "thinking_process": "Outer ∀ over students; inner ∃ over chemistry courses; the relation T(x, y) connects them.",
+            "step_by_step_solution": [
+              "'Every student' → ∀x (S(x) → …)",
+              "'Has taken a chemistry course' → ∃y (C(y) ∧ T(x, y))",
+              "Combine: ∀x (S(x) → ∃y (C(y) ∧ T(x, y)))."
+            ],
+            "final_answer": "∀x (S(x) → ∃y (C(y) ∧ T(x, y))).",
+            "common_mistake": "Putting ∃ outside ∀: ∃y (C(y) ∧ ∀x (S(x) → T(x, y))) wrongly says there is ONE chemistry course that every student took."
+          },
+          {
+            "type": "worked_example",
+            "format": "law_step_solution",
+            "title": "Mechanical negation of ∀x ∃y (P(x, y) → Q(x, y))",
+            "source_pattern": "Inspired by Lab 04 Q8 — negation of a nested-quantifier expression.",
+            "problem": "Negate **∀x ∃y (P(x, y) → Q(x, y))** so that ¬ touches only the atomic predicates.",
+            "approach": "Flip each quantifier as ¬ passes (De Morgan's Law for Quantifiers), then expand the negation of the implication.",
+            "starting_expression": "¬∀x ∃y (P(x, y) → Q(x, y))",
+            "steps": [
+              {
+                "step": 1,
+                "expression": "∃x ¬∃y (P(x, y) → Q(x, y))",
+                "law_name": "De Morgan's Law for Quantifiers",
+                "explanation": "¬∀x α ≡ ∃x ¬α."
+              },
+              {
+                "step": 2,
+                "expression": "∃x ∀y ¬(P(x, y) → Q(x, y))",
+                "law_name": "De Morgan's Law for Quantifiers",
+                "explanation": "¬∃y α ≡ ∀y ¬α."
+              },
+              {
+                "step": 3,
+                "expression": "∃x ∀y ¬(¬P(x, y) ∨ Q(x, y))",
+                "law_name": "Implication Law",
+                "explanation": "P → Q ≡ ¬P ∨ Q."
+              },
+              {
+                "step": 4,
+                "expression": "∃x ∀y (¬¬P(x, y) ∧ ¬Q(x, y))",
+                "law_name": "De Morgan's Law",
+                "explanation": "¬(A ∨ B) ≡ ¬A ∧ ¬B."
+              },
+              {
+                "step": 5,
+                "expression": "∃x ∀y (P(x, y) ∧ ¬Q(x, y))",
+                "law_name": "Double Negation Law",
+                "explanation": "¬¬P(x, y) ≡ P(x, y)."
+              }
+            ],
+            "conclusion": "The negation is **∃x ∀y (P(x, y) ∧ ¬Q(x, y))** — 'there exists an x such that for every y, P(x, y) holds and Q(x, y) does not.'",
+            "thinking_process": "Apply quantifier-De Morgan twice (one per quantifier), then unfold the implication and push the propositional ¬ inward.",
+            "step_by_step_solution": [
+              "**Step 1** — De Morgan's Law for Quantifiers (¬∀ → ∃¬).",
+              "**Step 2** — De Morgan's Law for Quantifiers again (¬∃ → ∀¬).",
+              "**Step 3** — Implication Law converts the inner implication.",
+              "**Step 4** — De Morgan's Law for ∨.",
+              "**Step 5** — Double Negation Law cleans up the result."
+            ],
+            "final_answer": "∃x ∀y (P(x, y) ∧ ¬Q(x, y)).",
+            "why_it_works": "Each step is a named CPCS222 equivalence; negation winds up touching only the atomic predicates P(x, y) and Q(x, y).",
+            "common_mistake": "Writing ∃x ∀y (P(x, y) → ¬Q(x, y)). The negation of an implication is a CONJUNCTION (A ∧ ¬B), not another implication."
+          },
+          {
+            "type": "misconception_box",
+            "title": "Common student mistakes",
+            "items": [
+              "Assuming ∀x ∃y and ∃y ∀x mean the same thing. They generally don't.",
+              "Writing ∀x ∃y but treating y as fixed across x in a proof — y was chosen for THAT x.",
+              "Stopping the negation halfway. Flip every quantifier; only stop when ¬ touches a predicate."
+            ]
+          },
+          {
+            "type": "memory_hook",
+            "title": "Quick rules",
+            "items": [
+              "**∃y ∀x ⇒ ∀x ∃y** (one direction only).",
+              "**∀x ∃y allows y to depend on x. ∃y ∀x demands a fixed y for every x.**",
+              "**Negation: flip every quantifier; negate the innermost predicate.**"
+            ]
+          }
+        ],
+        "sections": [
+          {
+            "number": 1,
+            "heading": "Reading nested quantifiers",
+            "explanation": "Parse left-to-right; outer quantifier binds first."
+          },
+          {
+            "number": 2,
+            "heading": "Order of quantifiers",
+            "explanation": "∃y ∀x ⇒ ∀x ∃y, but the reverse fails."
+          },
+          {
+            "number": 3,
+            "heading": "Negating nested quantifiers",
+            "explanation": "Flip every quantifier as ¬ moves inward; negate the innermost predicate."
+          }
+        ],
+        "worked_examples": [
+          {
+            "problem": "Domain ℝ. Truth of ∀x ∃y (x + y = 0) and ∃y ∀x (x + y = 0)?",
+            "step_by_step_solution": [
+              "First: True (y = -x). Second: False (no uniform y)."
+            ],
+            "final_answer": "T, F.",
+            "why_it_works": "∃∀ is strictly stronger than ∀∃.",
+            "common_mistake": "Treating the two as equivalent."
+          }
+        ],
+        "quick_checks": [
+          {
+            "type": "mcq",
+            "question": "Over ℤ, which is TRUE?",
+            "choices": [
+              "∃y ∀x (x < y)",
+              "∀x ∃y (x < y)",
+              "∀x ∀y (x < y)",
+              "∃x ∀y (x < y)"
+            ],
+            "answer": "∀x ∃y (x < y)",
+            "explanation": "y = x + 1 works per x; the others fail."
+          },
+          {
+            "type": "mcq",
+            "question": "Negate ∃x ∀y P(x, y):",
+            "choices": [
+              "∃x ∃y ¬P(x, y)",
+              "∀x ∀y ¬P(x, y)",
+              "∀x ∃y ¬P(x, y)",
+              "∃x ∀y ¬P(x, y)"
+            ],
+            "answer": "∀x ∃y ¬P(x, y)",
+            "explanation": "Flip each quantifier; negate predicate."
+          },
+          {
+            "type": "true_false",
+            "question": "∀x ∃y P(x, y) implies ∃y ∀x P(x, y).",
+            "choices": [
+              "True",
+              "False"
+            ],
+            "answer": "False",
+            "explanation": "Reverse direction holds; this one does not."
+          }
+        ],
+        "summary": {
+          "key_takeaways": [
+            "Order of mixed-type quantifiers MATTERS.",
+            "∃y ∀x P(x, y) ⇒ ∀x ∃y P(x, y), not the reverse.",
+            "Same-type quantifiers commute.",
+            "Negate by flipping each quantifier and negating the innermost predicate.",
+            "Implicit quantifiers in math English ('always', 'sum of any two') must be made explicit."
+          ],
+          "next": "Module 2 toolkit complete. Move to the Module 2 Exercises for full practice."
+        }
+      }
+    ],
+    "exercises": {
+      "lesson_id": "module2-exercises",
+      "type": "exercises",
+      "title": "Module 2 Exercises — Predicate Logic",
+      "description": "Practice covering predicates, quantifiers, English-to-logic translation, De Morgan for quantifiers, nested-quantifier evaluation and negation. Modeled on Lab 04, Assignment 1 Q5, and the Spring 2026 midterm Q5 area.",
+      "question_sets": [
+        {
+          "type": "mcq",
+          "questions": [
+            {
+              "question": "P(x): x > 5. Which is a proposition?",
+              "choices": [
+                "P(x)",
+                "P(7)",
+                "P(y)",
+                "∀x P(x) without a domain"
+              ],
+              "answer": "P(7)",
+              "explanation": "Plugging a value yields a proposition."
+            },
+            {
+              "question": "Domain ℤ. Which is TRUE?",
+              "choices": [
+                "∀n (n² > 0)",
+                "∃n (n² < 0)",
+                "∀n (n + 0 = n)",
+                "∃n ∀m (n + m = 0)"
+              ],
+              "answer": "∀n (n + 0 = n)",
+              "explanation": "0 is the additive identity."
+            },
+            {
+              "question": "'All birds fly' translates to:",
+              "choices": [
+                "∀x (B(x) ∧ F(x))",
+                "∀x (B(x) → F(x))",
+                "∃x (B(x) → F(x))",
+                "∃x (B(x) ∧ F(x))"
+              ],
+              "answer": "∀x (B(x) → F(x))",
+              "explanation": "All A are B uses → inside ∀.",
+              "source_pattern": "Inspired by Lab 04 Q1/Q2 — quantifier translation."
+            },
+            {
+              "question": "'Some integer is even' (domain ℤ) translates to:",
+              "choices": [
+                "∀n E(n)",
+                "∀n (I(n) → E(n))",
+                "∃n E(n)",
+                "∃n (I(n) → E(n))"
+              ],
+              "answer": "∃n E(n)",
+              "explanation": "On the integer domain, just ∃."
+            },
+            {
+              "question": "Negate ∀x P(x):",
+              "choices": [
+                "∀x ¬P(x)",
+                "∃x ¬P(x)",
+                "¬∃x ¬P(x)",
+                "∀x P(x)"
+              ],
+              "answer": "∃x ¬P(x)",
+              "explanation": "De Morgan for ∀.",
+              "source_pattern": "Inspired by Lab 04 Q9."
+            },
+            {
+              "question": "Domain ℝ. ∃y ∀x (x + y = 0) is:",
+              "choices": [
+                "True",
+                "False — no single y zeros every x",
+                "True only when y = 0",
+                "Equivalent to ∀x ∃y (x + y = 0)"
+              ],
+              "answer": "False — no single y zeros every x",
+              "explanation": "∃∀ is strictly stronger than ∀∃."
+            },
+            {
+              "question": "What is the negation of 'No student is late'?",
+              "choices": [
+                "Every student is late.",
+                "Some student is late.",
+                "All students are not late.",
+                "Some student is not late."
+              ],
+              "answer": "Some student is late.",
+              "explanation": "¬∀x (S(x) → ¬L(x)) ≡ ∃x (S(x) ∧ L(x))."
+            },
+            {
+              "question": "Which is the correct ¬(∀x (P(x) → Q(x)))?",
+              "choices": [
+                "∀x (P(x) ∧ ¬Q(x))",
+                "∃x (P(x) → ¬Q(x))",
+                "∃x (P(x) ∧ ¬Q(x))",
+                "∃x (¬P(x) → Q(x))"
+              ],
+              "answer": "∃x (P(x) ∧ ¬Q(x))",
+              "explanation": "Flip ∀ → ∃; ¬(P → Q) ≡ P ∧ ¬Q."
+            }
+          ]
+        },
+        {
+          "type": "true_false",
+          "questions": [
+            {
+              "question": "A predicate P(x) by itself is a proposition.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "False",
+              "explanation": "Needs a value or quantifier."
+            },
+            {
+              "question": "On the empty domain, ∀x P(x) is true.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "True",
+              "explanation": "Vacuous truth."
+            },
+            {
+              "question": "∀x ∀y P(x, y) ≡ ∀y ∀x P(x, y).",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "True",
+              "explanation": "Same-type quantifiers commute."
+            },
+            {
+              "question": "∀x ∃y P(x, y) ≡ ∃y ∀x P(x, y).",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "False",
+              "explanation": "Mixed quantifiers do not commute in general."
+            },
+            {
+              "question": "¬∃x P(x) ≡ ∀x ¬P(x).",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "True",
+              "explanation": "De Morgan for ∃."
+            },
+            {
+              "question": "'Every student passed' is correctly translated as ∀x (S(x) ∧ P(x)).",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "False",
+              "explanation": "Should use → inside ∀."
+            },
+            {
+              "question": "¬(P → Q) ≡ P ∧ ¬Q.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "True",
+              "explanation": "Standard equivalence."
+            }
+          ]
+        },
+        {
+          "type": "short_answer",
+          "questions": [
+            {
+              "question": "What is a 'domain of discourse' and why must it be specified?",
+              "answer": "The domain is the set of objects the variables range over. The truth value of a quantified statement depends on the domain — the same predicate can be true on one and false on another.",
+              "explanation": "Predicates have no fixed meaning outside a stated domain."
+            },
+            {
+              "question": "Translate 'There is a student in your class who has visited Madinah'. Use S(x), C(x), V(x).",
+              "answer": "Restricted: ∃x V(x). Unrestricted: ∃x (S(x) ∧ C(x) ∧ V(x)).",
+              "explanation": "Existential with conjunctive filter.",
+              "source_pattern": "Inspired by Lab 04 Q3."
+            },
+            {
+              "question": "Express the negation of 'Every Swedish movie is serious' so ¬ touches only predicates.",
+              "answer": "Original: ∀x (S(x) → R(x)). Negation: ∃x (S(x) ∧ ¬R(x)) — 'some Swedish movie is not serious'.",
+              "explanation": "Flip ∀ → ∃; ¬(P → Q) ≡ P ∧ ¬Q.",
+              "source_pattern": "Inspired by Lab 04 Q9."
+            },
+            {
+              "question": "Why does ∃y ∀x P(x, y) imply ∀x ∃y P(x, y) but not the reverse?",
+              "answer": "If a single y witnesses P for every x, then for each x we can use that same y. The reverse fails because the witness in ∀x ∃y can change with x — there might be no single y that works for all of them.",
+              "explanation": "Uniform witness ⇒ per-x witness."
+            },
+            {
+              "question": "Make the implicit quantifiers explicit and translate: 'The product of two negative numbers is positive.'",
+              "answer": "∀x ∀y ((x < 0 ∧ y < 0) → x · y > 0), domain = ℝ.",
+              "explanation": "'Of two' hides ∀x ∀y."
+            }
+          ]
+        },
+        {
+          "type": "fill_in_blank",
+          "questions": [
+            {
+              "question": "¬∀x P(x) ≡ ___ x ¬P(x).",
+              "answer": "∃",
+              "explanation": "De Morgan for ∀."
+            },
+            {
+              "question": "¬∃x P(x) ≡ ∀x ___ P(x).",
+              "answer": "¬",
+              "explanation": "De Morgan for ∃."
+            },
+            {
+              "question": "'All A are B' translates to ∀x (A(x) ___ B(x)).",
+              "answer": "→",
+              "explanation": "Implication inside ∀."
+            },
+            {
+              "question": "'Some A is B' translates to ∃x (A(x) ___ B(x)).",
+              "answer": "∧",
+              "explanation": "Conjunction inside ∃."
+            },
+            {
+              "question": "¬(P → Q) ≡ P ∧ ___ Q.",
+              "answer": "¬",
+              "explanation": "Negation of implication is conjunction with negated consequent."
+            },
+            {
+              "question": "¬∃x ∀y P(x, y) ≡ ___ x ___ y ¬P(x, y).",
+              "answer": "∀; ∃",
+              "explanation": "De Morgan's Law for Quantifiers applied twice."
+            },
+            {
+              "question": "¬(P → Q) ≡ P ∧ ___ Q.",
+              "answer": "¬",
+              "explanation": "Implication Law + De Morgan: ¬(¬P ∨ Q) ≡ P ∧ ¬Q."
+            },
+            {
+              "question": "'All KAU students who pass CPCS 203 may register for CPCS 222' translates to ∀x ((S(x) ___ P(x)) → R(x)).",
+              "answer": "∧",
+              "explanation": "Inside ∀, the hypothesis is the conjunction of the two conditions; the conclusion is the registration claim.",
+              "source_pattern": "Inspired by Lab 04 Q3 — translation with conjunctive filters."
+            }
+          ]
+        },
+        {
+          "type": "matching",
+          "questions": [
+            {
+              "question": "Match each English statement to its predicate-logic form. Domain = all people.",
+              "left": [
+                "Every student passes",
+                "Some student fails",
+                "No student is late",
+                "Some teacher is strict"
+              ],
+              "right": [
+                "∀x (S(x) → P(x))",
+                "∃x (S(x) ∧ ¬P(x))",
+                "∀x (S(x) → ¬L(x))",
+                "∃x (T(x) ∧ R(x))"
+              ],
+              "pairs": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  1
+                ],
+                [
+                  2,
+                  2
+                ],
+                [
+                  3,
+                  3
+                ]
+              ],
+              "explanation": "Standard 'all A are B' → and 'some A is B' ∧ patterns; 'no A is B' negates an existential."
+            }
+          ]
+        },
+        {
+          "type": "step_by_step",
+          "questions": [
+            {
+              "question": "Express 'No driver disobeys the speed limit' using D(x), O(x), then negate the result.",
+              "answer": "**Let:** D(x) = 'x is a driver', O(x) = 'x obeys the speed limit'.\n**Original:** ∀x (D(x) → O(x)).\n\n**Step 1** — De Morgan's Law for Quantifiers:\n¬∀x (D(x) → O(x)) ≡ ∃x ¬(D(x) → O(x)).\n\n**Step 2** — Negation of Implication (¬(P → Q) ≡ P ∧ ¬Q):\n∃x (D(x) ∧ ¬O(x)).\n\n**Conclusion:**\n'Some driver disobeys the speed limit.'",
+              "explanation": "Two-step rewrite using De Morgan + ¬(P → Q) ≡ P ∧ ¬Q.",
+              "source_pattern": "Inspired by Lab 04 Q9.",
+              "format": "law_step_solution",
+              "starting_expression": "¬∀x (D(x) → O(x))",
+              "steps": [
+                {
+                  "step": 1,
+                  "expression": "∃x ¬(D(x) → O(x))",
+                  "law_name": "De Morgan's Law for Quantifiers",
+                  "explanation": "¬∀x α ≡ ∃x ¬α."
+                },
+                {
+                  "step": 2,
+                  "expression": "∃x (D(x) ∧ ¬O(x))",
+                  "law_name": "Negation of Implication (¬(P → Q) ≡ P ∧ ¬Q)",
+                  "explanation": "Equivalently: Implication Law + De Morgan + Double Negation."
+                }
+              ],
+              "conclusion": "Negation: ∃x (D(x) ∧ ¬O(x)) — 'some driver disobeys the speed limit.'"
+            },
+            {
+              "question": "On a finite domain U = {1, 2, 3} with P(x, y) true exactly for (1, 3), (2, 1), (2, 2), (3, 1), (3, 2), (3, 3), evaluate ∀y ∃x (x ≠ y ∧ P(x, y)).",
+              "answer": "y = 1: x ∈ {2, 3} both work. y = 2: x = 3 works. y = 3: x = 1 works. ∀y holds. **TRUE.**",
+              "explanation": "Direct enumeration on the finite relation."
+            },
+            {
+              "question": "Translate 'Every student in your school has visited at least one country in Europe.' Use S(x), C(y), V(x, y). Domain = all people and all countries.",
+              "answer": "∀x (S(x) → ∃y (C(y) ∧ V(x, y))).",
+              "explanation": "Outer ∀ with filter; inner ∃ with filter.",
+              "source_pattern": "Inspired by Lab 04 Q10."
+            },
+            {
+              "question": "Negate ∀x ∃y ∀z P(x, y, z) so ¬ touches only the predicate.",
+              "answer": "¬∀x ∃y ∀z P ≡ ∃x ¬∃y ∀z P ≡ ∃x ∀y ¬∀z P ≡ ∃x ∀y ∃z ¬P(x, y, z).",
+              "explanation": "Three quantifiers to flip."
+            }
+          ]
+        },
+        {
+          "type": "exam_style",
+          "questions": [
+            {
+              "question": "Translate: 'Some student in CPCS 222 has not asked any faculty member a question.' Use S(x), F(x), A(x, y), CPCS222(x).",
+              "answer": "**Let:**\nCPCS222(x) = 'x is enrolled in CPCS 222'\nS(x) = 'x is a student'\nF(y) = 'y is a faculty member'\nA(x, y) = 'x has asked y a question'\n\n**Translation:**\n∃x (CPCS222(x) ∧ S(x) ∧ ∀y (F(y) → ¬A(x, y))).\n\n**Reading:**\nThere is a CPCS 222 student x such that for every faculty member y, x has not asked y a question.",
+              "explanation": "Outer ∃ over students with filters; inner ∀ over faculty with negated relation.",
+              "source_pattern": "Inspired by Lab 04 Q6."
+            },
+            {
+              "question": "Show that ∀x (P(x) → Q(x)) and ¬∃x (P(x) ∧ ¬Q(x)) are equivalent.",
+              "answer": "¬∃x (P(x) ∧ ¬Q(x)) ≡ ∀x ¬(P(x) ∧ ¬Q(x)) ≡ ∀x (¬P(x) ∨ Q(x)) ≡ ∀x (P(x) → Q(x)). ∎",
+              "explanation": "De Morgan for ∃, then for ∧, then implication-as-disjunction backwards."
+            },
+            {
+              "question": "Determine the truth value over ℝ: ∀x ∃y (xy = x).",
+              "answer": "Take y = 1; for every x, x · 1 = x. **TRUE.**",
+              "explanation": "Witness y = 1 works uniformly for every x."
+            },
+            {
+              "question": "Translate the negation in English: ¬∃w ∀a ∃f (P(w, f) ∧ Q(f, a)) where P(w, f) = 'woman w has taken flight f' and Q(f, a) = 'flight f is on airline a'.",
+              "answer": "Push ¬ inward: ∀w ∃a ∀f (¬P(w, f) ∨ ¬Q(f, a)). English: 'For every woman, some airline exists such that for every flight, either she has not taken that flight or that flight is not on that airline.' (i.e., no woman has taken a flight on every airline.)",
+              "explanation": "Mechanical negation + back-translation.",
+              "source_pattern": "Inspired by Lab 04 Q10 nested-quantifier negation."
+            },
+            {
+              "question": "Use rules to show ∀x (P(x) ∨ Q(x)) and ∀x P(x) ∨ ∀x Q(x) are NOT equivalent. Give a counterexample.",
+              "answer": "Domain = {1, 2}; P(1) = T, P(2) = F, Q(1) = F, Q(2) = T. Then ∀x (P(x) ∨ Q(x)) is T (1 has P, 2 has Q). But ∀x P(x) is F and ∀x Q(x) is F, so the right-hand side is F. Not equivalent.",
+              "explanation": "Pointwise satisfaction does not imply uniform satisfaction by either side."
+            }
+          ]
+        },
+        {
+          "type": "randomized",
+          "questions": [
+            {
+              "template": "Domain = {DOMAIN}. Determine the truth value of {EXPR}.",
+              "variables": {
+                "DOMAIN": [
+                  "ℤ",
+                  "ℝ",
+                  "positive integers"
+                ],
+                "EXPR": [
+                  "∀x ∃y (x + y = 0)",
+                  "∃y ∀x (x + y = 0)",
+                  "∀x ∃y (xy = 1)",
+                  "∃y ∀x (xy = x)",
+                  "∀x ∀y (x + y = y + x)"
+                ]
+              },
+              "instructions": "Pick a (DOMAIN, EXPR) pair; evaluate by giving a witness or counterexample.",
+              "example_realization": "DOMAIN = ℤ, EXPR = ∀x ∃y (xy = 1) → FALSE (x = 2 has no integer inverse).",
+              "explanation": "Same expression has different truth values on different domains.",
+              "source_pattern": "Inspired by Lab 04 Q4."
+            },
+            {
+              "template": "Translate the English sentence into predicate logic: '{SENTENCE}'.",
+              "variables": {
+                "SENTENCE": [
+                  "All cats purr.",
+                  "Some KAU student is from Riyadh.",
+                  "No bird is mute.",
+                  "Every prime greater than 2 is odd.",
+                  "Some integer is both prime and even."
+                ]
+              },
+              "instructions": "Apply 'all A are B' → ∀x (A(x) → B(x)); 'some A is B' → ∃x (A(x) ∧ B(x)); 'no A is B' negates an existential.",
+              "example_realization": "SENTENCE = 'No bird is mute' → ∀x (B(x) → ¬M(x)).",
+              "explanation": "Drill on the standard translation patterns.",
+              "source_pattern": "Inspired by Lab 04 Q2."
+            },
+            {
+              "template": "Negate {EXPR} so ¬ touches only predicates.",
+              "variables": {
+                "EXPR": [
+                  "∀x P(x)",
+                  "∃x P(x)",
+                  "∀x ∃y P(x, y)",
+                  "∃x ∀y P(x, y)",
+                  "∀x (P(x) → Q(x))",
+                  "∃x (P(x) ∧ Q(x))"
+                ]
+              },
+              "instructions": "Flip each quantifier; negate innermost predicate; use ¬(P → Q) ≡ P ∧ ¬Q.",
+              "example_realization": "EXPR = ∀x (P(x) → Q(x)) → ∃x (P(x) ∧ ¬Q(x)).",
+              "explanation": "Drill on negation procedure.",
+              "source_pattern": "Inspired by Lab 04 Q8/Q9."
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

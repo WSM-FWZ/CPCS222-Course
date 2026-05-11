@@ -1,0 +1,877 @@
+{
+  "course": "CPCS 222 — Discrete Mathematics",
+  "version": "v4",
+  "module": {
+    "module_id": 5,
+    "title": "Sequences",
+    "description": "Sequences (closed-form vs recurrence), arithmetic and geometric progressions, Fibonacci, and strings. v4 adds structured truth-table-style sequence tables, step-by-step closed-form derivations, and multi-line answers.",
+    "source_files": [
+      "CPCS222_05_Sequences.pdf",
+      "CPCS 222 - Lab 08 - Sequences and Summations.pdf"
+    ],
+    "lessons": [
+      {
+        "lesson_id": "module5-lesson1",
+        "type": "tutorial",
+        "title": "Introduction to Sequences",
+        "slug": "introduction-to-sequences",
+        "welcome": "A SEQUENCE is the ordered cousin of a set — same elements, but now position matters and repeats are allowed. Sequences appear everywhere in computing.",
+        "objectives": [
+          "Define a sequence as a function from a subset of ℤ to a set S.",
+          "Distinguish CLOSED-FORM from RECURRENCE definitions.",
+          "Read sequence notation: aₙ, {aₙ}, indexing.",
+          "Define a STRING as a finite sequence over an alphabet.",
+          "Compute terms from either form."
+        ],
+        "storytelling": [
+          {
+            "speaker": "Student",
+            "text": "What's the difference between a sequence and a set?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "A set is unordered and ignores duplicates. A sequence is ordered and allows repeats. Formally, a sequence is a FUNCTION from indices (usually ℕ or ℤ⁺) to values."
+          }
+        ],
+        "flow": [
+          {
+            "type": "definition",
+            "title": "Sequence",
+            "content": "A **sequence** is a function from a subset of ℤ — usually ℕ = {0, 1, 2, …} or ℤ⁺ = {1, 2, 3, …} — to a set S. Notation: `aₙ` is the n-th term; `{aₙ}` denotes the whole sequence."
+          },
+          {
+            "type": "table",
+            "title": "Two ways to specify a sequence",
+            "headers": [
+              "Method",
+              "What it gives",
+              "Pros / Cons"
+            ],
+            "rows": [
+              [
+                "Closed form",
+                "aₙ as a formula in n directly",
+                "Compute any term instantly; can be hard to discover"
+              ],
+              [
+                "Recurrence",
+                "aₙ in terms of earlier terms + initial conditions",
+                "Often natural to write; must compute earlier terms first"
+              ]
+            ]
+          },
+          {
+            "type": "table",
+            "title": "Sample sequences",
+            "headers": [
+              "Closed form",
+              "First few terms"
+            ],
+            "rows": [
+              [
+                "aₙ = n²",
+                "0, 1, 4, 9, 16, 25, …"
+              ],
+              [
+                "bₙ = (-1)ⁿ",
+                "1, -1, 1, -1, 1, …"
+              ],
+              [
+                "cₙ = 1/(n+1)",
+                "1, 1/2, 1/3, 1/4, …"
+              ]
+            ]
+          },
+          {
+            "type": "definition",
+            "title": "String",
+            "content": "A **string** is a finite sequence of characters from a finite **alphabet**. The empty string is denoted **λ** (length 0). Strings can be concatenated."
+          },
+          {
+            "type": "real_life_example",
+            "title": "Sequences in real life",
+            "items": [
+              "**Daily attendance** in CPCS 222: a₁, a₂, a₃, … (1 = present, 0 = absent).",
+              "**Monthly STC bill** is a sequence indexed by months.",
+              "**Saudi car-plate numbering** generates a sequence as plates are issued.",
+              "**Installment payments** form a sequence with a fixed length."
+            ]
+          },
+          {
+            "type": "definition",
+            "title": "Recurrence relations",
+            "content": "A **recurrence relation** defines aₙ in terms of one or more previous values, accompanied by **initial conditions** that anchor the early terms. The number of initial conditions equals the **depth** of the recurrence — a k-step back recurrence requires k initial conditions."
+          },
+          {
+            "type": "inline_dialogue",
+            "trigger": "After recurrences — students always ask about depth.",
+            "exchange": [
+              {
+                "speaker": "Student",
+                "text": "Why does Fibonacci need TWO initial conditions while a basic geometric needs only one?"
+              },
+              {
+                "speaker": "Professor",
+                "text": "Look at the recurrence depth. `aₙ = 2 · aₙ₋₁` only references the immediately previous term — depth 1, so one base. Fibonacci `fₙ = fₙ₋₁ + fₙ₋₂` references two previous terms — depth 2, so two bases."
+              }
+            ]
+          },
+          {
+            "type": "worked_example",
+            "title": "First six terms",
+            "source_pattern": "Inspired by Lab 08 Q1.",
+            "problem": "Find the first six terms of aₙ = (-1)ⁿ · n for n ≥ 0.",
+            "thinking_process": "(-1)ⁿ flips sign; n controls magnitude.",
+            "step_by_step_solution": [
+              "a₀ = 0, a₁ = -1, a₂ = 2, a₃ = -3, a₄ = 4, a₅ = -5."
+            ],
+            "final_answer": "0, -1, 2, -3, 4, -5.",
+            "common_mistake": "Forgetting (-1)⁰ = 1."
+          },
+          {
+            "type": "worked_example",
+            "title": "Compute from recurrence",
+            "source_pattern": "Inspired by Lab 08 Q3.",
+            "problem": "Given a₀ = 2 and aₙ = 3 · aₙ₋₁ + 1 for n ≥ 1, compute a₁ through a₄.",
+            "thinking_process": "Step-by-step substitution.",
+            "step_by_step_solution": [
+              "a₁ = 3·2 + 1 = 7.",
+              "a₂ = 3·7 + 1 = 22.",
+              "a₃ = 3·22 + 1 = 67.",
+              "a₄ = 3·67 + 1 = 202."
+            ],
+            "final_answer": "7, 22, 67, 202.",
+            "common_mistake": "Substituting aₙ on the right side instead of aₙ₋₁."
+          },
+          {
+            "type": "worked_example",
+            "title": "Recurrence to closed form",
+            "source_pattern": "Sec 2.4 unfolding.",
+            "problem": "Convert a₀ = 5; aₙ = aₙ₋₁ + 3 into a closed form.",
+            "thinking_process": "Each step adds 3 to the previous term.",
+            "step_by_step_solution": [
+              "a₁ = 5 + 3, a₂ = 5 + 2·3, a₃ = 5 + 3·3, …",
+              "Generalize: aₙ = 5 + 3n."
+            ],
+            "final_answer": "aₙ = 5 + 3n.",
+            "common_mistake": "Off-by-one when starting at index 0."
+          },
+          {
+            "type": "misconception_box",
+            "title": "Common student mistakes",
+            "items": [
+              "Confusing the sequence with the set of its values.",
+              "Forgetting whether index starts at 0 or 1.",
+              "Providing the wrong number of initial conditions for the recurrence depth.",
+              "Confusing the empty string λ with the empty set ∅."
+            ]
+          },
+          {
+            "type": "memory_hook",
+            "title": "Quick rules",
+            "items": [
+              "**Sequence = function from ℕ (or ℤ⁺) to S.**",
+              "**Closed form** = direct formula in n.",
+              "**Recurrence** = previous terms + initial conditions.",
+              "**Depth k recurrence needs k initial conditions.**"
+            ]
+          },
+          {
+            "type": "simulator_seq_gen",
+            "title": "Try It — Sequence Generator"
+          }
+        ],
+        "sections": [
+          {
+            "number": 1,
+            "heading": "What is a sequence",
+            "explanation": "Function from a subset of ℤ to a set; aₙ is the n-th term."
+          },
+          {
+            "number": 2,
+            "heading": "Closed form vs recurrence",
+            "explanation": "Two equivalent ways to define a sequence."
+          },
+          {
+            "number": 3,
+            "heading": "Strings and recurrences",
+            "explanation": "Strings are finite sequences over an alphabet; recurrences need initial conditions."
+          }
+        ],
+        "worked_examples": [
+          {
+            "problem": "Compute the first 5 terms of a₀ = 1, aₙ = 2 · aₙ₋₁.",
+            "step_by_step_solution": [
+              "1, 2, 4, 8, 16."
+            ],
+            "final_answer": "1, 2, 4, 8, 16.",
+            "why_it_works": "Each step doubles.",
+            "common_mistake": "Forgetting the initial condition."
+          }
+        ],
+        "quick_checks": [
+          {
+            "type": "mcq",
+            "question": "First term (a₀) of aₙ = n² + 1:",
+            "choices": [
+              "0",
+              "1",
+              "2",
+              "Cannot tell"
+            ],
+            "answer": "1",
+            "explanation": "0² + 1 = 1."
+          },
+          {
+            "type": "mcq",
+            "question": "Depth-2 recurrence needs how many initial conditions?",
+            "choices": [
+              "0",
+              "1",
+              "2",
+              "3"
+            ],
+            "answer": "2",
+            "explanation": "One per level of depth."
+          },
+          {
+            "type": "true_false",
+            "question": "Empty string λ has length 0.",
+            "choices": [
+              "True",
+              "False"
+            ],
+            "answer": "True",
+            "explanation": "By definition."
+          }
+        ],
+        "summary": {
+          "key_takeaways": [
+            "A sequence is a function from a subset of ℤ to a set.",
+            "Closed form is direct; recurrence uses earlier terms + initial conditions.",
+            "Recurrence depth = number of initial conditions needed.",
+            "Strings are finite sequences over an alphabet."
+          ],
+          "next": "Next: the THREE most important named patterns — arithmetic, geometric, and Fibonacci."
+        }
+      },
+      {
+        "lesson_id": "module5-lesson2",
+        "type": "tutorial",
+        "title": "Arithmetic, Geometric, and Fibonacci Sequences",
+        "slug": "arithmetic-geometric-and-fibonacci-sequences",
+        "welcome": "Three named patterns cover most of the sequences you'll meet: arithmetic (constant common difference), geometric (constant common ratio), and Fibonacci (a self-referential recurrence).",
+        "objectives": [
+          "Identify and write arithmetic and geometric progressions in both closed and recurrence form.",
+          "Distinguish arithmetic from geometric by checking consecutive differences vs ratios.",
+          "Define Fibonacci: f₀ = 0, f₁ = 1, fₙ = fₙ₋₁ + fₙ₋₂.",
+          "Recognize where these patterns appear in computing and real life."
+        ],
+        "storytelling": [
+          {
+            "speaker": "Student",
+            "text": "How do I quickly tell arithmetic vs geometric?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "Look at consecutive terms. Constant DIFFERENCE → arithmetic. Constant RATIO → geometric. If neither is constant, it's something else (squares, Fibonacci-like, etc.)."
+          }
+        ],
+        "flow": [
+          {
+            "type": "definition",
+            "title": "Arithmetic progression",
+            "content": "**aₙ = a + n·d**, where `a` is the initial term and `d` is the **common difference**. Each term is `d` more than the previous one. Recurrence: `a₀ = a; aₙ = aₙ₋₁ + d`."
+          },
+          {
+            "type": "definition",
+            "title": "Geometric progression",
+            "content": "**aₙ = a · rⁿ**, where `a` is the initial term and `r` is the **common ratio**. Each term is `r` times the previous one. Recurrence: `a₀ = a; aₙ = r · aₙ₋₁`."
+          },
+          {
+            "type": "table",
+            "title": "Quick diagnostic",
+            "headers": [
+              "Sequence",
+              "Differences",
+              "Ratios",
+              "Type"
+            ],
+            "rows": [
+              [
+                "3, 7, 11, 15",
+                "4, 4, 4 ✓",
+                "varies",
+                "Arithmetic, d = 4"
+              ],
+              [
+                "3, 6, 12, 24",
+                "varies",
+                "2, 2, 2 ✓",
+                "Geometric, r = 2"
+              ],
+              [
+                "1, 4, 9, 16",
+                "varies",
+                "varies",
+                "Squares (neither)"
+              ],
+              [
+                "0, 1, 1, 2, 3, 5",
+                "varies",
+                "varies",
+                "Fibonacci-like"
+              ]
+            ]
+          },
+          {
+            "type": "real_life_example",
+            "title": "Real-life patterns",
+            "items": [
+              "**Arithmetic — KAU monthly stipend:** SAR 1500, 1500, 1500, … (d = 0); or pay raises by SAR 200/year.",
+              "**Geometric — bacterial growth or compound interest:** doubles each period.",
+              "**Geometric — STC promotion:** half off each successive month for 4 months.",
+              "**Fibonacci — natural growth patterns:** spiral arrangements in seeds and shells."
+            ]
+          },
+          {
+            "type": "definition",
+            "title": "Fibonacci sequence",
+            "content": "**f₀ = 0, f₁ = 1, fₙ = fₙ₋₁ + fₙ₋₂** for n ≥ 2. First terms: 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, …"
+          },
+          {
+            "type": "table",
+            "title": "Fibonacci values f₀ through f₁₀",
+            "headers": [
+              "n",
+              "0",
+              "1",
+              "2",
+              "3",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "9",
+              "10"
+            ],
+            "rows": [
+              [
+                "fₙ",
+                "0",
+                "1",
+                "1",
+                "2",
+                "3",
+                "5",
+                "8",
+                "13",
+                "21",
+                "34",
+                "55"
+              ]
+            ],
+            "notes": "Each fₙ (n ≥ 2) is the sum of the two previous terms."
+          },
+          {
+            "type": "worked_example",
+            "title": "Arithmetic — find a, d, a₁₀ from two terms",
+            "source_pattern": "Inspired by Lab 08 — arithmetic progression two-term recovery.",
+            "problem": "An arithmetic progression has a₁ = 4 and a₅ = 20 (1-indexed). Find a, d, and a₁₀.",
+            "approach": "Use the 1-indexed closed form aₙ = a + (n − 1)·d. Plug in the two known terms; solve linearly.",
+            "step_by_step_solution": [
+              "**Given:** a₁ = 4 and a₅ = 20.",
+              "**Step 1** — Identify a:\n   1-indexed closed form gives a₁ = a, so a = 4.",
+              "**Step 2** — Solve for d:\n   a₅ = a + 4d = 20 ⇒ 4 + 4d = 20 ⇒ 4d = 16 ⇒ **d = 4**.",
+              "**Step 3** — Compute a₁₀:\n   a₁₀ = a + 9d = 4 + 9·4 = 4 + 36 = **40**."
+            ],
+            "final_answer": "a = 4, d = 4, a₁₀ = 40.",
+            "why_it_works": "Two distinct terms uniquely determine a linear (arithmetic) progression.",
+            "common_mistake": "Off-by-one in the index: 1-indexed form uses (n − 1)·d, not n·d."
+          },
+          {
+            "type": "worked_example",
+            "title": "Diagnose and write closed form",
+            "source_pattern": "Inspired by Lab 08 — diagnostic exercise.",
+            "problem": "Identify 3, 12, 48, 192, 768 and write a closed form.",
+            "thinking_process": "Compute consecutive ratios.",
+            "step_by_step_solution": [
+              "12/3 = 4, 48/12 = 4, 192/48 = 4, 768/192 = 4. Constant.",
+              "Geometric with a = 3, r = 4.",
+              "0-indexed: aₙ = 3 · 4ⁿ."
+            ],
+            "final_answer": "Geometric. aₙ = 3 · 4ⁿ.",
+            "common_mistake": "Reporting differences and concluding 'arithmetic' before checking ratios."
+          },
+          {
+            "type": "worked_example",
+            "title": "Fibonacci numbers",
+            "source_pattern": "Sec 2.4 worked example.",
+            "problem": "Compute the first eight Fibonacci numbers f₀ through f₇.",
+            "thinking_process": "Apply the recurrence from f₀ = 0, f₁ = 1.",
+            "step_by_step_solution": [
+              "f₀ = 0, f₁ = 1.",
+              "f₂ = 1, f₃ = 2, f₄ = 3, f₅ = 5, f₆ = 8, f₇ = 13."
+            ],
+            "final_answer": "0, 1, 1, 2, 3, 5, 8, 13.",
+            "common_mistake": "Skipping f₂ = 1 (assuming f₂ = 2)."
+          },
+          {
+            "type": "misconception_box",
+            "title": "Common student mistakes",
+            "items": [
+              "Confusing arithmetic (+) with geometric (×).",
+              "Diagnosing only differences without checking ratios (or vice versa).",
+              "Starting Fibonacci with f₁ = 1, f₂ = 2 — CPCS222 uses f₀ = 0, f₁ = 1.",
+              "Off-by-one when using closed forms with 1-indexed sequences."
+            ]
+          },
+          {
+            "type": "memory_hook",
+            "title": "Quick recognition",
+            "items": [
+              "**Arithmetic** = constant +.",
+              "**Geometric** = constant ×.",
+              "**Fibonacci** = sum of previous two.",
+              "Always check ratios AND differences before deciding."
+            ]
+          }
+        ],
+        "sections": [
+          {
+            "number": 1,
+            "heading": "Arithmetic and geometric",
+            "explanation": "Constant difference vs constant ratio."
+          },
+          {
+            "number": 2,
+            "heading": "Diagnosis",
+            "explanation": "Check consecutive ratios and differences."
+          },
+          {
+            "number": 3,
+            "heading": "Fibonacci",
+            "explanation": "Two-term recurrence with initial conditions f₀ = 0, f₁ = 1."
+          }
+        ],
+        "worked_examples": [
+          {
+            "problem": "f₆ = ? for Fibonacci.",
+            "step_by_step_solution": [
+              "0, 1, 1, 2, 3, 5, 8 → f₆ = 8."
+            ],
+            "final_answer": "8.",
+            "why_it_works": "Apply the recurrence.",
+            "common_mistake": "Off-by-one indexing."
+          }
+        ],
+        "quick_checks": [
+          {
+            "type": "mcq",
+            "question": "Which is geometric?",
+            "choices": [
+              "2, 5, 8, 11",
+              "3, 6, 12, 24",
+              "1, 4, 9, 16",
+              "0, 1, 1, 2"
+            ],
+            "answer": "3, 6, 12, 24",
+            "explanation": "Common ratio 2."
+          },
+          {
+            "type": "mcq",
+            "question": "f₆ for Fibonacci with f₀ = 0, f₁ = 1:",
+            "choices": [
+              "5",
+              "8",
+              "13",
+              "21"
+            ],
+            "answer": "8",
+            "explanation": "0,1,1,2,3,5,8."
+          },
+          {
+            "type": "true_false",
+            "question": "Arithmetic has a constant common ratio.",
+            "choices": [
+              "True",
+              "False"
+            ],
+            "answer": "False",
+            "explanation": "Common DIFFERENCE."
+          }
+        ],
+        "summary": {
+          "key_takeaways": [
+            "Arithmetic: aₙ = a + n·d (constant +).",
+            "Geometric: aₙ = a · rⁿ (constant ×).",
+            "Diagnose by consecutive differences and ratios.",
+            "Fibonacci: f₀ = 0, f₁ = 1, fₙ = fₙ₋₁ + fₙ₋₂.",
+            "Two-step recurrence needs two initial conditions."
+          ],
+          "next": "Module 5 toolkit complete. Move to Module 5 Exercises."
+        }
+      }
+    ],
+    "exercises": {
+      "lesson_id": "module5-exercises",
+      "type": "exercises",
+      "title": "Module 5 Exercises — Sequences",
+      "description": "Practice covering sequence definitions, indexing, closed-form vs recurrence, strings, arithmetic, geometric, and Fibonacci. Modeled on Lab 08.",
+      "question_sets": [
+        {
+          "type": "mcq",
+          "questions": [
+            {
+              "question": "Which is arithmetic?",
+              "choices": [
+                "2, 6, 18, 54",
+                "5, 8, 11, 14",
+                "1, 4, 9, 16",
+                "0, 1, 1, 2"
+              ],
+              "answer": "5, 8, 11, 14",
+              "explanation": "Common difference 3."
+            },
+            {
+              "question": "Which is geometric?",
+              "choices": [
+                "7, 4, 1, -2",
+                "1, 3, 5, 7",
+                "2, 6, 18, 54",
+                "0, 1, 1, 2"
+              ],
+              "answer": "2, 6, 18, 54",
+              "explanation": "Common ratio 3."
+            },
+            {
+              "question": "f₈ for Fibonacci:",
+              "choices": [
+                "13",
+                "21",
+                "34",
+                "55"
+              ],
+              "answer": "21",
+              "explanation": "0,1,1,2,3,5,8,13,21."
+            },
+            {
+              "question": "Arithmetic with a = 10, d = -3. a₅ (0-indexed)?",
+              "choices": [
+                "-5",
+                "5",
+                "-15",
+                "25"
+              ],
+              "answer": "-5",
+              "explanation": "10 + 5·(-3)."
+            },
+            {
+              "question": "Geometric with a = 2, r = 1/2. a₃ (0-indexed)?",
+              "choices": [
+                "1",
+                "1/2",
+                "1/4",
+                "8"
+              ],
+              "answer": "1/4",
+              "explanation": "2 · (1/2)³."
+            },
+            {
+              "question": "Length of empty string λ:",
+              "choices": [
+                "0",
+                "1",
+                "Undefined",
+                "Infinity"
+              ],
+              "answer": "0",
+              "explanation": "Definition."
+            },
+            {
+              "question": "Which is NOT geometric?",
+              "choices": [
+                "1, 2, 4, 8",
+                "3, 9, 27, 81",
+                "5, 10, 15, 20",
+                "10, 5, 5/2, 5/4"
+              ],
+              "answer": "5, 10, 15, 20",
+              "explanation": "Constant difference 5 → arithmetic."
+            },
+            {
+              "question": "Two-step recurrence needs how many initial conditions?",
+              "choices": [
+                "0",
+                "1",
+                "2",
+                "3"
+              ],
+              "answer": "2",
+              "explanation": "Depth 2."
+            }
+          ]
+        },
+        {
+          "type": "true_false",
+          "questions": [
+            {
+              "question": "A sequence is a function from a subset of ℤ to a set.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "True",
+              "explanation": "Standard definition."
+            },
+            {
+              "question": "Arithmetic has constant common ratio.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "False",
+              "explanation": "Common difference."
+            },
+            {
+              "question": "Geometric with |r| < 1 grows without bound.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "False",
+              "explanation": "Shrinks toward 0."
+            },
+            {
+              "question": "Fibonacci can be defined with one initial condition.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "False",
+              "explanation": "Two-step recurrence."
+            },
+            {
+              "question": "Strings are finite sequences over a finite alphabet.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "True",
+              "explanation": "Definition."
+            },
+            {
+              "question": "(-1)ⁿ alternates between 1 and -1.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "True",
+              "explanation": "Even n: 1; odd n: -1."
+            }
+          ]
+        },
+        {
+          "type": "short_answer",
+          "questions": [
+            {
+              "question": "Recurrence and closed form for 5, 9, 13, 17, …",
+              "answer": "Recurrence: a₁ = 5; aₙ = aₙ₋₁ + 4. Closed form: aₙ = 4n + 1 (1-indexed).",
+              "explanation": "Initial 5, common difference 4."
+            },
+            {
+              "question": "Closed form for 4, 12, 36, 108, …",
+              "answer": "a = 4, r = 3, aₙ = 4 · 3ⁿ (0-indexed).",
+              "explanation": "Geometric."
+            },
+            {
+              "question": "Compute f₉ and f₁₀.",
+              "answer": "f₈ = 21, f₉ = 34, f₁₀ = 55.",
+              "explanation": "Continue recurrence."
+            },
+            {
+              "question": "Distinguish 1, 2, 4, 8, 16 from 2, 4, 6, 8, 10.",
+              "answer": "First: ratios 2 → geometric, r = 2. Second: differences 2 → arithmetic, d = 2.",
+              "explanation": "Different patterns despite both growing."
+            },
+            {
+              "question": "Why do recurrences appear in algorithm analysis?",
+              "answer": "A recursive algorithm calls itself on smaller inputs; cost on size n equals cost of subproblems plus current-level work — exactly a recurrence.",
+              "explanation": "Algorithm analysis and recurrences are deeply connected."
+            }
+          ]
+        },
+        {
+          "type": "fill_in_blank",
+          "questions": [
+            {
+              "question": "Arithmetic closed form: aₙ = a + ___ · d.",
+              "answer": "n",
+              "explanation": "Linear in n."
+            },
+            {
+              "question": "Geometric closed form: aₙ = a · r___.",
+              "answer": "ⁿ",
+              "explanation": "Exponential in n."
+            },
+            {
+              "question": "Fibonacci recurrence: fₙ = fₙ₋₁ + ___.",
+              "answer": "fₙ₋₂",
+              "explanation": "Two-step back."
+            },
+            {
+              "question": "Common ratio of 3, 6, 12, 24 is ___.",
+              "answer": "2",
+              "explanation": "Each term doubles."
+            },
+            {
+              "question": "Initial conditions needed for depth-3 recurrence: ___.",
+              "answer": "3",
+              "explanation": "Match depth."
+            },
+            {
+              "question": "Arithmetic 1-indexed closed form: aₙ = a + ( ___ ) · d.",
+              "answer": "n − 1",
+              "explanation": "1-indexed convention."
+            },
+            {
+              "question": "Geometric closed form: aₙ = a · r___.",
+              "answer": "ⁿ",
+              "explanation": "Exponential in n."
+            },
+            {
+              "question": "Fibonacci: f₀ = ___, f₁ = ___, fₙ = fₙ₋₁ + fₙ₋₂.",
+              "answer": "0; 1",
+              "explanation": "CPCS222 convention."
+            }
+          ]
+        },
+        {
+          "type": "step_by_step",
+          "questions": [
+            {
+              "question": "First six terms of a₀ = 1; aₙ = 2 · aₙ₋₁ + 1.",
+              "answer": "1, 3, 7, 15, 31, 63 (= 2ⁿ⁺¹ - 1).",
+              "explanation": "Substitute step-by-step."
+            },
+            {
+              "question": "Diagnose 8, 12, 18, 27, 40.5.",
+              "answer": "Differences vary. Ratios: 1.5, 1.5, 1.5, 1.5 ✓. Geometric, a = 8, r = 1.5.",
+              "explanation": "Constant ratio diagnosis."
+            },
+            {
+              "question": "Convert closed form aₙ = 5 · 2ⁿ to recurrence.",
+              "answer": "Recurrence: a₀ = 5; aₙ = 2 · aₙ₋₁. First six: 5, 10, 20, 40, 80, 160.",
+              "explanation": "Geometric reverse."
+            },
+            {
+              "question": "Compute f₁₂.",
+              "answer": "0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144 → f₁₂ = 144.",
+              "explanation": "Mechanical recurrence."
+            }
+          ]
+        },
+        {
+          "type": "exam_style",
+          "questions": [
+            {
+              "question": "Arithmetic with a₃ = 17, a₇ = 41 (0-indexed). Find a, d, a₂₀.",
+              "answer": "4d = 24 → d = 6; a = 17 - 18 = -1; a₂₀ = -1 + 120 = 119.",
+              "explanation": "Two terms determine the progression."
+            },
+            {
+              "question": "Geometric with a₂ = 18, a₅ = 486. Find a, r, a₈.",
+              "answer": "r³ = 27 → r = 3; a = 18/9 = 2; a₈ = 2 · 6561 = 13122.",
+              "explanation": "Same idea using ratios."
+            },
+            {
+              "question": "Show fₙ₊₁/fₙ → φ = (1 + √5)/2.",
+              "answer": "Assume L = lim fₙ₊₁/fₙ. Divide recurrence by fₙ: L = 1 + 1/L, so L² = L + 1, L = (1+√5)/2 = φ.",
+              "explanation": "Limit argument."
+            },
+            {
+              "question": "Convert a₀ = 3; aₙ = 2 · aₙ₋₁ to closed form. Verify n = 4.",
+              "answer": "aₙ = 3 · 2ⁿ. a₄ = 48. Recurrence: 3, 6, 12, 24, 48 ✓.",
+              "explanation": "Geometric closed form."
+            }
+          ]
+        },
+        {
+          "type": "randomized",
+          "questions": [
+            {
+              "template": "First {N} terms of {KIND} with parameters {PARAMS}.",
+              "variables": {
+                "N": [
+                  "5",
+                  "6",
+                  "7"
+                ],
+                "KIND": [
+                  "arithmetic",
+                  "geometric",
+                  "Fibonacci-like"
+                ],
+                "PARAMS": [
+                  "a = 3, d = 4",
+                  "a = 2, r = 3",
+                  "a = 7, d = -2",
+                  "a = 1, r = 1/2",
+                  "f₀ = 1, f₁ = 2, fₙ = fₙ₋₁ + fₙ₋₂"
+                ]
+              },
+              "instructions": "Match KIND to rule; produce N terms.",
+              "example_realization": "N=5, arithmetic, a=3, d=4 → 3, 7, 11, 15, 19.",
+              "explanation": "Sequence-type drill."
+            },
+            {
+              "template": "Diagnose {SEQ}: arithmetic, geometric, or neither?",
+              "variables": {
+                "SEQ": [
+                  "3, 7, 11, 15, 19",
+                  "5, 10, 20, 40, 80",
+                  "1, 4, 9, 16, 25",
+                  "2, 5, 9, 14, 20",
+                  "10, 5, 5/2, 5/4, 5/8"
+                ]
+              },
+              "instructions": "Check differences and ratios.",
+              "example_realization": "3, 7, 11, 15, 19 → arithmetic, d = 4.",
+              "explanation": "Diagnostic drill."
+            },
+            {
+              "template": "Convert recurrence to closed form: {REC}.",
+              "variables": {
+                "REC": [
+                  "a₀ = 5; aₙ = aₙ₋₁ + 3",
+                  "a₀ = 1; aₙ = 2·aₙ₋₁",
+                  "a₀ = 7; aₙ = aₙ₋₁ - 2",
+                  "a₀ = 100; aₙ = 0.5·aₙ₋₁"
+                ]
+              },
+              "instructions": "Recognize arithmetic/geometric pattern.",
+              "example_realization": "a₀ = 5; aₙ = aₙ₋₁ + 3 → aₙ = 5 + 3n.",
+              "explanation": "Conversion drill."
+            },
+            {
+              "template": "Fibonacci f_{N} (with f₀ = 0, f₁ = 1).",
+              "variables": {
+                "N": [
+                  "5",
+                  "7",
+                  "10",
+                  "12",
+                  "15"
+                ]
+              },
+              "instructions": "Apply recurrence.",
+              "example_realization": "N = 10 → 55.",
+              "explanation": "Fibonacci computation."
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

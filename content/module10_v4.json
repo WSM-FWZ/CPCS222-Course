@@ -1,0 +1,1121 @@
+{
+  "course": "CPCS 222 — Discrete Mathematics",
+  "version": "v4",
+  "module": {
+    "module_id": 10,
+    "title": "Mathematical Induction",
+    "description": "The principle of mathematical induction (base case + inductive step), applications to summation formulas, inequalities, divisibility, recursive sequences, and an introduction to strong induction. v4 adds induction_solution worked examples that explicitly label Base Case, Inductive Hypothesis (IH), Inductive Step, and Conclusion.",
+    "source_files": [
+      "CPCS222_MathematicalInduction.pdf"
+    ],
+    "lessons": [
+      {
+        "lesson_id": "module10-lesson1",
+        "type": "tutorial",
+        "title": "Mathematical Induction — The Two Steps",
+        "slug": "mathematical-induction-two-steps",
+        "welcome": "Mathematical INDUCTION proves a statement holds for ALL integers n ≥ a base value. It works on a simple insight: if the first domino falls, and each falling domino topples the next, then every domino falls.",
+        "objectives": [
+          "State the principle of mathematical induction.",
+          "Identify the BASE CASE and the INDUCTIVE STEP.",
+          "Use the inductive hypothesis correctly.",
+          "Prove a simple summation formula by induction.",
+          "Recognize when induction is the right tool."
+        ],
+        "storytelling": [
+          {
+            "speaker": "Student",
+            "text": "Why is induction valid? It feels like cheating to assume P(k) when proving P(k+1)."
+          },
+          {
+            "speaker": "Professor",
+            "text": "It's not cheating because we already proved P(base). Combined with 'P(k) ⇒ P(k+1)', the chain is unbroken: base ⇒ next ⇒ next ⇒ … . Each link is established. Like dominoes: the first is pushed, and each one knocks over the one after it. The result holds for every n ≥ base."
+          }
+        ],
+        "flow": [
+          {
+            "type": "definition",
+            "title": "Principle of Mathematical Induction",
+            "content": "To prove P(n) holds for every integer n ≥ a, do TWO things:\n\n  1. **Base case:** prove P(a).\n  2. **Inductive step:** prove that for every k ≥ a, IF P(k) is true, THEN P(k + 1) is true.\n\nIf both steps succeed, P(n) holds for all n ≥ a."
+          },
+          {
+            "type": "table",
+            "title": "Anatomy of an induction proof",
+            "headers": [
+              "Part",
+              "What you write",
+              "Purpose"
+            ],
+            "rows": [
+              [
+                "Base case",
+                "'P(a) holds because …'",
+                "First domino falls"
+              ],
+              [
+                "Inductive hypothesis (IH)",
+                "'Assume P(k) holds for some k ≥ a.'",
+                "Hand on the next domino"
+              ],
+              [
+                "Inductive step",
+                "'… therefore P(k + 1) holds.'",
+                "Push the next domino"
+              ],
+              [
+                "Conclusion",
+                "'By induction, P(n) holds ∀n ≥ a. ∎'",
+                "All dominos fall"
+              ]
+            ]
+          },
+          {
+            "type": "induction_flow",
+            "title": "Anatomy of an induction proof",
+            "phases": [
+              {
+                "phase": "Base Case",
+                "purpose": "Verify P(a) directly. This is the first domino."
+              },
+              {
+                "phase": "Inductive Hypothesis (IH)",
+                "purpose": "Assume P(k) holds for some k ≥ a. (Conditional assumption.)"
+              },
+              {
+                "phase": "Inductive Step",
+                "purpose": "Use the IH to derive P(k+1)."
+              },
+              {
+                "phase": "Conclusion",
+                "purpose": "'By induction, P(n) holds for all n ≥ a.' ∎"
+              }
+            ],
+            "display": {
+              "preferred_size": "medium",
+              "max_height": 180,
+              "fit": "contain"
+            }
+          },
+          {
+            "type": "real_life_example",
+            "title": "The domino metaphor",
+            "items": [
+              "**Imagine a chain of dominoes.** If you knock over the first AND each domino can knock over the next, all dominoes fall.",
+              "**KAU example:** if you can prove (a) 'The first student in the line gets a seat', and (b) 'Whenever student k gets a seat, student k+1 also gets a seat', then EVERY student in the line gets a seat — by induction.",
+              "**Code analogy:** induction is the mathematical version of a `while` loop with a loop invariant."
+            ]
+          },
+          {
+            "type": "warning",
+            "title": "The inductive hypothesis is NOT a free assumption",
+            "content": "We assume P(k) only for the purpose of this conditional argument — to show P(k) → P(k+1). We are not claiming P(k) is true unconditionally; we are showing that IF P(k) holds, THEN P(k+1) follows."
+          },
+          {
+            "type": "definition",
+            "title": "Strong induction (preview)",
+            "content": "In **strong induction**, instead of just assuming P(k), you assume `P(a) ∧ P(a+1) ∧ … ∧ P(k)` and use any of these to prove P(k+1). Useful when the proof needs more than the immediately previous step."
+          },
+          {
+            "type": "mermaid",
+            "title": "The inductive chain",
+            "mermaid": "flowchart LR\n  A[\"Base: P(a) ✓\"] --> B[\"P(a+1)\"]\n  B --> C[\"P(a+2)\"]\n  C --> D[\"...\"]\n  D --> E[\"P(n)\"]\n  E --> F[\"P(n+1)\"]",
+            "display": {
+              "preferred_size": "medium",
+              "max_height": 200,
+              "fit": "contain",
+              "layout": "LR"
+            }
+          },
+          {
+            "type": "step_list",
+            "title": "How to write an induction proof",
+            "items": [
+              "1. **State** the claim P(n) and the range (n ≥ a).",
+              "2. **Base case:** verify P(a) directly.",
+              "3. **Inductive hypothesis:** 'Assume P(k) holds for some k ≥ a.'",
+              "4. **Inductive step:** use the hypothesis to derive P(k + 1).",
+              "5. **Conclude:** 'By induction, P(n) holds for all n ≥ a. ∎'"
+            ]
+          },
+          {
+            "type": "worked_example",
+            "title": "Sum of first n positive integers",
+            "source_pattern": "Sec 5.1 / classical induction example.",
+            "problem": "Prove by induction: for every n ≥ 1, `1 + 2 + 3 + … + n = n(n + 1) / 2`.",
+            "thinking_process": "Base n = 1; inductive step uses P(k) to derive P(k+1).",
+            "step_by_step_solution": [
+              "**Base (n = 1):** LHS = 1; RHS = 1·2/2 = 1. ✓",
+              "**Inductive hypothesis:** assume 1 + 2 + … + k = k(k+1)/2 for some k ≥ 1.",
+              "**Inductive step:** show 1 + 2 + … + k + (k+1) = (k+1)(k+2)/2.",
+              "LHS = [1 + 2 + … + k] + (k+1) = k(k+1)/2 + (k+1)   (by IH)",
+              "= (k+1) · [k/2 + 1] = (k+1) · (k + 2)/2 = (k+1)(k+2)/2 = RHS. ✓",
+              "By induction, the formula holds for all n ≥ 1. ∎"
+            ],
+            "final_answer": "1 + 2 + … + n = n(n+1)/2 for all n ≥ 1. ∎",
+            "common_mistake": "Skipping the base case; jumping to algebra without setting up the inductive step."
+          },
+          {
+            "type": "worked_example",
+            "format": "induction_solution",
+            "title": "Sum of powers of 2",
+            "source_pattern": "Sec 5.1 — geometric-style summation.",
+            "problem": "Prove by induction: for every n ≥ 0, **2⁰ + 2¹ + 2² + … + 2ⁿ = 2ⁿ⁺¹ − 1**.",
+            "approach": "Base n = 0; inductive step adds 2^{k+1}.",
+            "base_case": {
+              "label": "Base Case (n = 0)",
+              "lhs": "2⁰ = 1",
+              "rhs": "2¹ − 1 = 1",
+              "verification": "LHS = RHS = 1. ✓"
+            },
+            "inductive_hypothesis": {
+              "label": "Inductive Hypothesis",
+              "statement": "Assume P(k): 2⁰ + 2¹ + … + 2ᵏ = 2ᵏ⁺¹ − 1 for some k ≥ 0."
+            },
+            "inductive_step": {
+              "label": "Inductive Step",
+              "goal": "Show P(k+1): 2⁰ + 2¹ + … + 2ᵏ + 2ᵏ⁺¹ = 2ᵏ⁺² − 1.",
+              "steps": [
+                {
+                  "step": 1,
+                  "expression": "[2⁰ + … + 2ᵏ] + 2ᵏ⁺¹ = (2ᵏ⁺¹ − 1) + 2ᵏ⁺¹",
+                  "law_name": "Inductive Hypothesis",
+                  "explanation": "Substitute IH for the bracketed sum."
+                },
+                {
+                  "step": 2,
+                  "expression": "= 2 · 2ᵏ⁺¹ − 1",
+                  "law_name": "Algebra",
+                  "explanation": "Combine the two 2ᵏ⁺¹ terms."
+                },
+                {
+                  "step": 3,
+                  "expression": "= 2ᵏ⁺² − 1",
+                  "law_name": "Exponent Rule",
+                  "explanation": "2 · 2ᵏ⁺¹ = 2ᵏ⁺². Matches RHS of P(k+1). ✓"
+                }
+              ]
+            },
+            "conclusion": "**By the Principle of Mathematical Induction**, 2⁰ + 2¹ + … + 2ⁿ = 2ⁿ⁺¹ − 1 for all n ≥ 0. ∎",
+            "step_by_step_solution": [
+              "**Base Case (n = 0):** 2⁰ = 1 = 2¹ − 1. ✓",
+              "**IH:** assume 2⁰ + … + 2ᵏ = 2ᵏ⁺¹ − 1.",
+              "**Inductive Step:** add 2ᵏ⁺¹ to both sides → (2ᵏ⁺¹ − 1) + 2ᵏ⁺¹ = 2 · 2ᵏ⁺¹ − 1 = 2ᵏ⁺² − 1. ✓",
+              "**Conclusion:** by induction, formula holds for all n ≥ 0. ∎"
+            ],
+            "final_answer": "2⁰ + 2¹ + … + 2ⁿ = 2ⁿ⁺¹ − 1 for all n ≥ 0. ∎",
+            "why_it_works": "The doubling structure of 2ᵏ matches exactly the additive step in the induction.",
+            "common_mistake": "Adding 2ᵏ to both sides instead of 2ᵏ⁺¹ — the new term must be the *next* power, not the previous."
+          },
+          {
+            "type": "worked_example",
+            "format": "induction_solution",
+            "title": "Sum of cubes equals (sum of integers)²",
+            "source_pattern": "Sec 5.1 — induction on a closed form.",
+            "problem": "Prove: for every n ≥ 1, **1³ + 2³ + … + n³ = (n(n+1)/2)²**.",
+            "approach": "Base n = 1; inductive step adds (k+1)³ and uses algebra to land on the (k+1)(k+2)/2 form.",
+            "base_case": {
+              "label": "Base Case (n = 1)",
+              "lhs": "1³ = 1",
+              "rhs": "(1·2/2)² = 1² = 1",
+              "verification": "LHS = RHS = 1. ✓"
+            },
+            "inductive_hypothesis": {
+              "label": "Inductive Hypothesis",
+              "statement": "Assume P(k): 1³ + 2³ + … + k³ = (k(k+1)/2)²."
+            },
+            "inductive_step": {
+              "label": "Inductive Step",
+              "goal": "Show P(k+1): 1³ + 2³ + … + k³ + (k+1)³ = ((k+1)(k+2)/2)².",
+              "steps": [
+                {
+                  "step": 1,
+                  "expression": "[1³ + … + k³] + (k+1)³ = (k(k+1)/2)² + (k+1)³",
+                  "law_name": "Inductive Hypothesis",
+                  "explanation": "Substitute IH."
+                },
+                {
+                  "step": 2,
+                  "expression": "= (k+1)² · [k²/4 + (k+1)]",
+                  "law_name": "Factor (k+1)²",
+                  "explanation": "Pull (k+1)² out: (k(k+1)/2)² = (k+1)² · k²/4 and (k+1)³ = (k+1)² · (k+1)."
+                },
+                {
+                  "step": 3,
+                  "expression": "= (k+1)² · (k² + 4k + 4)/4",
+                  "law_name": "Common denominator",
+                  "explanation": "k²/4 + (k+1) = (k² + 4k + 4)/4."
+                },
+                {
+                  "step": 4,
+                  "expression": "= (k+1)² · (k+2)²/4",
+                  "law_name": "Perfect square",
+                  "explanation": "k² + 4k + 4 = (k + 2)²."
+                },
+                {
+                  "step": 5,
+                  "expression": "= ((k+1)(k+2)/2)²",
+                  "law_name": "Algebra",
+                  "explanation": "Matches RHS of P(k+1). ✓"
+                }
+              ]
+            },
+            "conclusion": "**By the Principle of Mathematical Induction**, 1³ + … + n³ = (n(n+1)/2)² for every n ≥ 1. ∎",
+            "step_by_step_solution": [
+              "**Base Case (n = 1):** 1 = 1². ✓",
+              "**IH:** assume the formula for k.",
+              "**Inductive Step:** add (k+1)³, factor (k+1)², simplify to ((k+1)(k+2)/2)². ✓",
+              "**Conclusion:** by induction, formula holds for all n ≥ 1. ∎"
+            ],
+            "final_answer": "1³ + 2³ + … + n³ = (n(n+1)/2)². ∎",
+            "why_it_works": "The closed form is already a perfect square; factoring (k+1)² out of the IH + extra cube makes the induction visible.",
+            "common_mistake": "Algebraic slip on k² + 4k + 4 — recognize it as (k + 2)²."
+          },
+          {
+            "type": "misconception_box",
+            "title": "Common student mistakes",
+            "items": [
+              "Skipping the base case (the chain has no start without it).",
+              "Treating the inductive hypothesis as a free assumption rather than a conditional one.",
+              "Forgetting to ADD the new term in the inductive step.",
+              "Not stating the conclusion 'by induction'."
+            ]
+          },
+          {
+            "type": "memory_hook",
+            "title": "Two-step rule",
+            "items": [
+              "**Step 1 (base):** verify P(a).",
+              "**Step 2 (inductive):** P(k) → P(k+1).",
+              "**Both ⇒** P(n) for all n ≥ a.",
+              "**Domino mental model.**"
+            ]
+          },
+          {
+            "type": "simulator_induction_check",
+            "title": "Try It — Induction Verifier"
+          }
+        ],
+        "sections": [
+          {
+            "number": 1,
+            "heading": "Principle of induction",
+            "explanation": "Base case + inductive step ⇒ P(n) for all n ≥ a."
+          },
+          {
+            "number": 2,
+            "heading": "Writing an induction proof",
+            "explanation": "State, base, IH, step, conclude."
+          },
+          {
+            "number": 3,
+            "heading": "Strong induction (preview)",
+            "explanation": "Assume P holds for all k' ≤ k, prove P(k+1)."
+          }
+        ],
+        "worked_examples": [
+          {
+            "problem": "Prove 2 + 4 + … + 2n = n(n+1) for all n ≥ 1.",
+            "step_by_step_solution": [
+              "Base n=1: 2 = 1·2 ✓.",
+              "IH: 2 + 4 + … + 2k = k(k+1).",
+              "Step: + 2(k+1) gives k(k+1) + 2(k+1) = (k+1)(k+2). ✓"
+            ],
+            "final_answer": "Holds for all n ≥ 1. ∎",
+            "why_it_works": "Standard sum-formula induction.",
+            "common_mistake": "Forgetting to add 2(k+1) to both sides."
+          }
+        ],
+        "quick_checks": [
+          {
+            "type": "mcq",
+            "question": "Induction needs:",
+            "choices": [
+              "Base case only",
+              "Inductive step only",
+              "Both base and step",
+              "Truth table"
+            ],
+            "answer": "Both base and step",
+            "explanation": "Standard."
+          },
+          {
+            "type": "mcq",
+            "question": "What's the inductive hypothesis (IH)?",
+            "choices": [
+              "P(n) for all n",
+              "P(k+1)",
+              "Assume P(k) for some k ≥ a",
+              "P(a) only"
+            ],
+            "answer": "Assume P(k) for some k ≥ a",
+            "explanation": "Conditional assumption."
+          },
+          {
+            "type": "true_false",
+            "question": "Induction proves P(n) only for the base case.",
+            "choices": [
+              "True",
+              "False"
+            ],
+            "answer": "False",
+            "explanation": "Both steps together prove for all n ≥ a."
+          }
+        ],
+        "summary": {
+          "key_takeaways": [
+            "Induction = base case + inductive step.",
+            "IH is conditional: assume P(k), derive P(k+1).",
+            "Both halves are required.",
+            "Useful for summation formulas, divisibility, and recursive structures."
+          ],
+          "next": "Next: induction on inequalities, divisibility, and a glimpse of strong induction."
+        }
+      },
+      {
+        "lesson_id": "module10-lesson2",
+        "type": "tutorial",
+        "title": "Induction on Inequalities, Divisibility, and Recursion",
+        "slug": "induction-on-inequalities-divisibility-and-recursion",
+        "welcome": "The same two-step pattern proves much more than summation formulas. This lesson shows induction at work on inequalities, divisibility, and recursive structures.",
+        "objectives": [
+          "Prove inequalities by induction (e.g., 2ⁿ > n).",
+          "Prove divisibility statements by induction (e.g., 3 | n³ - n).",
+          "Apply induction to recursive sequences and algorithms.",
+          "Distinguish weak induction from strong induction by use case."
+        ],
+        "storytelling": [
+          {
+            "speaker": "Student",
+            "text": "Why does the base case sometimes start at n = 4 and not n = 1?"
+          },
+          {
+            "speaker": "Professor",
+            "text": "Because the claim might fail for small n. For 2ⁿ > n², the smallest n where it actually holds is n = 5 (since 2⁵ = 32 > 25 = 5², while 2⁴ = 16 ≯ 16 = 4²). The base case must be the first n where the claim is genuinely true, and the inductive step covers everything after that."
+          }
+        ],
+        "flow": [
+          {
+            "type": "definition",
+            "title": "Induction on inequalities",
+            "content": "Inequality proofs by induction often need extra algebraic work in the inductive step — typically showing that 'a bigger thing on each side' preserves the inequality."
+          },
+          {
+            "type": "worked_example",
+            "format": "induction_solution",
+            "title": "Inequality 2ⁿ > n",
+            "source_pattern": "Sec 5.1 inequality.",
+            "problem": "Prove by induction: for every n ≥ 1, **2ⁿ > n**.",
+            "approach": "Base n = 1 gives 2 > 1. Inductive step doubles 2ᵏ and uses the IH twice.",
+            "base_case": {
+              "label": "Base Case (n = 1)",
+              "lhs": "2¹ = 2",
+              "rhs": "1",
+              "verification": "2 > 1. ✓"
+            },
+            "inductive_hypothesis": {
+              "label": "Inductive Hypothesis",
+              "statement": "Assume P(k): 2ᵏ > k for some k ≥ 1."
+            },
+            "inductive_step": {
+              "label": "Inductive Step",
+              "goal": "Show P(k+1): 2ᵏ⁺¹ > k + 1.",
+              "steps": [
+                {
+                  "step": 1,
+                  "expression": "2ᵏ⁺¹ = 2 · 2ᵏ",
+                  "law_name": "Exponent Rule",
+                  "explanation": "2ᵏ⁺¹ = 2 · 2ᵏ."
+                },
+                {
+                  "step": 2,
+                  "expression": "2 · 2ᵏ > 2k",
+                  "law_name": "Inductive Hypothesis",
+                  "explanation": "Multiply 2ᵏ > k by 2."
+                },
+                {
+                  "step": 3,
+                  "expression": "2k ≥ k + 1",
+                  "law_name": "Algebra (k ≥ 1)",
+                  "explanation": "k + k ≥ k + 1 iff k ≥ 1, which is our domain."
+                },
+                {
+                  "step": 4,
+                  "expression": "Therefore 2ᵏ⁺¹ > k + 1",
+                  "law_name": "Transitivity of >",
+                  "explanation": "Combine the strict and weak inequalities."
+                }
+              ]
+            },
+            "conclusion": "**By the Principle of Mathematical Induction**, 2ⁿ > n for all n ≥ 1. ∎",
+            "step_by_step_solution": [
+              "**Base Case (n = 1):** 2 > 1. ✓",
+              "**IH:** assume 2ᵏ > k for some k ≥ 1.",
+              "**Inductive Step:** 2ᵏ⁺¹ = 2 · 2ᵏ > 2k ≥ k + 1 (since k ≥ 1). ✓",
+              "**Conclusion:** by induction, 2ⁿ > n for all n ≥ 1. ∎"
+            ],
+            "final_answer": "2ⁿ > n for all n ≥ 1. ∎",
+            "why_it_works": "Doubling 2ᵏ produces 2 · 2ᵏ = 2ᵏ⁺¹; using IH and k ≥ 1 makes 2k ≥ k + 1 immediate.",
+            "common_mistake": "Replacing 2 · 2ᵏ with 2k + 1 directly without the intermediate strict-weak chain."
+          },
+          {
+            "type": "definition",
+            "title": "Induction on divisibility",
+            "content": "To prove `d | f(n)` for all n ≥ a, use base case to verify d | f(a), then in the inductive step use d | f(k) (IH) to derive d | f(k+1). Algebraically, write `f(k+1) = f(k) + (multiple of d)`."
+          },
+          {
+            "type": "worked_example",
+            "format": "induction_solution",
+            "title": "Divisibility: 3 divides n³ − n",
+            "source_pattern": "Sec 5.1 divisibility.",
+            "problem": "Prove by induction: for every n ≥ 0, **3 | (n³ − n)**.",
+            "approach": "Base n = 0; inductive step expresses (k+1)³ − (k+1) as (k³ − k) + 3·(k² + k).",
+            "base_case": {
+              "label": "Base Case (n = 0)",
+              "lhs": "0³ − 0 = 0",
+              "verification": "3 | 0. ✓"
+            },
+            "inductive_hypothesis": {
+              "label": "Inductive Hypothesis",
+              "statement": "Assume P(k): 3 | (k³ − k)."
+            },
+            "inductive_step": {
+              "label": "Inductive Step",
+              "goal": "Show P(k+1): 3 | ((k+1)³ − (k+1)).",
+              "steps": [
+                {
+                  "step": 1,
+                  "expression": "(k+1)³ − (k+1) = k³ + 3k² + 3k + 1 − k − 1",
+                  "law_name": "Algebra (expand)",
+                  "explanation": "Binomial expansion."
+                },
+                {
+                  "step": 2,
+                  "expression": "= (k³ − k) + 3k² + 3k",
+                  "law_name": "Regroup",
+                  "explanation": "Collect terms."
+                },
+                {
+                  "step": 3,
+                  "expression": "= (k³ − k) + 3(k² + k)",
+                  "law_name": "Factor 3",
+                  "explanation": "The extra terms are an explicit multiple of 3."
+                },
+                {
+                  "step": 4,
+                  "expression": "3 | (k³ − k) by IH and 3 | 3(k² + k)",
+                  "law_name": "Inductive Hypothesis + Divisibility",
+                  "explanation": "Both summands are divisible by 3."
+                },
+                {
+                  "step": 5,
+                  "expression": "Therefore 3 | ((k+1)³ − (k+1))",
+                  "law_name": "Sum of multiples",
+                  "explanation": "Sum of two multiples of 3 is a multiple of 3."
+                }
+              ]
+            },
+            "conclusion": "**By the Principle of Mathematical Induction**, 3 | (n³ − n) for every n ≥ 0. ∎",
+            "step_by_step_solution": [
+              "**Base Case (n = 0):** 0 is divisible by 3. ✓",
+              "**IH:** assume 3 | (k³ − k).",
+              "**Inductive Step:** (k+1)³ − (k+1) = (k³ − k) + 3(k² + k). Both summands divisible by 3. ✓",
+              "**Conclusion:** by induction, 3 | (n³ − n) for all n ≥ 0. ∎"
+            ],
+            "final_answer": "3 | (n³ − n). ∎",
+            "why_it_works": "The crucial algebraic identity (k+1)³ − (k+1) = (k³ − k) + 3·(k² + k) decomposes the next case into (previous case) + (explicit multiple of 3).",
+            "common_mistake": "Skipping the algebraic decomposition into f(k) + 3·integer — without it the inductive step has nothing to lean on."
+          },
+          {
+            "type": "definition",
+            "title": "Strong induction",
+            "content": "**Strong induction:** assume P(j) for ALL j with a ≤ j ≤ k, then prove P(k + 1). Useful when the proof of P(k+1) needs an earlier case, not just P(k). Equivalent in power to ordinary induction but often more convenient."
+          },
+          {
+            "type": "inline_dialogue",
+            "trigger": "After strong induction — students often wonder why both forms exist.",
+            "exchange": [
+              {
+                "speaker": "Student",
+                "text": "If strong induction is at least as powerful, why use weak induction?"
+              },
+              {
+                "speaker": "Professor",
+                "text": "Weak is usually CLEANER when the next case follows from JUST the previous one — like summation formulas. Strong induction shines when proving things about, say, prime factorization (where you need to break n down into possibly much smaller factors). Same logical strength, different ergonomics."
+              }
+            ]
+          },
+          {
+            "type": "real_life_example",
+            "title": "Where induction shows up at KAU",
+            "items": [
+              "**Algorithm correctness:** prove a loop invariant by induction over loop iterations.",
+              "**Recurrence solutions:** prove a closed form for `T(n) = T(n-1) + n` by induction.",
+              "**Compound interest at SABB or Al Rajhi:** prove that after n months the balance is `P(1 + r)ⁿ`.",
+              "**Pigeonhole-like counting** in CPCS 222 itself uses induction in the underlying proofs."
+            ]
+          },
+          {
+            "type": "worked_example",
+            "title": "Strong induction — every integer n ≥ 2 has a prime factorization",
+            "source_pattern": "Classical strong-induction example.",
+            "problem": "Prove: every integer n ≥ 2 can be written as a product of primes.",
+            "thinking_process": "Base n = 2 (prime). Strong IH: every j with 2 ≤ j ≤ k has a factorization. Show n = k + 1 also does.",
+            "step_by_step_solution": [
+              "**Base (n = 2):** 2 is prime; itself is a 'product' of one prime. ✓",
+              "**IH (strong):** assume every j with 2 ≤ j ≤ k has a prime factorization.",
+              "**Step:** consider n = k + 1.",
+              "Case 1: k + 1 is prime → it is its own factorization. ✓",
+              "Case 2: k + 1 is composite → k + 1 = a·b with 2 ≤ a, b ≤ k. By IH, both a and b have prime factorizations; concatenating gives one for k + 1. ✓",
+              "By strong induction, every n ≥ 2 factors into primes. ∎"
+            ],
+            "final_answer": "Every n ≥ 2 has a prime factorization. ∎",
+            "common_mistake": "Trying to use weak induction here — the factorization of k + 1 may need MUCH smaller pieces, not just k."
+          },
+          {
+            "type": "worked_example",
+            "title": "Induction on a recurrence",
+            "source_pattern": "Sec 5.1 — induction proves recurrence closed forms.",
+            "problem": "Define a₀ = 2, aₙ = 2 · aₙ₋₁ for n ≥ 1. Prove by induction aₙ = 2ⁿ⁺¹.",
+            "thinking_process": "Standard recurrence induction.",
+            "step_by_step_solution": [
+              "**Base (n = 0):** a₀ = 2 = 2¹ = 2⁰⁺¹. ✓",
+              "**IH:** aₖ = 2ᵏ⁺¹.",
+              "**Step:** aₖ₊₁ = 2 · aₖ = 2 · 2ᵏ⁺¹ = 2ᵏ⁺². ✓",
+              "By induction, aₙ = 2ⁿ⁺¹ for all n ≥ 0. ∎"
+            ],
+            "final_answer": "aₙ = 2ⁿ⁺¹ for all n ≥ 0. ∎",
+            "common_mistake": "Failing to show the closed form matches at the base."
+          },
+          {
+            "type": "misconception_box",
+            "title": "Common student mistakes",
+            "items": [
+              "Wrong base case — must be the FIRST n where the claim holds.",
+              "Using strong induction syntax when weak suffices (or vice versa).",
+              "Algebraic errors in the inductive step (especially with inequalities).",
+              "Not stating 'by induction' in the conclusion."
+            ]
+          },
+          {
+            "type": "memory_hook",
+            "title": "When to reach for which",
+            "items": [
+              "**Weak induction:** P(k) → P(k+1). Most summation formulas.",
+              "**Strong induction:** P(a), …, P(k) → P(k+1). Useful when next case needs earlier ones.",
+              "**Both proven by base + inductive step.**"
+            ]
+          }
+        ],
+        "sections": [
+          {
+            "number": 1,
+            "heading": "Inequalities",
+            "explanation": "Apply IH and tighten using extra algebraic facts."
+          },
+          {
+            "number": 2,
+            "heading": "Divisibility",
+            "explanation": "Express f(k+1) as f(k) + d·(integer)."
+          },
+          {
+            "number": 3,
+            "heading": "Strong induction",
+            "explanation": "Useful when next case depends on earlier-than-immediate-previous case."
+          }
+        ],
+        "worked_examples": [
+          {
+            "problem": "Prove 4 | (5ⁿ - 1) for all n ≥ 0.",
+            "step_by_step_solution": [
+              "Base: 5⁰ - 1 = 0, divisible by 4. ✓",
+              "IH: 5ᵏ - 1 = 4m.",
+              "Step: 5ᵏ⁺¹ - 1 = 5·5ᵏ - 1 = 5(4m + 1) - 1 = 20m + 4 = 4(5m + 1). Divisible by 4. ✓"
+            ],
+            "final_answer": "4 | 5ⁿ - 1 for all n ≥ 0. ∎",
+            "why_it_works": "Express (k+1) case in terms of k case + multiple of 4.",
+            "common_mistake": "Skipping the algebraic decomposition."
+          }
+        ],
+        "quick_checks": [
+          {
+            "type": "mcq",
+            "question": "When proving P(n+1) using strong induction, you assume:",
+            "choices": [
+              "P(a)",
+              "P(n+1)",
+              "P(j) for all a ≤ j ≤ n",
+              "Nothing"
+            ],
+            "answer": "P(j) for all a ≤ j ≤ n",
+            "explanation": "Strong induction."
+          },
+          {
+            "type": "mcq",
+            "question": "Best for proving 2ⁿ > n²?",
+            "choices": [
+              "Direct proof",
+              "Weak induction (with care for early base)",
+              "Truth table",
+              "Counterexample"
+            ],
+            "answer": "Weak induction (with care for early base)",
+            "explanation": "Standard inequality induction."
+          },
+          {
+            "type": "true_false",
+            "question": "Strong induction is logically more powerful than weak induction.",
+            "choices": [
+              "True",
+              "False"
+            ],
+            "answer": "False",
+            "explanation": "Equivalent power; strong is just sometimes more convenient."
+          }
+        ],
+        "summary": {
+          "key_takeaways": [
+            "Induction proves inequalities, divisibility, and recurrence formulas.",
+            "Inequality steps often need extra algebraic facts.",
+            "Divisibility: express f(k+1) = f(k) + d·integer.",
+            "Strong induction: assume P(a), …, P(k) — useful for prime factorization, structural recursion.",
+            "Equivalent in power to weak induction."
+          ],
+          "next": "Module 10 toolkit complete. Move to Module 10 Exercises."
+        }
+      }
+    ],
+    "exercises": {
+      "lesson_id": "module10-exercises",
+      "type": "exercises",
+      "title": "Module 10 Exercises — Mathematical Induction",
+      "description": "Practice covering the principle of induction, summation/inequality/divisibility proofs, and strong induction. Modeled on Sec 5.1 examples and standard CPCS 222 exam patterns.",
+      "question_sets": [
+        {
+          "type": "mcq",
+          "questions": [
+            {
+              "question": "Induction requires:",
+              "choices": [
+                "Only base case",
+                "Only inductive step",
+                "Both base and inductive step",
+                "A truth table"
+              ],
+              "answer": "Both base and inductive step",
+              "explanation": "Foundation of the principle."
+            },
+            {
+              "question": "Inductive hypothesis (IH) means:",
+              "choices": [
+                "Assume P(n) for all n",
+                "Assume P(k+1)",
+                "Assume P(k) for some k ≥ a",
+                "P(a)"
+              ],
+              "answer": "Assume P(k) for some k ≥ a",
+              "explanation": "Conditional assumption."
+            },
+            {
+              "question": "Strong induction assumes:",
+              "choices": [
+                "P(k) only",
+                "P(a) only",
+                "P(a) ∧ P(a+1) ∧ … ∧ P(k)",
+                "Nothing"
+              ],
+              "answer": "P(a) ∧ P(a+1) ∧ … ∧ P(k)",
+              "explanation": "All previous cases."
+            },
+            {
+              "question": "Why do we sometimes start the base at n = 4?",
+              "choices": [
+                "Convention",
+                "First n where claim holds",
+                "Faster proofs",
+                "Larger base = stronger result"
+              ],
+              "answer": "First n where claim holds",
+              "explanation": "Base must be where the claim is genuinely true."
+            },
+            {
+              "question": "Sum 1+2+...+n =",
+              "choices": [
+                "n²",
+                "n(n+1)/2",
+                "n(n+1)(2n+1)/6",
+                "2ⁿ"
+              ],
+              "answer": "n(n+1)/2",
+              "explanation": "Gauss formula proven by induction."
+            },
+            {
+              "question": "After induction is done, you write:",
+              "choices": [
+                "'By contradiction'",
+                "'By induction, P(n) holds for all n ≥ a. ∎'",
+                "'By contraposition'",
+                "'QED' only"
+              ],
+              "answer": "'By induction, P(n) holds for all n ≥ a. ∎'",
+              "explanation": "Standard conclusion."
+            },
+            {
+              "question": "Strong induction is logically:",
+              "choices": [
+                "More powerful than weak",
+                "Less powerful than weak",
+                "Equivalent to weak",
+                "Independent of weak"
+              ],
+              "answer": "Equivalent to weak",
+              "explanation": "Same provable theorems."
+            },
+            {
+              "question": "Best technique for prime factorization existence:",
+              "choices": [
+                "Weak induction",
+                "Strong induction",
+                "Counterexample",
+                "Truth table"
+              ],
+              "answer": "Strong induction",
+              "explanation": "Composite case requires factors smaller than k."
+            }
+          ]
+        },
+        {
+          "type": "true_false",
+          "questions": [
+            {
+              "question": "If you skip the base case, the proof is still valid.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "False",
+              "explanation": "Base case is required."
+            },
+            {
+              "question": "The IH is unconditionally true.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "False",
+              "explanation": "Conditional — assumed only to derive next case."
+            },
+            {
+              "question": "Sum of cubes equals (sum of integers)².",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "True",
+              "explanation": "Provable by induction."
+            },
+            {
+              "question": "Strong induction always needs more work than weak.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "False",
+              "explanation": "Often cleaner; depends on the problem."
+            },
+            {
+              "question": "Induction proves results for all n ≥ a, not just n = a.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "True",
+              "explanation": "Whole point."
+            },
+            {
+              "question": "Induction proves divisibility statements like d | f(n).",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "True",
+              "explanation": "Common application."
+            },
+            {
+              "question": "Strong induction is needed to prove ∑i = n(n+1)/2.",
+              "choices": [
+                "True",
+                "False"
+              ],
+              "answer": "False",
+              "explanation": "Weak induction suffices."
+            }
+          ]
+        },
+        {
+          "type": "short_answer",
+          "questions": [
+            {
+              "question": "State the principle of mathematical induction in your own words.",
+              "answer": "If P(a) holds, and for every k ≥ a we can prove P(k) → P(k+1), then P(n) holds for all n ≥ a.",
+              "explanation": "Standard phrasing."
+            },
+            {
+              "question": "What does the IH allow you to do?",
+              "answer": "Use P(k) as a temporary fact to derive P(k+1).",
+              "explanation": "Conditional assumption."
+            },
+            {
+              "question": "Why must the base case be verified?",
+              "answer": "Without a base case, the chain of implications has no starting point — like dominoes with no first push.",
+              "explanation": "Foundational link."
+            },
+            {
+              "question": "When should you prefer strong induction?",
+              "answer": "When proving P(k+1) requires an earlier case (not just P(k)) — e.g., factorizing a composite number into possibly much smaller factors.",
+              "explanation": "Recursive structure with deep dependencies."
+            },
+            {
+              "question": "Give an example where the base case is n = 4.",
+              "answer": "Proving 2ⁿ > n² for n ≥ 5 (smallest n where it holds, since 2⁴ = 16 = 4² fails strict inequality).",
+              "explanation": "Match base to the first valid n."
+            }
+          ]
+        },
+        {
+          "type": "fill_in_blank",
+          "questions": [
+            {
+              "question": "Induction step assumes P(___) and proves P(___).",
+              "answer": "k; k+1",
+              "explanation": "Standard."
+            },
+            {
+              "question": "Sum 1+2+...+n = n(n+___)/___.",
+              "answer": "1; 2",
+              "explanation": "Gauss formula."
+            },
+            {
+              "question": "Sum of cubes 1³+...+n³ = ( ___ )².",
+              "answer": "n(n+1)/2",
+              "explanation": "Equals (sum of integers)²."
+            },
+            {
+              "question": "Strong induction assumes P(j) for all j with ___ ≤ j ≤ k.",
+              "answer": "a",
+              "explanation": "Lower bound is the base."
+            },
+            {
+              "question": "Closing line: 'By ___, P(n) holds for all n ≥ a. ∎'",
+              "answer": "induction",
+              "explanation": "Standard conclusion."
+            },
+            {
+              "question": "An induction proof needs the ___ Case + the Inductive ___ + Conclusion.",
+              "answer": "Base; Step",
+              "explanation": "Standard skeleton."
+            },
+            {
+              "question": "Sum 1 + 2 + … + n = n(n + ___)/___.",
+              "answer": "1; 2",
+              "explanation": "Gauss formula proven by induction."
+            }
+          ]
+        },
+        {
+          "type": "ordering",
+          "questions": [
+            {
+              "question": "Reorder these proof lines to form a correct induction proof of 1 + 2 + … + n = n(n+1)/2.",
+              "items": [
+                "Base case (n = 1): LHS = 1, RHS = 1·2/2 = 1. ✓",
+                "By induction, the formula holds for all n ≥ 1. ∎",
+                "Inductive hypothesis: assume 1 + 2 + … + k = k(k+1)/2.",
+                "Inductive step: show 1 + 2 + … + (k+1) = (k+1)(k+2)/2.",
+                "1 + 2 + … + k + (k+1) = k(k+1)/2 + (k+1) = (k+1)(k+2)/2.   ✓"
+              ],
+              "correct_order": [
+                0,
+                2,
+                3,
+                4,
+                1
+              ],
+              "explanation": "Base, hypothesis, step (with what to show, then derivation), conclusion."
+            }
+          ]
+        },
+        {
+          "type": "step_by_step",
+          "questions": [
+            {
+              "question": "Prove by induction: 1² + 2² + … + n² = n(n+1)(2n+1)/6 for n ≥ 1.",
+              "answer": "**Base Case (n = 1):** 1 = 1·2·3/6 = 1. ✓\n\n**IH:** 1² + … + k² = k(k+1)(2k+1)/6.\n\n**Inductive Step:** add (k+1)² to both sides.\n(IH) + (k+1)² = k(k+1)(2k+1)/6 + (k+1)²\n         = (k+1)·[k(2k+1)/6 + (k+1)]\n         = (k+1)·(2k² + 7k + 6)/6\n         = (k+1)(k+2)(2k+3)/6. ✓\n\n**Conclusion:** by induction, the formula holds for every n ≥ 1. ∎",
+              "explanation": "Sum of squares closed form.",
+              "format": "induction_solution",
+              "base_case": {
+                "label": "Base Case (n = 1)",
+                "lhs": "1² = 1",
+                "rhs": "1·2·3/6 = 1",
+                "verification": "LHS = RHS = 1. ✓"
+              },
+              "inductive_hypothesis": {
+                "label": "Inductive Hypothesis",
+                "statement": "Assume 1² + … + k² = k(k+1)(2k+1)/6."
+              },
+              "inductive_step": {
+                "label": "Inductive Step",
+                "goal": "Show 1² + … + (k+1)² = (k+1)(k+2)(2k+3)/6.",
+                "steps": [
+                  {
+                    "step": 1,
+                    "expression": "[1² + … + k²] + (k+1)² = k(k+1)(2k+1)/6 + (k+1)²",
+                    "law_name": "Inductive Hypothesis",
+                    "explanation": "Substitute IH."
+                  },
+                  {
+                    "step": 2,
+                    "expression": "= (k+1)·[k(2k+1)/6 + (k+1)]",
+                    "law_name": "Factor (k+1)",
+                    "explanation": "Algebra."
+                  },
+                  {
+                    "step": 3,
+                    "expression": "= (k+1)·(2k² + k + 6k + 6)/6",
+                    "law_name": "Common denominator",
+                    "explanation": "k(2k+1)/6 + (k+1) = (2k² + 7k + 6)/6."
+                  },
+                  {
+                    "step": 4,
+                    "expression": "= (k+1)·(2k + 3)(k + 2)/6",
+                    "law_name": "Factor 2k² + 7k + 6",
+                    "explanation": "Polynomial factoring."
+                  },
+                  {
+                    "step": 5,
+                    "expression": "= (k+1)(k+2)(2k+3)/6",
+                    "law_name": "Reorder",
+                    "explanation": "Matches RHS of P(k+1). ✓"
+                  }
+                ]
+              },
+              "conclusion": "By induction, 1² + 2² + … + n² = n(n+1)(2n+1)/6 for every n ≥ 1. ∎"
+            },
+            {
+              "question": "Prove 2ⁿ > n for all n ≥ 1.",
+              "answer": "Base (n=1): 2 > 1. ✓\nIH: 2ᵏ > k.\nStep: 2ᵏ⁺¹ = 2 · 2ᵏ > 2k ≥ k + 1 (since k ≥ 1). ✓",
+              "explanation": "Inequality induction."
+            },
+            {
+              "question": "Prove 3 | (4ⁿ - 1) for all n ≥ 0.",
+              "answer": "Base (n=0): 4⁰ - 1 = 0, divisible by 3. ✓\nIH: 3 | (4ᵏ - 1), so 4ᵏ - 1 = 3m.\nStep: 4ᵏ⁺¹ - 1 = 4·4ᵏ - 1 = 4(3m + 1) - 1 = 12m + 3 = 3(4m + 1). Divisible by 3. ✓",
+              "explanation": "Divisibility induction."
+            },
+            {
+              "question": "Prove by induction: 1 + 3 + 5 + … + (2n - 1) = n² for n ≥ 1.",
+              "answer": "Base (n=1): 1 = 1². ✓\nIH: 1+3+...+(2k-1) = k².\nStep: + (2(k+1)-1) = k² + 2k+1 = (k+1)². ✓",
+              "explanation": "Sum of odd numbers."
+            }
+          ]
+        },
+        {
+          "type": "exam_style",
+          "questions": [
+            {
+              "question": "Prove by induction: ∑_{i=1}^{n} i·(i+1) = n(n+1)(n+2)/3 for n ≥ 1.",
+              "answer": "Base (n=1): 1·2 = 2 = 1·2·3/3. ✓\nIH: ∑_{i=1}^{k} i(i+1) = k(k+1)(k+2)/3.\nStep: + (k+1)(k+2) = k(k+1)(k+2)/3 + (k+1)(k+2) = (k+1)(k+2)[k/3 + 1] = (k+1)(k+2)(k+3)/3. ✓",
+              "explanation": "Apply telescoping factor."
+            },
+            {
+              "question": "Prove 2ⁿ ≥ n + 1 for all n ≥ 1 (Bernoulli-style).",
+              "answer": "Base (n=1): 2 ≥ 2. ✓\nIH: 2ᵏ ≥ k+1.\nStep: 2ᵏ⁺¹ = 2·2ᵏ ≥ 2(k+1) = 2k+2 ≥ k+2 (since k ≥ 0). ✓",
+              "explanation": "Strict inequality variant."
+            },
+            {
+              "question": "Prove 6 | (n³ - n) for all n ≥ 0.",
+              "answer": "Base (n=0): 0 divisible by 6. ✓\nIH: 6 | (k³ - k).\nStep: (k+1)³ - (k+1) = k³ + 3k² + 3k + 1 - k - 1 = (k³ - k) + 3k(k+1). k(k+1) is product of consecutive integers, hence even, say 2m. So 3k(k+1) = 6m. Sum: (k³ - k) + 6m, divisible by 6. ✓",
+              "explanation": "Combine 2 (consecutive integers) with 3 to get 6."
+            },
+            {
+              "question": "Use strong induction: every n ≥ 12 can be written as 4a + 5b for non-negative integers a, b.",
+              "answer": "Bases (n = 12, 13, 14, 15): 12 = 4·3 + 5·0; 13 = 4·2 + 5·1; 14 = 4·1 + 5·2; 15 = 4·0 + 5·3. ✓\nIH: assume true for all j with 12 ≤ j ≤ k (k ≥ 15).\nStep: n = k+1 ≥ 16. n - 4 = k - 3 ≥ 12, so by IH n - 4 = 4a + 5b. Then n = 4(a+1) + 5b. ✓",
+              "explanation": "Multi-base strong induction."
+            },
+            {
+              "question": "Prove that the recursive sum function `S(n) = S(n-1) + n` with `S(0) = 0` satisfies S(n) = n(n+1)/2.",
+              "answer": "Base (n=0): S(0) = 0 = 0·1/2. ✓\nIH: S(k) = k(k+1)/2.\nStep: S(k+1) = S(k) + (k+1) = k(k+1)/2 + (k+1) = (k+1)(k+2)/2. ✓",
+              "explanation": "Connecting recurrence to closed form."
+            }
+          ]
+        },
+        {
+          "type": "randomized",
+          "questions": [
+            {
+              "template": "Prove ∑_{i=1}^{n} {EXPR} = {CLOSED} by induction.",
+              "variables": {
+                "EXPR": [
+                  "i",
+                  "i²",
+                  "i³",
+                  "(2i-1)",
+                  "i(i+1)"
+                ],
+                "CLOSED": [
+                  "n(n+1)/2",
+                  "n(n+1)(2n+1)/6",
+                  "(n(n+1)/2)²",
+                  "n²",
+                  "n(n+1)(n+2)/3"
+                ]
+              },
+              "instructions": "Match correct EXPR with CLOSED, apply base + inductive step.",
+              "example_realization": "EXPR = i, CLOSED = n(n+1)/2 → standard Gauss proof.",
+              "explanation": "Summation induction drill."
+            },
+            {
+              "template": "Prove {D} | ({BASE}ⁿ - 1) for all n ≥ 0.",
+              "variables": {
+                "D": [
+                  "2",
+                  "3",
+                  "4",
+                  "5",
+                  "7"
+                ],
+                "BASE": [
+                  "3",
+                  "4",
+                  "5",
+                  "8"
+                ]
+              },
+              "instructions": "Verify D | (BASE - 1); apply induction on BASE^{k+1} - 1 = BASE·(BASE^k - 1) + (BASE - 1).",
+              "example_realization": "D = 4, BASE = 5: 4 | (5ⁿ - 1).",
+              "explanation": "Divisibility induction drill."
+            },
+            {
+              "template": "Prove {INEQ} for all n ≥ {N0}.",
+              "variables": {
+                "INEQ": [
+                  "2ⁿ > n",
+                  "2ⁿ ≥ n+1",
+                  "n! ≥ 2ⁿ⁻¹",
+                  "2ⁿ > n²"
+                ],
+                "N0": [
+                  "1",
+                  "1",
+                  "1",
+                  "5"
+                ]
+              },
+              "instructions": "Choose appropriate base; algebraic step.",
+              "example_realization": "2ⁿ > n²: base n=5 (32 > 25), inductive step uses 2·2ᵏ > 2k² ≥ (k+1)² for k ≥ 5.",
+              "explanation": "Inequality induction drill."
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

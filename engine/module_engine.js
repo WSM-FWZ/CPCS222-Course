@@ -512,14 +512,81 @@
     container.appendChild(art);
   }
 
+  /* ── V4 FORMAT-DISPATCH HELPERS ─────────────────────────────── */
+  var _V4_FORMAT_LABELS = {
+    'law_step_solution':          'Show Full Solution ▸',
+    'summation_solution':         'Show Summation Steps ▸',
+    'counting_solution':          'Show Counting Steps ▸',
+    'function_mapping_solution':  'Show Property Check ▸',
+    'relation_property_solution': 'Show Property Check ▸',
+    'induction_solution':         'Show Induction Proof ▸',
+    'truth_table_solution':       'Show Interactive Table ▸'
+  };
+  function _isV4FormatQ(q) {
+    return q && q.format && _V4_FORMAT_LABELS.hasOwnProperty(q.format);
+  }
+  function _buildFormatElForQ(q, uid) {
+    switch (q.format) {
+      case 'law_step_solution':          return _buildLawStepEl(q);
+      case 'summation_solution':         return _buildLawStepEl(q, { badge: '∑ Summation', cssMod: 'v4-law-proof v4-sum-proof' });
+      case 'counting_solution':          return _buildLawStepEl(q, { badge: '🔢 Counting', cssMod: 'v4-law-proof v4-count-proof' });
+      case 'truth_table_solution':       return _buildTruthTableSolutionEl(q, uid + '-tts');
+      case 'function_mapping_solution':  return _buildFunctionMappingEl(q);
+      case 'relation_property_solution': return _buildRelationPropertyEl(q);
+      case 'induction_solution':         return _buildInductionEl(q);
+    }
+    return null;
+  }
+  /* Build a question card with a reveal button that reveals the format-specific
+     solution. Used by short_answer, exam_style, and step_by_step exercises whose
+     question carries a v4 `format` field. */
+  function _buildFormatRevealQuestion(div, q, uid, srcTag) {
+    var label = _V4_FORMAT_LABELS[q.format] || 'Show Full Solution ▸';
+    var fbId = uid + '-fb';
+    var btnId = uid + '-rvl';
+    div.innerHTML =
+      srcTag +
+      '<p class="m1-ex-q">' + esc(q.question || '') + '</p>' +
+      '<button class="m1-sa-reveal" id="' + btnId + '">' + esc(label) + '</button>' +
+      '<div class="m1-qc-feedback m1-sa-answer" id="' + fbId + '" style="display:none"></div>';
+    var solnEl = _buildFormatElForQ(q, uid);
+    if (solnEl) div.querySelector('#' + fbId).appendChild(solnEl);
+    if (q.explanation) {
+      var expl = document.createElement('em');
+      expl.className = 'm1-ans-expl';
+      expl.textContent = q.explanation;
+      div.querySelector('#' + fbId).appendChild(expl);
+    }
+    setTimeout(function () {
+      var btn = document.getElementById(btnId);
+      if (btn) btn.addEventListener('click', function () {
+        btn.style.display = 'none';
+        var fb = document.getElementById(fbId);
+        if (fb) fb.style.display = 'block';
+      });
+    }, 0);
+  }
+
   /* ── ANSWER FORMATTER ───────────────────────────────────────── */
-  var _LABEL_TEST  = /\b(?:Converse|Contrapositive|Inverse|Original|Final answer|Step\s+\d+|Reason|Result):/;
-  var _LABEL_SPLIT = /(?=\b(?:Converse|Contrapositive|Inverse|Original|Final answer|Step\s+\d+|Reason|Result):)/;
+  var _LABEL_TEST  = /\b(?:Converse|Contrapositive|Inverse|Original|Final answer|Step\s+\d+|Reason|Result|Let|Specs?|Try|Check|Conclusion|Statement|Note|Rule|Given|Claim|Proof):/i;
+  var _LABEL_SPLIT = /(?=\b(?:Converse|Contrapositive|Inverse|Original|Final answer|Step\s+\d+|Reason|Result|Let|Specs?|Try|Check|Conclusion|Statement|Note|Rule|Given|Claim|Proof):)/i;
 
   function _formatAnswer(text) {
     if (!text) return '';
     if (text.indexOf('|') !== -1 && text.indexOf('\n') !== -1) {
       return _renderPipeAnswer(text);
+    }
+    /* v4: **Label:** bold-markdown paragraphs */
+    if (text.indexOf('**') !== -1 && /\*\*[^*\n]+:\*\*/.test(text)) {
+      var paras = text.split(/\n\n+/).filter(function (p) { return p.trim(); });
+      if (paras.length > 1) {
+        return '<div class="m1-ans-text">' +
+          paras.map(function (p) {
+            return '<div class="m1-ans-part">' + _md(p.trim()) + '</div>';
+          }).join('') +
+        '</div>';
+      }
+      return '<div class="m1-ans-text">' + _md(text) + '</div>';
     }
     if (_LABEL_TEST.test(text)) {
       var parts = text.split(_LABEL_SPLIT).filter(function (p) { return p.trim(); });
@@ -556,6 +623,15 @@
         '<p class="m1-ex-q">' + esc(q.question) + '</p>' +
         '<div class="m1-choices">' + choicesHtml + '</div>' +
         '<div class="m1-qc-feedback" id="' + uid + '-fb">' + esc(q.explanation || '') + '</div>';
+
+    } else if ((type === 'short_answer' || type === 'exam_style') && q.format === 'passage_analysis') {
+      _renderPassageAnalysis(div, q, uid, srcTag);
+
+    } else if ((type === 'short_answer' || type === 'exam_style' || type === 'step_by_step') && _isV4FormatQ(q)) {
+      /* v4 format-dispatched questions (law_step, truth_table, summation,
+         counting, function_mapping, relation_property, induction) — render the
+         specialized solution block hidden behind a reveal button. */
+      _buildFormatRevealQuestion(div, q, uid, srcTag);
 
     } else if (type === 'short_answer' || type === 'exam_style') {
       div.innerHTML =
@@ -604,17 +680,28 @@
   function _normalizeLogic(s) {
     if (s == null) return '';
     var t = String(s).trim().toLowerCase();
-    /* unify symbol variants */
+    /* unify negation variants before other replacements */
     t = t.replace(/[¬~!]\s*/g, 'not ');
+    /* biconditional */
     t = t.replace(/<->/g, '↔').replace(/<=>/g, '↔');
-    t = t.replace(/->/g, '→').replace(/=>/g, '→');
     t = t.replace(/\s+iff\s+/g, ' ↔ ');
+    /* implication (must come before single -> to avoid double-replace) */
+    t = t.replace(/->/g, '→').replace(/=>/g, '→');
     t = t.replace(/\bimplies\b/g, '→');
+    /* conjunction */
+    t = t.replace(/&&/g, '∧');
     t = t.replace(/\b(and)\b/g, '∧');
+    t = t.replace(/\^/g, '∧');           /* caret ^  → ∧ */
+    t = t.replace(/&(?!&)/g, '∧');       /* single & → ∧ */
+    /* disjunction */
+    t = t.replace(/\|\|/g, '∨');
     t = t.replace(/\b(or)\b/g, '∨');
+    t = t.replace(/\|(?!\|)/g, '∨');     /* single | → ∨ */
+    /* xor */
     t = t.replace(/\b(xor)\b/g, '⊕');
+    /* resolve 'not ' after symbol replacement */
     t = t.replace(/\bnot\s+/g, '¬');
-    t = t.replace(/&&/g, '∧').replace(/\|\|/g, '∨');
+    /* boolean literals */
     t = t.replace(/\btrue\b/g, 't').replace(/\bfalse\b/g, 'f');
     /* strip all whitespace and trailing punctuation */
     t = t.replace(/\s+/g, '');
@@ -643,11 +730,31 @@
     }
   }
 
-  /* Short Answer (auto-checked) */
+  /* Short Answer (auto-checked) — with symbol toolbar.
+     Module 1 uses the propositional-logic core; later modules also need
+     quantifiers / set / number-theory symbols. Buttons are grouped visually
+     but all live in one flat array since insertion is the same for all. */
+  var _SYM_TOOLBAR_SYMS = [
+    ['p','p'],['q','q'],['r','r'],['T','T'],['F','F'],
+    ['¬','¬'],['∧','∧'],['∨','∨'],['⊕','⊕'],['→','→'],['↔','↔'],
+    ['(','('],[')',')'],
+    /* Quantifiers & predicate logic */
+    ['∀','∀'],['∃','∃'],
+    /* Sets */
+    ['∈','∈'],['∉','∉'],['⊆','⊆'],['⊂','⊂'],['∪','∪'],['∩','∩'],['∅','∅'],
+    /* Number sets & summation */
+    ['ℕ','ℕ'],['ℤ','ℤ'],['Σ','Σ']
+  ];
   function _renderShortAnswerCheck(div, q, uid, srcTag) {
+    var toolbarHtml = '<div class="m1-sym-toolbar" aria-label="Insert symbol">' +
+      _SYM_TOOLBAR_SYMS.map(function(pair) {
+        return '<button type="button" class="m1-sym-btn" data-sym="' + pair[1] + '" title="Insert ' + pair[0] + '">' + pair[0] + '</button>';
+      }).join('') +
+    '</div>';
     div.innerHTML =
       srcTag +
       '<p class="m1-ex-q">' + esc(q.question) + '</p>' +
+      toolbarHtml +
       '<input type="text" class="m1-iex-input" placeholder="Type your answer…" />' +
       '<div class="m1-iex-actions">' +
         '<button class="m1-iex-submit">Submit</button>' +
@@ -714,6 +821,92 @@
       retry.addEventListener('click', doRetry);
       show.addEventListener('click', doShow);
       input.addEventListener('keydown', function (e) { if (e.key === 'Enter') doSubmit(); });
+
+      /* Symbol toolbar — insert at cursor position */
+      div.querySelectorAll('.m1-sym-btn').forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
+          e.preventDefault();
+          if (input.disabled) return;
+          var sym = btn.getAttribute('data-sym') || '';
+          var start = input.selectionStart;
+          var end   = input.selectionEnd;
+          var val   = input.value;
+          input.value = val.slice(0, start) + sym + val.slice(end);
+          var newPos = start + sym.length;
+          input.setSelectionRange(newPos, newPos);
+          input.focus();
+        });
+      });
+    }, 0);
+  }
+
+  /* Passage Analysis — renders each sentence as a click-to-reveal analysis card */
+  function _renderPassageAnalysis(div, q, uid, srcTag) {
+    var sentences = q.sentences || [];
+    var cardsHtml = sentences.map(function (s, i) {
+      /* v4 uses is_declarative / has_definite_truth_value; v3 uses declarative / truth_value */
+      var isDecl  = s.is_declarative  !== undefined ? s.is_declarative  : (s.declarative  || false);
+      var hasTruth = s.has_definite_truth_value !== undefined ? s.has_definite_truth_value : (s.truth_value || false);
+      /* v4 sentence text: s.sentence; v3: s.text */
+      var sentText = s.sentence || s.text || '';
+      /* Badge logic — v4 result starts with "Proposition" (incl. "Proposition (T)"); v3 is 'prop' or other */
+      var isProp = (s.result === 'prop' || (s.result && /^Proposition/.test(s.result)));
+      var badgeCls = isProp ? 'prop' : 'not';
+      var badgeTxt = isProp
+        ? '✅ ' + (s.result === 'prop' ? 'Proposition' : s.result)
+        : ('❌ ' + (s.result || s.reason || 'Not a proposition'));
+      /* v4 uses s.classification for the badge type label */
+      var classLabel = s.classification ? '<span class="m1-pa-class">' + esc(s.classification) + '</span>' : '';
+      /* Explanation: v4 s.explanation; v3 s.analysis */
+      var explText = s.explanation || s.analysis || '';
+      var checkHtml = [
+        '<span class="m1-pa-check ' + (isDecl   ? 'yes' : 'no') + '">Declarative: '   + (isDecl   ? 'Yes' : 'No') + '</span>',
+        '<span class="m1-pa-check ' + (hasTruth ? 'yes' : 'no') + '">Definite truth: ' + (hasTruth ? 'Yes' : 'No') + '</span>'
+      ].join('');
+      return (
+        '<div class="m1-pa-card" id="' + uid + '-pa-' + i + '">' +
+          '<div class="m1-pa-sentence">' + esc(sentText) + '</div>' +
+          '<button class="m1-pa-reveal-btn" data-card="' + uid + '-pa-' + i + '">Click to analyse ▸</button>' +
+          '<div class="m1-pa-analysis">' +
+            '<div class="m1-pa-checks">' + checkHtml + '</div>' +
+            '<div class="m1-pa-badge-row">' +
+              '<span class="m1-pa-badge ' + badgeCls + '">' + badgeTxt + '</span>' +
+              classLabel +
+            '</div>' +
+            '<div class="m1-pa-reason">' + esc(explText) + '</div>' +
+          '</div>' +
+        '</div>'
+      );
+    }).join('');
+
+    var passageText = q.passage
+      ? '<div class="m1-passage-text">' + esc(q.passage) + '</div>'
+      : '';
+
+    div.innerHTML =
+      srcTag +
+      '<div class="m1-passage-block">' +
+        '<p class="m1-passage-q">' + esc(q.question || q.problem || '') + '</p>' +
+        passageText +
+        '<div class="m1-pa-grid">' + cardsHtml + '</div>' +
+        '<button class="m1-pa-show-all">Reveal all ▸</button>' +
+        (q.explanation || q.conclusion ? '<div class="m1-pa-expl">' + esc(q.explanation || q.conclusion || '') + '</div>' : '') +
+      '</div>';
+
+    setTimeout(function () {
+      div.querySelectorAll('.m1-pa-reveal-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var card = document.getElementById(btn.getAttribute('data-card'));
+          if (card) card.classList.add('revealed');
+        });
+      });
+      var showAll = div.querySelector('.m1-pa-show-all');
+      if (showAll) {
+        showAll.addEventListener('click', function () {
+          div.querySelectorAll('.m1-pa-card').forEach(function (c) { c.classList.add('revealed'); });
+          showAll.style.display = 'none';
+        });
+      }
     }, 0);
   }
 
@@ -746,9 +939,17 @@
       idx = n;
     }
 
+    /* Symbol toolbar (restored) */
+    var toolbarHtml = '<div class="m1-sym-toolbar" aria-label="Insert symbol">' +
+      _SYM_TOOLBAR_SYMS.map(function (pair) {
+        return '<button type="button" class="m1-sym-btn" data-sym="' + pair[1] + '" title="Insert ' + pair[0] + '">' + pair[0] + '</button>';
+      }).join('') +
+    '</div>';
+
     div.innerHTML =
       srcTag +
       '<p class="m1-ex-q">' + html + '</p>' +
+      toolbarHtml +
       '<div class="m1-iex-actions">' +
         '<button class="m1-iex-submit">Submit</button>' +
         '<button class="m1-iex-retry" style="display:none;">Try Again</button>' +
@@ -763,6 +964,10 @@
       var show   = div.querySelector('.m1-iex-show');
       var fb     = div.querySelector('.m1-iex-feedback');
       var answered = false;
+      var activeInput = inputs[0] || null;
+      inputs.forEach(function (inp) {
+        inp.addEventListener('focus', function () { activeInput = inp; });
+      });
 
       function doSubmit() {
         if (answered) return;
@@ -817,6 +1022,28 @@
       submit.addEventListener('click', doSubmit);
       retry.addEventListener('click', doRetry);
       show.addEventListener('click', doShow);
+
+      /* Symbol toolbar — insert into active blank */
+      div.querySelectorAll('.m1-sym-btn').forEach(function (btn) {
+        btn.addEventListener('mousedown', function (e) { e.preventDefault(); });
+        btn.addEventListener('click', function (e) {
+          e.preventDefault();
+          var target = activeInput && !activeInput.disabled ? activeInput : null;
+          if (!target) {
+            for (var k = 0; k < inputs.length; k++) {
+              if (!inputs[k].disabled) { target = inputs[k]; break; }
+            }
+          }
+          if (!target) return;
+          var sym = btn.getAttribute('data-sym') || '';
+          var s = target.selectionStart, e2 = target.selectionEnd, v = target.value;
+          target.value = v.slice(0, s) + sym + v.slice(e2);
+          var pos = s + sym.length;
+          target.setSelectionRange(pos, pos);
+          target.focus();
+          activeInput = target;
+        });
+      });
     }, 0);
   }
 
@@ -1046,73 +1273,185 @@
     }, 0);
   }
 
-  /* Fill-in-the-blank (single blank, M2-M10 format: question has "___", answer is a string) */
+  /* Fill-in-the-blank — supports both single blank (M2-M10 format: question has
+     one "___" and answer is a string) AND multiple blanks (Module 1 v4 format:
+     question has 2+ "___" and answer is semicolon-separated, e.g. "T; F").
+     Always shows a symbol toolbar so users can enter logic symbols without a
+     full keyboard. */
   function _renderFillInBlank(div, q, uid, srcTag) {
-    var qText = q.question || '';
-    var answer = String(q.answer || '');
-    var parts = qText.split('___');
-    var before = parts[0] || '';
-    var after  = parts.slice(1).join('___');
+    var qText  = q.question || '';
+    var rawAns = String(q.answer == null ? '' : q.answer);
+    /* Split the question on ___ markers (one or more underscores, run of 3+). */
+    var segments = qText.split(/_{3,}/);
+    var blankCount = Math.max(1, segments.length - 1);
+    /* Per-blank expected answers.
+       - If q.answer contains ';' and there are multiple blanks, split on ';'.
+       - Otherwise, treat as single answer for the (only) blank.
+       - q.accept may be a flat array (legacy single-blank) or an array-of-arrays
+         (one alternates list per blank, v4 multi-blank).               */
+    var expected = [];
+    if (blankCount > 1 && rawAns.indexOf(';') !== -1) {
+      expected = rawAns.split(';').map(function (s) { return s.trim(); });
+    } else {
+      expected = [rawAns.trim()];
+    }
+    /* Pad/trim so we always have exactly blankCount entries */
+    while (expected.length < blankCount) expected.push('');
+    expected = expected.slice(0, blankCount);
+
+    var perBlankAccept = [];
+    if (Array.isArray(q.accept) && q.accept.length && Array.isArray(q.accept[0])) {
+      /* array-of-arrays */
+      for (var bi = 0; bi < blankCount; bi++) {
+        perBlankAccept.push(Array.isArray(q.accept[bi]) ? q.accept[bi] : []);
+      }
+    } else if (Array.isArray(q.accept) && blankCount === 1) {
+      perBlankAccept.push(q.accept);
+    } else {
+      for (var bj = 0; bj < blankCount; bj++) perBlankAccept.push([]);
+    }
+
+    /* Build question HTML with one input per ___ marker */
+    var questionHtml = '';
+    if (segments.length <= 1) {
+      /* No ___ markers — render question text then a trailing input (legacy behaviour) */
+      questionHtml = esc(qText) + ' <input type="text" class="m1-iex-input m1-iex-fib" data-bidx="0" placeholder="…" />';
+    } else {
+      for (var si = 0; si < segments.length; si++) {
+        questionHtml += esc(segments[si]);
+        if (si < segments.length - 1) {
+          questionHtml += '<input type="text" class="m1-iex-input m1-iex-fib" data-bidx="' + si + '" placeholder="…" />';
+        }
+      }
+    }
+
+    /* Symbol toolbar (restored) */
+    var toolbarHtml = '<div class="m1-sym-toolbar" aria-label="Insert symbol">' +
+      _SYM_TOOLBAR_SYMS.map(function (pair) {
+        return '<button type="button" class="m1-sym-btn" data-sym="' + pair[1] + '" title="Insert ' + pair[0] + '">' + pair[0] + '</button>';
+      }).join('') +
+    '</div>';
+
     div.innerHTML =
       srcTag +
-      '<p class="m1-ex-q">' +
-        esc(before) +
-        '<input type="text" class="m1-iex-input m1-iex-fib" placeholder="…" />' +
-        esc(after) +
-      '</p>' +
+      '<p class="m1-ex-q">' + questionHtml + '</p>' +
+      toolbarHtml +
       '<div class="m1-iex-actions">' +
         '<button class="m1-iex-submit">Check</button>' +
         '<button class="m1-iex-retry" style="display:none;">Try Again</button>' +
-        '<button class="m1-iex-show" style="display:none;">Show Answer</button>' +
+        '<button class="m1-iex-show"  style="display:none;">Show Answer</button>' +
       '</div>' +
       '<div class="m1-iex-feedback" id="' + uid + '-fb"></div>';
 
     setTimeout(function () {
-      var input  = div.querySelector('.m1-iex-fib');
+      var inputs = div.querySelectorAll('.m1-iex-fib');
       var submit = div.querySelector('.m1-iex-submit');
       var retry  = div.querySelector('.m1-iex-retry');
       var show   = div.querySelector('.m1-iex-show');
       var fb     = div.querySelector('.m1-iex-feedback');
       var answered = false;
+      var activeInput = inputs[0] || null;
+
+      /* Track focus so the symbol toolbar inserts into the active blank */
+      inputs.forEach(function (inp) {
+        inp.addEventListener('focus', function () { activeInput = inp; });
+        inp.addEventListener('keydown', function (e) { if (e.key === 'Enter') doSubmit(); });
+      });
 
       function doSubmit() {
         if (answered) return;
-        var uv = (input.value || '').trim();
-        var accepted = [answer].concat(Array.isArray(q.accept) ? q.accept : []);
-        var ok = accepted.some(function(a){ return a.trim().toLowerCase() === uv.toLowerCase(); });
-        input.disabled = true;
-        input.classList.remove('is-correct', 'is-wrong');
-        input.classList.add(ok ? 'is-correct' : 'is-wrong');
+        var anyEmpty = false, allOk = true;
+        var perResult = [];
+        inputs.forEach(function (inp, i) {
+          var uv = (inp.value || '').trim();
+          if (!uv) anyEmpty = true;
+          var accepted = [expected[i]].concat(perBlankAccept[i] || []);
+          var ok = _isLogicMatch(uv, accepted);
+          inp.disabled = true;
+          inp.classList.remove('is-correct', 'is-wrong');
+          inp.classList.add(ok ? 'is-correct' : 'is-wrong');
+          perResult.push(ok);
+          if (!ok) allOk = false;
+        });
+        if (anyEmpty && inputs.length === 1 && !inputs[0].value.trim()) {
+          /* Allow re-entry if user submitted empty single blank */
+          inputs.forEach(function (inp) { inp.disabled = false; inp.classList.remove('is-correct','is-wrong'); });
+          fb.className = 'm1-iex-feedback show is-partial';
+          fb.innerHTML = 'Please type an answer before submitting.';
+          return;
+        }
         answered = true;
         submit.disabled = true;
         retry.style.display = '';
         show.style.display  = '';
-        fb.className = 'm1-iex-feedback show ' + (ok ? 'is-correct' : 'is-wrong');
-        fb.innerHTML = (ok ? '<strong>✅ Correct!</strong> ' : '<strong>❌ Not quite.</strong> ') +
-          (q.explanation ? esc(q.explanation) : '');
-        _scoreInc(uid, ok);
+        var feedbackLead = allOk
+          ? '<strong>✅ Correct!</strong> '
+          : '<strong>❌ Not quite.</strong> ';
+        if (inputs.length > 1) {
+          var perBlank = perResult.map(function (r, i) {
+            return '<li>Blank ' + (i + 1) + ': ' + (r ? '✅' : '❌') + '</li>';
+          }).join('');
+          feedbackLead += '<ul class="m1-iex-perblank">' + perBlank + '</ul>';
+        }
+        fb.className = 'm1-iex-feedback show ' + (allOk ? 'is-correct' : 'is-wrong');
+        fb.innerHTML = feedbackLead + (q.explanation ? esc(q.explanation) : '');
+        _scoreInc(uid, allOk);
       }
       function doRetry() {
         answered = false;
-        input.value = '';
-        input.disabled = false;
-        input.classList.remove('is-correct', 'is-wrong');
+        inputs.forEach(function (inp) {
+          inp.value = '';
+          inp.disabled = false;
+          inp.classList.remove('is-correct', 'is-wrong');
+        });
         submit.disabled = false;
         retry.style.display = 'none';
         show.style.display  = 'none';
-        fb.classList.remove('show', 'is-correct', 'is-wrong');
+        fb.classList.remove('show', 'is-correct', 'is-wrong', 'is-partial');
         fb.innerHTML = '';
+        if (inputs[0]) inputs[0].focus();
       }
       function doShow() {
         fb.className = 'm1-iex-feedback show is-partial';
-        fb.innerHTML = '<strong>Answer:</strong> ' + esc(answer) +
-          (q.explanation ? ' — ' + esc(q.explanation) : '');
+        if (inputs.length > 1) {
+          var lines = expected.map(function (a, i) {
+            return '<li>Blank ' + (i + 1) + ': <strong>' + esc(a) + '</strong></li>';
+          }).join('');
+          fb.innerHTML = '<strong>Suggested answers:</strong>' +
+            '<ul class="m1-iex-perblank">' + lines + '</ul>' +
+            (q.explanation ? '<em>' + esc(q.explanation) + '</em>' : '');
+        } else {
+          fb.innerHTML = '<strong>Answer:</strong> ' + esc(expected[0] || rawAns) +
+            (q.explanation ? ' — ' + esc(q.explanation) : '');
+        }
       }
 
-      input.addEventListener('keydown', function(e){ if (e.key === 'Enter') doSubmit(); });
       submit.addEventListener('click', doSubmit);
       retry.addEventListener('click',  doRetry);
       show.addEventListener('click',   doShow);
+
+      /* Symbol toolbar — insert into the currently-active input */
+      div.querySelectorAll('.m1-sym-btn').forEach(function (btn) {
+        btn.addEventListener('mousedown', function (e) { e.preventDefault(); }); /* don't steal focus */
+        btn.addEventListener('click', function (e) {
+          e.preventDefault();
+          var target = activeInput && !activeInput.disabled ? activeInput : null;
+          if (!target) {
+            /* fall back to first enabled input in this question */
+            for (var k = 0; k < inputs.length; k++) {
+              if (!inputs[k].disabled) { target = inputs[k]; break; }
+            }
+          }
+          if (!target) return;
+          var sym = btn.getAttribute('data-sym') || '';
+          var s = target.selectionStart, e2 = target.selectionEnd, v = target.value;
+          target.value = v.slice(0, s) + sym + v.slice(e2);
+          var pos = s + sym.length;
+          target.setSelectionRange(pos, pos);
+          target.focus();
+          activeInput = target;
+        });
+      });
     }, 0);
   }
 
@@ -1341,7 +1680,7 @@
 
   /* Detect v3 content */
   function _isV3(data) {
-    return data && data.version === 'v3';
+    return data && (data.version === 'v3' || data.version === 'v4');
   }
 
   /* Markdown helper with blockquote support (used by v3 prose) */
@@ -1356,12 +1695,14 @@
         s = s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
         s = s.replace(/_([^_\n]+?)_/g, '<em>$1</em>');
         s = s.replace(/`([^`\n]+?)`/g, '<code class="v2-inline-code">$1</code>');
+        s = s.replace(/==(.+?)==/g, '<mark class="v3-term">$1</mark>');
         return '<blockquote class="v3-blockquote">' + s + '</blockquote>';
       }
       var s = esc(p);
       s = s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
       s = s.replace(/_([^_\n]+?)_/g, '<em>$1</em>');
       s = s.replace(/`([^`\n]+?)`/g, '<code class="v2-inline-code">$1</code>');
+      s = s.replace(/==(.+?)==/g, '<mark class="v3-term">$1</mark>');
       return '<p>' + s.replace(/\n/g, '<br>') + '</p>';
     }).join('');
   }
@@ -1425,6 +1766,10 @@
     if (type === 'simulator_conditional_promise')    return _v3SimConditionalPromise(block);
     if (type === 'set_diagram')                      return _v3BlockSetDiagram(block);
     if (type === 'mapping_diagram')                  return _v3BlockMappingDiagram(block);
+    /* v4 top-level visual blocks */
+    if (type === 'relation_matrix')                  return _v4BlockRelationMatrix(block);
+    if (type === 'counting_tree')                    return _v4BlockCountingTree(block);
+    if (type === 'induction_flow')                   return _v4BlockInductionFlow(block);
     if (type === 'simulator_quantifier_explorer')    return _v3SimQuantifierExplorer(block);
     if (type === 'simulator_inference_checker')      return _v3SimInferenceChecker(block);
     if (type === 'simulator_set_ops')                return _v3SimSetOps(block);
@@ -1455,125 +1800,104 @@
     return div;
   }
 
-  /* Proposition Classifier — rule-based heuristic */
-  function _v3ClassifyProp(raw) {
-    if (!raw) return null;
-    var s = String(raw).trim();
-    if (!s) return null;
-    var lower = s.toLowerCase();
-    var firstChar = s.charAt(0);
-    var lastChar  = s.charAt(s.length - 1);
-
-    /* Check for question */
-    if (lastChar === '?' || /^(is|are|was|were|do|does|did|can|could|will|would|should|has|have|had|may|might|what|where|why|when|who|how|which)\b/i.test(s)) {
-      return { kind: 'not', label: 'Question — NOT a proposition',
-               why: 'This sentence is interrogative (asks something). Questions have no truth value, so they are not propositions.' };
+  /* Proposition Gallery — 8 curated cards, click-to-reveal */
+  var _PROP_GALLERY_ITEMS = [
+    {
+      text: 'Jeddah is on the Red Sea.',
+      kind: 'prop',
+      verdict: '✅ Proposition',
+      reason: 'Declarative sentence with a definite truth value (True).'
+    },
+    {
+      text: '7 is prime.',
+      kind: 'prop',
+      verdict: '✅ Proposition',
+      reason: 'Declarative with a definite truth value (True). Whether we know it is irrelevant — the statement IS either true or false.'
+    },
+    {
+      text: 'The capital of France is Berlin.',
+      kind: 'prop',
+      verdict: '✅ Proposition',
+      reason: 'Declarative with a definite truth value (False). A proposition can be false — it only needs to HAVE a truth value.'
+    },
+    {
+      text: 'For every integer n ≥ 1, n! > 0.',
+      kind: 'prop',
+      verdict: '✅ Proposition',
+      reason: 'Universally quantified statement — the variable n is bound, so the statement has a definite truth value (True).'
+    },
+    {
+      text: 'Open the door.',
+      kind: 'not',
+      verdict: '❌ Not a proposition',
+      reason: 'Command (imperative). It tells someone to do something — it does not assert a fact, so it has no truth value.'
+    },
+    {
+      text: 'Is 7 prime?',
+      kind: 'not',
+      verdict: '❌ Not a proposition',
+      reason: 'Question (interrogative). Questions request information rather than asserting a claim, so they have no truth value.'
+    },
+    {
+      text: 'Wow, the weather is nice!',
+      kind: 'not',
+      verdict: '❌ Not a proposition',
+      reason: 'Exclamation. It expresses an emotion rather than making a declarative claim with a definite truth value.'
+    },
+    {
+      text: 'x + 2 = 7',
+      kind: 'not',
+      verdict: '❌ Not a proposition',
+      reason: 'Open sentence — contains a free variable x. Without knowing x, we cannot determine a truth value. It becomes a proposition only when x is fixed (e.g., x = 5 → True).'
     }
+  ];
 
-    /* Check for exclamation */
-    if (lastChar === '!' || /^(wow|oh|ah|alas|hooray|ouch|yay|hey|bravo)\b/i.test(s)) {
-      return { kind: 'not', label: 'Exclamation — NOT a proposition',
-               why: 'Exclamations express emotion rather than make a declarative claim. They do not have a definite truth value.' };
-    }
-
-    /* Check for command (imperative): leading verb without subject */
-    var imperatives = /^(open|close|please|do|don't|stop|go|come|find|solve|calculate|compute|write|read|prove|show|give|take|list|name|state|describe|let|consider|assume|silence|submit|pay|renew|register|sign|click|press|enter|select|choose|pick|return|deliver|send|email|call|answer|complete)\b/i;
-    if (imperatives.test(s)) {
-      return { kind: 'not', label: 'Command — NOT a proposition',
-               why: 'This is an imperative (a command). It tells someone to do something rather than asserting a fact, so it has no truth value.' };
-    }
-
-    /* Check for free variable / open sentence */
-    /* Look for math expressions with single-letter variables that are NOT bound */
-    var hasFreeVar = /(^|[^a-z])([a-z])\s*([+\-*/=<>≤≥≠]|\bis\b|\bequals\b)/i.test(s) &&
-      !/(\bfor all\b|\bfor every\b|\bfor any\b|\bthere exists\b|\bsome\b|^(let|if)\b)/i.test(lower);
-    var openVarPattern = /(^|[^a-z])(x|y|z|n|m|k|i|j)\b/i;
-    if (hasFreeVar && openVarPattern.test(s)) {
-      return { kind: 'open', label: 'Open sentence — NOT a proposition (yet)',
-               why: 'This sentence contains a free variable. Until you assign a specific value to that variable (or quantify over it), the sentence has no fixed truth value — it is a template, not a proposition.' };
-    }
-
-    /* Otherwise: looks declarative */
-    if (lastChar === '.' || /^[A-Z]/.test(s)) {
-      return { kind: 'prop', label: 'Likely a proposition',
-               why: 'This appears to be a declarative sentence with a definite truth value. (Whether it is true or false, it qualifies as a proposition.)' };
-    }
-
-    return { kind: 'open', label: 'Unclear — likely not a proposition',
-             why: 'The sentence does not match a clear declarative pattern. Try rewriting it as a complete declarative statement.' };
-  }
-
-  function _v3SimPropClassifier(block) {
-    var examples = [
-      'Jeddah is on the Red Sea.',
-      'Open the door.',
-      'x + 2 = 7',
-      'Is 7 prime?',
-      '7 is prime.',
-      'Wow, the weather is nice!'
-    ];
-    var examplesHtml = examples.map(function (ex) {
-      return '<button class="v3-sim-btn-ghost" data-ex="' + esc(ex) + '">' + esc(ex) + '</button>';
+  function _v3SimPropGallery(block) {
+    var cardsHtml = _PROP_GALLERY_ITEMS.map(function (item, i) {
+      var cls = item.kind === 'prop' ? 'is-prop' : 'is-not';
+      return (
+        '<div class="v3-pg-card ' + cls + '" data-pg-idx="' + i + '" role="button" tabindex="0" aria-label="Click to classify: ' + esc(item.text) + '">' +
+          '<div class="v3-pg-front">' + esc(item.text) + '</div>' +
+          '<div class="v3-pg-hint">Click to classify ▸</div>' +
+          '<div class="v3-pg-back">' +
+            '<div class="v3-pg-verdict">' + esc(item.verdict) + '</div>' +
+            '<div class="v3-pg-reason">' + esc(item.reason) + '</div>' +
+          '</div>' +
+        '</div>'
+      );
     }).join('');
-    var bodyHtml =
-      '<div class="v3-sim-row">' +
-        '<input type="text" class="v3-sim-input v3-pc-input" placeholder="Type a sentence (e.g., 7 is prime.)" />' +
-        '<button class="v3-sim-btn v3-pc-go">Classify</button>' +
-        '<button class="v3-sim-btn-ghost v3-pc-clear">Clear</button>' +
-      '</div>' +
-      '<div style="font-size:.78rem;color:var(--text-3);margin-bottom:.4rem;">Try an example:</div>' +
-      '<div class="v3-pc-examples">' + examplesHtml + '</div>' +
-      '<div class="v3-pc-result" role="status" aria-live="polite">' +
-        '<div class="v3-pc-verdict"></div>' +
-        '<div class="v3-pc-why"></div>' +
+
+    var reflectHtml =
+      '<div class="v3-pg-reflect">' +
+        '<div class="v3-pg-reflect-label">🤔 Try your own</div>' +
+        '<textarea placeholder="Write a sentence here, then use the two-question test yourself…" rows="2"></textarea>' +
+        '<div class="v3-pg-reflect-note">This is a reflection space — no auto-grading. Apply the lesson rules mentally.</div>' +
       '</div>';
 
-    var shell = _v3SimShell(block.title || 'Proposition Classifier', '🧪 Simulator',
-      'This is a learning heuristic, not a perfect natural-language AI. It may misclassify edge cases — use the rules from the lesson to verify.',
-      bodyHtml);
+    var bodyHtml =
+      '<div class="v3-pg-grid">' + cardsHtml + '</div>' +
+      reflectHtml;
+
+    var shell = _v3SimShell(
+      block.title || 'Proposition or Not? Gallery',
+      '🃏 Gallery',
+      'Click each card to reveal its classification. Use the two-question test: Is it declarative? Does it have a definite truth value?',
+      bodyHtml
+    );
 
     setTimeout(function () {
-      var input  = shell.querySelector('.v3-pc-input');
-      var goBtn  = shell.querySelector('.v3-pc-go');
-      var clrBtn = shell.querySelector('.v3-pc-clear');
-      var result = shell.querySelector('.v3-pc-result');
-      var verdict= shell.querySelector('.v3-pc-verdict');
-      var why    = shell.querySelector('.v3-pc-why');
-
-      function classify() {
-        var r = _v3ClassifyProp(input.value);
-        if (!r) {
-          result.classList.remove('show', 'is-prop', 'is-not', 'is-open');
-          return;
-        }
-        result.classList.remove('is-prop', 'is-not', 'is-open');
-        verdict.classList.remove('is-prop', 'is-not', 'is-open');
-        var cls = r.kind === 'prop' ? 'is-prop' : (r.kind === 'open' ? 'is-open' : 'is-not');
-        result.classList.add('show', cls);
-        verdict.classList.add(cls);
-        verdict.textContent = r.label;
-        why.textContent = r.why;
-      }
-
-      if (goBtn)  goBtn.addEventListener('click', classify);
-      if (input) {
-        input.addEventListener('keydown', function (e) { if (e.key === 'Enter') classify(); });
-      }
-      if (clrBtn) clrBtn.addEventListener('click', function () {
-        input.value = '';
-        result.classList.remove('show', 'is-prop', 'is-not', 'is-open');
-        input.focus();
-      });
-      shell.querySelectorAll('[data-ex]').forEach(function (b) {
-        b.addEventListener('click', function () {
-          input.value = b.getAttribute('data-ex');
-          classify();
-        });
+      shell.querySelectorAll('.v3-pg-card').forEach(function (card) {
+        function reveal() { card.classList.add('revealed'); }
+        card.addEventListener('click', reveal);
+        card.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') reveal(); });
       });
     }, 0);
 
     return shell;
   }
+
+  /* Keep dispatcher alias so existing JSON blocks still work */
+  function _v3SimPropClassifier(block) { return _v3SimPropGallery(block); }
 
   /* Truth Table Builder — fixed list of expressions */
   function _v3EvalExpr(exprId, p, q) {
@@ -2319,6 +2643,20 @@
 
   /* Worked example — inline (always visible, not collapsed) */
   function _v3BlockWorkedExample(b) {
+    /* v4 format dispatch */
+    if (b.format === 'law_step_solution')         return _buildLawStepEl(b);
+    if (b.format === 'summation_solution')        return _buildLawStepEl(b, { badge: '∑ Summation', cssMod: 'v4-law-proof v4-sum-proof' });
+    if (b.format === 'counting_solution')         return _buildLawStepEl(b, { badge: '🔢 Counting', cssMod: 'v4-law-proof v4-count-proof' });
+    if (b.format === 'truth_table_solution')      return _buildTruthTableSolutionEl(b, 'we-tts-' + Math.random().toString(36).slice(2, 7));
+    if (b.format === 'function_mapping_solution') return _buildFunctionMappingEl(b);
+    if (b.format === 'relation_property_solution') return _buildRelationPropertyEl(b);
+    if (b.format === 'induction_solution')        return _buildInductionEl(b);
+    if (b.format === 'passage_analysis') {
+      var paWrap = document.createElement('div');
+      paWrap.className = 'v3-worked-example';
+      _renderPassageAnalysis(paWrap, b, 'we-pa-' + Math.random().toString(36).slice(2, 7), '');
+      return paWrap;
+    }
     var div = document.createElement('div');
     div.className = 'v3-worked-example';
     var sourceHtml = b.source_pattern
@@ -2354,6 +2692,406 @@
           '<div class="v3-we-body">' + _md(b.final_answer) + '</div></div>'
         : '') +
       mistakeHtml;
+    return div;
+  }
+
+  /* ── V4 LAW-STEP PROOF RENDERER ─────────────────────────────── */
+  /* Also reused for summation_solution and counting_solution which share the
+     same {title, problem, starting_expression?, steps[{step,expression,law_name,explanation}], conclusion} shape.
+     Pass opts = { badge, cssMod } to override the badge label and CSS class. */
+  function _buildLawStepEl(b, opts) {
+    opts = opts || {};
+    var badgeText = opts.badge || '📝 Worked Example';
+    var cssMod    = opts.cssMod || 'v4-law-proof';
+    var stepsHtml = (b.steps || []).map(function (s, i) {
+      return (
+        '<div class="v4-law-step">' +
+          '<div class="v4-law-step-num">' + (s.step || (i + 1)) + '</div>' +
+          '<div class="v4-law-step-main">' +
+            '<div class="v4-law-expr">' + esc(s.expression || '') + '</div>' +
+            '<div class="v4-law-step-meta">' +
+              (s.law_name ? '<span class="v4-law-badge">' + esc(s.law_name) + '</span>' : '') +
+              (s.explanation ? '<span class="v4-law-expl">' + esc(s.explanation) + '</span>' : '') +
+            '</div>' +
+          '</div>' +
+        '</div>'
+      );
+    }).join('');
+    var div = document.createElement('div');
+    div.className = cssMod;
+    div.innerHTML =
+      '<div class="v4-law-header">' +
+        '<span class="v3-we-badge">' + esc(badgeText) + '</span>' +
+        (b.title ? '<div class="v3-we-title">' + esc(b.title) + '</div>' : '') +
+      '</div>' +
+      (b.problem ? '<div class="v4-law-problem">' + _md(b.problem) + '</div>' : '') +
+      (b.approach && !b.problem ? '<div class="v4-law-problem">' + _md(b.approach) + '</div>' : '') +
+      (b.starting_expression
+        ? '<div class="v4-law-start">Starting expression: <strong>' + esc(b.starting_expression) + '</strong></div>'
+        : '') +
+      '<div class="v4-law-steps">' + stepsHtml + '</div>' +
+      (b.conclusion
+        ? '<div class="v4-law-conclusion">' + _mdInline(b.conclusion) + '</div>'
+        : '');
+    return div;
+  }
+
+  /* Helper — inline markdown only (no paragraph wrapping). For one-liners like
+     "Total possible plates: **49,130,000**." inside conclusion boxes. */
+  function _mdInline(text) {
+    if (!text) return '';
+    var s = esc(text);
+    s = s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    s = s.replace(/_([^_\n]+?)_/g, '<em>$1</em>');
+    s = s.replace(/`([^`\n]+?)`/g, '<code class="v2-inline-code">$1</code>');
+    return s;
+  }
+
+  /* ── V4 FUNCTION-MAPPING SOLUTION RENDERER ──────────────────── */
+  /* Used for function_mapping_solution (Module 7): classification of a function
+     into injective / surjective / bijective. Each check is a card with verdict
+     icon, property label, and explanatory argument. */
+  function _buildFunctionMappingEl(b) {
+    var checksHtml = (b.checks || []).map(function (c) {
+      var ok = !!c.verdict;
+      return (
+        '<div class="v4-prop-check ' + (ok ? 'is-yes' : 'is-no') + '">' +
+          '<div class="v4-prop-check-hdr">' +
+            '<span class="v4-prop-check-icon">' + (ok ? '✅' : '❌') + '</span>' +
+            '<span class="v4-prop-check-name">' + esc(c.property || '') + '</span>' +
+            '<span class="v4-prop-check-verdict">' + (ok ? 'Yes' : 'No') + '</span>' +
+          '</div>' +
+          (c.argument ? '<div class="v4-prop-check-arg">' + _mdInline(c.argument) + '</div>' : '') +
+        '</div>'
+      );
+    }).join('');
+    var div = document.createElement('div');
+    div.className = 'v4-prop-block v4-fmap-block';
+    div.innerHTML =
+      '<div class="v4-law-header">' +
+        '<span class="v3-we-badge">ƒ Function check</span>' +
+        (b.title ? '<div class="v3-we-title">' + esc(b.title) + '</div>' : '') +
+      '</div>' +
+      (b.problem ? '<div class="v4-law-problem">' + _md(b.problem) + '</div>' : '') +
+      (b.approach ? '<div class="v4-prop-approach"><strong>Approach:</strong> ' + _mdInline(b.approach) + '</div>' : '') +
+      '<div class="v4-prop-checks">' + checksHtml + '</div>' +
+      (b.final_answer
+        ? '<div class="v4-law-conclusion">' + _md(b.final_answer) + '</div>'
+        : '');
+    return div;
+  }
+
+  /* ── V4 RELATION-PROPERTY SOLUTION RENDERER ─────────────────── */
+  /* Used for relation_property_solution (Module 8). Renders an optional
+     relation_matrix block followed by the four-property check cards. */
+  function _buildRelationPropertyEl(b) {
+    var checksHtml = (b.checks || []).map(function (c) {
+      var ok = !!c.verdict;
+      return (
+        '<div class="v4-prop-check ' + (ok ? 'is-yes' : 'is-no') + '">' +
+          '<div class="v4-prop-check-hdr">' +
+            '<span class="v4-prop-check-icon">' + (ok ? '✅' : '❌') + '</span>' +
+            '<span class="v4-prop-check-name">' + esc(c.property || '') + '</span>' +
+            '<span class="v4-prop-check-verdict">' + (ok ? 'Yes' : 'No') + '</span>' +
+          '</div>' +
+          (c.argument ? '<div class="v4-prop-check-arg">' + _mdInline(c.argument) + '</div>' : '') +
+        '</div>'
+      );
+    }).join('');
+    var div = document.createElement('div');
+    div.className = 'v4-prop-block v4-rprop-block';
+    var hasMatrix = b.matrix && b.matrix.type === 'relation_matrix';
+    var matrixHtml = hasMatrix ? '' : '';
+    div.innerHTML =
+      '<div class="v4-law-header">' +
+        '<span class="v3-we-badge">R Relation check</span>' +
+        (b.title ? '<div class="v3-we-title">' + esc(b.title) + '</div>' : '') +
+      '</div>' +
+      (b.problem ? '<div class="v4-law-problem">' + _md(b.problem) + '</div>' : '') +
+      (b.approach ? '<div class="v4-prop-approach"><strong>Approach:</strong> ' + _mdInline(b.approach) + '</div>' : '') +
+      '<div class="v4-prop-matrix-slot"></div>' +
+      '<div class="v4-prop-checks">' + checksHtml + '</div>' +
+      (b.final_answer
+        ? '<div class="v4-law-conclusion">' + _md(b.final_answer) + '</div>'
+        : '');
+    /* Append matrix as a DOM node after innerHTML is built */
+    if (hasMatrix) {
+      var slot = div.querySelector('.v4-prop-matrix-slot');
+      if (slot) slot.appendChild(_v4BlockRelationMatrix(b.matrix));
+    }
+    return div;
+  }
+
+  /* ── V4 INDUCTION SOLUTION RENDERER ─────────────────────────── */
+  /* Used for induction_solution (Module 10). Three visually separated phases:
+     Base Case, Inductive Hypothesis, Inductive Step, plus a conclusion.
+     The Inductive Step's nested steps reuse the law_step card style. */
+  function _buildInductionEl(b) {
+    var bc = b.base_case || {};
+    var ih = b.inductive_hypothesis || {};
+    var is = b.inductive_step || {};
+
+    var baseHtml = (bc.lhs || bc.rhs || bc.verification) ?
+      '<div class="v4-ind-phase v4-ind-base">' +
+        '<div class="v4-ind-phase-label">' + esc(bc.label || 'Base Case') + '</div>' +
+        '<div class="v4-ind-phase-body">' +
+          (bc.lhs ? '<div class="v4-ind-eq"><strong>LHS:</strong> ' + esc(bc.lhs) + '</div>' : '') +
+          (bc.rhs ? '<div class="v4-ind-eq"><strong>RHS:</strong> ' + esc(bc.rhs) + '</div>' : '') +
+          (bc.verification ? '<div class="v4-ind-verify">' + esc(bc.verification) + '</div>' : '') +
+        '</div>' +
+      '</div>' : '';
+
+    var ihHtml = (ih.statement) ?
+      '<div class="v4-ind-phase v4-ind-ih">' +
+        '<div class="v4-ind-phase-label">' + esc(ih.label || 'Inductive Hypothesis') + '</div>' +
+        '<div class="v4-ind-phase-body">' + _md(ih.statement) + '</div>' +
+      '</div>' : '';
+
+    var isStepsHtml = (is.steps || []).map(function (s, i) {
+      return (
+        '<div class="v4-law-step">' +
+          '<div class="v4-law-step-num">' + (s.step || (i + 1)) + '</div>' +
+          '<div class="v4-law-step-main">' +
+            '<div class="v4-law-expr">' + esc(s.expression || '') + '</div>' +
+            '<div class="v4-law-step-meta">' +
+              (s.law_name ? '<span class="v4-law-badge">' + esc(s.law_name) + '</span>' : '') +
+              (s.explanation ? '<span class="v4-law-expl">' + esc(s.explanation) + '</span>' : '') +
+            '</div>' +
+          '</div>' +
+        '</div>'
+      );
+    }).join('');
+    var isHtml = (is.goal || isStepsHtml) ?
+      '<div class="v4-ind-phase v4-ind-step">' +
+        '<div class="v4-ind-phase-label">' + esc(is.label || 'Inductive Step') + '</div>' +
+        '<div class="v4-ind-phase-body">' +
+          (is.goal ? '<div class="v4-ind-goal"><strong>Goal:</strong> ' + _mdInline(is.goal) + '</div>' : '') +
+          (isStepsHtml ? '<div class="v4-law-steps">' + isStepsHtml + '</div>' : '') +
+        '</div>' +
+      '</div>' : '';
+
+    var div = document.createElement('div');
+    div.className = 'v4-induction-proof';
+    div.innerHTML =
+      '<div class="v4-law-header">' +
+        '<span class="v3-we-badge">🪜 Induction Proof</span>' +
+        (b.title ? '<div class="v3-we-title">' + esc(b.title) + '</div>' : '') +
+      '</div>' +
+      (b.problem ? '<div class="v4-law-problem">' + _md(b.problem) + '</div>' : '') +
+      (b.approach ? '<div class="v4-prop-approach"><strong>Approach:</strong> ' + _mdInline(b.approach) + '</div>' : '') +
+      baseHtml +
+      ihHtml +
+      isHtml +
+      (b.conclusion
+        ? '<div class="v4-law-conclusion">' + _mdInline(b.conclusion) + '</div>'
+        : '');
+    return div;
+  }
+
+  /* ── V4 BLOCK: RELATION MATRIX ──────────────────────────────── */
+  /* Top-level block { type: 'relation_matrix', title, elements, matrix, properties, notes } */
+  function _v4BlockRelationMatrix(b) {
+    var elems = b.elements || [];
+    var mat   = b.matrix   || [];
+    /* Header row: empty corner, then column labels */
+    var headerCells = '<th class="v4-rm-corner"></th>' + elems.map(function (e) {
+      return '<th class="v4-rm-col-lbl">' + esc(e) + '</th>';
+    }).join('');
+    var bodyRows = mat.map(function (row, ri) {
+      var rowLbl = '<th class="v4-rm-row-lbl">' + esc(elems[ri] != null ? elems[ri] : '') + '</th>';
+      var cells = (row || []).map(function (cell, ci) {
+        var v = String(cell);
+        var tfCls = '';
+        if (v === 'T' || v === '1' || v === 'true') tfCls = ' v4-rm-true';
+        else if (v === 'F' || v === '0' || v === 'false') tfCls = ' v4-rm-false';
+        var diagCls = (ri === ci) ? ' v4-rm-diag' : '';
+        return '<td class="v4-rm-cell' + tfCls + diagCls + '">' + esc(v) + '</td>';
+      }).join('');
+      return '<tr>' + rowLbl + cells + '</tr>';
+    }).join('');
+    var propsHtml = (b.properties && b.properties.length)
+      ? '<div class="v4-rm-props"><strong>Properties:</strong> ' +
+          b.properties.map(function (p) { return '<span class="v4-rm-prop-chip">' + esc(p) + '</span>'; }).join(' ') +
+        '</div>'
+      : '';
+    var div = document.createElement('div');
+    div.className = 'v4-relation-matrix';
+    div.innerHTML =
+      (b.title ? '<div class="v4-rm-title">📊 ' + esc(b.title) + '</div>' : '') +
+      '<div class="v4-rm-table-wrap">' +
+        '<table class="v4-rm-table">' +
+          '<thead><tr>' + headerCells + '</tr></thead>' +
+          '<tbody>' + bodyRows + '</tbody>' +
+        '</table>' +
+      '</div>' +
+      propsHtml +
+      (b.notes ? '<div class="v4-rm-notes">' + _md(b.notes) + '</div>' : '');
+    return div;
+  }
+
+  /* ── V4 BLOCK: COUNTING TREE ────────────────────────────────── */
+  /* Top-level block: renders a branching tree showing how the Product Rule
+     multiplies choices. branches is a flat list of {node, children[]} pairs
+     starting from "root". We do a layout-friendly nested list rendering. */
+  function _v4BlockCountingTree(b) {
+    var branches = b.branches || [];
+    /* Build lookup: parent → children[] */
+    var childMap = {};
+    branches.forEach(function (br) {
+      childMap[br.node] = br.children || [];
+    });
+    function buildSubtree(nodeKey, depth) {
+      var children = childMap[nodeKey] || [];
+      if (!children.length) {
+        return '<li class="v4-ct-leaf"><span class="v4-ct-node">' + esc(nodeKey) + '</span></li>';
+      }
+      var childHtml = children.map(function (c) { return buildSubtree(c, depth + 1); }).join('');
+      var labelHtml = nodeKey === 'root'
+        ? '<span class="v4-ct-root">root</span>'
+        : '<span class="v4-ct-node">' + esc(nodeKey) + '</span>';
+      return '<li class="v4-ct-branch">' + labelHtml +
+        '<ul class="v4-ct-children">' + childHtml + '</ul>' +
+      '</li>';
+    }
+    var rootHtml = '<ul class="v4-ct-root-list">' + buildSubtree('root', 0) + '</ul>';
+    var levelsHtml = (b.levels && b.levels.length)
+      ? '<div class="v4-ct-levels">' + b.levels.map(function (lv, i) {
+          return '<span class="v4-ct-level-pill"><span class="v4-ct-level-num">' + (i + 1) + '</span> ' + esc(lv) + '</span>';
+        }).join('') + '</div>'
+      : '';
+    var div = document.createElement('div');
+    div.className = 'v4-counting-tree';
+    div.innerHTML =
+      (b.title ? '<div class="v4-ct-title">🌳 ' + esc(b.title) + '</div>' : '') +
+      levelsHtml +
+      '<div class="v4-ct-canvas">' + rootHtml + '</div>' +
+      (b.notes ? '<div class="v4-ct-notes">' + _md(b.notes) + '</div>' : '');
+    return div;
+  }
+
+  /* ── V4 BLOCK: INDUCTION FLOW ───────────────────────────────── */
+  /* Top-level block: renders the 4-phase anatomy of an induction proof as a
+     horizontal flow with chevron separators. */
+  function _v4BlockInductionFlow(b) {
+    var phases = b.phases || [];
+    var phasesHtml = phases.map(function (p, i) {
+      return (
+        '<div class="v4-if-phase">' +
+          '<div class="v4-if-phase-step">' + (i + 1) + '</div>' +
+          '<div class="v4-if-phase-name">' + esc(p.phase || '') + '</div>' +
+          (p.purpose ? '<div class="v4-if-phase-purpose">' + esc(p.purpose) + '</div>' : '') +
+        '</div>'
+      );
+    }).join('<div class="v4-if-arrow">→</div>');
+    var div = document.createElement('div');
+    div.className = 'v4-induction-flow';
+    div.innerHTML =
+      (b.title ? '<div class="v4-if-title">🪜 ' + esc(b.title) + '</div>' : '') +
+      '<div class="v4-if-row">' + phasesHtml + '</div>';
+    return div;
+  }
+
+  /* ── V4 INTERACTIVE TRUTH-TABLE SOLUTION RENDERER ───────────── */
+  function _buildTruthTableSolutionEl(b, uid) {
+    var headers     = b.headers     || [];
+    var rows        = b.rows        || [];
+    var hidden      = b.hidden_columns || [];
+    var revealSteps = b.reveal_steps   || [];
+
+    /* Build a set of hidden column names for quick lookup */
+    var hiddenSet = {};
+    hidden.forEach(function (h) { hiddenSet[h] = true; });
+
+    /* Table header row */
+    var theadHtml = '<tr>' + headers.map(function (h, i) {
+      var cls = 'v4-tts-th' +
+        (hiddenSet[h] ? ' v4-tts-col-hidden' : '') +
+        (i === headers.length - 1 ? ' v4-tts-final' : '');
+      return '<th class="' + cls + '" data-col="' + esc(h) + '">' + esc(h) + '</th>';
+    }).join('') + '</tr>';
+
+    /* Table body rows */
+    var tbodyHtml = rows.map(function (row) {
+      return '<tr>' + row.map(function (cell, i) {
+        var hdr    = headers[i];
+        var tfCls  = cell === 'T' ? ' v4-tts-T' : (cell === 'F' ? ' v4-tts-F' : '');
+        var cls    = 'v4-tts-td' + tfCls +
+          (hiddenSet[hdr] ? ' v4-tts-col-hidden' : '') +
+          (i === headers.length - 1 ? ' v4-tts-final' : '');
+        return '<td class="' + cls + '" data-col="' + esc(hdr) + '">' + esc(cell) + '</td>';
+      }).join('') + '</tr>';
+    }).join('');
+
+    /* Controls (only if there are hidden columns) */
+    var ctrlHtml = hidden.length
+      ? '<div class="v4-tts-controls">' +
+          '<button class="v4-tts-btn v4-tts-next" id="' + uid + '-next">Reveal next column ▸</button>' +
+          '<button class="v4-tts-btn v4-tts-all"  id="' + uid + '-all">Reveal all</button>' +
+          '<button class="v4-tts-btn v4-tts-reset" id="' + uid + '-rst">Reset</button>' +
+        '</div>'
+      : '';
+
+    var div = document.createElement('div');
+    div.className = 'v4-tts-wrap';
+    div.innerHTML =
+      (b.title ? '<div class="v4-tts-title">' + esc(b.title) + '</div>' : '') +
+      (b.problem ? '<div class="v4-tts-problem">' + _md(b.problem) + '</div>' : '') +
+      ctrlHtml +
+      '<div class="v4-tts-table-wrap">' +
+        '<table class="v4-tts-table" id="' + uid + '-tbl">' +
+          '<thead>' + theadHtml + '</thead>' +
+          '<tbody>' + tbodyHtml + '</tbody>' +
+        '</table>' +
+      '</div>' +
+      '<div class="v4-tts-explanation" id="' + uid + '-expl" style="display:none"></div>';
+
+    /* Wire up interactive reveal after the element is in the DOM */
+    if (hidden.length) {
+      setTimeout(function () {
+        var hiddenLeft  = hidden.slice(); /* mutable copy */
+        var nextBtn = document.getElementById(uid + '-next');
+        var allBtn  = document.getElementById(uid + '-all');
+        var rstBtn  = document.getElementById(uid + '-rst');
+        var expl    = document.getElementById(uid + '-expl');
+        if (!nextBtn) return;
+
+        function revealColumn(colName) {
+          div.querySelectorAll('[data-col="' + colName + '"]').forEach(function (el) {
+            el.classList.remove('v4-tts-col-hidden');
+          });
+          /* Find matching reveal step explanation */
+          var rs = null;
+          for (var k = 0; k < revealSteps.length; k++) {
+            if (revealSteps[k].column === colName) { rs = revealSteps[k]; break; }
+          }
+          if (rs && expl) {
+            expl.textContent = rs.explanation;
+            expl.style.display = 'block';
+          }
+        }
+
+        nextBtn.addEventListener('click', function () {
+          if (!hiddenLeft.length) return;
+          revealColumn(hiddenLeft.shift());
+          if (!hiddenLeft.length) nextBtn.style.display = 'none';
+        });
+
+        allBtn.addEventListener('click', function () {
+          while (hiddenLeft.length) revealColumn(hiddenLeft.shift());
+          nextBtn.style.display = 'none';
+          if (expl) expl.style.display = 'none';
+        });
+
+        rstBtn.addEventListener('click', function () {
+          hiddenLeft = hidden.slice();
+          div.querySelectorAll('[data-col]').forEach(function (el) {
+            if (hiddenSet[el.getAttribute('data-col')]) el.classList.add('v4-tts-col-hidden');
+          });
+          nextBtn.style.display = '';
+          if (expl) { expl.style.display = 'none'; expl.textContent = ''; }
+        });
+      }, 0);
+    }
     return div;
   }
 
@@ -2419,13 +3157,14 @@
       (lesson && lesson.rich_content_blocks && lesson.rich_content_blocks.length > 0);
   }
 
-  /* Safe inline markdown: **bold**, _italic_, `code` */
+  /* Safe inline markdown: **bold**, _italic_, `code`, ==highlight== */
   function _md(text) {
     if (!text) return '';
     var s = esc(text);
     s = s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
     s = s.replace(/_([^_\n]+?)_/g, '<em>$1</em>');
     s = s.replace(/`([^`\n]+?)`/g, '<code class="v2-inline-code">$1</code>');
+    s = s.replace(/==(.+?)==/g, '<mark class="v3-term">$1</mark>');
     var paras = s.split(/\n\n+/);
     return paras.map(function (p) {
       return '<p>' + p.replace(/\n/g, '<br>') + '</p>';
@@ -2725,13 +3464,24 @@
     return div;
   }
 
-  /* Mermaid diagram block */
+  /* Mermaid diagram block.
+     v4 may include a `display` hint with preferred_size / max_height / fit / layout.
+     We DO NOT crop the SVG with max-height — that hides parts of the diagram.
+     Instead, sizing is governed by responsive width-100% + height-auto CSS, and
+     the hint is forwarded as data-attributes for possible future post-render
+     tuning by mermaid itself. */
   function _blockMermaid(b) {
     var div = document.createElement('div');
     div.className = 'v2-mermaid';
+    var dataAttrs = '';
+    if (b.display) {
+      if (b.display.preferred_size) dataAttrs += ' data-pref-size="' + esc(b.display.preferred_size) + '"';
+      if (b.display.fit)            dataAttrs += ' data-fit="' + esc(b.display.fit) + '"';
+      if (b.display.layout)         dataAttrs += ' data-layout="' + esc(b.display.layout) + '"';
+    }
     div.innerHTML =
       (b.title ? '<div class="v2-mermaid-title">📊 ' + esc(b.title) + '</div>' : '') +
-      '<div class="v2-mermaid-wrap"><div class="mermaid">' + esc(b.mermaid || '') + '</div></div>';
+      '<div class="v2-mermaid-wrap"' + dataAttrs + '><div class="mermaid">' + esc(b.mermaid || '') + '</div></div>';
     return div;
   }
 
@@ -2842,20 +3592,22 @@
       s.src = 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js';
       s.onload = function () {
         try {
+          var lightVars = {
+            fontFamily: 'Inter, system-ui, sans-serif',
+            fontSize: '16px',
+            primaryColor: '#dbeafe',
+            primaryTextColor: '#1e293b',
+            primaryBorderColor: '#2563eb',
+            lineColor:  '#475569',
+            edgeLabelBackground: '#ffffff'
+          };
           mermaid.initialize({
             startOnLoad: false,
-            theme: 'neutral',
+            theme: 'base',
             fontSize: 16,
             securityLevel: 'loose',
             flowchart: { useMaxWidth: true, htmlLabels: true, curve: 'basis', padding: 14 },
-            themeVariables: {
-              fontFamily: 'Inter, system-ui, sans-serif',
-              fontSize: '16px',
-              primaryColor: '#dbeafe',
-              primaryTextColor: '#1e293b',
-              primaryBorderColor: '#2563eb',
-              lineColor: '#475569'
-            }
+            themeVariables: lightVars
           });
           runMermaid();
         } catch (e) { nodes.forEach(function (n) { _mermaidFallback(n); }); }

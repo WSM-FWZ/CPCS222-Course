@@ -6,12 +6,16 @@
 (function (global) {
   'use strict';
 
-  /* ── Static course structure ──────────────────────────────── */
+  /* ── Static course structure ──────────────────────────────────
+     Lesson titles and counts mirror the v4 JSON files exactly so that the
+     sidebar entries always map to a real lesson_id (moduleN-lessonK). When
+     v4 consolidates lessons (e.g. Module 9 went from 4 → 2), this array
+     reflects that consolidation. */
   var COURSE = [
     { num: 1,  icon: '📐', title: 'Propositional Logic',
       lessons: [
         'What Is a Proposition?',
-        'Logical Connectives and Truth Values',
+        'Logical Connectives — The Verbs of Logic',
         'Truth Tables and Conditional Statements'
       ]
     },
@@ -19,7 +23,7 @@
       lessons: [
         'Predicates and Quantifiers',
         'Translating and Negating Quantified Statements',
-        'Nested Quantifiers and Order'
+        'Nested Quantifiers and Why Order Matters'
       ]
     },
     { num: 3,  icon: '🧮', title: 'Proofs',
@@ -49,31 +53,26 @@
     },
     { num: 7,  icon: '📈', title: 'Functions',
       lessons: [
-        'Functions — Definitions, Domain, Codomain, and Range',
-        'Injective, Surjective, and Bijective Functions',
-        'Function Composition and Special Functions'
+        'Functions — Domain, Codomain, Range',
+        'Injective, Surjective, Bijective — and Composition'
       ]
     },
     { num: 8,  icon: '🔗', title: 'Relations',
       lessons: [
-        'Relations — Definitions and Properties',
-        'Representing Relations — Matrices and Digraphs',
-        'Equivalence Relations and Partitions'
+        'Relations and Their Properties',
+        'Equivalence Relations and Partial Orders'
       ]
     },
     { num: 9,  icon: '🎲', title: 'Counting',
       lessons: [
-        'Basic Counting Principles — Product, Sum, and Inclusion-Exclusion',
-        'The Pigeonhole Principle',
-        'Permutations — Ordered Selections',
-        'Combinations — Unordered Selections'
+        'Basic Counting Rules and the Pigeonhole Principle',
+        'Permutations and Combinations'
       ]
     },
     { num: 10, icon: '🏗️', title: 'Mathematical Induction',
       lessons: [
-        'Summations and the Telescoping Trick',
-        'The Principle of Mathematical Induction',
-        'Proving Summation Identities by Induction'
+        'Mathematical Induction — The Two Steps',
+        'Induction on Inequalities, Divisibility, and Recursion'
       ]
     }
   ];
